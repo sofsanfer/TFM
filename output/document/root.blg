@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: root.aux
+The style file: plain.bst
+Database file #1: root.bib
+Warning--I didn't find a database entry for "smullyan1963unifying"
+Warning--empty institution in modal
+Warning--empty institution in automatic
+Warning--empty institution in proofsystems
+Warning--empty institution in coq
+You've used 15 entries,
+            2118 wiz_defined-function locations,
+            569 strings with 7489 characters,
+and the built_in function-call counts, 3269 in all, are:
+= -- 323
+> -- 123
+< -- 0
++ -- 55
+- -- 36
+* -- 125
+:= -- 607
+add.period$ -- 54
+call.type$ -- 15
+change.case$ -- 67
+chr.to.int$ -- 0
+cite$ -- 19
+duplicate$ -- 127
+empty$ -- 282
+format.name$ -- 36
+if$ -- 673
+int.to.chr$ -- 0
+int.to.str$ -- 15
+missing$ -- 6
+newline$ -- 86
+num.names$ -- 30
+pop$ -- 89
+preamble$ -- 1
+purify$ -- 48
+quote$ -- 0
+skip$ -- 89
+stack$ -- 0
+substring$ -- 79
+swap$ -- 8
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 54
+warning$ -- 4
+while$ -- 30
+width$ -- 17
+write$ -- 171
+(There were 5 warnings)

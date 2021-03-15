@@ -1,0 +1,1380 @@
+%
+\begin{isabellebody}%
+\setisabellecontext{Glosario}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isatagtheory
+%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\begin{isamarkuptext}%
+En este glosario se recoge la lista de los lemas y reglas usadas
+  indicando la página del \href{https://bit.ly/2KvG2ej}{libro de HOL} 
+  donde se encuentran.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{La base de lógica de primer orden (2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+En Isabelle corresponde a la teoría 
+  \href{https://bit.ly/3bGva9s}{HOL.thy}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Lógica primitiva (2.1)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Conectivas y cuantificadores definidos (2.1.2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.34) \isa{{\isasymnot}\ P\ {\isasymequiv}\ P\ {\isasymlongrightarrow}\ False} 
+      \hfill (\isa{not{\isacharunderscore}def})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Axiomas y definiciones básicas (2.1.4)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.36) \isa{\mbox{}\inferrule{\mbox{\mbox{}\inferrule{\mbox{P}}{\mbox{Q}}}}{\mbox{P\ {\isasymlongrightarrow}\ Q}}} 
+      \hfill (\isa{impI})
+    \item (p.36) \isa{\mbox{}\inferrule{\mbox{{\isacharparenleft}P\ {\isasymlongrightarrow}\ Q{\isacharparenright}\ {\isasymand}\ P}}{\mbox{Q}}} 
+      \hfill (\isa{mp})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Reglas fundamentales (2.2)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Reglas de congruencia para aplicaciones (2.2.2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.37) \isa{\mbox{}\inferrule{\mbox{x\ {\isacharequal}\ y}}{\mbox{f\ x\ {\isacharequal}\ f\ y}}} 
+      \hfill (\isa{arg{\isacharunderscore}cong})
+    \item (p.37) \isa{\mbox{}\inferrule{\mbox{a\ {\isacharequal}\ b\ {\isasymand}\ c\ {\isacharequal}\ d}}{\mbox{f\ a\ c\ {\isacharequal}\ f\ b\ d}}} 
+      \hfill (\isa{arg{\isacharunderscore}cong{\isadigit{2}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Igualdad de booleanos - \isa{iff} (2.2.3)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.38) \isa{\mbox{}\inferrule{\mbox{Q\ {\isacharequal}\ P\ {\isasymand}\ Q}}{\mbox{P}}} 
+      \hfill (\isa{iffD{\isadigit{1}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Cuantificador universal I (2.2.5)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.38) \isa{\mbox{}\inferrule{\mbox{{\isasymforall}x{\isachardot}\ P\ x}\\\ \mbox{\mbox{}\inferrule{\mbox{P\ x}}{\mbox{R}}}}{\mbox{R}}} 
+      \hfill (\isa{allE})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Negación (2.2.7)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.39) \isa{\mbox{}\inferrule{\mbox{\mbox{}\inferrule{\mbox{P}}{\mbox{False}}}}{\mbox{{\isasymnot}\ P}}} 
+      \hfill (\isa{notI})
+    \item (p.39) \isa{\mbox{}\inferrule{\mbox{{\isasymnot}\ P\ {\isasymand}\ P}}{\mbox{R}}} 
+      \hfill (\isa{notE})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Implicación (2.2.8)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.40) \isa{\mbox{}\inferrule{\mbox{Q}\\\ \mbox{\mbox{}\inferrule{\mbox{P}}{\mbox{{\isasymnot}\ Q}}}}{\mbox{{\isasymnot}\ P}}} 
+      \hfill (\isa{contrapos{\isacharunderscore}pn})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Disyunción I (2.2.9)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.40) \isa{\mbox{}\inferrule{\mbox{P\ {\isasymor}\ Q}\\\ \mbox{\mbox{}\inferrule{\mbox{P}}{\mbox{R}}}\\\ \mbox{\mbox{}\inferrule{\mbox{Q}}{\mbox{R}}}}{\mbox{R}}} 
+      \hfill (\isa{disjE})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Derivación de \isa{iffI} (2.2.10)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.40) \isa{\mbox{}\inferrule{\mbox{\mbox{}\inferrule{\mbox{P}}{\mbox{Q}}}\\\ \mbox{\mbox{}\inferrule{\mbox{Q}}{\mbox{P}}}}{\mbox{P\ {\isacharequal}\ Q}}} 
+      \hfill (\isa{iffI})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Cuantificador universal II (2.2.12)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{{\isasymAnd}x{\isachardot}\ P\ x}}{\mbox{{\isasymforall}x{\isachardot}\ P\ x}}} 
+      \hfill (\isa{allI})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Cuantificador existencia (2.2.13)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{P\ x}}{\mbox{{\isasymexists}x{\isachardot}\ P\ x}}} 
+      \hfill (\isa{exI})
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{{\isasymexists}x{\isachardot}\ P\ x}\\\ \mbox{{\isasymAnd}x{\isachardot}\ \mbox{}\inferrule{\mbox{P\ x}}{\mbox{Q}}}}{\mbox{Q}}} 
+      \hfill (\isa{exE})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Conjunción (2.2.14)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{P\ {\isasymand}\ Q}}{\mbox{P\ {\isasymand}\ Q}}} 
+      \hfill (\isa{conjI})
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{P\ {\isasymand}\ Q}}{\mbox{P}}} 
+      \hfill (\isa{conjunct{\isadigit{1}}})
+    \item (p.41) \isa{\mbox{}\inferrule{\mbox{P\ {\isasymand}\ Q}}{\mbox{Q}}} 
+      \hfill (\isa{conjunct{\isadigit{2}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Disyunción II (2.2.15)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.42) \isa{\mbox{}\inferrule{\mbox{P}}{\mbox{P\ {\isasymor}\ Q}}} 
+      \hfill (\isa{disjI{\isadigit{1}}})
+    \item (p.42) \isa{\mbox{}\inferrule{\mbox{Q}}{\mbox{P\ {\isasymor}\ Q}}} 
+      \hfill (\isa{disjI{\isadigit{2}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Atomización de conectivas de nivel intermedio (2.2.20)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.46) \isa{{\isacharparenleft}x\ {\isasymequiv}\ y{\isacharparenright}\ {\isasymequiv}\ x\ {\isacharequal}\ y} 
+      \hfill (\isa{atomize{\isacharunderscore}eq})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Configuración del paquete (2.3)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Simplificadores (2.3.4)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.50) \isa{{\isacharparenleft}{\isasymnot}\ False{\isacharparenright}\ {\isacharequal}\ True} 
+      \hfill (\isa{not{\isacharunderscore}False{\isacharunderscore}eq{\isacharunderscore}True})
+    \item (p.53) \isa{{\isacharparenleft}{\isasymnexists}x{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}x{\isachardot}\ {\isasymnot}\ P\ x{\isacharparenright}} 
+      \hfill (\isa{not{\isacharunderscore}ex})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Grupos, también combinados con órdenes (5)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+Los siguientes resultados pertenecen a la teoría de 
+  grupos \href{https://bit.ly/3fwjIPe}{Groups.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Estructuras abstractas%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.109) \isa{sup\ bot\ a\ {\isacharequal}\ a} 
+      \hfill (\isa{sup{\isacharunderscore}bot{\isachardot}left{\isacharunderscore}neutral})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Retículos abstractos (6)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+Los resultados expuestos a continuación pertenecen a la teoría de 
+  retículos \href{https://bit.ly/2N4lbjn}{Lattices.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.139) \isa{{\isacharparenleft}sup\ b\ c\ {\isasymle}\ a{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}b\ {\isasymle}\ a\ {\isasymand}\ c\ {\isasymle}\ a{\isacharparenright}} 
+      \hfill (\isa{sup{\isachardot}bounded{\isacharunderscore}iff})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Teoría de conjuntos para lógica de orden superior (7)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+Los siguientes resultados corresponden a la teoría de conjuntos 
+  \href{https://bit.ly/3ePFv4B}{Set.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Subconjuntos y cuantificadores acotados (7.2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.163) \isa{\mbox{}\inferrule{\mbox{{\isasymAnd}x{\isachardot}\ \mbox{}\inferrule{\mbox{x\ {\isasymin}\ A}}{\mbox{P\ x}}}}{\mbox{{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x}}} 
+      \hfill (\isa{ballI})
+    \item (p.163) \isa{\mbox{}\inferrule{\mbox{{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}\ {\isasymand}\ x\ {\isasymin}\ A}}{\mbox{P\ x}}} 
+      \hfill (\isa{bspec})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Operaciones básicas (7.3)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Subconjuntos (7.3.1)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.165) \isa{\mbox{}\inferrule{\mbox{c\ {\isasymin}\ A\ {\isasymand}\ A\ {\isasymsubseteq}\ B}}{\mbox{c\ {\isasymin}\ B}}} 
+      \hfill (\isa{rev{\isacharunderscore}subsetD})
+    \item (p.166) \isa{A\ {\isasymsubseteq}\ A} 
+      \hfill (\isa{subset{\isacharunderscore}refl})
+    \item (p.166) \isa{\mbox{}\inferrule{\mbox{A\ {\isasymsubseteq}\ B\ {\isasymand}\ B\ {\isasymsubseteq}\ C}}{\mbox{A\ {\isasymsubseteq}\ C}}} 
+      \hfill (\isa{subset{\isacharunderscore}trans})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{El conjunto vacío (7.3.3)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.167) \isa{{\isasymemptyset}\ {\isasymsubseteq}\ A} 
+      \hfill (\isa{empty{\isacharunderscore}subsetI})
+    \item (p.167) \isa{Ball\ {\isasymemptyset}\ P\ {\isacharequal}\ True} 
+      \hfill (\isa{ball{\isacharunderscore}empty})
+    \item (p.167) \isa{Bex\ {\isasymemptyset}\ P\ {\isacharequal}\ False} 
+      \hfill (\isa{bex{\isacharunderscore}empty})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Unión binaria (7.3.8)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.169) \isa{{\isacharparenleft}c\ {\isasymin}\ A\ {\isasymunion}\ B{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}c\ {\isasymin}\ A\ {\isasymor}\ c\ {\isasymin}\ B{\isacharparenright}} 
+      \hfill (\isa{Un{\isacharunderscore}iff})
+    \item (p.169) \isa{\mbox{}\inferrule{\mbox{c\ {\isasymin}\ A}}{\mbox{c\ {\isasymin}\ A\ {\isasymunion}\ B}}} 
+      \hfill (\isa{UnI{\isadigit{1}}})
+    \item (p.170) \isa{\mbox{}\inferrule{\mbox{c\ {\isasymin}\ B}}{\mbox{c\ {\isasymin}\ A\ {\isasymunion}\ B}}} 
+      \hfill (\isa{UnI{\isadigit{2}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Aumentar un conjunto - insertar (7.3.10)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.171) \isa{List{\isachardot}insert\ x\ xs\ {\isacharequal}\ {\isacharbraceleft}x{\isacharbraceright}\ {\isasymunion}\ xs} 
+      \hfill (\isa{set{\isacharunderscore}insert})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Conjuntos unitarios, insertar (7.3.11)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.172) \isa{a\ {\isasymin}\ {\isacharbraceleft}a{\isacharbraceright}} 
+      \hfill (\isa{singletonI})
+    \item (p.172) \isa{\mbox{}\inferrule{\mbox{b\ {\isasymin}\ {\isacharbraceleft}a{\isacharbraceright}}}{\mbox{b\ {\isacharequal}\ a}}} 
+      \hfill (\isa{singletonD})
+    \item (p.172) \isa{{\isacharparenleft}b\ {\isasymin}\ {\isacharbraceleft}a{\isacharbraceright}{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}b\ {\isacharequal}\ a{\isacharparenright}} 
+      \hfill (\isa{singleton{\isacharunderscore}iff})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Imagen de un conjunto por una función (7.3.12)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.173) \isa{f\ {\isacharbackquote}\ A\ {\isacharequal}\ {\isacharbraceleft}y\ {\isacharbar}\ {\isasymexists}x{\isasymin}A{\isachardot}\ y\ {\isacharequal}\ f\ x{\isacharbraceright}} 
+      \hfill (\isa{image{\isacharunderscore}def})
+    \item (p.173) \isa{f\ {\isacharbackquote}\ {\isacharparenleft}A\ {\isasymunion}\ B{\isacharparenright}\ {\isacharequal}\ f\ {\isacharbackquote}\ A\ {\isasymunion}\ f\ {\isacharbackquote}\ B} 
+      \hfill (\isa{image{\isacharunderscore}Un})
+    \item (p.174) \isa{f\ {\isacharbackquote}\ {\isasymemptyset}\ {\isacharequal}\ {\isasymemptyset}} 
+      \hfill (\isa{image{\isacharunderscore}empty})
+    \item (p.174) \isa{f\ {\isacharbackquote}\ {\isacharparenleft}{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ B{\isacharparenright}\ {\isacharequal}\ {\isacharbraceleft}f\ a{\isacharbraceright}\ {\isasymunion}\ f\ {\isacharbackquote}\ B} 
+      \hfill (\isa{image{\isacharunderscore}insert})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Más operaciones y lemas (7.4)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Reglas derivadas sobre subconjuntos (7.4.2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.177) \isa{A\ {\isasymsubseteq}\ A\ {\isasymunion}\ B} 
+      \hfill (\isa{Un{\isacharunderscore}upper{\isadigit{1}}})
+    \item (p.177) \isa{B\ {\isasymsubseteq}\ A\ {\isasymunion}\ B} 
+      \hfill (\isa{Un{\isacharunderscore}upper{\isadigit{2}}})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Igualdades sobre la union, intersección, inclusion, 
+  etc. (7.4.3)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.179) \isa{{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ A\ {\isacharequal}\ {\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ A} 
+      \hfill (\isa{insert{\isacharunderscore}is{\isacharunderscore}Un})
+    \item (p.181) \isa{A\ {\isasymunion}\ A\ {\isacharequal}\ A} 
+      \hfill (\isa{Un{\isacharunderscore}absorb})
+    \item (p.181) \isa{A\ {\isasymunion}\ {\isasymemptyset}\ {\isacharequal}\ A} 
+      \hfill (\isa{Un{\isacharunderscore}empty{\isacharunderscore}right})
+    \item (p.182) \isa{{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ B\ {\isasymunion}\ C\ {\isacharequal}\ {\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ {\isacharparenleft}B\ {\isasymunion}\ C{\isacharparenright}} 
+      \hfill (\isa{Un{\isacharunderscore}insert{\isacharunderscore}left})
+    \item (p.187) \isa{{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x\ {\isasymor}\ Q{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}\ {\isasymor}\ Q{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ {\isasymor}\ Q\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}P\ {\isasymor}\ {\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ Q\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ {\isasymlongrightarrow}\ Q\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}P\ {\isasymlongrightarrow}\ {\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ Q\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x\ {\isasymlongrightarrow}\ Q{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}\ {\isasymlongrightarrow}\ Q{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}{\isasymemptyset}{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ True\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}UNIV{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}x{\isachardot}\ P\ x{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ B{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}P\ a\ {\isasymand}\ {\isacharparenleft}{\isasymforall}x{\isasymin}B{\isachardot}\ P\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}Collect\ Q{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}x{\isachardot}\ Q\ x\ {\isasymlongrightarrow}\ P\ x{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymforall}x{\isasymin}f\ {\isacharbackquote}\ A{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ {\isacharparenleft}f\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymnot}\ {\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ {\isasymnot}\ P\ x{\isacharparenright}} 
+      \hfill (\isa{ball{\isacharunderscore}simps})
+    \item (p.187) \isa{{\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ x\ {\isasymand}\ Q{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}\ {\isasymand}\ Q{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ {\isasymand}\ Q\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}P\ {\isasymand}\ {\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ Q\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}{\isasymemptyset}{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ False\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}UNIV{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymexists}x{\isachardot}\ P\ x{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ B{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}P\ a\ {\isasymor}\ {\isacharparenleft}{\isasymexists}x{\isasymin}B{\isachardot}\ P\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}Collect\ Q{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymexists}x{\isachardot}\ Q\ x\ {\isasymand}\ P\ x{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymexists}x{\isasymin}f\ {\isacharbackquote}\ A{\isachardot}\ P\ x{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ {\isacharparenleft}f\ x{\isacharparenright}{\isacharparenright}\isasep\isanewline%
+{\isacharparenleft}{\isasymnot}\ {\isacharparenleft}{\isasymexists}x{\isasymin}A{\isachardot}\ P\ x{\isacharparenright}{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}x{\isasymin}A{\isachardot}\ {\isasymnot}\ P\ x{\isacharparenright}} 
+      \hfill (\isa{bex{\isacharunderscore}simps})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsubsection{Monotonía de varias operaciones (7.4.4)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.188) \isa{\mbox{}\inferrule{\mbox{A\ {\isasymsubseteq}\ C\ {\isasymand}\ B\ {\isasymsubseteq}\ D}}{\mbox{A\ {\isasymunion}\ B\ {\isasymsubseteq}\ C\ {\isasymunion}\ D}}} 
+      \hfill (\isa{Un{\isacharunderscore}mono})
+    \item (p.188) \isa{P\ {\isasymlongrightarrow}\ P} 
+      \hfill (\isa{imp{\isacharunderscore}refl})
+    \item (p.188) \isa{\mbox{}\inferrule{\mbox{Q\ {\isasymlongrightarrow}\ P}}{\mbox{{\isasymnot}\ P\ {\isasymlongrightarrow}\ {\isasymnot}\ Q}}} 
+      \hfill (\isa{not{\isacharunderscore}mono})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Nociones sobre funciones (9)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+En Isabelle, la teoría de funciones se corresponde con 
+  \href{https://bit.ly/2VBe1Im}{Fun.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Actualización de funciones (9.6)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.212) \isa{f{\isacharparenleft}a\ {\isacharcolon}{\isacharequal}\ b{\isacharparenright}\ {\isacharequal}\ {\isacharparenleft}{\isasymlambda}x{\isachardot}\ \textsf{if}\ x\ {\isacharequal}\ a\ \textsf{then}\ b\ \textsf{else}\ f\ x{\isacharparenright}} 
+      \hfill (\isa{fun{\isacharunderscore}upd{\isacharunderscore}def})
+    \item (p.213) \isa{\mbox{}\inferrule{\mbox{z\ {\isasymnoteq}\ x}}{\mbox{{\isacharparenleft}f{\isacharparenleft}x\ {\isacharcolon}{\isacharequal}\ y{\isacharparenright}{\isacharparenright}\ z\ {\isacharequal}\ f\ z}}} 
+      \hfill (\isa{fun{\isacharunderscore}upd{\isacharunderscore}other})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Retículos completos (10)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+En Isabelle corresponde a la teoría 
+  \href{https://bit.ly/2Y5wxKA}{Complete-Lattices.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Retículos completos en conjuntos (10.6)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Unión (10.6.3)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.238) \isa{{\isasymUnion}\ {\isasymemptyset}\ {\isacharequal}\ {\isasymemptyset}} 
+      \hfill (\isa{Union{\isacharunderscore}empty})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Conjuntos finitos (18)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+A continuación se muestran resultados relativos a la teoría 
+  \href{https://bit.ly/3bEIScG}{Finite-Set.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Predicado de conjuntos finitos (18.1)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.419) \isa{finite\ A} 
+      \hfill (\isa{finite})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Finitud y operaciones de conjuntos comunes (18.2)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.422) \isa{\mbox{}\inferrule{\mbox{finite\ F\ {\isasymand}\ finite\ G}}{\mbox{finite\ {\isacharparenleft}F\ {\isasymunion}\ G{\isacharparenright}}}} 
+      \hfill (\isa{finite{\isacharunderscore}UnI})
+    \item (p.423) \isa{finite\ {\isacharparenleft}{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ A{\isacharparenright}\ {\isacharequal}\ finite\ A} 
+      \hfill (\isa{finite{\isacharunderscore}insert})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{Composición de functores naturales acotados (33)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+En esta sección se muestran resultados pertenecientes a la
+  teoría de composición de functores naturales acotados de Isabelle 
+  \href{https://bit.ly/2zGl9v6}{BNFComposition.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.718) \isa{{\isasymUnion}\ {\isacharparenleft}f\ {\isacharbackquote}\ {\isacharparenleft}{\isacharbraceleft}a{\isacharbraceright}\ {\isasymunion}\ B{\isacharparenright}{\isacharparenright}\ {\isacharequal}\ f\ a\ {\isasymunion}\ {\isasymUnion}\ {\isacharparenleft}f\ {\isacharbackquote}\ B{\isacharparenright}} 
+      \hfill (\isa{Union{\isacharunderscore}image{\isacharunderscore}insert})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsection{El tipo de datos de la listas finitas (66)%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+En esta sección se muestran resultados sobre listas finitas 
+  dentro de la teoría de listas de Isabelle 
+  \href{https://bit.ly/3bCNxvX}{List.thy}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.1169) \isa{{\isacharbrackleft}{\isacharbrackright}\ {\isacharequal}\ {\isasymemptyset}\isasep\isanewline%
+x{\isadigit{2}}{\isadigit{1}}\ {\isasymcdot}\ x{\isadigit{2}}{\isadigit{2}}\ {\isacharequal}\ {\isacharbraceleft}x{\isadigit{2}}{\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ x{\isadigit{2}}{\isadigit{2}}} 
+      \hfill (\isa{list{\isachardot}set})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\isatagdocument
+%
+\isamarkupsubsection{Funciones básicas de procesamiento de listas (66.1)%
+}
+\isamarkuptrue%
+%
+\isamarkupsubsubsection{Función \isa{set}%
+}
+\isamarkuptrue%
+%
+\endisatagdocument
+{\isafolddocument}%
+%
+\isadelimdocument
+%
+\endisadelimdocument
+%
+\begin{isamarkuptext}%
+\begin{itemize}
+    \item (p.1195) \isa{xs\ \isacharat\ ys\ {\isacharequal}\ xs\ {\isasymunion}\ ys} 
+      \hfill (\isa{set{\isacharunderscore}append})
+  \end{itemize}%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isatagtheory
+%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\end{isabellebody}%
+\endinput
+%:%file=~/Desktop/TFM/TFM1/Glosario.thy%:%
+%:%19=13%:%
+%:%20=14%:%
+%:%21=15%:%
+%:%30=17%:%
+%:%42=19%:%
+%:%43=20%:%
+%:%52=22%:%
+%:%56=24%:%
+%:%68=27%:%
+%:%69=28%:%
+%:%70=29%:%
+%:%71=30%:%
+%:%80=32%:%
+%:%92=35%:%
+%:%93=36%:%
+%:%94=37%:%
+%:%95=38%:%
+%:%96=39%:%
+%:%97=40%:%
+%:%106=42%:%
+%:%110=44%:%
+%:%122=47%:%
+%:%123=48%:%
+%:%124=49%:%
+%:%125=50%:%
+%:%126=51%:%
+%:%127=52%:%
+%:%136=54%:%
+%:%148=57%:%
+%:%149=58%:%
+%:%150=59%:%
+%:%151=60%:%
+%:%160=62%:%
+%:%172=65%:%
+%:%173=66%:%
+%:%174=67%:%
+%:%175=68%:%
+%:%184=70%:%
+%:%196=73%:%
+%:%197=74%:%
+%:%198=75%:%
+%:%199=76%:%
+%:%200=77%:%
+%:%201=78%:%
+%:%210=80%:%
+%:%222=83%:%
+%:%223=84%:%
+%:%224=85%:%
+%:%225=86%:%
+%:%234=88%:%
+%:%246=91%:%
+%:%247=92%:%
+%:%248=93%:%
+%:%249=94%:%
+%:%258=96%:%
+%:%270=99%:%
+%:%271=100%:%
+%:%272=101%:%
+%:%273=102%:%
+%:%282=104%:%
+%:%294=107%:%
+%:%295=108%:%
+%:%296=109%:%
+%:%297=110%:%
+%:%306=112%:%
+%:%318=115%:%
+%:%319=116%:%
+%:%320=117%:%
+%:%321=118%:%
+%:%322=119%:%
+%:%323=120%:%
+%:%332=122%:%
+%:%344=125%:%
+%:%345=126%:%
+%:%346=127%:%
+%:%347=128%:%
+%:%348=129%:%
+%:%349=130%:%
+%:%350=131%:%
+%:%351=132%:%
+%:%360=134%:%
+%:%372=137%:%
+%:%373=138%:%
+%:%374=139%:%
+%:%375=140%:%
+%:%376=141%:%
+%:%377=142%:%
+%:%386=144%:%
+%:%398=147%:%
+%:%399=148%:%
+%:%400=149%:%
+%:%401=150%:%
+%:%410=152%:%
+%:%414=154%:%
+%:%426=157%:%
+%:%427=158%:%
+%:%428=159%:%
+%:%429=160%:%
+%:%430=161%:%
+%:%431=162%:%
+%:%440=164%:%
+%:%452=166%:%
+%:%453=167%:%
+%:%462=169%:%
+%:%474=172%:%
+%:%475=173%:%
+%:%476=174%:%
+%:%477=175%:%
+%:%486=177%:%
+%:%498=179%:%
+%:%499=180%:%
+%:%503=183%:%
+%:%504=184%:%
+%:%505=185%:%
+%:%506=186%:%
+%:%515=188%:%
+%:%527=190%:%
+%:%528=191%:%
+%:%537=193%:%
+%:%549=196%:%
+%:%550=197%:%
+%:%551=198%:%
+%:%552=199%:%
+%:%553=200%:%
+%:%554=201%:%
+%:%563=203%:%
+%:%567=205%:%
+%:%579=208%:%
+%:%580=209%:%
+%:%581=210%:%
+%:%582=211%:%
+%:%583=212%:%
+%:%584=213%:%
+%:%585=214%:%
+%:%586=215%:%
+%:%595=217%:%
+%:%607=220%:%
+%:%608=221%:%
+%:%609=222%:%
+%:%610=223%:%
+%:%611=224%:%
+%:%612=225%:%
+%:%613=226%:%
+%:%614=227%:%
+%:%623=229%:%
+%:%635=232%:%
+%:%636=233%:%
+%:%637=234%:%
+%:%638=235%:%
+%:%639=236%:%
+%:%640=237%:%
+%:%641=238%:%
+%:%642=239%:%
+%:%651=241%:%
+%:%663=244%:%
+%:%664=245%:%
+%:%665=246%:%
+%:%666=247%:%
+%:%675=249%:%
+%:%687=252%:%
+%:%688=253%:%
+%:%689=254%:%
+%:%690=255%:%
+%:%691=256%:%
+%:%692=257%:%
+%:%693=258%:%
+%:%694=259%:%
+%:%703=262%:%
+%:%715=265%:%
+%:%716=266%:%
+%:%717=267%:%
+%:%718=268%:%
+%:%719=269%:%
+%:%720=270%:%
+%:%721=271%:%
+%:%722=272%:%
+%:%723=273%:%
+%:%724=274%:%
+%:%733=277%:%
+%:%737=279%:%
+%:%749=282%:%
+%:%750=283%:%
+%:%751=284%:%
+%:%752=285%:%
+%:%753=286%:%
+%:%754=287%:%
+%:%763=289%:%
+%:%764=290%:%
+%:%776=293%:%
+%:%777=294%:%
+%:%778=295%:%
+%:%779=296%:%
+%:%780=297%:%
+%:%781=298%:%
+%:%782=299%:%
+%:%783=300%:%
+%:%784=301%:%
+%:%785=302%:%
+%:%794=302%:%
+%:%795=303%:%
+%:%796=304%:%
+%:%803=304%:%
+%:%804=305%:%
+%:%805=306%:%
+%:%814=308%:%
+%:%826=311%:%
+%:%827=312%:%
+%:%828=313%:%
+%:%829=314%:%
+%:%830=315%:%
+%:%831=316%:%
+%:%832=317%:%
+%:%833=318%:%
+%:%842=321%:%
+%:%854=323%:%
+%:%855=324%:%
+%:%864=326%:%
+%:%876=329%:%
+%:%877=330%:%
+%:%878=331%:%
+%:%879=332%:%
+%:%880=333%:%
+%:%881=334%:%
+%:%890=336%:%
+%:%902=338%:%
+%:%903=339%:%
+%:%912=341%:%
+%:%916=343%:%
+%:%928=346%:%
+%:%929=347%:%
+%:%930=348%:%
+%:%931=349%:%
+%:%940=351%:%
+%:%952=353%:%
+%:%953=354%:%
+%:%962=356%:%
+%:%974=359%:%
+%:%975=360%:%
+%:%976=361%:%
+%:%977=362%:%
+%:%986=364%:%
+%:%998=367%:%
+%:%999=368%:%
+%:%1000=369%:%
+%:%1001=370%:%
+%:%1002=371%:%
+%:%1003=372%:%
+%:%1012=374%:%
+%:%1024=376%:%
+%:%1025=377%:%
+%:%1026=378%:%
+%:%1030=381%:%
+%:%1031=382%:%
+%:%1032=383%:%
+%:%1033=384%:%
+%:%1042=386%:%
+%:%1054=388%:%
+%:%1055=389%:%
+%:%1056=390%:%
+%:%1060=393%:%
+%:%1061=394%:%
+%:%1062=394%:%
+%:%1063=395%:%
+%:%1064=396%:%
+%:%1073=398%:%
+%:%1077=400%:%
+%:%1089=403%:%
+%:%1090=404%:%
+%:%1091=405%:%
+%:%1092=406%:%
