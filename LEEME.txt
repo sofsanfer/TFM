@@ -1,0 +1,7 @@
+Para compilar la teoría, ejecutar
+   /Applications/Isabelle2020.app/Isabelle/bin/isabelle build -c -D .
+
+Genera el documento en output/document.pdf
+
+Si, además se desea generar el documento en HTML, ejecutar
+   isabelle build -c -o browser_info -D . 

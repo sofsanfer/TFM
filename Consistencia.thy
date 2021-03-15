@@ -1,0 +1,1709 @@
+(*<*) 
+theory Consistencia
+  imports 
+    Sintaxis
+    Semantica
+    Hintikka
+begin
+(*>*)
+
+section\<open>Consistencia\<close>
+
+text\<open>Definición: C verifica la condición de consistencia proposicional.\<close>
+
+definition "pcp C \<equiv> (\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C))"
+
+lemma auxEqB:
+  assumes "\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+  shows "pcp C"
+proof -
+  have "pcp C = (\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C))" 
+    using pcp_def by (simp only: atomize_eq)
+  thus "pcp C"
+    using assms by (rule iffD2)
+qed
+
+lemma auxEqC:
+  assumes "pcp C"
+          "S \<in> C"
+  shows "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+proof -
+  have "pcp C = (\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C))" 
+    using pcp_def by (simp only: atomize_eq)
+  then have "\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms(1) by (rule iffD1)
+  thus ?thesis 
+    using assms(2) by (rule bspec)
+qed
+
+lemma auxEqC1:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<bottom> \<notin> S"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  thus ?thesis by (rule conjunct1)
+qed
+
+lemma auxEqC2:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<notin> S"
+proof (rule impI)
+  assume H:"Atom k \<in> S"
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+    by (iprover elim: conjunct2 conjunct1)
+  then have "\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<notin> S"
+    by (simp only: not_def)
+  then have "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<notin> S"
+    by (rule allE)
+  thus "\<^bold>\<not> (Atom k) \<notin> S"
+    using H by (rule mp)
+qed
+
+lemma auxEqC3:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC4:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC5:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC6:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis 
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC7:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis 
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC8:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis 
+    by (iprover elim: allE)
+qed
+
+lemma auxEqC9:
+  assumes "pcp C"
+          "S \<in> C"
+        shows "\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C"
+proof -
+  have "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
+\<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
+\<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
+    using assms by (rule auxEqC)
+  then have "\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C"
+    by (iprover elim: conjunct2 conjunct1)
+  thus ?thesis 
+    by (iprover elim: allE)
+qed
+
+text \<open>Ejemplos:\<close>
+
+lemma "pcp {{}}"
+  unfolding pcp_def by simp
+
+lemma "pcp {{Atom 0}}"
+  unfolding pcp_def by simp
+
+lemma "pcp {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
+   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))},
+  {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1)),  Atom 1}}" 
+  unfolding pcp_def by auto
+
+text\<open>Fitting uses uniform notation~\cite{smullyan1963unifying} for the
+ definition of @{const pcp}. 
+We try to mimic this, more to see whether it works than because it is 
+ultimately necessary.\<close>
+(* It does help a bit, occasionally. *)
+
+text \<open>Definición: fórmulas de tipo \<open>\<alpha>\<close>, y sus componentes.\<close>
+
+inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
+"Con (And F G) F G" |
+"Con (Not (Or F G)) (Not F) (Not G)" |
+"Con (Not (Imp F G)) F (Not G)" |
+"Con (Not (Not F)) F F"
+
+text \<open>Definición: fórmulas de tipo \<open>\<beta>\<close>, y sus componentes.\<close>
+
+inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
+"Dis (Or F G) F G" |
+"Dis (Imp F G) (Not F) G" |
+"Dis (Not (And F G)) (Not F) (Not G)" |
+"Dis (Not (Not F)) F F"
+
+(* note that *)
+
+lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
+  by (simp only: Con.intros Dis.intros)+
+(* i.e. \<^bold>\<not>\<^bold>\<not> is both Conjunctive and Disjunctive. *)
+(*   I saw no reason to break this symmetry. *)
+
+text \<open>Ejemplos:\<close>
+
+lemma con_dis_simps:
+  "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
+    (\<exists>F G. a1 = \<^bold>\<not> (F \<^bold>\<or> G) \<and> a2 = \<^bold>\<not> F \<and> a3 = \<^bold>\<not> G) \<or> 
+    (\<exists>G. a1 = \<^bold>\<not> (a2 \<^bold>\<rightarrow> G) \<and> a3 = \<^bold>\<not> G) \<or> 
+    a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)"
+  "Dis a1 a2 a3 = (a1 = a2 \<^bold>\<or> a3 \<or> 
+    (\<exists>F G. a1 = F \<^bold>\<rightarrow> G \<and> a2 = \<^bold>\<not> F \<and> a3 = G) \<or> 
+    (\<exists>F G. a1 = \<^bold>\<not> (F \<^bold>\<and> G) \<and> a2 = \<^bold>\<not> F \<and> a3 = \<^bold>\<not> G) \<or> 
+    a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
+  by (simp_all add: Con.simps Dis.simps)
+
+text\<open> Lema: caracterización de los conjuntos de Hintikka mediante las 
+fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
+
+lemma Hintikka_alt1Con:
+  assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)"
+  shows "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+proof (rule impI)
+  assume "Con F G H"
+  then have "F = G \<^bold>\<and> H \<or> 
+    ((\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+    (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
+    by (simp only: con_dis_simps(1))
+  thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+  proof (rule disjE)
+    assume "F = G \<^bold>\<and> H"
+    have "\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      using assms by (rule conjunct1)
+    thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      using \<open>F = G \<^bold>\<and> H\<close> by (iprover elim: allE)
+  next 
+    assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+    ((\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
+    thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S" 
+    proof (rule disjE)
+      assume E1:"\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+      obtain G1 H1 where A1:"F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+        using E1 by (iprover elim: exE)
+      then have "F = \<^bold>\<not> (G1 \<^bold>\<or> H1)"
+        by (rule conjunct1)
+      have "G = \<^bold>\<not> G1"
+        using A1 by (iprover elim: conjunct1)
+      have "H = \<^bold>\<not> H1"
+        using A1 by (iprover elim: conjunct1)
+      have "\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+        using assms by (iprover elim: conjunct2 conjunct1)
+      thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+        using \<open>F = \<^bold>\<not> (G1 \<^bold>\<or> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = \<^bold>\<not> H1\<close> by (iprover elim: allE)
+    next
+      assume "(\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+      F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+      thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S" 
+      proof (rule disjE)
+        assume E2:"\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+        obtain H2 where A2:"F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+          using E2 by (rule exE)
+        have "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)"
+          using A2 by (rule conjunct1)
+        have "H = \<^bold>\<not> H2"
+          using A2 by (rule conjunct2)
+        have "\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using assms by (iprover elim: conjunct2 conjunct1)
+        thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          using \<open>F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
+      next 
+        assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        then have "F = \<^bold>\<not> (\<^bold>\<not> G)"
+          by (rule conjunct1)
+        have "H = G"
+          using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct2)
+        have "\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          using assms by (iprover elim: conjunct2 conjunct1)
+        then have "\<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          by (rule allE)
+        then have "F \<in> S \<longrightarrow> G \<in> S"
+          by (simp only: \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close>) 
+        then have "F \<in> S \<longrightarrow> G \<in> S \<and> G \<in> S"
+          by (simp only: conj_absorb)
+        thus "F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          by (simp only: \<open>H=G\<close>)
+      qed
+    qed
+  qed
+qed
+
+lemma Hintikka_alt1Dis:
+  assumes  "(\<forall> G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+  \<and> (\<forall> G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)
+  \<and> (\<forall> G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+  \<and> (\<forall> G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)"
+  shows "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+proof (rule impI)
+  assume "Dis F G H"
+  then have "F = G \<^bold>\<or> H \<or> 
+    (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+    (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
+    by (simp only: con_dis_simps(2))
+  thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S" 
+  proof (rule disjE)
+    assume "F = G \<^bold>\<or> H"
+    have "\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      using assms by (rule conjunct1)
+    thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S" 
+      using \<open>F = G \<^bold>\<or> H\<close> by (iprover elim: allE)
+  next
+    assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+    (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+    thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+    proof (rule disjE)
+      assume E1:"\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+      obtain G1 H1 where A1:"F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+        using E1 by (iprover elim: exE)
+      have "F = G1 \<^bold>\<rightarrow> H1"
+        using A1 by (rule conjunct1)
+      have "G = \<^bold>\<not> G1"
+        using A1 by (iprover elim: conjunct1)
+      have "H = H1"
+        using A1 by (iprover elim: conjunct2 conjunct1)
+      have "\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+        using assms by (iprover elim: conjunct2 conjunct1)
+      thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+        using \<open>F = G1 \<^bold>\<rightarrow> H1\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = H1\<close> by (iprover elim: allE)
+    next
+      assume "(\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+      F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+      thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      proof (rule disjE)
+        assume E2:"\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
+        obtain G2 H2 where A2:"F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2" 
+          using E2 by (iprover elim: exE)
+        have "F = \<^bold>\<not> (G2 \<^bold>\<and> H2)" 
+          using A2 by (rule conjunct1)
+        have "G = \<^bold>\<not> G2"
+          using A2 by (iprover elim: conjunct2 conjunct1)
+        have "H = \<^bold>\<not> H2"
+          using A2 by (iprover elim: conjunct1)
+        have "\<forall> G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+          using assms by (iprover elim: conjunct2 conjunct1)
+        thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+          using \<open>F = \<^bold>\<not>(G2 \<^bold>\<and> H2)\<close> \<open>G = \<^bold>\<not> G2\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
+      next
+        assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        then have "F = \<^bold>\<not> (\<^bold>\<not> G)" 
+          by (rule conjunct1)
+        have "H = G"
+          using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct2)
+        have "\<forall> G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          using assms by (iprover elim: conjunct2 conjunct1)
+        then have "\<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          by (rule allE)
+        then have "F \<in> S \<longrightarrow> G \<in> S"
+          by (simp only: \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close>)
+        then have "F \<in> S \<longrightarrow> G \<in> S \<or> G \<in> S"
+          by (simp only: disj_absorb)
+        thus "F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+        by (simp only: \<open>H = G\<close>)
+      qed
+    qed
+  qed
+qed
+
+lemma Hintikka_alt1:
+  assumes "Hintikka S"
+  shows "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)"
+proof -
+  have Hk:"(\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S))"
+    using assms by (rule auxEq)
+  then have C1: "\<bottom> \<notin> S"
+    by (rule conjunct1)
+  have C2: "\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+    using Hk by (iprover elim: conjunct2 conjunct1)
+  have C3: "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H.  Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+    proof (rule allI)
+      fix G 
+      show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      proof (rule allI)
+        fix H
+        have C31:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C32:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C33:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C34:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)"
+          using C31 C32 by (rule conjI)
+        then have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)"
+          using C33 by blast (*Pendiente*)
+        then have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)" 
+          using C34 by blast (*Pendiente*)
+        thus "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          by (rule Hintikka_alt1Con)
+      qed
+    qed
+  qed
+  have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H.  Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+    proof (rule allI)
+      fix G 
+      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      proof (rule allI)
+        fix H
+        have C41:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C42:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C43:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have C44:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+          using Hk by (iprover elim: conjunct2 conjunct1)
+        have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+        \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)"
+          using C41 C42 by (rule conjI)
+        then have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+        \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)
+        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)"
+          using C43 by blast (*Pendiente*)
+        then have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+        \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)
+        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)"
+          using C44 by blast (*Pendiente*)
+        thus "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+          by (rule Hintikka_alt1Dis)
+      qed
+    qed
+  qed
+  have "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)"
+    using C1 C2 by (rule conjI)
+  then have "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)"
+    using C3 by blast (*Pendiente*)
+  thus "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)"
+    using C4 by blast (*Pendiente*)
+qed
+
+lemma Hintikka_alt2:
+  assumes "\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S) 
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)"  
+  shows "Hintikka S"
+proof -
+  have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)"
+  proof -
+    have C1:"\<bottom> \<notin> S"
+      using assms by (rule conjunct1)
+    have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+      using assms by (iprover elim: conjunct2 conjunct1)
+    have C3:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Con (G \<^bold>\<and> H) G H"
+          by (simp only: Con.intros(1))
+        have "Con (G \<^bold>\<and> H) G H \<longrightarrow> G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          using Con by (iprover elim: allE)
+        thus "G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+          using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
+      qed
+    qed
+    have C4:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Dis (G \<^bold>\<or> H) G H"
+          by (simp only: Dis.intros(1))
+        have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+          using Dis by (iprover elim: allE)
+        thus "G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+          using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
+      qed
+    qed
+    have C5:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H"
+          by (simp only: Dis.intros(2))
+        have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H \<longrightarrow> G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+          using Dis by (iprover elim: allE)
+        thus "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S" 
+          using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H\<close> by (rule mp)
+      qed
+    qed
+    have C6:"\<forall>G. \<^bold>\<not>(\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+    proof (rule allI)
+      fix G
+      have "Con (\<^bold>\<not>(\<^bold>\<not> G)) G G \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not> G)) \<in> S \<longrightarrow> G \<in> S \<and> G \<in> S"
+        using Con by blast (*Pendiente*)
+      have "(\<^bold>\<not>(\<^bold>\<not> G)) \<in> S \<longrightarrow> G \<in> S \<and> G \<in> S"
+        using Con.intros(4) \<open>Con (\<^bold>\<not> (\<^bold>\<not> G)) G G \<longrightarrow> \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S \<and> G \<in> S\<close> by blast 
+              (*Pendiente*)
+      thus "(\<^bold>\<not>(\<^bold>\<not> G)) \<in> S \<longrightarrow> G \<in> S"
+        by (simp only: conj_absorb)
+    qed
+    have C7:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)"
+          by (simp only: Dis.intros(3))
+        have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+          using Dis by (iprover elim: allE)
+        thus "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+          using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)\<close> by (rule mp)
+      qed
+    qed
+    have C8:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)"
+          by (simp only: Con.intros(2))
+        have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using Con by (iprover elim: allE)
+        thus "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)\<close> by (rule mp)
+      qed
+    qed
+    have C9:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      proof (rule allI)
+        fix H
+        have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H)"
+          by (simp only: Con.intros(3))
+        have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using Con by (iprover elim: allE)
+        thus "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H)\<close> by (rule mp)
+      qed
+    qed
+    have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)"
+      using C1 C2 by (rule conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)" 
+      using C3 by (iprover intro: conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)"
+      using C4 by (iprover intro: conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)"
+      using C5 by (iprover intro: conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)"
+      using C6 by (iprover intro: conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)"
+      using C7 by (iprover intro: conjI)
+    then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)"
+      using C8 by (iprover intro: conjI)
+    thus "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not>G \<in> S \<or> H \<in> S)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> G \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)"
+      using C9 by blast (*Pendiente*)
+  qed
+  thus "Hintikka S"
+    unfolding Hintikka_def by this
+qed
+
+lemma "Hintikka S = (\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))"  
+proof (rule iffI)
+  assume "Hintikka S"
+  thus "(\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))"
+    by (rule Hintikka_alt1)
+next
+  assume "(\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))"
+  thus "Hintikka S"
+    by (rule Hintikka_alt2)
+qed
+
+lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))"  
+  apply(simp add: Hintikka_def con_dis_simps)
+  apply(rule iffI)
+   subgoal by blast
+  subgoal by safe metis+
+done
+
+text\<open> Lema: caracterización de la propiedad de consistencia proposicional
+ mediante las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
+
+lemma pcp_alt1Con:
+  assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+  shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+proof -
+  have C1:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    using assms by (rule conjunct1)
+  have C2:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have C3:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have C4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2) 
+  show "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      proof (rule allI)
+        fix H
+        show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        proof (rule impI)
+          assume "Con F G H"
+          then have "F = G \<^bold>\<and> H \<or> 
+          ((\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+          (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+           F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
+            by (simp only: con_dis_simps(1))
+          thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          proof (rule disjE)
+            assume "F = G \<^bold>\<and> H"
+            show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+              using C1 \<open>F = G \<^bold>\<and> H\<close> by (iprover elim: allE)
+          next
+            assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+          (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+           F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+            thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+            proof (rule disjE)
+              assume E1:"\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+              obtain G1 H1 where A1:"F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+                using E1 by (iprover elim: exE)
+              have "F = \<^bold>\<not> (G1 \<^bold>\<or> H1)"
+                using A1 by (rule conjunct1)
+              have "G = \<^bold>\<not> G1"
+                using A1 by (iprover elim: conjunct2 conjunct1)
+              have "H = \<^bold>\<not> H1"
+                using A1 by (iprover elim: conjunct2)
+              show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+                using C3 \<open>F = \<^bold>\<not> (G1 \<^bold>\<or> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = \<^bold>\<not> H1\<close> by (iprover elim: allE)
+            next
+              assume "(\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+              F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
+              thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+              proof (rule disjE)
+                assume E2:"\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+                obtain H2 where A2:"F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+                  using E2 by (rule exE)
+                have "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)"
+                  using A2 by (rule conjunct1)
+                have "H = \<^bold>\<not> H2"
+                  using A2 by (rule conjunct2)
+                show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+                  using C4 \<open>F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
+              next
+                assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
+                then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
+                  by (rule conjunct1)
+                have "H = G"
+                  using A3 by (rule conjunct2)
+                have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+                  using C2 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
+                thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+                  using \<open>H = G\<close> by simp (*Pendiente*)
+              qed
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+qed
+
+lemma pcp_alt1Dis:
+  assumes "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
+  shows "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+proof -
+  have C1:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    using assms by (rule conjunct1)
+  have C2:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have C3:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2 conjunct1)
+  have C4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+    using assms by (iprover elim: conjunct2) 
+  show "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      proof (rule allI)
+        fix H
+        show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        proof (rule impI)
+          assume "Dis F G H"
+          then have "F = G \<^bold>\<or> H \<or> 
+          (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+          (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+          F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
+            by (simp only: con_dis_simps(2))
+          thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          proof (rule disjE)
+            assume "F = G \<^bold>\<or> H"
+            show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+              using C1 \<open>F = G \<^bold>\<or> H\<close> by (iprover elim: allE)
+          next
+            assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+            (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+            F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+            thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            proof (rule disjE)
+              assume E1:"\<exists>G1 H1. F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+              obtain G1 H1 where A1:" F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+                using E1 by (iprover elim: exE)
+              have "F = (G1 \<^bold>\<rightarrow> H1)"
+                using A1 by (rule conjunct1)
+              have "G = \<^bold>\<not> G1"
+                using A1 by (iprover elim: conjunct2 conjunct1)
+              have "H = H1"
+                using A1 by (iprover elim: conjunct2)
+              show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+                using C2 \<open>F = (G1 \<^bold>\<rightarrow> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = H1\<close> by (iprover elim: allE)
+            next
+              assume "(\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+                        F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
+              thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+              proof (rule disjE)
+                assume E2:"\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
+                obtain G2 H2 where A2:"F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
+                  using E2 by (iprover elim: exE)
+                have "F = \<^bold>\<not> (G2 \<^bold>\<and> H2)"
+                  using A2 by (rule conjunct1)
+                have "G = \<^bold>\<not> G2"
+                  using A2 by (iprover elim: conjunct2 conjunct1)
+                have "H = \<^bold>\<not> H2"
+                  using A2 by (iprover elim: conjunct2)
+                show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+                  using C4 \<open>F = \<^bold>\<not> (G2 \<^bold>\<and> H2)\<close> \<open>G = \<^bold>\<not> G2\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
+              next
+                assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
+                then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
+                  by (rule conjunct1)
+                have "H = G"
+                  using A3 by (rule conjunct2)
+                have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+                  using C3 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
+                then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+                  by (simp only: disj_absorb)
+                thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+                  by (simp only: \<open>H = G\<close>)
+              qed
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+qed 
+
+lemma pcp_alt1: 
+  assumes "pcp C"
+  shows "\<forall>S \<in> C. \<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+proof (rule ballI)
+  fix S
+  assume "S \<in> C"
+  have "(\<forall>S \<in> C.
+  \<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C))"
+    using assms by (simp only: pcp_def)
+  then have pcpS:"\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+    using \<open>S \<in> C\<close> by (rule bspec)
+  then have C1:"\<bottom> \<notin> S"
+    by (rule conjunct1)
+  have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C3:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C4:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C5:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C6:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C7:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C8:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2 conjunct1)
+  have C9:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+    using pcpS by (iprover elim: conjunct2)
+  have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+    using C3 C6 C8 C9 by simp (*Pendiente*)
+  then have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    by (rule pcp_alt1Con)
+  have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
+    using C4 C5 C6 C7 by simp (*Pendiente*)
+  then have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    by (rule pcp_alt1Dis)
+  thus "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using C1 C2 Con Dis by simp (*Pendiente*)
+qed
+
+lemma pcp_alt2Con:
+  assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  shows "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+proof -
+  have 1:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "G \<^bold>\<and> H \<in> S"
+        then have "Con (G \<^bold>\<and> H) G H"
+          by (simp only: Con.intros(1))
+        have "\<forall>G H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          by (rule allE)
+        then have "(G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
+        thus "{G,H} \<union> S \<in> C"
+          using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  have 2:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+    proof (rule impI)
+      assume "\<^bold>\<not>(\<^bold>\<not>G) \<in> S"
+      then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G"
+        by (simp only: Con.intros(4))
+      have "\<forall>G H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+        by (rule allE)
+      then have "(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+        using \<open>Con (\<^bold>\<not>(\<^bold>\<not>G)) G G\<close> by (rule mp)
+      then have "{G,G} \<union> S \<in> C"
+        using \<open>(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
+      thus "{G} \<union> S \<in> C"
+        by simp (*Pendiente*)
+    qed
+  qed
+  have 3:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
+        then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+          by (simp only: Con.intros(2))
+        have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+          using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+        thus "{\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+          using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  have 4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
+        then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)"
+          by (simp only: Con.intros(3))
+        have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"  
+          using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)\<close> by (rule mp)
+        thus "{G,\<^bold>\<not>H} \<union> S \<in> C"
+          using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  show ?thesis
+    using 1 2 3 4 by auto (*Pendiente*)
+qed
+
+lemma pcp_alt2Dis:
+  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  shows "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
+proof -
+  have 1:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "G \<^bold>\<or> H \<in> S"
+        then have "Dis (G \<^bold>\<or> H) G H"
+          by (simp only: Dis.intros(1))
+        have "\<forall>G H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          by (rule allE)
+        then have "(G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
+        thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  have 2:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "G \<^bold>\<rightarrow> H \<in> S"
+        then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
+          by (simp only: Dis.intros(2))
+        have "\<forall>G H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          by (rule allE)
+        then have "(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
+        thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  have 3:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+    proof (rule impI)
+      assume "\<^bold>\<not> (\<^bold>\<not>G) \<in> S"
+      then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G"
+        by (simp only: Dis.intros(4))
+      have "\<forall>G H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+        by (rule allE)
+      then have "(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+        using \<open>Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G\<close> by (rule mp)
+      then have "{G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+        using \<open>(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
+      thus "{G} \<union> S \<in> C"
+        by (simp only: disj_absorb)
+    qed
+  qed
+  have 4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix G
+    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule allI)
+      fix H
+      show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
+        then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+          by (simp only: Dis.intros(3))
+        have "\<forall>G H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+          using assms by auto (*Pendiente*)
+        then have "\<forall>H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+          by (rule allE)
+        then have "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+          using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+        thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+          using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
+      qed
+    qed
+  qed
+  show ?thesis
+    using 1 2 3 4 by auto (*Pendiente*)
+qed
+
+lemma pcp_alt2: 
+  assumes "\<forall>S \<in> C. \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+  shows "pcp C"
+proof -
+  have "(\<forall>S \<in> C.
+  \<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+  \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C))"
+  proof (rule ballI)
+    fix S
+    assume "S \<in> C"
+    have H:"\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+      using assms \<open>S \<in> C\<close> by (rule bspec)
+    then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      by blast (*Pendiente*)
+    then have C:"(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+      by (rule pcp_alt2Con)
+    have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using H by blast (*Pendiente*)
+    then have D:"(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
+      by (rule pcp_alt2Dis)
+    have 1:"\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)"
+      using H by blast (*Pendiente*)
+    have 2:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      using C by blast (*Pendiente*)
+    have 3:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using D by blast (*Pendiente*)
+    have 4:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using D by blast (*Pendiente*)
+    have 5:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+      using C by blast (*Pendiente*)
+    have 6:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+      using D by blast (*Pendiente*)
+    have 7:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+      using C by blast (*Pendiente*)
+    have 8:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+      using C by blast (*Pendiente*)
+    show "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+    \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
+    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C)
+    \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
+      using 1 2 3 4 5 6 7 8 by blast (*Pendiente*)
+  qed
+  thus "pcp C" 
+    by (rule auxEqB)
+qed
+
+lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+proof (rule iffI)
+  assume "pcp C"
+  thus "\<forall>S \<in> C. \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    by (rule pcp_alt1)
+next
+  assume "\<forall>S \<in> C. \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+  thus "pcp C"
+    by (rule pcp_alt2)
+qed
+
+lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+  apply(simp add: pcp_def con_dis_simps)
+  apply(rule iffI; unfold Ball_def; elim all_forward)
+  by (auto simp add: insert_absorb split: formula.splits)
+
+text\<open> Definición: C es cerrado bajo subconjunto.\<close>
+definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"
+
+text \<open> Definición: C tiene la propiedad de carácter finito.\<close>
+definition "finite_character C \<equiv> 
+            (\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C))"
+
+text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
+entonces tiene un subconjunto con la propiedad de consistencia
+proposicional y cerrado bajo subconjunto.\<close>
+
+lemma 
+  assumes "pcp C"
+  shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+proof -
+  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
+  have C1:"C \<subseteq> ?E"
+  proof (rule subsetI)
+    fix s
+    assume "s \<in> C"
+    have "s \<subseteq> s"
+      by (rule subset_refl)
+    then have "\<exists>S\<in>C. s \<subseteq> S"
+      using \<open>s \<in> C\<close> by (rule bexI)
+    thus "s \<in> ?E"
+      by (rule CollectI)
+  qed
+  have C2:"pcp ?E"
+    using assms unfolding pcp_alt
+    by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
+      (*Pendiente*)
+  (*proof -  
+    have "\<forall>S \<in> C.
+    (\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+      using assms by (simp only: pcp_alt)
+    then have "\<forall>S \<in> ?E.
+    (\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E))"
+      using C1*)
+(*definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"*)
+  have C3:"subset_closed ?E"
+  proof -
+    have "\<forall>S \<in> ?E. \<forall>s\<subseteq>S. s \<in> ?E"
+    proof (rule ballI)
+      fix S
+      assume "S \<in> ?E"
+      thus "\<forall>s\<subseteq>S. s \<in> ?E"
+        by auto (*Pendiente*)
+    qed
+    thus "subset_closed ?E"
+      unfolding subset_closed_def by this
+  qed
+  have "C \<subseteq> ?E \<and> pcp ?E \<and> subset_closed ?E" 
+    using C1 C2 C3 by blast (*Pendiente*)
+  thus ?thesis
+    by (rule exI)
+qed
+
+
+lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
+  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
+  show "C \<subseteq> ?E" by blast
+  show "subset_closed ?E" unfolding subset_closed_def by blast
+  assume C: \<open>pcp C\<close>
+  show "pcp ?E" using C unfolding pcp_alt
+    by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
+qed
+
+text\<open>Lema: \<close>
+lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s" using [[simp_trace]]
+  by simp (*Pendiente*)
+
+text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
+cerrado bajo subconjunto.\<close>
+lemma ex2: 
+  assumes fc: "finite_character C"
+  shows "subset_closed C"
+  unfolding subset_closed_def
+proof (intro ballI sallI)
+  fix s S
+  assume e: \<open>S \<in> C\<close> and s: \<open>s \<subseteq> S\<close>
+  hence *: "t \<subseteq> s \<Longrightarrow> t \<subseteq> S" for t by simp
+  from fc have "t \<subseteq> S \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
+    unfolding finite_character_def using e by blast
+  hence "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t using * by simp
+  with fc show \<open>s \<in> C\<close> unfolding finite_character_def by blast
+qed
+
+text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es 
+cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
+de consistencia proposicional y de carácter finito.\<close>
+
+(*lemma
+  assumes C: "pcp C"
+  assumes S: "subset_closed C"
+  shows ex3: "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
+proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"] conjI)
+  let ?E = " {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
+  show "C \<subseteq> C \<union> ?E" by blast
+  from S show "finite_character (C \<union> ?E)" 
+    unfolding finite_character_def subset_closed_def by blast
+  note C'' = C[unfolded pcp_alt, THEN bspec]
+    
+  (* uniform notation. what did I learn? only slightly more elegant\<dots> *)
+  have CON: "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+             if si: "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C" and
+    un: "Con F G H" and el: " F \<in> S" for F G H S proof -
+    have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+      using si un C'' by simp
+    have "{G,H} \<union> S \<in> ?E"
+      unfolding mem_Collect_eq Un_iff proof safe
+      fix s
+      assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
+      hence "F \<triangleright> (s - {G,H}) \<subseteq> S" using el by blast
+      with k f have "G \<triangleright> H \<triangleright> F \<triangleright> (s - {G,H}) \<in> C" by simp
+      hence "F \<triangleright> G \<triangleright> H \<triangleright> s \<in> C" using insert_absorb by fastforce
+      thus "s \<in> C" using S unfolding subset_closed_def by fast  
+    qed
+    thus "G \<triangleright> H \<triangleright> S \<in> C \<union> ?E" by simp
+  qed
+  have DIS: "G \<triangleright> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> H \<triangleright> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+    if si: "\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and un: "Dis F G H" and el: "F \<in> S"
+    for F G H S proof -
+    have l: "\<exists>I\<in>{G, H}. I \<triangleright> s1 \<in> C \<and> I \<triangleright> s2 \<in> C" 
+      if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
+         "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+    proof -
+      let ?s = "s1 \<union> s2"
+      have "?s \<subseteq> S" "finite ?s" using that by simp_all 
+      with si have "?s \<in> C" by simp
+      moreover have "F \<in> ?s" using that by simp
+      ultimately have "\<exists>I\<in>{G,H}. I \<triangleright> ?s \<in> C"
+        using C'' un by simp
+      thus "\<exists>I\<in>{G,H}. I \<triangleright> s1 \<in> C \<and> I \<triangleright> s2 \<in> C"
+        by (meson S[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1)
+    qed
+    have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; G \<triangleright> s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; H \<triangleright> s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+      using l by blast
+    have "False" if "s1 \<subseteq> S" "finite s1" "G \<triangleright> s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "H \<triangleright> s2 \<notin> C" for s1 s2
+    proof -
+      have *: "F \<triangleright> s1 \<subseteq> S" "finite (F \<triangleright> s1)" "F \<in> F \<triangleright> s1" if  "s1 \<subseteq> S" "finite s1" for s1
+        using that el by simp_all
+      have  "G \<triangleright> F \<triangleright> s1 \<notin> C" "H \<triangleright> F \<triangleright> s2 \<notin> C" 
+        by (meson S insert_mono subset_closed_def subset_insertI that(3,6))+
+      from m[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
+      show False .
+    qed
+    hence "G \<triangleright> S \<in> ?E \<or> H \<triangleright> S \<in> ?E"
+      unfolding mem_Collect_eq Un_iff
+      by (metis (no_types, lifting) finite_Diff insert_Diff si subset_insert_iff)
+    thus "G \<triangleright> S \<in> C \<union> ?E \<or> H \<triangleright> S \<in> C \<union> ?E" by blast
+  qed
+    
+  (* this proof does benefit from uniform notation a bit. Before it was introduced,
+     the subclaims CON, DIS had to be stated as *)  
+  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 F2 \<triangleright> s \<in> C \<or> g2 G2 \<triangleright> s \<in> C; 
+                                   \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
+      \<Longrightarrow> f2 F2 \<triangleright> S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 G2 \<triangleright> S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+    by fast
+  (* (without the False, obviously). The proof of the subclaim does not change gravely, 
+      but the f2 g2 h2 have to be instantiated manually upon use (with, e.g., id Not (\<lambda>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G))),
+      and there were multiple working instantiations. Generally not as beautiful. *)
+
+  show "pcp (C \<union> ?E)" unfolding pcp_alt
+    apply(intro ballI conjI; elim UnE; (unfold mem_Collect_eq)?)
+           subgoal using C'' by blast
+          subgoal using C'' by blast
+         subgoal using C'' by (simp;fail)
+        subgoal by (meson C'' empty_subsetI finite.emptyI finite_insert insert_subset subset_insertI)
+       subgoal using C'' by simp
+      subgoal using CON by simp
+     subgoal using C'' by blast
+    subgoal using DIS by simp
+  done
+qed
+
+text\<open> Definición: definición de una sucesión de conjuntos a partir de 
+C y S: S_0, S_1,...,S_n,...\<close>
+
+primrec pcp_seq where
+"pcp_seq C S 0 = S" |
+"pcp_seq C S (Suc n) = (
+  let Sn = pcp_seq C S n; Sn1 = from_nat n \<triangleright> Sn in
+  if Sn1 \<in> C then Sn1 else Sn
+)"
+
+text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y S 
+pertenece a C, todos los conjuntos de la sucesión están en C.\<close>
+
+lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
+proof(induction n)
+  case (Suc n)
+  hence "pcp_seq C S n \<in> C" by simp
+  thus ?case by(simp add: Let_def)
+qed simp
+
+text\<open>Lema: la sucesión es monónota.\<close>
+
+lemma pcp_seq_mono: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+proof(induction m)
+  case (Suc m)
+  thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
+qed simp
+
+lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
+proof(induction m)
+  case (Suc m)
+  have "{f n |n. n \<le> Suc m} = f (Suc m) \<triangleright> {f n |n. n \<le> m}" 
+    for f using le_Suc_eq by auto
+  hence "{pcp_seq C S n |n. n \<le> Suc m} = 
+          pcp_seq C S (Suc m) \<triangleright> {pcp_seq C S n |n. n \<le> m}" .
+  hence "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = 
+         \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" by auto
+  thus ?case using Suc pcp_seq_mono by blast
+qed simp
+
+text\<open>
+lemma wont_get_added: 
+"(F :: ('a :: countable) formula) \<notin> pcp_seq C S (Suc (to_nat F)) \<Longrightarrow> 
+F \<notin> pcp_seq C S (Suc (to_nat F) + n)"
+text\<open>We don't necessarily have @{term "n = to_nat (from_nat n)"}, so this doesn't hold.\<close>
+oops
+\<close>
+
+definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
+  
+lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
+  unfolding pcp_lim_def by(induction n; blast)
+    
+lemma pcp_lim_inserted_at_ex: 
+    "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
+  unfolding pcp_lim_def by blast
+
+lemma pcp_lim_in:
+  assumes c: "pcp C"
+  and el: "S \<in> C"
+  and sc: "subset_closed C"
+  and fc: "finite_character C"
+  shows "pcp_lim C S \<in> C" (is "?cl \<in> C")
+proof -
+  from pcp_seq_in[OF c el, THEN allI] have "\<forall>n. pcp_seq C S n \<in> C" .
+  hence "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" unfolding pcp_seq_UN .
+  
+  have "\<forall>s \<subseteq> ?cl. finite s \<longrightarrow> s \<in> C"
+  proof safe
+    fix s :: "'a formula set"
+    have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
+      using pcp_seq_sub by blast
+    assume \<open>finite s\<close> \<open>s \<subseteq> pcp_lim C S\<close>
+    hence "\<exists>k. s \<subseteq> pcp_seq C S k" 
+    proof(induction s rule: finite_induct) 
+      case (insert x s)
+      hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast
+      then guess k1 ..
+      moreover obtain k2 where "x \<in> pcp_seq C S k2"
+        by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
+      ultimately have "x \<triangleright> s \<subseteq> pcp_seq C S (max k1 k2)"
+        by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
+      thus ?case by blast
+    qed simp
+    with pcp_seq_in[OF c el] sc
+    show "s \<in> C" unfolding subset_closed_def by blast
+  qed
+  thus "?cl \<in> C" using fc unfolding finite_character_def by blast
+qed
+  
+lemma cl_max:
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  assumes el: "K \<in> C"
+  assumes su: "pcp_lim C S \<subseteq> K"
+  shows "pcp_lim C S = K" (is ?e)
+proof (rule ccontr)
+  assume \<open>\<not>?e\<close>
+  with su have "pcp_lim C S \<subset> K" by simp
+  then obtain F where e: "F \<in> K" and ne: "F \<notin> pcp_lim C S" by blast
+  from ne have "F \<notin> pcp_seq C S (Suc (to_nat F))" using pcp_seq_sub by fast
+  hence 1: "F \<triangleright> pcp_seq C S (to_nat F) \<notin> C" by (simp add: Let_def split: if_splits)
+  have "F \<triangleright> pcp_seq C S (to_nat F) \<subseteq> K" using pcp_seq_sub e su by blast
+  hence "F \<triangleright> pcp_seq C S (to_nat F) \<in> C" using sc 
+    unfolding subset_closed_def using el by blast
+  with 1 show False ..
+qed
+
+lemma cl_max':
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  shows "F \<triangleright> pcp_lim C S \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+    "F \<triangleright> G \<triangleright> pcp_lim C S \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+using cl_max[OF assms] by blast+
+
+lemma pcp_lim_Hintikka:
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  assumes fc: "finite_character C"
+  assumes el: "S \<in> C"
+  shows "Hintikka (pcp_lim C S)"
+proof -
+  let ?cl = "pcp_lim C S"
+  have "?cl \<in> C" using pcp_lim_in[OF c el sc fc] .
+  from c[unfolded pcp_alt, THEN bspec, OF this]
+  have d: "\<bottom> \<notin> ?cl"
+    "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
+    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<triangleright> H \<triangleright> ?cl \<in> C"
+    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<triangleright> ?cl \<in> C \<or> H \<triangleright> ?cl \<in> C"
+  for k F G H by blast+
+  have
+    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+    for F G H
+    by(auto dest: d(3-) cl_max'[OF c sc])
+  with d(1,2) show ?thesis unfolding Hintikka_alt by fast
+qed
+  
+theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
+  fixes S :: "'a :: countable formula set"
+  assumes c: "pcp C"
+  assumes el: "S \<in> C"
+  shows "sat S"
+proof -
+  note [[show_types]]
+  from c obtain Ce where 
+      "C \<subseteq> Ce" "pcp Ce" "subset_closed Ce" "finite_character Ce" 
+      using ex1[where 'a='a] ex2[where 'a='a] ex3[where 'a='a]
+    by (meson dual_order.trans ex2)
+  have "S \<in> Ce" using \<open>C \<subseteq> Ce\<close> el ..
+  with pcp_lim_Hintikka \<open>pcp Ce\<close> \<open>subset_closed Ce\<close> \<open>finite_character Ce\<close>
+  have  "Hintikka (pcp_lim Ce S)" .
+  with Hintikkas_lemma have "sat (pcp_lim Ce S)" .
+  moreover have "S \<subseteq> pcp_lim Ce S" using pcp_seq.simps(1) pcp_seq_sub by fast
+  ultimately show ?thesis unfolding sat_def by fast
+qed*)
+(* This and Hintikka's lemma are the only two where we need semantics. 
+   Still, I don't think it's meaningful to separate those two into 
+   an extra theory. *)
+
+(*<*)
+end
+(*>*) 
