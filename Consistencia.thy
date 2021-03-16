@@ -1610,6 +1610,20 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
 qed
 
 text\<open>Lema: \<close>
+
+lemma 
+  assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
+  shows "\<forall>s \<subseteq> S. P s" 
+proof (rule allI)
+  fix s
+  show "s \<subseteq> S \<longrightarrow> P s"
+  proof (rule impI)
+    assume "s \<subseteq> S"
+    thus "P s" 
+      by (rule assms)
+  qed
+qed
+
 lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s" using [[simp_trace]]
   by simp (*Pendiente*)
 
