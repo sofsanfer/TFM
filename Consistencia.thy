@@ -1390,23 +1390,196 @@ proof -
       by (rule CollectI)
   qed
   have C2:"pcp ?E"
-    using assms unfolding pcp_alt
-    by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
-      (*Pendiente*)
-  (*proof -  
-    have "\<forall>S \<in> C.
-    (\<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
-    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
-      using assms by (simp only: pcp_alt)
-    then have "\<forall>S \<in> ?E.
-    (\<bottom> \<notin> S
+  proof -
+    have "(\<forall>S \<in> ?E.
+    \<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
     \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
     \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E))"
-      using C1*)
-(*definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"*)
+    proof (rule ballI)
+      fix S
+      assume "S \<in> ?E"
+      then have 1:"\<exists>S'\<in> C. S \<subseteq> S'"
+        by (rule CollectD)  
+      obtain S' where "S' \<in> C" "S \<subseteq> S'"
+        using 1 by (rule bexE)
+      have 2:"(\<forall>S \<in> C.
+      \<bottom> \<notin> S
+      \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+        using assms by (rule pcp_alt1)
+      have 3:"\<bottom> \<notin> S'
+      \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
+      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
+        using \<open>S' \<in> C\<close> 2 by simp (*Pendiente*)
+      then have "\<bottom> \<notin> S'"
+        by (rule conjunct1)
+      have S1:"\<bottom> \<notin> S"
+        using \<open>S \<subseteq> S'\<close> \<open>\<bottom> \<notin> S'\<close> by (rule contra_subsetD)
+      have 4:"(\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
+      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
+        using 3 by (rule conjunct2)
+      then have 5:"\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+        by (rule conjunct1)
+      have S2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+      proof (rule allI)
+        fix k
+        show "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+        proof (rule impI)
+          assume "Atom k \<in> S"
+          have "Atom k \<in> S'"
+            using \<open>S \<subseteq> S'\<close> \<open>Atom k \<in> S\<close> by (rule set_mp)
+          show "\<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+          proof (rule impI)
+            assume "\<^bold>\<not> (Atom k) \<in> S"
+            have "\<^bold>\<not> (Atom k) \<in> S'"
+              using \<open>S \<subseteq> S'\<close> \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule set_mp)
+            have "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+              using 5 by (rule allE)
+            then have "\<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+              using \<open>Atom k \<in> S'\<close> by (rule mp)
+            thus "False"
+              using \<open>\<^bold>\<not> (Atom k) \<in> S'\<close> by (rule mp)
+          qed
+        qed
+      qed
+      have 6:"(\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
+        using 4 by (rule conjunct2)
+      then have 7:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+        by (rule conjunct1)
+      have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+      proof (rule allI)
+        fix F
+        show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+        proof (rule allI)
+          fix G
+          show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+          proof (rule allI)
+            fix H
+            show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+            proof (rule impI)
+              assume "Con F G H"
+              show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+              proof (rule impI)
+                assume "F \<in> S"
+                have "F \<in> S'"
+                  using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+                have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+                  using 7 by (iprover elim: allE)
+                then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+                  using \<open>Con F G H\<close> by (rule mp)
+                then have "{G,H} \<union> S' \<in> C"
+                  using \<open>F \<in> S'\<close> by (rule mp)
+                have "{G,H} \<union> S' \<in> ?E"
+                  using C1 \<open>{G,H} \<union> S' \<in> C\<close> by (rule set_mp)
+                have "S \<subseteq> insert H S'"
+                  using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
+                have "insert H S' = {H} \<union> S'"
+                  by (rule insert_is_Un)
+                then have "S \<subseteq> {H} \<union> S'"
+                  using \<open>S \<subseteq> insert H S'\<close> by simp (*Pendiente*)
+                have "S \<subseteq> insert G ({H} \<union> S')"
+                  using \<open>S \<subseteq> {H} \<union> S'\<close> by (rule subset_insertI2)
+                have "insert G ({H} \<union> S') = {G} \<union> ({H} \<union> S')"
+                  by (rule insert_is_Un)
+                then have "S \<subseteq> {G} \<union> ({H} \<union> S')"
+                  using \<open>S \<subseteq> insert G ({H} \<union> S')\<close> by simp (*Pendiente*)
+                then have "S \<subseteq> {G,H} \<union> S'"
+                  by auto (*Pendiente*)
+                then have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'"
+                  by simp (*Pendiente*)
+                thus "{G,H} \<union> S \<in> ?E"
+                  using \<open>{G, H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+              qed
+            qed
+          qed
+        qed
+      qed
+      have 8:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+        using 6 by (rule conjunct2)
+      have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+      proof (rule allI)
+        fix F
+        show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+        proof (rule allI)
+          fix G
+          show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+          proof (rule allI)
+            fix H
+            show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+            proof (rule impI)
+              assume "Dis F G H"
+              show "F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+              proof (rule impI)
+                assume "F \<in> S"
+                have "F \<in> S'"
+                  using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+                have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+                  using 8 by (iprover elim: allE)
+                then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+                  using \<open>Dis F G H\<close> by (rule mp)
+                then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+                  using \<open>F \<in> S'\<close> by (rule mp)
+                show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+                  using 9
+                proof (rule disjE)
+                  assume "{G} \<union> S' \<in> C"
+                  have "{G} \<union> S' \<in> ?E"
+                    using C1 \<open>{G} \<union> S' \<in> C\<close> by (rule set_mp)
+                  have "S \<subseteq> insert G S'"
+                    using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2)
+                  have "insert G S' = {G} \<union> S'"
+                    by (rule insert_is_Un)
+                  then have "S \<subseteq> {G} \<union> S'"
+                    using \<open>S \<subseteq> insert G S'\<close> by simp (*Pendiente*)
+                  then have "{G} \<union> S \<subseteq> {G} \<union> S'"
+                    by simp (*Pendiente*)
+                  then have "{G} \<union> S \<in> ?E"
+                    using \<open>{G} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+                  thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+                    by (rule disjI1)
+                next
+                  assume "{H} \<union> S' \<in> C"
+                  have "{H} \<union> S' \<in> ?E"
+                    using C1 \<open>{H} \<union> S' \<in> C\<close> by (rule set_mp)
+                  have "S \<subseteq> insert H S'"
+                    using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2)
+                  have "insert H S' = {H} \<union> S'"
+                    by (rule insert_is_Un)
+                  then have "S \<subseteq> {H} \<union> S'"
+                    using \<open>S \<subseteq> insert H S'\<close> by simp (*Pendiente*)
+                  then have "{H} \<union> S \<subseteq> {H} \<union> S'"
+                    by simp (*Pendiente*)
+                  then have "{H} \<union> S \<in> ?E"
+                    using \<open>{H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+                  thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+                    by (rule disjI2)
+                qed
+              qed
+            qed
+          qed
+        qed
+      qed
+      have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)"
+        using S1 S2 by (rule conjI)
+      then have "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)"
+        using S3 by simp (*Pendiente*)
+      thus "\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E)"
+        using S4 by simp (*Pendiente*)
+    qed
+    thus "pcp ?E"
+      by (rule pcp_alt2)
+  qed
   have C3:"subset_closed ?E"
   proof -
     have "\<forall>S \<in> ?E. \<forall>s\<subseteq>S. s \<in> ?E"

@@ -299,7 +299,7 @@ We try to mimic this, more to see whether it works than because it is
 ultimately necessary.\<close>
 (* It does help a bit, occasionally. *)
 
-text \<open>Definición: fórmulas de tipo \<alpha>, y sus componentes.\<close>
+text \<open>Definición: fórmulas de tipo \<open>\<alpha>\<close>, y sus componentes.\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
@@ -307,7 +307,7 @@ inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (Not (Imp F G)) F (Not G)" |
 "Con (Not (Not F)) F F"
 
-text \<open>Definición: fórmulas de tipo \<beta>, y sus componentes.\<close>
+text \<open>Definición: fórmulas de tipo \<open>\<beta>\<close>, y sus componentes.\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
@@ -336,7 +336,7 @@ lemma con_dis_simps:
   by (simp_all add: Con.simps Dis.simps)
 
 text\<open> Lema: caracterización de los conjuntos de Hintikka mediante las 
-fórmulas de tipo \<alpha> y \<beta>.\<close>
+fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
 
 lemma Hintikka_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
@@ -803,7 +803,7 @@ lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
 done
 
 text\<open> Lema: caracterización de la propiedad de consistencia proposicional
- mediante las fórmulas de tipo \<alpha> y \<beta>.\<close>
+ mediante las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
 
 lemma pcp_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
