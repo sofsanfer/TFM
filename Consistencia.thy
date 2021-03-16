@@ -1624,11 +1624,34 @@ proof (rule allI)
   qed
 qed
 
-lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s" using [[simp_trace]]
+lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
   by simp (*Pendiente*)
 
 text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
+
+lemma
+  assumes "finite_character C"
+  shows "subset_closed C"
+  unfolding subset_closed_def
+proof (intro ballI sallI)
+  fix s S
+  assume  \<open>S \<in> C\<close> and \<open>s \<subseteq> S\<close>
+  then have "t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S" for t 
+    by (simp only: subset_trans)
+  have "\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+    using assms unfolding finite_character_def by this
+  then have 1:"S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+    by (rule allE)
+  have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+    using \<open>S \<in> C\<close> 1 by (rule back_subst)
+  then have "t \<subseteq> S \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
+    using \<open>S \<in> C\<close> by blast (*Pendiente*)
+  then have "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
+    using \<open>s \<subseteq> S\<close> \<open>t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S\<close> by simp
+  with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
+qed
+
 lemma ex2: 
   assumes fc: "finite_character C"
   shows "subset_closed C"
