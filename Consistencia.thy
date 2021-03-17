@@ -1548,12 +1548,6 @@ text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es
 cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
 de consistencia proposicional y de carácter finito.\<close>
 
-text \<open>He introducido la notación correspondiente al triángulo en Sintaxis. 
-  Explicar la necesidad y ver si es necesario. Se corresponde con insert. He
-  prescindido de la notación y he empleado insert directamente.
-
-  Esta demostración es aún necesario revisarla (no se completa).\<close>
-
 lemma
   assumes C: "pcp C"
   assumes S: "subset_closed C"
@@ -1564,11 +1558,10 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
   from S show "finite_character (C \<union> ?E)" 
     unfolding finite_character_def subset_closed_def by blast
   note C'' = C[unfolded pcp_alt, THEN bspec]
-    
-  (* uniform notation. what did I learn? only slightly more elegant\<dots> *)
   have CON: "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
              if si: "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C" and
-    un: "Con F G H" and el: " F \<in> S" for F G H S proof -
+    un: "Con F G H" and el: " F \<in> S" for F G H S 
+  proof -
     have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
       using si un C'' by simp
     have "{G,H} \<union> S \<in> ?E"
@@ -1580,9 +1573,8 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
       hence "insert F (insert G (insert H  s)) \<in> C" using insert_absorb by fastforce
       thus "s \<in> C" using S unfolding subset_closed_def by fast  
     qed
-    
-    (*thus "G \<triangleright> H \<triangleright> S \<in> C \<union> ?E" by simp
-  qed*)
+    thus "{G, H} \<union> S \<in> C \<union> ?E" by simp
+  qed
   have DIS: "insert G S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     if si: "\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and un: "Dis F G H" and el: "F \<in> S"
     for F G H S proof -
@@ -1614,18 +1606,12 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
       unfolding mem_Collect_eq Un_iff
       by (metis (no_types, lifting) finite_Diff insert_Diff si subset_insert_iff)
     thus "insert G S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" by blast
-  qed
-    
-  (* this proof does benefit from uniform notation a bit. Before it was introduced,
-     the subclaims CON, DIS had to be stated as *)  
+  qed 
   have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
                                    \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
       \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     by fast
-  (* (without the False, obviously). The proof of the subclaim does not change gravely, 
-      but the f2 g2 h2 have to be instantiated manually upon use (with, e.g., id Not (\<lambda>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G))),
-      and there were multiple working instantiations. Generally not as beautiful. *)
- (*show "pcp (C \<union> ?E)" unfolding pcp_alt
+  show "pcp (C \<union> ?E)" unfolding pcp_alt
     apply(intro ballI conjI; elim UnE; (unfold mem_Collect_eq)?)
            subgoal using C'' by blast
           subgoal using C'' by blast
@@ -1636,8 +1622,7 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
      subgoal using C'' by blast
     subgoal using DIS by simp
   done
-qed*)
-  oops
+qed
 
 text\<open> Definición: definición de una sucesión de conjuntos a partir de 
 C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
