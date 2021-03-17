@@ -1758,15 +1758,14 @@ proof -
     "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
     "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
   for k F G H by blast+
-  have
-    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+  have "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+       "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
     for F G H
-    by(auto dest: d(3-) cl_max'[OF c sc])
+       by(auto dest: d(3-) cl_max'[OF c sc])
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
-qed
+qed*)
   
-theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
+(*theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
   fixes S :: "'a :: countable formula set"
   assumes c: "pcp C"
   assumes el: "S \<in> C"
