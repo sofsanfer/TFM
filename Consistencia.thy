@@ -9,6 +9,8 @@ begin
 
 section\<open>Consistencia\<close>
 
+subsection \<open>Condición de consistencia proposicional\<close>
+
 text \<open>En esta sección probaremos la consistencia de la lógica proposicional
   demostrando el \<open>teorema de existencia de modelos\<close>. Para ello, definiremos 
   inicialmente una condición de consistencia proposicional para una colección 
@@ -154,6 +156,8 @@ proof -
   thus ?thesis 
     using assms(2) by (rule bspec)
 qed
+
+subsection \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
 
 text \<open>Definición: fórmulas de tipo \<open>\<alpha>\<close>, y sus componentes.\<close>
 
