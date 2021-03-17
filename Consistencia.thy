@@ -1642,11 +1642,9 @@ qed*)
 text\<open> Definición: definición de una sucesión de conjuntos a partir de 
 C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
 
-text \<open>Al cambiar la notación del triángulo a insert da interferencias en el tipo. Revisar.\<close>
-
-(*primrec pcp_seq where
+primrec pcp_seq where
 "pcp_seq C S 0 = S" |
-"pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = from_nat insert n Sn in
+"pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
 
 text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y S 
@@ -1674,10 +1672,10 @@ qed simp
 lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induction m)
   case (Suc m)
-  have "{f n |n. n \<le> Suc m} = f (Suc m) \<triangleright> {f n |n. n \<le> m}" 
+  have "{f n |n. n \<le> Suc m} = insert (f (Suc m)) {f n |n. n \<le> m}" 
     for f using le_Suc_eq by auto
   hence "{pcp_seq C S n |n. n \<le> Suc m} = 
-          pcp_seq C S (Suc m) \<triangleright> {pcp_seq C S n |n. n \<le> m}" .
+          insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}" .
   hence "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = 
          \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" by auto
   thus ?case using Suc pcp_seq_mono by blast
@@ -1723,7 +1721,7 @@ proof -
       then guess k1 ..
       moreover obtain k2 where "x \<in> pcp_seq C S k2"
         by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
-      ultimately have "x \<triangleright> s \<subseteq> pcp_seq C S (max k1 k2)"
+      ultimately have "insert x s \<subseteq> pcp_seq C S (max k1 k2)"
         by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
       thus ?case by blast
     qed simp
@@ -1744,9 +1742,9 @@ proof (rule ccontr)
   with su have "pcp_lim C S \<subset> K" by simp
   then obtain F where e: "F \<in> K" and ne: "F \<notin> pcp_lim C S" by blast
   from ne have "F \<notin> pcp_seq C S (Suc (to_nat F))" using pcp_seq_sub by fast
-  hence 1: "F \<triangleright> pcp_seq C S (to_nat F) \<notin> C" by (simp add: Let_def split: if_splits)
-  have "F \<triangleright> pcp_seq C S (to_nat F) \<subseteq> K" using pcp_seq_sub e su by blast
-  hence "F \<triangleright> pcp_seq C S (to_nat F) \<in> C" using sc 
+  hence 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" by (simp add: Let_def split: if_splits)
+  have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" using pcp_seq_sub e su by blast
+  hence "insert F (pcp_seq C S (to_nat F)) \<in> C" using sc 
     unfolding subset_closed_def using el by blast
   with 1 show False ..
 qed
@@ -1754,11 +1752,13 @@ qed
 lemma cl_max':
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
-  shows "F \<triangleright> pcp_lim C S \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-    "F \<triangleright> G \<triangleright> pcp_lim C S \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+  shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+    "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 using cl_max[OF assms] by blast+
 
-lemma pcp_lim_Hintikka:
+text \<open>Modificar blast+ con el cambio de notación ya que no carga.\<close>
+
+(*lemma pcp_lim_Hintikka:
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
   assumes fc: "finite_character C"
@@ -1770,8 +1770,8 @@ proof -
   from c[unfolded pcp_alt, THEN bspec, OF this]
   have d: "\<bottom> \<notin> ?cl"
     "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
-    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<triangleright> H \<triangleright> ?cl \<in> C"
-    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<triangleright> ?cl \<in> C \<or> H \<triangleright> ?cl \<in> C"
+    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
+    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
   for k F G H by blast+
   have
     "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
