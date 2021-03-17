@@ -1553,7 +1553,7 @@ text \<open>He introducido la notación correspondiente al triángulo en Sintaxi
 
   Esta demostración es aún necesario revisarla (no se completa).\<close>
 
-lemma
+(*lemma
   assumes C: "pcp C"
   assumes S: "subset_closed C"
   shows ex3: "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
@@ -1799,7 +1799,7 @@ qed
 (* This and Hintikka's lemma are the only two where we need semantics. 
    Still, I don't think it's meaningful to separate those two into 
    an extra theory. *)
-
+*)
 (*<*)
 end
 (*>*) 

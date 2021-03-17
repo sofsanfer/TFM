@@ -73,7 +73,7 @@ text \<open>En esta sección presentaremos una formalización en Isabelle de la
   A continuación, veamos la representación en Isabelle de la estructura
   de las fórmulas proposicionales.\<close>
 
-notation insert ("_ ▹ _" [56,55] 55)
+(*notation insert ("_ ▹ _" [56,55] 55)*)
 
 datatype (atoms: 'a) formula = 
   Atom 'a
@@ -83,7 +83,7 @@ datatype (atoms: 'a) formula =
 | Or "'a formula" "'a formula"     (infix "\<^bold>\<or>" 68)
 | Imp "'a formula" "'a formula"    (infixr "\<^bold>\<rightarrow>" 68)
 
-text‹Formulas are countable if their atoms are, and @{method countable_datatype} is really helpful with that.› 
+text\<open>Formulas are countable if their atoms are\<close> 
 instance formula :: (countable) countable by countable_datatype
 
 text \<open>Como podemos observar representamos las fórmulas proposicionales
