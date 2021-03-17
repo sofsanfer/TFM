@@ -83,6 +83,9 @@ datatype (atoms: 'a) formula =
 | Or "'a formula" "'a formula"     (infix "\<^bold>\<or>" 68)
 | Imp "'a formula" "'a formula"    (infixr "\<^bold>\<rightarrow>" 68)
 
+text‹Formulas are countable if their atoms are, and @{method countable_datatype} is really helpful with that.› 
+instance formula :: (countable) countable by countable_datatype
+
 text \<open>Como podemos observar representamos las fórmulas proposicionales
   mediante un tipo de dato recursivo, @{term "formula"}, con los 
   siguientes constructores sobre un tipo cualquiera:
