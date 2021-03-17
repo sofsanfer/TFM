@@ -73,6 +73,8 @@ text \<open>En esta sección presentaremos una formalización en Isabelle de la
   A continuación, veamos la representación en Isabelle de la estructura
   de las fórmulas proposicionales.\<close>
 
+notation insert ("_ ▹ _" [56,55] 55)
+
 datatype (atoms: 'a) formula = 
   Atom 'a
 | Bot                              ("\<bottom>")  
