@@ -460,7 +460,7 @@ proof -
   then have "\<bottom> \<notin> S
   \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)"
-    by simp (*Pendiente*) find_theorems name: conj "(?P \<and> ?Q) \<and> ?R"
+    by simp (*Pendiente*)
   then have "(\<bottom> \<notin> S
   \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S))
@@ -1549,11 +1549,12 @@ cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
 de consistencia proposicional y de carácter finito.\<close>
 
 text \<open>He introducido la notación correspondiente al triángulo en Sintaxis. 
-  Explicar la necesidad y ver si es necesario.
+  Explicar la necesidad y ver si es necesario. Se corresponde con insert. He
+  prescindido de la notación y he empleado insert directamente.
 
   Esta demostración es aún necesario revisarla (no se completa).\<close>
 
-(*lemma
+lemma
   assumes C: "pcp C"
   assumes S: "subset_closed C"
   shows ex3: "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
@@ -1574,18 +1575,18 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
       unfolding mem_Collect_eq Un_iff proof safe
       fix s
       assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
-      hence "F \<triangleright> (s - {G,H}) \<subseteq> S" using el by blast
-      with k f have "G \<triangleright> H \<triangleright> F \<triangleright> (s - {G,H}) \<in> C" by simp
-      hence "F \<triangleright> G \<triangleright> H \<triangleright> s \<in> C" using insert_absorb by fastforce
+      hence "insert F  (s - {G,H}) \<subseteq> S" using el by blast
+      with k f have "insert G  (insert H (insert F (s - {G,H}))) \<in> C" by simp
+      hence "insert F (insert G (insert H  s)) \<in> C" using insert_absorb by fastforce
       thus "s \<in> C" using S unfolding subset_closed_def by fast  
     qed
     
     (*thus "G \<triangleright> H \<triangleright> S \<in> C \<union> ?E" by simp
   qed*)
-  have DIS: "G \<triangleright> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> H \<triangleright> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+  have DIS: "insert G S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     if si: "\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and un: "Dis F G H" and el: "F \<in> S"
     for F G H S proof -
-    have l: "\<exists>I\<in>{G, H}. I \<triangleright> s1 \<in> C \<and> I \<triangleright> s2 \<in> C" 
+    have l: "\<exists>I\<in>{G, H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
       if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
     proof -
@@ -1593,33 +1594,33 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
       have "?s \<subseteq> S" "finite ?s" using that by simp_all 
       with si have "?s \<in> C" by simp
       moreover have "F \<in> ?s" using that by simp
-      ultimately have "\<exists>I\<in>{G,H}. I \<triangleright> ?s \<in> C"
+      ultimately have "\<exists>I\<in>{G,H}. insert I ?s \<in> C"
         using C'' un by simp
-      thus "\<exists>I\<in>{G,H}. I \<triangleright> s1 \<in> C \<and> I \<triangleright> s2 \<in> C"
+      thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
         by (meson S[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1)
     qed
-    have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; G \<triangleright> s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; H \<triangleright> s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+    have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
       using l by blast
-    have "False" if "s1 \<subseteq> S" "finite s1" "G \<triangleright> s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "H \<triangleright> s2 \<notin> C" for s1 s2
+    have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
     proof -
-      have *: "F \<triangleright> s1 \<subseteq> S" "finite (F \<triangleright> s1)" "F \<in> F \<triangleright> s1" if  "s1 \<subseteq> S" "finite s1" for s1
+      have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
         using that el by simp_all
-      have  "G \<triangleright> F \<triangleright> s1 \<notin> C" "H \<triangleright> F \<triangleright> s2 \<notin> C" 
+      have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
         by (meson S insert_mono subset_closed_def subset_insertI that(3,6))+
       from m[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
       show False .
     qed
-    hence "G \<triangleright> S \<in> ?E \<or> H \<triangleright> S \<in> ?E"
+    hence "insert G S \<in> ?E \<or> insert H S \<in> ?E"
       unfolding mem_Collect_eq Un_iff
       by (metis (no_types, lifting) finite_Diff insert_Diff si subset_insert_iff)
-    thus "G \<triangleright> S \<in> C \<union> ?E \<or> H \<triangleright> S \<in> C \<union> ?E" by blast
+    thus "insert G S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" by blast
   qed
     
   (* this proof does benefit from uniform notation a bit. Before it was introduced,
      the subclaims CON, DIS had to be stated as *)  
-  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 F2 \<triangleright> s \<in> C \<or> g2 G2 \<triangleright> s \<in> C; 
+  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
                                    \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
-      \<Longrightarrow> f2 F2 \<triangleright> S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 G2 \<triangleright> S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+      \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     by fast
   (* (without the False, obviously). The proof of the subclaim does not change gravely, 
       but the f2 g2 h2 have to be instantiated manually upon use (with, e.g., id Not (\<lambda>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G))),
@@ -1639,11 +1640,13 @@ qed*)
   oops
 
 text\<open> Definición: definición de una sucesión de conjuntos a partir de 
-C y S: S_0, S_1,...,S_n,...\<close>
+C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
 
-primrec pcp_seq where
+text \<open>Al cambiar la notación del triángulo a insert da interferencias en el tipo. Revisar.\<close>
+
+(*primrec pcp_seq where
 "pcp_seq C S 0 = S" |
-"pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = from_nat n \<triangleright> Sn in
+"pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = from_nat insert n Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
 
 text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y S 
