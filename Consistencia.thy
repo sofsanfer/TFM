@@ -9,7 +9,38 @@ begin
 
 section\<open>Consistencia\<close>
 
-text\<open>Definición: C verifica la condición de consistencia proposicional.\<close>
+text \<open>En esta sección probaremos la consistencia de la lógica proposicional
+  demostrando el \<open>teorema de existencia de modelos\<close>. Para ello, definiremos 
+  inicialmente una condición de consistencia proposicional para una colección 
+  de conjuntos de fórmulas proposicionales. De este modo, cualquier conjunto de
+  fórmulas proposicionales perteneciente a una colección que verifique dicha
+  condición será satisfacible por el \<open>teorema de existencia de modelos\<close>.\<close>
+
+text \<open>
+  \begin{definicion}
+    Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales. Decimos que
+    \<open>C\<close> verifica la \<open>condición de consistencia proposicional\<close> si, para todo
+    conjunto \<open>S\<close> perteneciente a la colección, se verifica:
+    \begin{enumerate}
+      \item \<open>\<bottom> \<notin> S\<close>.
+      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+      \item Si \<open>F \<and> G \<in> S\<close>, entonces el conjunto \<open>{F,G} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>F \<or> G \<in> S\<close>, entonces o bien el conjunto \<open>{F} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>F \<rightarrow> G \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(\<not> F) \<in> S\<close>, entonces el conjunto \<open>{F} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(F \<and> G) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(F \<or> G) \<in> S\<close>, entonces el conjunto \<open>{\<not> F, \<not> G} \<union> S\<close> pertenece a la 
+        colección. 
+      \item Si \<open>\<not>(F \<rightarrow> G) \<in> S\<close>, entonces el conjunto \<open>{F, \<not> G} \<union> S\<close> pertenece a la
+        colección. 
+    \end{enumerate}
+  \end{definicion}
+
+  Veamos, a continuación, su formalización en Isabelle mediante el tipo \<open>definition\<close>.\<close>
 
 definition "pcp C \<equiv> (\<forall>S \<in> C.
   \<bottom> \<notin> S
@@ -22,7 +53,42 @@ definition "pcp C \<equiv> (\<forall>S \<in> C.
 \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
 \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C))"
 
-lemma auxEqB:
+text \<open>Observando la definición anterior, se prueba fácilmente que la colección trivial
+  formada por el conjunto vacío de fórmulas verifica la condición de consistencia 
+  proposicional.\<close>
+
+lemma "pcp {{}}"
+  unfolding pcp_def by simp
+
+text \<open>Del mismo modo, aplicando la definición, se demuestra que los siguientes ejemplos
+  de colecciones de conjuntos de fórmulas proposicionales verifican igualmente la 
+  condición.\<close>
+
+lemma "pcp {{Atom 0}}"
+  unfolding pcp_def by simp
+
+lemma "pcp {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
+   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))},
+  {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1)),  Atom 1}}" 
+  unfolding pcp_def by auto
+
+text \<open>En contraposición, podemos ilustrar un caso de colección que no verifique la 
+  condición con la siguiente colección obtenida al modificar el último ejemplo. De
+  esta manera, aunque la colección verifique correctamente la quinta condición de la
+  definición, no cumplirá la sexta.\<close>
+
+lemma "\<not> pcp {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
+   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))}}" 
+  unfolding pcp_def by auto
+
+text \<open>Seguidamente presentaremos dos lemas auxiliares derivados de la definición anterior
+  que facilitarán las posteriores demostraciones realizadas en Isabelle/HOL. Estos dos 
+  lemas indican que la verificación de la conjunción de las nueve condiciones de la 
+  definición para cualquier conjunto perteneciente a la colección es una condición 
+  necesaria y suficiente para que la colección verifique la condición de consistencia 
+  proposicional.\<close>
+
+lemma auxEq1:
   assumes "\<forall>S \<in> C.
   \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -50,7 +116,7 @@ proof -
     using assms by (rule iffD2)
 qed
 
-lemma auxEqC:
+lemma auxEq2:
   assumes "pcp C"
           "S \<in> C"
   shows "\<bottom> \<notin> S
@@ -88,25 +154,6 @@ proof -
   thus ?thesis 
     using assms(2) by (rule bspec)
 qed
-
-text \<open>Ejemplos:\<close>
-
-lemma "pcp {{}}"
-  unfolding pcp_def by simp
-
-lemma "pcp {{Atom 0}}"
-  unfolding pcp_def by simp
-
-lemma "pcp {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
-   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))},
-  {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1)),  Atom 1}}" 
-  unfolding pcp_def by auto
-
-text\<open>Fitting uses uniform notation~\cite{smullyan1963unifying} for the
- definition of @{const pcp}. 
-We try to mimic this, more to see whether it works than because it is 
-ultimately necessary.\<close>
-(* It does help a bit, occasionally. *)
 
 text \<open>Definición: fórmulas de tipo \<open>\<alpha>\<close>, y sus componentes.\<close>
 
@@ -1139,7 +1186,7 @@ proof -
       using 1 2 3 4 5 6 7 8 by blast (*Pendiente*)
   qed
   thus "pcp C" 
-    by (rule auxEqB)
+    by (rule auxEq1)
 qed
 
 lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
