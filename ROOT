@@ -7,9 +7,6 @@ sessions
   theories
     Resumen
     Introduccion
-    Sintaxis
-    Semantica
-    Hintikka
     Consistencia
     Glosario
   document_files

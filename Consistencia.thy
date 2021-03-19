@@ -159,7 +159,32 @@ qed
 
 subsection \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
 
-text \<open>Definición: fórmulas de tipo \<open>\<alpha>\<close>, y sus componentes.\<close>
+text \<open>En esta subsección vamos a introducir una notación uniforme inicialmente 
+  desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
+  de dicha notación es reducir el número de casos a considerar sobre la estructura de 
+  las fórmulas al clasificar estas en dos categorías, facilitando las demostraciones
+  y métodos empleados en adelante.
+
+  \comentario{Añadir referencia bibliográfica.}
+
+  De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
+  actúan de manera \<open>conjuntiva\<close> (las fórmulas \<open>\<alpha>\<close>) y las que actúan de manera 
+  disyuntiva (las fórmulas \<open>\<beta>\<close>). Para cada fórmula \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, se definen 
+  dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. 
+
+  \begin{definicion}
+    Las fórmulas de tipo \<open>\<alpha>\<close> (\<open>fórmulas conjuntivas\<close>) y sus correspondientes componentes
+    \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen inductivamente, dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera, como sigue:
+    \begin{enumerate}
+      \item \<open>F \<and> G\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
+      \item \<open>\<not>(F \<or> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>\<not> G\<close>.
+      \item \<open>\<not>(F \<longrightarrow> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>\<not> G\<close>.
+      \item \<open>\<not>(\<not> F)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>F\<close>.
+    \end{enumerate} 
+  \end{definicion}
+
+  Como se trata de una definición inductiva, su formalización en Isabelle emplea el tipo
+  \<open>inductive\<close>.\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
@@ -167,7 +192,30 @@ inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (Not (Imp F G)) F (Not G)" |
 "Con (Not (Not F)) F F"
 
-text \<open>Definición: fórmulas de tipo \<open>\<beta>\<close>, y sus componentes.\<close>
+text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona la formalización de cada
+  una de las reglas de introducción que conforman la definición inductiva de manera 
+  simultánea.
+
+  \begin{itemize}
+    \item[] @{thm[mode=Rule] Con.intros[no_vars]} 
+      \hfill (@{text Con.intros})
+  \end{itemize}
+
+  Finalmente, definamos las fórmulas disyuntivas.
+
+  \begin{definicion}
+    Las fórmulas de tipo \<open>\<beta>\<close> (\<open>fórmulas disyuntivas\<close>) y sus correspondientes componentes
+    \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se definen inductivamente, dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera, como sigue:
+    \begin{enumerate}
+      \item \<open>F \<or> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
+      \item \<open>F \<longrightarrow> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>G\<close>.
+      \item \<open>\<not>(F \<and> G)\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>\<not> G\<close>.
+      \item \<open>\<not>(\<not> F)\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>F\<close> y \<open>F\<close>.
+    \end{enumerate} 
+  \end{definicion}
+
+  Su formalización en Isabelle emplea análogamente el tipo \<open>inductive\<close>, como se muestra
+  a continuación.\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
@@ -175,12 +223,28 @@ inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
 
-(* note that *)
+text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducción de la definición
+  anterior como sigue.
+
+  \begin{itemize}
+    \item[] @{thm[mode=Rule] Dis.intros[no_vars]} 
+      \hfill (@{text Dis.intros})
+  \end{itemize}
+
+  Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
+  deducir el siguiente lema.
+
+  \begin{lema}
+    La doble negación de una fórmula cualquiera es una fórmula conjuntiva y disyuntiva
+    simultáneamente.
+  \end{lema}
+
+  Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
 
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
-  by (simp only: Con.intros Dis.intros)+
-(* i.e. \<^bold>\<not>\<^bold>\<not> is both Conjunctive and Disjunctive. *)
-(*   I saw no reason to break this symmetry. *)
+  by (simp only: Con.intros(4) Dis.intros(4))+
+
+text \<open>\comentario{Voy por aquí en redacción.}\<close>
 
 text \<open>Ejemplos:\<close>
 
@@ -1530,6 +1594,8 @@ proof (intro ballI sallI)
   with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
 
+text \<open>\comentario{Pendiente.}\<close>
+
 lemma ex2: 
   assumes fc: "finite_character C"
   shows "subset_closed C"
@@ -1543,6 +1609,8 @@ proof (intro ballI sallI)
   hence "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t using * by simp
   with fc show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
+
+text \<open>\comentario{He demostrado de manera detallada hasta aquí.}\<close>
 
 text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es 
 cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
@@ -1667,11 +1735,10 @@ proof(induction m)
 qed simp
 
 text\<open>
-lemma wont_get_added: 
-"(F :: ('a :: countable) formula) \<notin> pcp_seq C S (Suc (to_nat F)) \<Longrightarrow> 
-F \<notin> pcp_seq C S (Suc (to_nat F) + n)"
+lemma \<open>wont_get_added:\<close>
+\<open>"(F :: ('a :: countable) formula) \<notin> pcp_seq C S (Suc (to_nat F)) \<Longrightarrow> 
+F \<notin> pcp_seq C S (Suc (to_nat F) + n)"\<close>
 text\<open>We don't necessarily have @{term "n = to_nat (from_nat n)"}, so this doesn't hold.\<close>
-oops
 \<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
@@ -1741,7 +1808,7 @@ lemma cl_max':
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 using cl_max[OF assms] by blast+
 
-text \<open>Modificar blast+ con el cambio de notación ya que no carga.\<close>
+text \<open>\comentario{Modificar blast+ con el cambio de notación ya que no carga.}\<close>
 
 (*lemma pcp_lim_Hintikka:
   assumes c: "pcp C"
