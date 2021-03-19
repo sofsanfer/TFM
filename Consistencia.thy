@@ -244,7 +244,7 @@ text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducció
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
   by (simp only: Con.intros(4) Dis.intros(4))+
 
-text \<open>\comentario{Voy por aquí en redacción.}\<close>
+text \<open>\comentario{Voy por aquí en redacción}\<close>
 
 text \<open>Ejemplos:\<close>
 
