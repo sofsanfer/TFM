@@ -537,6 +537,8 @@ proof -
     by simp (*Pendiente*)
 qed
 
+text \<open>\comentario{Pendientes}\<close>
+
 lemma Hintikka_alt2:
   assumes "\<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -714,6 +716,8 @@ proof -
     unfolding Hintikka_def by this
 qed
 
+text \<open>\comentario{Pendientes}\<close>
+
 lemma "Hintikka S = (\<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
@@ -833,6 +837,8 @@ proof -
     qed
   qed
 qed
+
+text \<open>\comentario{Pendientes}\<close>
 
 lemma pcp_alt1Dis:
   assumes "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
@@ -994,6 +1000,8 @@ proof (rule ballI)
     using C1 C2 Con Dis by simp (*Pendiente*)
 qed
 
+text \<open>\comentario{Pendientes}\<close>
+
 lemma pcp_alt2Con:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -1098,6 +1106,8 @@ proof -
   show ?thesis
     using 1 2 3 4 by auto (*Pendiente*)
 qed
+
+text \<open>\comentario{Pendientes}\<close>
 
 lemma pcp_alt2Dis:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
@@ -1204,6 +1214,8 @@ proof -
     using 1 2 3 4 by auto (*Pendiente*)
 qed
 
+text \<open>\comentario{Pendientes}\<close>
+
 lemma pcp_alt2: 
   assumes "\<forall>S \<in> C. \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -1274,6 +1286,8 @@ proof -
   thus "pcp C" 
     by (rule auxEq1)
 qed
+
+text \<open>\comentario{Pendientes}\<close>
 
 lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -1540,6 +1554,8 @@ proof -
     by (rule exI)
 qed
 
+text \<open>\comentario{Pendientes}\<close>
+
 
 lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
@@ -1568,6 +1584,8 @@ qed
 
 lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
   by simp (*Pendiente*)
+
+text \<open>\comentario{Pendiente}\<close>
 
 text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
