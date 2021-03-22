@@ -1300,20 +1300,16 @@ proof (rule subsetI)
     by simp (*Pendiente*)
 qed
 
-text \<open>\comentario{Sacar lemas auxiliares fuera para facilitar lectura.}\<close>
-
-
-lemma ex2_detallada:
+lemma ex2_pcp: 
   assumes "pcp C"
-  shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+  shows "pcp {s. \<exists>S\<in>C. s \<subseteq> S}"
 proof -
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
-  have C1:"C \<subseteq> ?E"
+  have C1: "C \<subseteq> ?E"
     by (rule ex2_subset)
-  have C2:"pcp ?E"
-  proof -
-    have "(\<forall>S \<in> ?E.
-    \<bottom> \<notin> S
+  show "pcp ?E"
+  proof (rule pcp_alt2)
+    show "\<forall>S \<in> ?E. (\<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
     \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
     \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E))"
@@ -1485,34 +1481,38 @@ proof -
           qed
         qed
       qed
-      have "\<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)"
-        using S1 S2 by (rule conjI)
-      then have "\<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)"
-        using S3 by simp (*Pendiente*)
-      thus "\<bottom> \<notin> S
+      show "\<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
     \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
     \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E)"
-        using S4 by simp (*Pendiente*)
+        using S1 S2 S3 S4 by (iprover intro: conjI)
     qed
-    thus "pcp ?E"
-      by (rule pcp_alt2)
   qed
+qed
+
+lemma ex2_subset_closed:
+  assumes "pcp C"
+  shows "subset_closed {s. \<exists>S\<in>C. s \<subseteq> S}"
+  unfolding subset_closed_def
+proof (rule ballI)
+  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
+  fix S
+  assume "S \<in> ?E"
+  thus "\<forall>s \<subseteq> S. s \<in> ?E"
+    by auto (*Pendiente*)
+qed
+
+lemma ex2_detallada:
+  assumes "pcp C"
+  shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+proof -
+  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
+  have C1:"C \<subseteq> ?E"
+    by (rule ex2_subset)
+  have C2:"pcp ?E"
+    using assms by (rule ex2_pcp)
   have C3:"subset_closed ?E"
-  proof -
-    have "\<forall>S \<in> ?E. \<forall>s\<subseteq>S. s \<in> ?E"
-    proof (rule ballI)
-      fix S
-      assume "S \<in> ?E"
-      thus "\<forall>s \<subseteq> S. s \<in> ?E"
-        by auto (*Pendiente*)
-    qed
-    thus "subset_closed ?E"
-      unfolding subset_closed_def by this
-  qed
+    using assms by (rule ex2_subset_closed)
   have "C \<subseteq> ?E \<and> pcp ?E \<and> subset_closed ?E" 
     using C1 C2 C3 by (iprover intro: conjI)
   thus ?thesis
