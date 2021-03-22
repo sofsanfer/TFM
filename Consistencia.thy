@@ -712,6 +712,8 @@ done
 text\<open> Lema: caracterización de la propiedad de consistencia proposicional
  mediante las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
 
+text \<open>El lema \<open>pcp_alt1\<close> es el lema auxiliar para la primera implicación.\<close>
+
 lemma pcp_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
   \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
@@ -961,6 +963,116 @@ proof (rule ballI)
     using C1 C2 Con Dis by (iprover intro: conjI)
 qed
 
+text \<open>El lema \<open>pcp_alt2\<close> es para la implicación contraria.\<close>
+
+text \<open>Lemas auxiliares para \<open>pcp_alt2Con\<close> para las distintas conectivas (análogos)
+  Idea: hacer estas demostraciones a mano resumidas en una sola demostración
+  donde se considera la fórmula beta y sus componentes.\<close>
+
+lemma pcp_alt2Con1:
+  assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  shows "\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "G \<^bold>\<and> H \<in> S"
+      then have "Con (G \<^bold>\<and> H) G H"
+        by (simp only: Con.intros(1))
+      have "\<forall>G H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        by (rule allE)
+      then have "(G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
+      thus "{G,H} \<union> S \<in> C"
+        using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
+lemma pcp_alt2Con2:
+  assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  shows "\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+  proof (rule impI)
+    assume "\<^bold>\<not>(\<^bold>\<not>G) \<in> S"
+    then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G"
+      by (simp only: Con.intros(4))
+    then have "\<forall>G H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      using assms by simp(*Pendiente*)
+    then have "\<forall>H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      by (rule allE)
+    then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+      by (rule allE)
+    then have "(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+      using \<open>Con (\<^bold>\<not>(\<^bold>\<not>G)) G G\<close> by (rule mp)
+    then have "{G,G} \<union> S \<in> C"
+      using \<open>(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
+    thus "{G} \<union> S \<in> C"
+      by simp (*Pendiente*)
+  qed
+qed
+
+lemma pcp_alt2Con3:
+  assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
+      then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+        by (simp only: Con.intros(2))
+      then have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+        using assms by simp (*Pendiente*)
+      then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+        by (iprover elim: allE)
+      then have "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+        using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+      thus "{\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+        using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
+lemma pcp_alt2Con4:
+  assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
+      then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)"
+        by (simp only: Con.intros(3))
+      have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+        by (rule allE)
+      then have "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"  
+        using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)\<close> by (rule mp)
+      thus "{G,\<^bold>\<not>H} \<union> S \<in> C"
+        using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
 lemma pcp_alt2Con:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -969,104 +1081,16 @@ lemma pcp_alt2Con:
   \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
 proof -
   have 1:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "G \<^bold>\<and> H \<in> S"
-        then have "Con (G \<^bold>\<and> H) G H"
-          by (simp only: Con.intros(1))
-        have "\<forall>G H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          by (rule allE)
-        then have "(G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
-        thus "{G,H} \<union> S \<in> C"
-          using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Con1)
   have 2:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-    proof (rule impI)
-      assume "\<^bold>\<not>(\<^bold>\<not>G) \<in> S"
-      then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G"
-        by (simp only: Con.intros(4))
-      have "\<forall>G H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using assms by auto (*Pendiente*)
-      then have "\<forall>H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        by (rule allE)
-      then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
-        by (rule allE)
-      then have "(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
-        using \<open>Con (\<^bold>\<not>(\<^bold>\<not>G)) G G\<close> by (rule mp)
-      then have "{G,G} \<union> S \<in> C"
-        using \<open>(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
-      thus "{G} \<union> S \<in> C"
-        by simp (*Pendiente*)
-    qed
-  qed
+    using assms by (rule pcp_alt2Con2)
   have 3:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
-        then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
-          by (simp only: Con.intros(2))
-        have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-          using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
-        thus "{\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-          using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Con3)
   have 4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
-        then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)"
-          by (simp only: Con.intros(3))
-        have "\<forall>G H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"  
-          using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)\<close> by (rule mp)
-        thus "{G,\<^bold>\<not>H} \<union> S \<in> C"
-          using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Con4)
   show ?thesis
-    using 1 2 3 4 by auto (*Pendiente*)
+    using 1 2 3 4 by (iprover intro: conjI)
 qed
-
-text \<open>\comentario{Pendientes}\<close>
 
 text \<open>Lemas auxiliares para \<open>pcp_alt2Dis\<close> para las distintas conectivas (análogos)
   Idea: hacer estas demostraciones a mano resumidas en una sola demostración
