@@ -259,7 +259,7 @@ lemma con_dis_simps:
     a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
   by (simp_all add: Con.simps Dis.simps)
 
-text\<open> Lema: caracterización de los conjuntos de Hintikka mediante las 
+text\<open>Lema: caracterización de los conjuntos de Hintikka mediante las 
 fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
 
 lemma Hintikka_alt1Con:
@@ -1322,7 +1322,7 @@ text \<open> Lema: Si C verifica la propidad de consistencia proposicional,
 entonces tiene un subconjunto con la propiedad de consistencia
 proposicional y cerrado bajo subconjunto.\<close>
 
-lemma ex2_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
+lemma ex1_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
 proof (rule subsetI)
   fix s
   assume "s \<in> C"
@@ -1334,13 +1334,13 @@ proof (rule subsetI)
     by simp (*Pendiente*)
 qed
 
-lemma ex2_pcp: 
+lemma ex1_pcp: 
   assumes "pcp C"
   shows "pcp {s. \<exists>S\<in>C. s \<subseteq> S}"
 proof -
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
   have C1: "C \<subseteq> ?E"
-    by (rule ex2_subset)
+    by (rule ex1_subset)
   show "pcp ?E"
   proof (rule pcp_alt2)
     show "\<forall>S \<in> ?E. (\<bottom> \<notin> S
@@ -1524,7 +1524,7 @@ proof -
   qed
 qed
 
-lemma ex2_subset_closed:
+lemma ex1_subset_closed:
   assumes "pcp C"
   shows "subset_closed {s. \<exists>S\<in>C. s \<subseteq> S}"
   unfolding subset_closed_def
@@ -1536,17 +1536,17 @@ proof (rule ballI)
     by auto (*Pendiente*)
 qed
 
-lemma ex2_detallada:
+lemma ex1_detallada:
   assumes "pcp C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof -
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
   have C1:"C \<subseteq> ?E"
-    by (rule ex2_subset)
+    by (rule ex1_subset)
   have C2:"pcp ?E"
-    using assms by (rule ex2_pcp)
+    using assms by (rule ex1_pcp)
   have C3:"subset_closed ?E"
-    using assms by (rule ex2_subset_closed)
+    using assms by (rule ex1_subset_closed)
   have "C \<subseteq> ?E \<and> pcp ?E \<and> subset_closed ?E" 
     using C1 C2 C3 by (iprover intro: conjI)
   thus ?thesis
@@ -1565,7 +1565,7 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
     by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
-text\<open>Lema: \<close>
+text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
 
 lemma 
   assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
@@ -1581,14 +1581,12 @@ proof (rule allI)
 qed
 
 lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
-  by simp (*Pendiente*)
-
-text \<open>\comentario{Pendiente}\<close>
+  by simp
 
 text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
 
-lemma
+lemma ex2_detallada:
   assumes "finite_character C"
   shows "subset_closed C"
   unfolding subset_closed_def
@@ -1610,7 +1608,7 @@ proof (intro ballI sallI)
   with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
 
-text \<open>\comentario{Pendiente.}\<close>
+text \<open>\comentario{Pendiente}\<close>
 
 lemma ex2: 
   assumes fc: "finite_character C"
@@ -1625,8 +1623,6 @@ proof (intro ballI sallI)
   hence "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t using * by simp
   with fc show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
-
-text \<open>\comentario{He demostrado de manera detallada hasta aquí.}\<close>
 
 text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es 
 cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
@@ -1694,18 +1690,80 @@ proof -
 qed
 
 lemma ex3_pcp_CON:
-  assumes "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C"
+  assumes "pcp C"
+          "subset_closed C"
+          "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C"
           "Con F G H"
           "F \<in> S"
-        shows "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-  oops
+  shows "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+proof -
+  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
+  note C'' = assms(1)[unfolded pcp_alt, THEN bspec]
+  have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+    using assms(3) assms(4) C'' by simp (*Pendiente*)
+  have "{G,H} \<union> S \<in> ?E"
+    unfolding mem_Collect_eq Un_iff 
+    proof safe (*?*)
+    fix s
+    assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
+    hence "insert F  (s - {G,H}) \<subseteq> S" 
+      using assms(5) by blast (*Pendiente*)
+    with k f have "insert G  (insert H (insert F (s - {G,H}))) \<in> C" 
+      by simp (*Pendiente*)
+    hence "insert F (insert G (insert H  s)) \<in> C" 
+      using insert_absorb by fastforce (*Pendiente*)
+    thus "s \<in> C" 
+      using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
+    qed
+    thus "{G, H} \<union> S \<in> C \<union> ?E" 
+      by simp (*Pendiente*)
+qed
 
-lemma ex3_pcp_CON:
-  assumes "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C"
-          "Con F G H"
+lemma ex3_pcp_DIS:
+  assumes "pcp C"
+          "subset_closed C"
+          "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C"
+          "Dis F G H"
           "F \<in> S"
-        shows "insert G S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-  oops
+  shows "insert G S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}) \<or> insert H S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C})"
+proof -
+  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
+  note C'' = assms(1)[unfolded pcp_alt, THEN bspec]
+  have l: "\<exists>I\<in>{G, H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+      if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
+         "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+  proof -
+    let ?s = "s1 \<union> s2"
+    have "?s \<subseteq> S" "finite ?s" 
+      using that by simp_all (*Pendiente*)
+    with assms(3) have "?s \<in> C" 
+      by simp (*Pendiente*)
+    moreover have "F \<in> ?s" 
+      using that by simp (*Pendiente*)
+    ultimately have "\<exists>I\<in>{G,H}. insert I ?s \<in> C"
+        using C'' assms(4) by simp (*Pendiente*)
+    thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+      by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+  qed
+  have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+    using l by blast (*Pendiente*)
+  have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
+  proof -
+    have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
+      using that assms(5) by simp_all (*Pendiente*)
+    have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
+      by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
+    from m[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
+    show False . (*Pendiente*)
+  qed
+  hence "insert G S \<in> ?E \<or> insert H S \<in> ?E"
+    unfolding mem_Collect_eq Un_iff
+    by (metis (no_types, lifting) finite_Diff insert_Diff assms(3) subset_insert_iff) (*Pendiente*)
+  then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
+    by blast (*Pendiente*)
+  thus ?thesis
+    by simp (*Pendiente*)
+qed
 
 lemma ex3_pcp:
   assumes "pcp C"
@@ -1811,10 +1869,10 @@ proof -
       qed
       oops
 
-lemma
+lemma ex3:
   assumes C: "pcp C"
   assumes S: "subset_closed C"
-  shows ex3: "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
+  shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
 proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"] conjI)
   let ?E = " {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   show "C \<subseteq> C \<union> ?E" by blast
@@ -1823,12 +1881,13 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
   note C'' = C[unfolded pcp_alt, THEN bspec]
   have CON: "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
              if si: "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C" and
-    un: "Con F G H" and el: " F \<in> S" for F G H S 
+    un: "Con F G H" and el: "F \<in> S" for F G H S 
   proof -
     have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
       using si un C'' by simp
     have "{G,H} \<union> S \<in> ?E"
-      unfolding mem_Collect_eq Un_iff proof safe
+      unfolding mem_Collect_eq Un_iff 
+    proof safe
       fix s
       assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
       hence "insert F  (s - {G,H}) \<subseteq> S" using el by blast
@@ -1840,7 +1899,8 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
   qed
   have DIS: "{G}\<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     if si: "\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and un: "Dis F G H" and el: "F \<in> S"
-    for F G H S proof -
+    for F G H S 
+  proof -
     have l: "\<exists>I\<in>{G, H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
       if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
