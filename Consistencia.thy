@@ -2038,7 +2038,7 @@ text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y S
 pertenece a C, todos los conjuntos de la sucesión están en C.\<close>
 
 text \<open>He introducido una instancia en Sintaxis que señala que las fórmulas
-  son contables si sus átomos lo son. En caso contrario, hay interferencias
+  son contables si sus átomos lo son. En caso contrario hay interferencias
   entre los tipos.\<close>
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
@@ -2142,9 +2142,7 @@ lemma cl_max':
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 using cl_max[OF assms] by blast+
 
-text \<open>\comentario{Modificar blast+ con el cambio de notación ya que no carga.}\<close>
-
-(*lemma pcp_lim_Hintikka:
+lemma pcp_lim_Hintikka:
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
   assumes fc: "finite_character C"
@@ -2158,15 +2156,15 @@ proof -
     "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
     "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
     "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
-  for k F G H by blast+
+  for k F G H by force+
   have "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
        "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
     for F G H
        by(auto dest: d(3-) cl_max'[OF c sc])
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
-qed*)
+qed
   
-(*theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
+theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
   fixes S :: "'a :: countable formula set"
   assumes c: "pcp C"
   assumes el: "S \<in> C"
@@ -2180,14 +2178,16 @@ proof -
   have "S \<in> Ce" using \<open>C \<subseteq> Ce\<close> el ..
   with pcp_lim_Hintikka \<open>pcp Ce\<close> \<open>subset_closed Ce\<close> \<open>finite_character Ce\<close>
   have  "Hintikka (pcp_lim Ce S)" .
-  with Hintikkas_lemma have "sat (pcp_lim Ce S)" .
-  moreover have "S \<subseteq> pcp_lim Ce S" using pcp_seq.simps(1) pcp_seq_sub by fast
+  with Hintikkaslemma have "sat (pcp_lim Ce S)" .
+  moreover have "S \<subseteq> pcp_lim Ce S" 
+    using pcp_seq.simps(1) pcp_seq_sub by fast
   ultimately show ?thesis unfolding sat_def by fast
 qed
+
 (* This and Hintikka's lemma are the only two where we need semantics. 
    Still, I don't think it's meaningful to separate those two into 
    an extra theory. *)
-*)
+
 (*<*)
 end
 (*>*) 
