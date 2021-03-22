@@ -1288,22 +1288,28 @@ text \<open> Lema: Si C verifica la propidad de consistencia proposicional,
 entonces tiene un subconjunto con la propiedad de consistencia
 proposicional y cerrado bajo subconjunto.\<close>
 
-lemma 
+lemma ex2_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
+proof (rule subsetI)
+  fix s
+  assume "s \<in> C"
+  have "s \<subseteq> s"
+    by (rule subset_refl)
+  then have "\<exists>S\<in>C. s \<subseteq> S"
+    using \<open>s \<in> C\<close> by (rule bexI)
+  thus "s \<in> {s. \<exists>S\<in>C. s \<subseteq> S}"
+    by simp (*Pendiente*)
+qed
+
+text \<open>\comentario{Sacar lemas auxiliares fuera para facilitar lectura.}\<close>
+
+
+lemma ex2_detallada:
   assumes "pcp C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof -
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
   have C1:"C \<subseteq> ?E"
-  proof (rule subsetI)
-    fix s
-    assume "s \<in> C"
-    have "s \<subseteq> s"
-      by (rule subset_refl)
-    then have "\<exists>S\<in>C. s \<subseteq> S"
-      using \<open>s \<in> C\<close> by (rule bexI)
-    thus "s \<in> ?E"
-      by (rule CollectI)
-  qed
+    by (rule ex2_subset)
   have C2:"pcp ?E"
   proof -
     have "(\<forall>S \<in> ?E.
