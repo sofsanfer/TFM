@@ -1749,6 +1749,8 @@ proof -
     by simp (*Pendiente*)
 qed
 
+text \<open>\comentario{No se como integrarlo como lema auxiliar en ex3pcp.}\<close>
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -1758,35 +1760,53 @@ lemma ex3_pcp_DIS:
   shows "insert G S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}) \<or> insert H S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C})"
 proof -
   let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  note C'' = assms(1)[unfolded pcp_alt, THEN bspec]
-  have l: "\<exists>I\<in>{G, H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
-      if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
-         "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+  have 1:"\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using assms(1) by (rule pcp_alt1)
+  have H1:"\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+        if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
+          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
   proof -
     let ?s = "s1 \<union> s2"
     have "?s \<subseteq> S" "finite ?s" 
       using that by simp_all (*Pendiente*)
-    with assms(3) have "?s \<in> C" 
-      by simp (*Pendiente*)
-    moreover have "F \<in> ?s" 
+    then have "?s \<in> C" 
+      using assms(3) by simp (*Pendiente*)
+    then have "F \<in> ?s" 
       using that by simp (*Pendiente*)
-    ultimately have "\<exists>I\<in>{G,H}. insert I ?s \<in> C"
-        using C'' assms(4) by simp (*Pendiente*)
+    have "\<bottom> \<notin> ?s
+  \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+      using 1 \<open>?s \<in> C\<close> by (rule bspec)
+    then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+      by (iprover elim: conjunct2)
+    then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+      by (iprover elim: allE)
+    then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+      using assms(4) by (rule mp)
+    then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+      using \<open>F \<in> ?s\<close> by (rule mp)
+    then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+      by simp (*Pendiente*)
     thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
       by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
   qed
-  have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
-    using l by blast (*Pendiente*)
+  have H2:"\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+    using H1 by blast (*Pendiente*)
   have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
   proof -
     have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
       using that assms(5) by simp_all (*Pendiente*)
     have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
       by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
-    from m[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
+    from H2[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
     show False . (*Pendiente*)
   qed
-  hence "insert G S \<in> ?E \<or> insert H S \<in> ?E"
+  then have "insert G S \<in> ?E \<or> insert H S \<in> ?E"
     unfolding mem_Collect_eq Un_iff
     by (metis (no_types, lifting) finite_Diff insert_Diff assms(3) subset_insert_iff) (*Pendiente*)
   then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
@@ -1795,13 +1815,124 @@ proof -
     by simp (*Pendiente*)
 qed
 
+text \<open>\comentario{No se como integrarlo como lema auxiliar en ex3pcp.}\<close>
+
 lemma ex3_pcp:
   assumes "pcp C"
           "subset_closed C"
         shows "pcp (C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C})"
 proof -
   let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  show "pcp (C \<union> ?E)"
+  have 1:"\<forall>S \<in> C.
+  \<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using assms(1) by (rule pcp_alt1)
+  have CON: "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+             if H1:"\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C" and
+    H2:"Con F G H" and H3:"F \<in> S" for F G H S 
+  proof -
+    have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+    proof (rule sallI)
+      fix s
+      assume "s \<subseteq> S"
+      show "finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+      proof (rule impI)
+        assume "finite s"
+        show "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+        proof (rule impI)
+          assume "F \<in> s" 
+          have "s \<in> C"
+            using \<open>s \<subseteq> S\<close> \<open>finite s\<close> by (rule H1)
+          have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+            using 1 \<open>s \<in> C\<close> by blast (*Pendiente*)
+          then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+            by (iprover elim: allE)
+          then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+            using H2 by (rule mp)
+          thus "{G, H} \<union> s \<in> C"
+            using \<open>F \<in> s\<close> by (rule mp)
+        qed
+      qed
+    qed
+    have "{G,H} \<union> S \<in> ?E"
+      unfolding mem_Collect_eq Un_iff
+    proof (rule sallI)
+      fix s
+      assume H:"s \<subseteq> {G,H} \<union> S"
+      show "finite s \<longrightarrow> s \<in> C"
+      proof (rule impI)
+        assume "finite s"
+        have "insert F  (s - {G,H}) \<subseteq> S" 
+          using H3 H by blast (*Pendiente*)
+        then have "insert G  (insert H (insert F (s - {G,H}))) \<in> C"
+          using 2 \<open>finite s\<close> by simp (*Pendiente*)
+        then have "insert F (insert G (insert H  s)) \<in> C" 
+          using insert_absorb by fastforce (*Pendiente*)
+        thus "s \<in> C" 
+          using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
+      qed
+    qed
+    thus "{G, H} \<union> S \<in> C \<union> ?E" 
+      by simp (*Pendiente*)
+  qed   
+  have DIS: "{G} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+    if H4:"\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and H5:"Dis F G H" and H6:"F \<in> S"
+    for F G H S 
+  proof -
+    have l: "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+        if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
+          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+    proof -
+      let ?s = "s1 \<union> s2"
+      have "?s \<subseteq> S" "finite ?s" 
+        using that by simp_all (*Pendiente*)
+      then have "?s \<in> C" 
+        using H4 by simp (*Pendiente*)
+      then have "F \<in> ?s" 
+        using that by simp (*Pendiente*)
+      have "\<bottom> \<notin> ?s
+  \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+        using 1 \<open>?s \<in> C\<close> by (rule bspec)
+      then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+        by (iprover elim: conjunct2)
+      then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+        by (iprover elim: allE)
+      then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+        using H5 by (rule mp)
+      then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+        using \<open>F \<in> ?s\<close> by (rule mp)
+      then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+        by simp (*Pendiente*)
+      thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+        by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+    qed
+    have H7:"\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+      using l by blast (*Pendiente*)
+    have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
+    proof -
+      have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
+        using that H6 by simp_all (*Pendiente*)
+      have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
+        by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
+      from H7[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
+      show False . (*Pendiente*)
+    qed
+    then have "insert G S \<in> ?E \<or> insert H S \<in> ?E"
+      unfolding mem_Collect_eq Un_iff
+      by (metis (no_types, lifting) finite_Diff insert_Diff H4 subset_insert_iff) (*Pendiente*)
+    then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
+      by blast (*Pendiente*)
+    thus ?thesis
+      by simp (*Pendiente*)
+  qed
+have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
+                                   \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
+      \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+    by fast (*Pendiente*)
     oops
 
 lemma ex3_detallada:
@@ -1815,89 +1946,7 @@ proof -
   have C2:"finite_character (C \<union> ?E)"
     using assms(2) by (rule ex3_finite_character)
   have C3:"pcp (C \<union> ?E)"
-    unfolding pcp_def
-  proof (rule ballI)
-    fix S
-    assume "S \<in> C \<union> ?E"
-    then have "S \<in> C \<or> S \<in> ?E"
-      by simp (*Pendiente*)
-    thus "\<bottom> \<notin> S \<and>
-         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-         (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F. \<^bold>\<not> (\<^bold>\<not> F) \<in> S \<longrightarrow> {F} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G. \<^bold>\<not> (F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<union> ?E \<or> {\<^bold>\<not> G} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G. \<^bold>\<not> (F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G. \<^bold>\<not> (F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F, \<^bold>\<not> G} \<union> S \<in> C \<union> ?E)"
-    proof (rule disjE)
-      assume "S \<in> C"
-      have "(\<forall>S \<in> C.
-             \<bottom> \<notin> S
-             \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-             \<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
-             \<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
-             \<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
-             \<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C))"
-        using assms(1) unfolding pcp_def by this
-      then have pcpC:"\<bottom> \<notin> S
-             \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-             \<and> (\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F,G} \<union> S \<in> C)
-             \<and> (\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
-             \<and> (\<forall>F G. F \<^bold>\<rightarrow> G \<in> S \<longrightarrow> {\<^bold>\<not>F} \<union> S \<in> C \<or> {G} \<union> S \<in> C)
-             \<and> (\<forall>F. \<^bold>\<not> (\<^bold>\<not>F) \<in> S \<longrightarrow> {F} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<and> G) \<in> S \<longrightarrow> {\<^bold>\<not> F} \<union> S \<in> C \<or> {\<^bold>\<not> G} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<or> G) \<in> S \<longrightarrow> {\<^bold>\<not> F, \<^bold>\<not> G} \<union> S \<in> C)
-             \<and> (\<forall>F G. \<^bold>\<not>(F \<^bold>\<rightarrow> G) \<in> S \<longrightarrow> {F,\<^bold>\<not> G} \<union> S \<in> C)"
-        using \<open>S \<in> C\<close> by auto (*Pendiente*)
-      then have C31:"\<bottom> \<notin> S"
-        by (rule conjunct1)
-      have C32:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
-        using pcpC by (iprover elim: conjunct1 conjunct2)
-      have C33:"\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C \<union> ?E"
-      proof (rule allI)
-        fix F G
-        show "\<forall>G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C \<union> ?E"
-        proof (rule allI)
-          fix G
-          show "F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C \<union> ?E"
-          proof (rule impI)
-            assume "F \<^bold>\<and> G \<in> S"
-            have "\<forall>F G. F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C"
-              using pcpC by (iprover elim: conjunct1 conjunct2)
-            then have "F \<^bold>\<and> G \<in> S \<longrightarrow> {F, G} \<union> S \<in> C"
-              by (iprover elim: allE)
-            then have "{F,G} \<union> S \<in> C"
-              using \<open>F \<^bold>\<and> G \<in> S\<close> by (rule mp)
-            thus "{F,G} \<union> S \<in> C \<union> ?E"
-              by simp (*Pendiente*)
-          qed
-        qed
-      qed
-      have C34:"\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E"
-      proof (rule allI)
-        fix F G
-        show "\<forall>G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E"
-        proof (rule allI)
-          fix G
-          show "F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E"
-          proof (rule impI)
-            assume "F \<^bold>\<or> G \<in> S"
-            have "\<forall>F G. F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-              using pcpC by (iprover elim: conjunct1 conjunct2)
-            then have "F \<^bold>\<or> G \<in> S \<longrightarrow> {F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-              by (iprover elim: allE)
-            then have "{F} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-              using \<open>F \<^bold>\<or> G \<in> S\<close> by (rule mp)
-            thus "{F} \<union> S \<in> C \<union> ?E \<or> {G} \<union> S \<in> C \<union> ?E"
-              by auto (*Pendiente*)
-          qed
-        qed
-      qed
-      oops
+    oops
 
 lemma ex3:
   assumes C: "pcp C"
