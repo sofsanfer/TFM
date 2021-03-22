@@ -1068,6 +1068,118 @@ qed
 
 text \<open>\comentario{Pendientes}\<close>
 
+text \<open>Lemas auxiliares para \<open>pcp_alt2Dis\<close> para las distintas conectivas (análogos)
+  Idea: hacer estas demostraciones a mano resumidas en una sola demostración
+  donde se considera la fórmula beta y sus componentes.\<close>
+
+lemma pcp_alt2Dis1:
+  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  shows "\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "G \<^bold>\<or> H \<in> S"
+      then have "Dis (G \<^bold>\<or> H) G H"
+        by (simp only: Dis.intros(1))
+      have "\<forall>G H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        by (rule allE)
+      then have "(G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
+      thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
+lemma pcp_alt2Dis2:
+  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  shows "\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "G \<^bold>\<rightarrow> H \<in> S"
+      then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
+        by (simp only: Dis.intros(2))
+      have "\<forall>G H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        by (rule allE)
+      then have "(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
+      thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
+lemma pcp_alt2Dis3:
+  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  shows "\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+  proof (rule impI)
+    assume "\<^bold>\<not> (\<^bold>\<not>G) \<in> S"
+    then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G"
+      by (simp only: Dis.intros(4))
+    have "\<forall>G H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using assms by auto (*Pendiente*)
+    then have "\<forall>H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      by (rule allE)
+    then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+      by (rule allE)
+    then have "(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+      using \<open>Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G\<close> by (rule mp)
+    then have "{G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+      using \<open>(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
+    thus "{G} \<union> S \<in> C"
+      by (simp only: disj_absorb)
+  qed
+qed
+
+lemma pcp_alt2Dis4:
+  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+proof (rule allI)
+  fix G
+  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule allI)
+    fix H
+    show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
+      then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+        by (simp only: Dis.intros(3))
+      have "\<forall>G H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+        using assms by auto (*Pendiente*)
+      then have "\<forall>H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+        by (rule allE)
+      then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+        by (rule allE)
+      then have "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+        using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+      thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+        using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
+    qed
+  qed
+qed
+
+text \<open>Lema \<open>pcp_alt2Dis\<close>\<close>
+
 lemma pcp_alt2Dis:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
@@ -1076,104 +1188,16 @@ lemma pcp_alt2Dis:
   \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
 proof -
   have 1:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "G \<^bold>\<or> H \<in> S"
-        then have "Dis (G \<^bold>\<or> H) G H"
-          by (simp only: Dis.intros(1))
-        have "\<forall>G H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          by (rule allE)
-        then have "(G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
-        thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Dis1)
   have 2:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "G \<^bold>\<rightarrow> H \<in> S"
-        then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
-          by (simp only: Dis.intros(2))
-        have "\<forall>G H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          by (rule allE)
-        then have "(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
-        thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Dis2)
   have 3:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-    proof (rule impI)
-      assume "\<^bold>\<not> (\<^bold>\<not>G) \<in> S"
-      then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G"
-        by (simp only: Dis.intros(4))
-      have "\<forall>G H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using assms by auto (*Pendiente*)
-      then have "\<forall>H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        by (rule allE)
-      then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-        by (rule allE)
-      then have "(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-        using \<open>Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G\<close> by (rule mp)
-      then have "{G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-        using \<open>(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
-      thus "{G} \<union> S \<in> C"
-        by (simp only: disj_absorb)
-    qed
-  qed
+    using assms by (rule pcp_alt2Dis3)
   have 4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix G
-    show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule allI)
-      fix H
-      show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-      proof (rule impI)
-        assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
-        then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
-          by (simp only: Dis.intros(3))
-        have "\<forall>G H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-          using assms by auto (*Pendiente*)
-        then have "\<forall>H. Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-          by (rule allE)
-        then have "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-          using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
-        thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-          using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
-      qed
-    qed
-  qed
+    using assms by (rule pcp_alt2Dis4)
   show ?thesis
-    using 1 2 3 4 by auto (*Pendiente*)
+    using 1 2 3 4 by (iprover intro: conjI)
 qed
-
-text \<open>\comentario{Pendientes}\<close>
 
 lemma pcp_alt2: 
   assumes "\<forall>S \<in> C. \<bottom> \<notin> S
@@ -1232,7 +1256,6 @@ proof (rule ballI)
     \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C)"
     using 1 2 3 4 5 6 7 8 by blast (*Pendiente*)
 qed
-
 text \<open>\comentario{Pendientes}\<close>
 
 lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
