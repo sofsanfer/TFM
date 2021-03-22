@@ -1698,25 +1698,55 @@ lemma ex3_pcp_CON:
   shows "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
 proof -
   let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  note C'' = assms(1)[unfolded pcp_alt, THEN bspec]
-  have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
-    using assms(3) assms(4) C'' by simp (*Pendiente*)
-  have "{G,H} \<union> S \<in> ?E"
-    unfolding mem_Collect_eq Un_iff 
-    proof safe (*?*)
+  have 1:"\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using assms(1) by (rule pcp_alt1)
+  have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+  proof (rule sallI)
     fix s
-    assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
-    hence "insert F  (s - {G,H}) \<subseteq> S" 
-      using assms(5) by blast (*Pendiente*)
-    with k f have "insert G  (insert H (insert F (s - {G,H}))) \<in> C" 
-      by simp (*Pendiente*)
-    hence "insert F (insert G (insert H  s)) \<in> C" 
-      using insert_absorb by fastforce (*Pendiente*)
-    thus "s \<in> C" 
-      using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
+    assume "s \<subseteq> S"
+    show "finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+    proof (rule impI)
+      assume "finite s"
+      show "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+      proof (rule impI)
+        assume "F \<in> s" 
+        have "s \<in> C"
+          using \<open>s \<subseteq> S\<close> \<open>finite s\<close> by (rule assms(3))
+        have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+          using 1 \<open>s \<in> C\<close> by blast (*Pendiente*)
+        then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+          by (iprover elim: allE)
+        then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+          using assms(4) by (rule mp)
+        thus "{G, H} \<union> s \<in> C"
+          using \<open>F \<in> s\<close> by (rule mp)
+      qed
     qed
-    thus "{G, H} \<union> S \<in> C \<union> ?E" 
-      by simp (*Pendiente*)
+  qed
+  have "{G,H} \<union> S \<in> ?E"
+    unfolding mem_Collect_eq Un_iff
+  proof (rule sallI)
+    fix s
+    assume H:"s \<subseteq> {G,H} \<union> S"
+    show "finite s \<longrightarrow> s \<in> C"
+    proof (rule impI)
+      assume "finite s"
+      have "insert F  (s - {G,H}) \<subseteq> S" 
+        using assms(5) H by blast (*Pendiente*)
+      then have "insert G  (insert H (insert F (s - {G,H}))) \<in> C"
+        using 2 \<open>finite s\<close> by simp (*Pendiente*)
+      then have "insert F (insert G (insert H  s)) \<in> C" 
+        using insert_absorb by fastforce (*Pendiente*)
+      thus "s \<in> C" 
+        using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
+    qed
+  qed
+  thus "{G, H} \<union> S \<in> C \<union> ?E" 
+    by simp (*Pendiente*)
 qed
 
 lemma ex3_pcp_DIS:
