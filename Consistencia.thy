@@ -2098,21 +2098,24 @@ proof (induction n)
     by (simp only: pcp_seq.simps(1) \<open>S \<in> C\<close>)
 next
   fix n
-  assume HI:"pcp C \<and> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
-  assume "pcp C \<and> S \<in> C"
+  assume HI1:"pcp C \<and> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
+  assume HI2:"pcp C \<and> S \<in> C"
+  then have "S \<in> C"
+    by (rule conjunct2)
+  have "pcp C"
+    using HI2 by (rule conjunct1)
   have "pcp_seq C S n \<in> C"
-    using HI \<open>pcp C \<and> S \<in> C\<close> by simp (*Pendiente*)
-  have "insert (from_nat n) (pcp_seq C S) \<in> C"
+    using HI1 \<open>pcp C \<and> S \<in> C\<close> by simp (*Pendiente*)
   have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)"
     by (simp only: pcp_seq.simps(2))
-  also have "\<dots> = pcp_seq C S n"
-    using \<open>pcp_seq C S n \<in> C\<close> by (simp add: Let_def) (*Pendiente*)
-  finally have "pcp_seq C S (Suc n) = pcp_seq C S"
-    by this
-    
+  also have "\<dots> = (if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
+        else (pcp_seq C S n))"
+    by (simp only: Let_def)
+  also have "\<dots> = pcp_seq C S n"  
     oops
-qed
+
+text \<open>\comentario{Entender y terminar.}\<close>
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
 proof(induction n)
@@ -2122,6 +2125,33 @@ proof(induction n)
 qed simp
 
 text\<open>Lema: la sucesión es monónota.\<close>
+
+lemma pcp_seq_mono_detallada: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+proof(induction m)
+  assume "n \<le> 0" 
+  then have "n = 0"
+    by simp (*Pendiente*)
+  thus "pcp_seq C S n \<subseteq> pcp_seq C S 0"
+    by simp (*Pendiente*)
+next
+  fix m
+  assume HI:"n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+  assume "n \<le> Suc m"
+  then have "n \<le> m \<or> n = Suc m"
+    by auto (*Pendiente*)
+  thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
+  proof (rule disjE)
+    assume "n \<le> m"
+    have "pcp_seq C S n \<subseteq> pcp_seq C S m"
+      using HI \<open>n \<le> m\<close> by simp (*Pendiente*)
+    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
+      by (simp add: Let_def; blast) (*Pendiente*)
+  next
+    assume "n = Suc m"
+    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
+      by simp (*Pendiente*)
+  qed
+qed
 
 lemma pcp_seq_mono: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
 proof(induction m)
