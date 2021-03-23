@@ -1929,11 +1929,61 @@ proof -
     thus ?thesis
       by simp (*Pendiente*)
   qed
-have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
+  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
                                    \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
       \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-    by fast (*Pendiente*)
+  by fast (*Pendiente*)
+  show "pcp (C \<union> ?E)" 
+    unfolding pcp_alt
+  proof (rule ballI)
+    fix S
+    assume "S \<in> C \<union> ?E"
+    show "\<bottom> \<notin> S \<and>
+         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
+      using \<open>S \<in> C \<union> ?E\<close>
+    proof (rule UnE)
+      assume "S \<in> C"
+      have "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+        using 1 \<open>S \<in> C\<close> by auto (*Pendiente*)
+      thus "\<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
+        by blast (*Pendiente*)
+    next
+      assume "S \<in> ?E"
+      then have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+        by simp (*Pendiente*)
+      have "{} \<subseteq> S"
+        by (rule empty_subsetI)
+      have "finite {}"
+        by (rule finite.emptyI)
+      have "finite {} \<longrightarrow> {} \<in> C"
+        using E \<open>{} \<subseteq> S\<close> by blast (*Pendiente*)
+      then have "{} \<in> C"
+        using \<open>finite {}\<close> by (rule mp)
+      have "\<bottom> \<notin> {}
+  \<and> (\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G,H} \<union> {} \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G} \<union> {} \<in> C \<or> {H} \<union> {} \<in> C)"
+        using 1 \<open>{} \<in> C\<close> by auto (*Pendiente*)
     oops
+    (*apply(intro ballI conjI; elim UnE; (unfold mem_Collect_eq)?)
+           subgoal using C'' by blast
+          subgoal using C'' by blast
+         subgoal using C'' by (simp;fail)
+        subgoal by (meson C'' empty_subsetI finite.emptyI finite_insert insert_subset subset_insertI)
+       subgoal using C'' by simp
+      subgoal using CON by simp
+     subgoal using C'' by blast
+    subgoal using DIS by simp
+  done
+qed*)
 
 lemma ex3_detallada:
   assumes "pcp C"
@@ -2041,11 +2091,34 @@ text \<open>He introducido una instancia en Sintaxis que señala que las fórmul
   son contables si sus átomos lo son. En caso contrario hay interferencias
   entre los tipos.\<close>
 
+lemma pcp_seq_in_detallada: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
+proof (induction n)
+  assume "pcp C" and "S \<in> C"
+  show "pcp_seq C S 0 \<in> C"
+    by (simp only: pcp_seq.simps(1) \<open>S \<in> C\<close>)
+next
+  fix n
+  assume HI:"pcp C \<and> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
+  assume "pcp C \<and> S \<in> C"
+  have "pcp_seq C S n \<in> C"
+    using HI \<open>pcp C \<and> S \<in> C\<close> by simp (*Pendiente*)
+  have "insert (from_nat n) (pcp_seq C S) \<in> C"
+  have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
+                        if Sn1 \<in> C then Sn1 else Sn)"
+    by (simp only: pcp_seq.simps(2))
+  also have "\<dots> = pcp_seq C S n"
+    using \<open>pcp_seq C S n \<in> C\<close> by (simp add: Let_def) (*Pendiente*)
+  finally have "pcp_seq C S (Suc n) = pcp_seq C S"
+    by this
+    
+    oops
+qed
+
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
 proof(induction n)
-  case (Suc n)
+  case (Suc n)  
   hence "pcp_seq C S n \<in> C" by simp
-  thus ?case by(simp add: Let_def)
+  thus ?case by (simp add: Let_def)
 qed simp
 
 text\<open>Lema: la sucesión es monónota.\<close>
