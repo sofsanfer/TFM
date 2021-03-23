@@ -2179,7 +2179,19 @@ text\<open>We don't necessarily have @{term "n = to_nat (from_nat n)"}, so this 
 \<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
-  
+
+lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
+  unfolding pcp_lim_def
+proof (induction n)
+  show "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
+    by blast (*Pendiente*)
+next
+  fix n
+  assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
+  show "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n|n. True}"
+    by blast (*Pendiente*)
+qed
+
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
     
