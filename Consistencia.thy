@@ -2161,8 +2161,12 @@ qed simp
 
 lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
-  show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
+  have "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
+    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
+  also have "\<dots> = pcp_seq C S 0"
     by simp (*Pendiente*)
+  finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
+    by this
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
@@ -2170,17 +2174,19 @@ next
     by simp (*Pendiente*)
   have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
-  then have "{f n |n. n \<le> Suc m} = insert (f (Suc m)) {f n |n. n \<le> m}" 
-    for f using le_Suc_eq by auto (*Pendiente*)
-  then have 2:"{pcp_seq C S n |n. n \<le> Suc m} = 
-          insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}" 
-    . (*Pendiente*)
+  have "{pcp_seq C S n |n. n \<le> Suc m} = {pcp_seq C S n |n. (n \<le> m \<or> n = Suc m)}"
+    by (simp only: le_Suc_eq)
+  also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
+    by blast (*Pendiente*)
+  finally have 2:"{pcp_seq C S n |n. n \<le> Suc m} = 
+          insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
+    by this
   have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" 
-    using 2 by auto (*Pendiente*)
+    using 2 by auto
   also have "\<dots> = pcp_seq C S m \<union> pcp_seq C S (Suc m)"
     by (simp only: HI)
   also have "\<dots> = pcp_seq C S (Suc m)"
-    using 1 by blast (*Pendiente*)
+    using 1 by (simp only: subset_Un_eq)
   finally show "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
     by this
 qed
