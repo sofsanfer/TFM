@@ -2159,6 +2159,32 @@ proof(induction m)
   thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
 qed simp
 
+lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
+proof(induct m)
+  show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
+    by simp (*Pendiente*)
+next
+  fix m
+  assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
+  have "m \<le> Suc m"
+    by simp (*Pendiente*)
+  have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
+    using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
+  then have "{f n |n. n \<le> Suc m} = insert (f (Suc m)) {f n |n. n \<le> m}" 
+    for f using le_Suc_eq by auto (*Pendiente*)
+  then have 2:"{pcp_seq C S n |n. n \<le> Suc m} = 
+          insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}" 
+    . (*Pendiente*)
+  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" 
+    using 2 by auto (*Pendiente*)
+  also have "\<dots> = pcp_seq C S m \<union> pcp_seq C S (Suc m)"
+    by (simp only: HI)
+  also have "\<dots> = pcp_seq C S (Suc m)"
+    using 1 by blast (*Pendiente*)
+  finally show "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
+    by this
+qed
+
 lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induction m)
   case (Suc m)
