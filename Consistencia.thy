@@ -2226,7 +2226,17 @@ qed
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
-    
+
+lemma pcp_lim_inserted_at_ex_detallada: 
+  assumes "x \<in> pcp_lim C S"
+  shows "\<exists>k. x \<in> pcp_seq C S k"
+proof -
+  have "x \<in> \<Union>{pcp_seq C S n|n. True}"
+    using assms by (simp only: pcp_lim_def)
+  thus "\<exists>k. x \<in> pcp_seq C S k"
+    by blast (*Pendiente*)
+qed
+
 lemma pcp_lim_inserted_at_ex: 
     "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
