@@ -2130,26 +2130,26 @@ lemma pcp_seq_mono_detallada: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subse
 proof(induction m)
   assume "n \<le> 0" 
   then have "n = 0"
-    by simp (*Pendiente*)
+    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
   thus "pcp_seq C S n \<subseteq> pcp_seq C S 0"
-    by simp (*Pendiente*)
+    by (simp only: subset_refl)
 next
   fix m
   assume HI:"n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
   assume "n \<le> Suc m"
   then have "n \<le> m \<or> n = Suc m"
-    by auto (*Pendiente*)
+    by (simp only: le_Suc_eq)
   thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
   proof (rule disjE)
     assume "n \<le> m"
     have "pcp_seq C S n \<subseteq> pcp_seq C S m"
-      using HI \<open>n \<le> m\<close> by simp (*Pendiente*)
+      using \<open>n \<le> m\<close> by (simp only: HI)
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
       by (simp add: Let_def; blast) (*Pendiente*)
   next
     assume "n = Suc m"
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-      by simp (*Pendiente*)
+      by (simp only: subset_refl)
   qed
 qed
 
@@ -2233,7 +2233,7 @@ lemma pcp_lim_inserted_at_ex_detallada:
 proof -
   have "x \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
-  thus "\<exists>k. x \<in> pcp_seq C S k"
+  thus "\<exists>k. x \<in> pcp_seq C S k" 
     by blast (*Pendiente*)
 qed
 
