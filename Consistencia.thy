@@ -2141,8 +2141,14 @@ next
     assume "n \<le> m"
     have "pcp_seq C S n \<subseteq> pcp_seq C S m"
       using \<open>n \<le> m\<close> by (simp only: HI)
+    then have "pcp_seq C S n \<subseteq> (if (insert (from_nat m) (pcp_seq C S m) \<in> C) then (insert (from_nat m) (pcp_seq C S m))
+          else (pcp_seq C S m))"
+      by auto (*Pendiente*)
+    then have "pcp_seq C S n \<subseteq> (let Sn = pcp_seq C S m; Sn1 = insert (from_nat m) Sn in
+                        if Sn1 \<in> C then Sn1 else Sn)"
+      by (simp only: Let_def)
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-      by (simp add: Let_def; blast) (*Pendiente*)
+      by (simp only: pcp_seq.simps(2))
   next
     assume "n = Suc m"
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
