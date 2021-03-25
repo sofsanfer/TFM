@@ -2100,17 +2100,16 @@ proof (induction n)
     by (simp only: pcp_seq.simps(1) \<open>S \<in> C\<close>)
 next
   fix n
-  assume HI:"pcp_seq C S n \<in> C" 
-  thus "pcp_seq C S (Suc n) \<in> C" using [[simp_trace]]
-    by (simp add: Let_def)
-qed
-  (*have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
-                        if Sn1 \<in> C then Sn1 else Sn)"
-    by (simp only: pcp_seq.simps(2))
-  also have "\<dots> = (if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
-        else (pcp_seq C S n))"
+  assume HI:"pcp_seq C S n \<in> C"
+  then have "(if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
+        else (pcp_seq C S n)) \<in> C"
+    by simp (*Pendiente*)
+  then have "(let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
+                        if Sn1 \<in> C then Sn1 else Sn) \<in> C"
     by (simp only: Let_def)
-  also have "\<dots> = pcp_seq C S n"*)
+  thus "pcp_seq C S (Suc n) \<in> C"
+    by (simp only: pcp_seq.simps(2))
+qed
 
 text \<open>\comentario{Entender y terminar.}\<close>
 
