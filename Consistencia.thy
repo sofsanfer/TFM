@@ -2091,29 +2091,26 @@ text \<open>He introducido una instancia en Sintaxis que señala que las fórmul
   son contables si sus átomos lo son. En caso contrario hay interferencias
   entre los tipos.\<close>
 
-lemma pcp_seq_in_detallada: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
+lemma pcp_seq_in_detallada: 
+  assumes "pcp C" 
+          "S \<in> C"
+        shows "pcp_seq C S n \<in> C"
 proof (induction n)
-  assume "pcp C" and "S \<in> C"
   show "pcp_seq C S 0 \<in> C"
     by (simp only: pcp_seq.simps(1) \<open>S \<in> C\<close>)
 next
   fix n
-  assume HI1:"pcp C \<and> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
-  assume HI2:"pcp C \<and> S \<in> C"
-  then have "S \<in> C"
-    by (rule conjunct2)
-  have "pcp C"
-    using HI2 by (rule conjunct1)
-  have "pcp_seq C S n \<in> C"
-    using HI1 \<open>pcp C \<and> S \<in> C\<close> by simp (*Pendiente*)
-  have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
+  assume HI:"pcp_seq C S n \<in> C" 
+  thus "pcp_seq C S (Suc n) \<in> C" using [[simp_trace]]
+    by (simp add: Let_def)
+qed
+  (*have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)"
     by (simp only: pcp_seq.simps(2))
   also have "\<dots> = (if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
         else (pcp_seq C S n))"
     by (simp only: Let_def)
-  also have "\<dots> = pcp_seq C S n"  
-    oops
+  also have "\<dots> = pcp_seq C S n"*)
 
 text \<open>\comentario{Entender y terminar.}\<close>
 
