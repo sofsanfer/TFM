@@ -2165,8 +2165,14 @@ lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S 
 proof(induct m)
   have "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
     by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
+  also have "\<dots> = \<Union>{pcp_seq C S 0}" using [[simp_trace]]
+    by simp
+  also have "\<dots> = (pcp_seq C S 0) \<union> \<Union>{}"
+    by (simp only: complete_lattice_class.Sup_insert)
+  also have "\<dots> = (pcp_seq C S 0) \<union> {}"
+    by (simp only: complete_lattice_class.Sup_empty)
   also have "\<dots> = pcp_seq C S 0"
-    by simp (*Pendiente*)
+    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
   finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
     by this
 next
