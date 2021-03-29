@@ -2178,8 +2178,14 @@ proof(induct m)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
-  have "m \<le> Suc m" using [[simp_trace]]
-    by simp (*Pendiente*)
+  have "0 \<le> Suc 0"
+    by (simp only: canonically_ordered_monoid_add_class.zero_le)
+  then have "0 + m \<le> Suc 0 + m"
+    by (simp only: ordered_ab_semigroup_add_imp_le_class.add_le_cancel_right)
+  then have "0 + m \<le> Suc (0 + m)"
+    by (simp only: plus_nat.add_Suc)
+  then have "m \<le> Suc m" 
+    by (simp only: monoid_add_class.add_0_right)
   have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
   have "{pcp_seq C S n |n. n \<le> Suc m} = {pcp_seq C S n |n. (n \<le> m \<or> n = Suc m)}"
