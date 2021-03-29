@@ -246,7 +246,8 @@ lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F"
 
 text \<open>\comentario{Voy por aquí en redacción}\<close>
 
-text \<open>Ejemplos:\<close>
+text \<open>Ejemplos:
+ \comentario{Redactar esto con enlace.}\<close>
 
 lemma con_dis_simps:
   "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
@@ -259,8 +260,36 @@ lemma con_dis_simps:
     a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
   by (simp_all add: Con.simps Dis.simps)
 
-text\<open>Lema: caracterización de los conjuntos de Hintikka mediante las 
-fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
+text\<open>Veamos a continuación resultados que permiten caracterizar los conjuntos
+  de Hintikka y la condición de consistencia proposicional empleando la 
+  notación uniforme.
+
+  \begin{lema}[Caracterización de los conjuntos de Hintikka mediante la
+  notación uniforme]
+    Dado un conjunto de fórmulas proposicionales \<open>S\<close>, son equivalentes:
+    \begin{itemize}
+      \item \<open>S\<close> es un conjunto de Hintikka.
+      \item Se verifican las condiciones siguientes.
+      \begin{enumerate}
+        \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
+        \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+        \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
+        que si la fórmula pertenece al conjunto \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+        \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
+        que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+        al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto.
+      \end{enumerate} 
+    \end{itemize}
+  \end{lema}
+
+  En Isabelle/HOL se formaliza del siguiente modo.\<close>
+
+lemma "Hintikka S = (\<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))" 
+  oops
 
 lemma Hintikka_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
@@ -2229,7 +2258,9 @@ definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
-  show "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
+  have "pcp_seq C S 0 \<in> {pcp_seq C S 0}" 
+    by (simp only: singletonI)
+  thus "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
     by blast (*Pendiente*)
 next
   fix n
