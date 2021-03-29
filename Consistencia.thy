@@ -267,10 +267,10 @@ text\<open>Veamos a continuación resultados que permiten caracterizar los conju
   \begin{lema}[Caracterización de los conjuntos de Hintikka mediante la
   notación uniforme]
     Dado un conjunto de fórmulas proposicionales \<open>S\<close>, son equivalentes:
-    \begin{itemize}
+    \begin{enumerate}
       \item \<open>S\<close> es un conjunto de Hintikka.
       \item Se verifican las condiciones siguientes.
-      \begin{enumerate}
+      \begin{itemize}
         \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
         \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
         simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
@@ -279,8 +279,8 @@ text\<open>Veamos a continuación resultados que permiten caracterizar los conju
         \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
         que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
         al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto.
-      \end{enumerate} 
-    \end{itemize}
+      \end{itemize} 
+    \end{enumerate}
   \end{lema}
 
   En Isabelle/HOL se formaliza del siguiente modo.\<close>
@@ -290,6 +290,159 @@ lemma "Hintikka S = (\<bottom> \<notin> S
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
 \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S))" 
   oops
+
+text \<open>Procedamos a la demostración del resultado. Al tratarse de una equivalencia, 
+  veamos cada una de las implicaciones por separado.
+
+\begin{demostracion}
+\begin{enumerate}
+  \item [\<open>1) \<Longrightarrow> 2)\<close>]
+  Supongamos que \<open>S\<close> es un conjunto de Hintikka. Vamos a probar que, en efecto, se 
+  verifican las condiciones del enunciado del lema.
+
+  Por definición de conjunto de Hintikka, \<open>S\<close> verifica las siguientes condiciones:
+  \begin{enumerate}
+    \item \<open>\<bottom> \<notin> S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Si \<open>G \<and> H \<in> S\<close>, entonces \<open>G \<in> S\<close> y \<open>H \<in> S\<close>.
+    \item Si \<open>G \<or> H \<in> S\<close>, entonces \<open>G \<in> S\<close> o \<open>H \<in> S\<close>.
+    \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> o \<open>H \<in> S\<close>.
+    \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces \<open>G \<in> S\<close>.
+    \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> o \<open>\<not> H \<in> S\<close>.
+    \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> y \<open>\<not> H \<in> S\<close>. 
+    \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces \<open>G \<in> S\<close> y \<open>\<not> H \<in> S\<close>. 
+  \end{enumerate}  
+  De este modo, el conjunto \<open>S\<close> cumple la primera y la segunda condición del
+  enunciado del lema, que se corresponden con las dos primeras condiciones
+  de la definición de conjunto de Hintikka. Veamos que, además, verifica las
+  dos últimas condiciones del resultado.
+
+ En primer lugar, probemos que para toda fórmula de tipo \<open>\<alpha>\<close> con 
+  componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica que si la fórmula pertenece al conjunto 
+  \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también. Para ello, supongamos que una fórmula 
+  cualquiera de tipo \<open>\<alpha>\<close> pertence a \<open>S\<close>. Por definición de este tipo de
+  fórmulas, tenemos que \<open>\<alpha>\<close> puede ser de la forma \<open>G \<and> H\<close>, \<open>\<not>(\<not> G)\<close>, \<open>\<not>(G \<or> H)\<close> 
+  o \<open>\<not>(G \<longrightarrow> H)\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera. Probemos que, para cada
+  tipo de fórmula \<open>\<alpha>\<close> perteneciente a \<open>S\<close>, sus componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> están en
+  \<open>S\<close>.
+  \begin{enumerate}
+    \item[Fórmula del tipo \<open>G \<and> H\<close>:] Sus componentes conjuntivas son \<open>G\<close> y \<open>H\<close>. 
+    Por la tercera condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>G \<and> H\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>H\<close> están ambas en el conjunto,
+    lo que prueba este caso.
+    \item[Fórmula del tipo \<open>\<not>(\<not> G)\<close>:] Sus componentes conjuntivas son ambas \<open>G\<close>.
+    Por la sexta condición de la definición de conjunto de Hintikka, obtenemos que
+    si \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> pertenece al conjunto, lo que prueba
+    este caso.
+    \item[Fórmula del tipo \<open>\<not>(G \<or> H)\<close>:] Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
+    Por la octava condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>\<not>(G \<or> H)\<close> pertenece a \<open>S\<close>, entonces \<open>\<not> G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
+    lo que prueba este caso.
+    \item[Fórmula del tipo \<open>\<not>(G \<longrightarrow> H)\<close>:] Sus componentes conjuntivas son \<open>G\<close> y \<open>\<not> H\<close>. 
+    Por la novena condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>\<not>(G \<longrightarrow> H)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
+    lo que prueba este caso.
+  \end{enumerate}
+
+  Finalmente, probemos que para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y 
+  \<open>\<beta>\<^sub>2\<close> se verifica que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> 
+  pertenece al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece a conjunto. Para ello, supongamos que 
+  una fórmula cualquiera de tipo \<open>\<beta>\<close> pertence a \<open>S\<close>. Por definición de este tipo de
+  fórmulas, tenemos que \<open>\<beta>\<close> puede ser de la forma \<open>G \<or> H\<close>, \<open>G \<longrightarrow> H\<close>, \<open>\<not>(\<not> G)\<close> 
+  o \<open>\<not>(G \<and> H)\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera. Probemos que, para cada
+  tipo de fórmula \<open>\<beta>\<close> perteneciente a \<open>S\<close>, o bien su componente \<open>\<beta>\<^sub>1\<close> pertenece a \<open>S\<close> 
+  o bien su componente \<open>\<beta>\<^sub>2\<close> pertenece a \<open>S\<close>.
+  \begin{enumerate}
+    \item[Fórmula del tipo \<open>G \<or> H\<close>:] Sus componentes disyuntivas son \<open>G\<close> y \<open>H\<close>. 
+    Por la cuarta condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>G \<or> H\<close> pertenece a \<open>S\<close>, entonces o bien \<open>G\<close> está en \<open>S\<close> o bien \<open>H\<close> está
+    en \<open>S\<close>, lo que prueba este caso.
+    \item[Fórmula del tipo \<open>G \<longrightarrow> H\<close>:] Sus componentes disyuntivas son \<open>\<not> G\<close> y \<open>H\<close>.
+    Por la quinta condición de la definición de conjunto de Hintikka, obtenemos que
+    si \<open>G \<longrightarrow> H\<close> pertenece a \<open>S\<close>, entonces o bien \<open>\<not> G\<close> pertenece al conjunto o bien
+    \<open>H\<close> pertenece al conjunto, lo que prueba este caso.
+    \item[Fórmula del tipo \<open>\<not>(\<not> G)\<close>:] Sus componentes conjuntivas son ambas \<open>G\<close>.
+    Por la sexta condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> pertenece al conjunto. De este modo,
+    por la regla de introducción a la disyunción, se prueba que o bien una de las 
+    componentes está en el conjunto o bien lo está la otra pues, en este caso,
+    coinciden.
+    \item[Fórmula del tipo \<open>\<not>(G \<and> H)\<close>:] Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
+    Por la séptima condición de la definición de conjunto de Hintikka, obtenemos 
+    que si \<open>\<not>(G \<and> H)\<close> pertenece a \<open>S\<close>, entonces o bien \<open>\<not> G\<close> pertenece al conjunto
+    o bien \<open>\<not> H\<close> pertenece al conjunto, lo que prueba este caso.
+  \end{enumerate}
+\item[\<open>2) \<Longrightarrow> 1)\<close>]
+  Supongamos que se verifican las condiciones del enunciado del lema:
+ \begin{itemize}
+   \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
+   \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+   simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+   \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
+   que si la fórmula pertenece al conjunto \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+   \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
+   que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+   al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto.
+ \end{itemize}  
+
+  Vamos a probar que \<open>S\<close> es un conjunto de Hintikka.
+
+  Por la definición de conjunto de Hintikka, es suficiente probar las siguientes
+  condiciones:
+  \begin{enumerate}
+    \item \<open>\<bottom> \<notin> S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Si \<open>G \<and> H \<in> S\<close>, entonces \<open>G \<in> S\<close> y \<open>H \<in> S\<close>.
+    \item Si \<open>G \<or> H \<in> S\<close>, entonces \<open>G \<in> S\<close> o \<open>H \<in> S\<close>.
+    \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> o \<open>H \<in> S\<close>.
+    \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces \<open>G \<in> S\<close>.
+    \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> o \<open>\<not> H \<in> S\<close>.
+    \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces \<open>\<not> G \<in> S\<close> y \<open>\<not> H \<in> S\<close>. 
+    \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces \<open>G \<in> S\<close> y \<open>\<not> H \<in> S\<close>. 
+  \end{enumerate} 
+
+  En primer lugar se observa que, por hipótesis, se verifican las dos primeras
+  condiciones de la definición de conjunto de Hintikka. Veamos que, en efecto, se
+  cumplen las demás.
+  \begin{enumerate}
+    \item[\<open>3)\<close>] Supongamos que \<open>G \<and> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>G \<and> H\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>G\<close> y \<open>H\<close>.
+    Por lo tanto, por hipótesis se cumple que \<open>G\<close> y \<open>H\<close> están en \<open>S\<close>.
+    \item[\<open>4)\<close>] Supongamos que \<open>G \<or> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>G \<or> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>G\<close> y \<open>H\<close>.
+    Por lo tanto, por hipótesis se cumple que o bien \<open>G\<close> está en \<open>S\<close> o bien \<open>H\<close> está 
+    en \<open>S\<close>.
+    \item[\<open>5)\<close>] Supongamos que \<open>G \<longrightarrow> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>G \<longrightarrow> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>H\<close>.
+    Por lo tanto, por hipótesis se cumple que o bien \<open>\<not> G\<close> está en \<open>S\<close> o bien \<open>H\<close> está 
+    en \<open>S\<close>.
+    \item[\<open>6)\<close>] Supongamos que \<open>\<not>(\<not> G)\<close> está en \<open>S\<close> para una fórmula \<open>G\<close> cualquiera.
+    Por definición, \<open>\<not>(\<not> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son ambas \<open>G\<close>.
+    Por lo tanto, por hipótesis se cumple que \<open>G\<close> está en \<open>S\<close>.
+    \item[\<open>7)\<close>] Supongamos que \<open>\<not>(G \<and> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>\<not>(G \<and> H)\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>.
+    Por lo tanto, por hipótesis se cumple que o bien \<open>\<not> G\<close> está en \<open>S\<close> o bien \<open>\<not> H\<close> está 
+    en \<open>S\<close>.
+    \item[\<open>8)\<close>] Supongamos que \<open>\<not>(G \<or> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>\<not>(G \<or> H)\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>.
+    Por lo tanto, por hipótesis se cumple que \<open>\<not> G\<close> y \<open>\<not> H\<close> están en \<open>S\<close>.
+    \item[\<open>9)\<close>] Supongamos que \<open>\<not>(G \<longrightarrow> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    Por definición, \<open>\<not>(G \<longrightarrow> H)\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>G\<close> y \<not> \<open>H\<close>.
+    Por lo tanto, por hipótesis se cumple que \<open>G\<close> y \<open>\<not> H\<close> están en \<open>S\<close>.
+  \end{enumerate}
+\end{enumerate}
+\end{demostracion}
+
+  Para probar de manera detallada el lema en Isabelle, vamos a demostrar inicialmenre 
+  cada una de las implicaciones de la equivalencia por separado. 
+
+  La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
+  prueba que la tercera, sexta, octava y novena condición de la definición de conjunto de 
+  Hintikka son suficientes para probar que para toda fórmula de tipo \<open>\<alpha>\<close> con componentes 
+  \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica que si la fórmula pertenece al conjunto \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y 
+  \<open>\<alpha>\<^sub>2\<close> también. Su demostración detallada en Isabelle se muestra a continuación.\<close>
 
 lemma Hintikka_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
@@ -366,6 +519,13 @@ proof (rule impI)
     qed
   qed
 qed
+
+text \<open>Por otro lado, el segundo lema auxiliar prueba que la cuarta, quinta, sexta
+  y séptima condición de la definición de conjunto de Hintikka son suficientes para
+  probar que para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
+  que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece al
+  conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto. Veamos su prueba detallada en 
+  Isabelle/HOL.\<close>
 
 lemma Hintikka_alt1Dis:
   assumes  "(\<forall> G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
@@ -444,6 +604,9 @@ proof (rule impI)
     qed
   qed
 qed
+
+text \<open>Finalmente, podemos demostrar detalladamente esta primera implicación de la
+  equivalencia del lema en Isabelle.\<close>
 
 lemma Hintikka_alt1:
   assumes "Hintikka S"
@@ -526,6 +689,9 @@ proof -
   \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)"
     using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
+
+text \<open>Por último, probamos la implicación contraria de forma detallada en Isabelle mediante
+  el siguiente lema.\<close>
 
 lemma Hintikka_alt2:
   assumes "\<bottom> \<notin> S
@@ -706,7 +872,9 @@ proof -
     unfolding Hintikka_def by this
 qed
 
-text \<open>\comentario{Pendientes}\<close>
+text \<open>\comentario{Pendientes}
+
+  En conclusión, el lema completo se demuestra detalladamente en Isabelle/HOL como sigue.\<close>
 
 lemma "Hintikka S = (\<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -728,6 +896,8 @@ next
     by (rule Hintikka_alt2)
 qed
 
+text \<open>Del mismo modo, veamos su demostración automática.\<close>
+
 lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
@@ -736,7 +906,9 @@ lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
   apply(rule iffI)
    subgoal by blast
   subgoal by safe metis+
-done
+  done
+
+text \<open>\comentario{Voy redactando por aqui.}\<close>
 
 text\<open> Lema: caracterización de la propiedad de consistencia proposicional
  mediante las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
