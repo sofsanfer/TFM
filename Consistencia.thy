@@ -1293,13 +1293,10 @@ proof (rule allI)
       assume "G \<^bold>\<or> H \<in> S"
       then have "Dis (G \<^bold>\<or> H) G H"
         by (simp only: Dis.intros(1))
-      have "\<forall>G H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using assms by auto (*Pendiente*)
-      then have "\<forall>H. Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        by (rule allE)
-      then have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> (G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        by (rule allE)
-      then have "(G \<^bold>\<or> H) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      let ?F="G \<^bold>\<or> H"
+      have "Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using assms by (iprover elim: allE)
+      then have "?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
       thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
