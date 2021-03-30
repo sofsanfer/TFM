@@ -1317,13 +1317,10 @@ proof (rule allI)
       assume "G \<^bold>\<rightarrow> H \<in> S"
       then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
         by (simp only: Dis.intros(2))
-      have "\<forall>G H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using assms by auto (*Pendiente*)
-      then have "\<forall>H. Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        by (rule allE)
-      then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H \<longrightarrow> (G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        by (rule allE)
-      then have "(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      let ?F="G \<^bold>\<rightarrow> H" 
+      have "Dis ?F (\<^bold>\<not>G) H \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using assms by (iprover elim: allE)
+      then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
       thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
