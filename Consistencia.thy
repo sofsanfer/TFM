@@ -1338,13 +1338,14 @@ proof (rule allI)
     assume "\<^bold>\<not> (\<^bold>\<not>G) \<in> S"
     then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G"
       by (simp only: Dis.intros(4))
-    have "\<forall>G H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      using assms by auto (*Pendiente*)
-    then have "\<forall>H. Dis (\<^bold>\<not> (\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    let ?F="\<^bold>\<not> (\<^bold>\<not> G)" 
+    have "\<forall>G H. Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using assms by (rule allE)
+    then have "\<forall>H. Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
       by (rule allE)
-    then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+    then have "Dis ?F G G \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
       by (rule allE)
-    then have "(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+    then have "?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
       using \<open>Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G\<close> by (rule mp)
     then have "{G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
       using \<open>(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
