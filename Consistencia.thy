@@ -295,8 +295,8 @@ text \<open>Procedamos a la demostración del resultado.
 
 \begin{demostracion}
 Para probar la equivalencia, veamos cada una de las implicaciones por separado.
-\begin{enumerate}
-  \item [\<open>1) \<Longrightarrow> 2)\<close>]
+
+\textbf{\<open>1) \<Longrightarrow> 2)\<close>}
   Supongamos que \<open>S\<close> es un conjunto de Hintikka. Vamos a probar que, en efecto, se 
   verifican las condiciones del enunciado del lema.
 
@@ -376,7 +376,7 @@ Para probar la equivalencia, veamos cada una de las implicaciones por separado.
     o bien \<open>\<not> H\<close> pertenece al conjunto, lo que prueba este caso.
   \end{enumerate}
 
-\item[\<open>2) \<Longrightarrow> 1)\<close>]
+\textbf{\<open>2) \<Longrightarrow> 1)\<close>}
   Supongamos que se verifican las condiciones del enunciado del lema:
 
   \begin{itemize}
@@ -439,7 +439,7 @@ Para probar la equivalencia, veamos cada una de las implicaciones por separado.
     Por lo tanto, por hipótesis se cumple que \<open>G\<close> y \<open>\<not> H\<close> están en \<open>S\<close>.
   \end{enumerate}
 
-\end{enumerate}
+  Por tanto, queda probado el resultado.
 \end{demostracion}
 
   Para probar de manera detallada el lema en Isabelle, vamos a demostrar inicialmenre 
