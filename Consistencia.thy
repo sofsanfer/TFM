@@ -1172,13 +1172,10 @@ proof (rule allI)
       assume "G \<^bold>\<and> H \<in> S"
       then have "Con (G \<^bold>\<and> H) G H"
         by (simp only: Con.intros(1))
-      have "\<forall>G H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using assms by auto (*Pendiente*)
-      then have "\<forall>H. Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        by (rule allE)
-      then have "Con (G \<^bold>\<and> H) G H \<longrightarrow> (G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        by (rule allE)
-      then have "(G \<^bold>\<and> H) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      let ?F="G \<^bold>\<and> H"
+      have "Con ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using assms by (iprover elim: allE)
+      then have "?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
         using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
       thus "{G,H} \<union> S \<in> C"
         using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
