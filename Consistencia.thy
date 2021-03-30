@@ -980,8 +980,10 @@ proof -
                   using A3 by (rule conjunct2)
                 have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
                   using C2 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
-                thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-                  using \<open>H = G\<close> by simp (*Pendiente*)
+                then have "F \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+                  by (simp only: insert_absorb2)
+                thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C" 
+                  by (simp only: \<open>H = G\<close>)
               qed
             qed
           qed
@@ -990,8 +992,6 @@ proof -
     qed
   qed
 qed
-
-text \<open>\comentario{Pendientes}\<close>
 
 lemma pcp_alt1Dis:
   assumes "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
