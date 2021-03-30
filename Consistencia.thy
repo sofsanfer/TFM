@@ -1526,8 +1526,8 @@ proof (rule subsetI)
     by (rule subset_refl)
   then have "\<exists>S\<in>C. s \<subseteq> S"
     using \<open>s \<in> C\<close> by (rule bexI)
-  thus "s \<in> {s. \<exists>S\<in>C. s \<subseteq> S}"
-    by simp (*Pendiente*)
+  thus "s \<in> {s. \<exists>S\<in>C. s \<subseteq> S}" 
+    by (simp only: mem_Collect_eq)
 qed
 
 lemma ex1_pcp: 
