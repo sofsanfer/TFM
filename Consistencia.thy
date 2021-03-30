@@ -1193,18 +1193,19 @@ proof (rule allI)
     assume "\<^bold>\<not>(\<^bold>\<not>G) \<in> S"
     then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G"
       by (simp only: Con.intros(4))
-    then have "\<forall>G H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-      using assms by simp(*Pendiente*)
-    then have "\<forall>H. Con (\<^bold>\<not>(\<^bold>\<not>G)) G H \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    let ?F="\<^bold>\<not>(\<^bold>\<not> G)"
+    have "\<forall>G H. Con ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      using assms by (rule allE)
+    then have "\<forall>H. Con ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
       by (rule allE)
-    then have "Con (\<^bold>\<not>(\<^bold>\<not>G)) G G \<longrightarrow> (\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+    then have "Con ?F G G \<longrightarrow> ?F \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
       by (rule allE)
-    then have "(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+    then have "?F \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
       using \<open>Con (\<^bold>\<not>(\<^bold>\<not>G)) G G\<close> by (rule mp)
     then have "{G,G} \<union> S \<in> C"
       using \<open>(\<^bold>\<not>(\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
     thus "{G} \<union> S \<in> C"
-      by simp (*Pendiente*)
+      by (simp only: insert_absorb2)
   qed
 qed
 
