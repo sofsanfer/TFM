@@ -1532,6 +1532,20 @@ qed
 lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
   by simp
 
+text\<open>Lema auxiliar similar a bspec para contención y propiedades.\<close>
+
+lemma 
+  assumes "\<forall>x \<subseteq> A. P x"
+          "x \<subseteq> A"
+  shows "P x"
+proof -
+  show "P x"
+    using assms(1) assms(2) by simp (*Pendiente*)
+qed
+
+lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x"
+  by simp
+
 text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
 entonces tiene un subconjunto con la propiedad de consistencia
 proposicional y cerrado bajo subconjunto.\<close>
@@ -1802,6 +1816,8 @@ proof (intro ballI sallI)
     using \<open>s \<subseteq> S\<close> \<open>t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S\<close> by simp
   with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
+
+text \<open>\comentario{Entender y demostrar bien detallada}\<close>
 
 lemma ex2: 
   assumes fc: "finite_character C"
