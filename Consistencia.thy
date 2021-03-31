@@ -1514,6 +1514,24 @@ text \<open> Definición: C tiene la propiedad de carácter finito.\<close>
 definition "finite_character C \<equiv> 
             (\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C))"
 
+text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
+
+lemma 
+  assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
+  shows "\<forall>s \<subseteq> S. P s" 
+proof (rule allI)
+  fix s
+  show "s \<subseteq> S \<longrightarrow> P s"
+  proof (rule impI)
+    assume "s \<subseteq> S"
+    thus "P s" 
+      by (rule assms)
+  qed
+qed
+
+lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
+  by simp
+
 text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
 entonces tiene un subconjunto con la propiedad de consistencia
 proposicional y cerrado bajo subconjunto.\<close>
@@ -1556,11 +1574,11 @@ proof -
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
       \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
         using assms by (rule pcp_alt1)
-      have 3:"\<bottom> \<notin> S'
+      then have 3:"\<bottom> \<notin> S'
       \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
       \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using \<open>S' \<in> C\<close> 2 by simp (*Pendiente*)
+        using \<open>S' \<in> C\<close> by simp (*Pendiente*)
       then have "\<bottom> \<notin> S'"
         by (rule conjunct1)
       have S1:"\<bottom> \<notin> S"
@@ -1728,8 +1746,13 @@ proof (rule ballI)
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
   fix S
   assume "S \<in> ?E"
-  thus "\<forall>s \<subseteq> S. s \<in> ?E"
-    by auto (*Pendiente*)
+  show "\<forall>s \<subseteq> S. s \<in> ?E"
+  proof (rule sallI)
+    fix s
+    assume "s \<subseteq> S" 
+    thus "s \<in> ?E"
+      using \<open>S \<in> ?E\<close> by auto (*Pendiente*)
+  qed
 qed
 
 lemma ex1_detallada:
@@ -1761,23 +1784,6 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
     by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
-text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
-
-lemma 
-  assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
-  shows "\<forall>s \<subseteq> S. P s" 
-proof (rule allI)
-  fix s
-  show "s \<subseteq> S \<longrightarrow> P s"
-  proof (rule impI)
-    assume "s \<subseteq> S"
-    thus "P s" 
-      by (rule assms)
-  qed
-qed
-
-lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
-  by simp
 
 text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
