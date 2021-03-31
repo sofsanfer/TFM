@@ -244,8 +244,6 @@ text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducció
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
   by (simp only: Con.intros(4) Dis.intros(4))+
 
-text \<open>\comentario{Voy por aquí en redacción}\<close>
-
 text \<open>Ejemplos:
  \comentario{Redactar esto con enlace.}\<close>
 
@@ -2399,6 +2397,12 @@ next
     using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
   have "{pcp_seq C S n |n. n \<le> Suc m} = {pcp_seq C S n |n. (n \<le> m \<or> n = Suc m)}"
     by (simp only: le_Suc_eq)
+  also have "\<dots> = {pcp_seq C S n |n. n \<le> m} \<union> {pcp_seq C S n |n. n = Suc m}"
+    by blast (*Pendiente*)
+  also have "\<dots> = {pcp_seq C S n |n. n = Suc m} \<union> {pcp_seq C S n |n. n \<le> m}"
+    by simp (*Pendiente*)
+  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m}"
+    by simp (*Pendiente*)
   also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
     by blast (*Pendiente*)
   finally have 2:"{pcp_seq C S n |n. n \<le> Suc m} = 
