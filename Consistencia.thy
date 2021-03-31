@@ -1568,13 +1568,13 @@ proof -
         by (rule CollectD)  
       obtain S' where "S' \<in> C" "S \<subseteq> S'"
         using 1 by (rule bexE)
-      have 2:"(\<forall>S \<in> C.
+      have "\<forall>S \<in> C.
       \<bottom> \<notin> S
       \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
-      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
         using assms by (rule pcp_alt1)
-      then have 3:"\<bottom> \<notin> S'
+      then have H:"\<bottom> \<notin> S'
       \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
       \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
@@ -1583,19 +1583,15 @@ proof -
         by (rule conjunct1)
       have S1:"\<bottom> \<notin> S"
         using \<open>S \<subseteq> S'\<close> \<open>\<bottom> \<notin> S'\<close> by (rule contra_subsetD)
-      have 4:"(\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
-      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
-      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using 3 by (rule conjunct2)
-      then have 5:"\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
-        by (rule conjunct1)
+      have Atom:"\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+        using H by (iprover elim: conjunct1 conjunct2)
       have S2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
       proof (rule allI)
         fix k
         show "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
         proof (rule impI)
           assume "Atom k \<in> S"
-          have "Atom k \<in> S'"
+          have "Atom k \<in> S'" 
             using \<open>S \<subseteq> S'\<close> \<open>Atom k \<in> S\<close> by (rule set_mp)
           show "\<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
           proof (rule impI)
@@ -1603,7 +1599,7 @@ proof -
             have "\<^bold>\<not> (Atom k) \<in> S'"
               using \<open>S \<subseteq> S'\<close> \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule set_mp)
             have "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
-              using 5 by (rule allE)
+              using Atom by (rule allE)
             then have "\<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
               using \<open>Atom k \<in> S'\<close> by (rule mp)
             thus "False"
@@ -1611,11 +1607,8 @@ proof -
           qed
         qed
       qed
-      have 6:"(\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
-      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using 4 by (rule conjunct2)
-      then have 7:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-        by (rule conjunct1)
+      have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+        using H by (iprover elim: conjunct1 conjunct2)
       have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
       proof (rule allI)
         fix F
@@ -1634,7 +1627,7 @@ proof -
                 have "F \<in> S'"
                   using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
                 have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-                  using 7 by (iprover elim: allE)
+                  using Con by (iprover elim: allE)
                 then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
                   using \<open>Con F G H\<close> by (rule mp)
                 then have "{G,H} \<union> S' \<in> C"
@@ -1653,6 +1646,8 @@ proof -
                   by (rule insert_is_Un)
                 then have "S \<subseteq> {G} \<union> ({H} \<union> S')"
                   using \<open>S \<subseteq> insert G ({H} \<union> S')\<close> by simp (*Pendiente*)
+                then have "S \<subseteq> {G} \<union> {H} \<union> S'"
+                  by simp (*Pendiente*)
                 then have "S \<subseteq> {G,H} \<union> S'"
                   by auto (*Pendiente*)
                 then have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'"
@@ -1664,8 +1659,8 @@ proof -
           qed
         qed
       qed
-      have 8:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-        using 6 by (rule conjunct2)
+      have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+        using H by (iprover elim: conjunct2)
       have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
       proof (rule allI)
         fix F
@@ -1684,7 +1679,7 @@ proof -
                 have "F \<in> S'"
                   using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
                 have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-                  using 8 by (iprover elim: allE)
+                  using Dis by (iprover elim: allE)
                 then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
                   using \<open>Dis F G H\<close> by (rule mp)
                 then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
