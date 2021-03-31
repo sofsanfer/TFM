@@ -2538,7 +2538,25 @@ proof -
   qed
   thus "?cl \<in> C" using fc unfolding finite_character_def by blast
 qed
-  
+
+lemma cl_max_detallada:
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  assumes el: "K \<in> C"
+  assumes su: "pcp_lim C S \<subseteq> K"
+  shows "pcp_lim C S = K" (is ?e)
+proof (rule ccontr)
+  assume \<open>\<not>?e\<close>
+  with su have "pcp_lim C S \<subset> K" by simp
+  then obtain F where e: "F \<in> K" and ne: "F \<notin> pcp_lim C S" by blast
+  from ne have "F \<notin> pcp_seq C S (Suc (to_nat F))" using pcp_seq_sub by fast
+  hence 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" by (simp add: Let_def split: if_splits)
+  have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" using pcp_seq_sub e su by blast
+  hence "insert F (pcp_seq C S (to_nat F)) \<in> C" using sc 
+    unfolding subset_closed_def using el by blast
+  with 1 show False ..
+qed
+
 lemma cl_max:
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
@@ -2557,12 +2575,41 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
+lemma cl_max'_detallada:
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+    "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+using cl_max[OF assms] by blast+
+
 lemma cl_max':
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 using cl_max[OF assms] by blast+
+
+lemma pcp_lim_Hintikka_detallada:
+  assumes c: "pcp C"
+  assumes sc: "subset_closed C"
+  assumes fc: "finite_character C"
+  assumes el: "S \<in> C"
+  shows "Hintikka (pcp_lim C S)"
+proof -
+  let ?cl = "pcp_lim C S"
+  have "?cl \<in> C" using pcp_lim_in[OF c el sc fc] .
+  from c[unfolded pcp_alt, THEN bspec, OF this]
+  have d: "\<bottom> \<notin> ?cl"
+    "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
+    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
+    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
+  for k F G H by force+
+  have "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+       "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+    for F G H
+       by(auto dest: d(3-) cl_max'[OF c sc])
+  with d(1,2) show ?thesis unfolding Hintikka_alt by fast
+qed
 
 lemma pcp_lim_Hintikka:
   assumes c: "pcp C"
@@ -2584,6 +2631,26 @@ proof -
     for F G H
        by(auto dest: d(3-) cl_max'[OF c sc])
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
+qed
+
+theorem pcp_sat_detallada: \<comment> \<open>model existence theorem\<close>
+  fixes S :: "'a :: countable formula set"
+  assumes c: "pcp C"
+  assumes el: "S \<in> C"
+  shows "sat S"
+proof -
+  note [[show_types]]
+  from c obtain Ce where 
+      "C \<subseteq> Ce" "pcp Ce" "subset_closed Ce" "finite_character Ce" 
+      using ex1[where 'a='a] ex2[where 'a='a] ex3[where 'a='a]
+    by (meson dual_order.trans ex2)
+  have "S \<in> Ce" using \<open>C \<subseteq> Ce\<close> el ..
+  with pcp_lim_Hintikka \<open>pcp Ce\<close> \<open>subset_closed Ce\<close> \<open>finite_character Ce\<close>
+  have  "Hintikka (pcp_lim Ce S)" .
+  with Hintikkaslemma have "sat (pcp_lim Ce S)" .
+  moreover have "S \<subseteq> pcp_lim Ce S" 
+    using pcp_seq.simps(1) pcp_seq_sub by fast
+  ultimately show ?thesis unfolding sat_def by fast
 qed
   
 theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
