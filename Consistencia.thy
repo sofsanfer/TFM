@@ -1866,19 +1866,19 @@ proof -
            then have "\<forall>s \<subseteq> S. s \<in> C"
              using \<open>S \<in> C\<close> by (rule bspec)
            then have "s \<in> C"
-             using \<open>s \<subseteq> S\<close> by blast (*Pendiente*)
-           thus "s \<in> C \<union> ?E"
-             by blast (*Pendiente*)
+             using \<open>s \<subseteq> S\<close> by (rule sspec)
+           thus "s \<in> C \<union> ?E" 
+             by (simp only: UnI1)
          next
            assume "S \<in> ?E"
            then have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-             by simp (*Pendiente*)
+             by (rule CollectD)
            then have "finite s \<longrightarrow> s \<in> C"
-             using \<open>s \<subseteq> S\<close> by blast (*Pendiente*)
+             using \<open>s \<subseteq> S\<close> by (rule sspec)
            then have "s \<in> C"
              using \<open>finite s\<close> by (rule mp)
            thus "s \<in> C \<union> ?E"
-             by blast (*Pendiente*)
+             by (simp only: UnI1)
         qed
        qed
       qed
@@ -1893,7 +1893,7 @@ proof -
      then have "S \<in> ?E"
        by simp (*Pendiente*)
      thus "S \<in> C \<union> ?E"
-       by simp (*Pendiente*)
+       by (simp only: UnI2)
    qed
  qed
 qed
