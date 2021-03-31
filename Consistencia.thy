@@ -1578,7 +1578,7 @@ proof -
       \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
       \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using \<open>S' \<in> C\<close> by simp (*Pendiente*)
+        using \<open>S' \<in> C\<close> by (rule bspec)
       then have "\<bottom> \<notin> S'"
         by (rule conjunct1)
       have S1:"\<bottom> \<notin> S"
@@ -1638,14 +1638,14 @@ proof -
                   using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
                 have "insert H S' = {H} \<union> S'"
                   by (rule insert_is_Un)
-                then have "S \<subseteq> {H} \<union> S'"
-                  using \<open>S \<subseteq> insert H S'\<close> by simp (*Pendiente*)
+                have "S \<subseteq> {H} \<union> S'"
+                  using \<open>S \<subseteq> insert H S'\<close> by (simp only: \<open>insert H S' = {H} \<union> S'\<close>)
                 have "S \<subseteq> insert G ({H} \<union> S')"
                   using \<open>S \<subseteq> {H} \<union> S'\<close> by (rule subset_insertI2)
                 have "insert G ({H} \<union> S') = {G} \<union> ({H} \<union> S')"
                   by (rule insert_is_Un)
-                then have "S \<subseteq> {G} \<union> ({H} \<union> S')"
-                  using \<open>S \<subseteq> insert G ({H} \<union> S')\<close> by simp (*Pendiente*)
+                have "S \<subseteq> {G} \<union> ({H} \<union> S')"
+                  using \<open>S \<subseteq> insert G ({H} \<union> S')\<close> by (simp only: \<open>insert G ({H} \<union> S') = {G} \<union> ({H} \<union> S')\<close>)
                 then have "S \<subseteq> {G} \<union> {H} \<union> S'"
                   by simp (*Pendiente*)
                 then have "S \<subseteq> {G,H} \<union> S'"
@@ -1694,8 +1694,8 @@ proof -
                     using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2)
                   have "insert G S' = {G} \<union> S'"
                     by (rule insert_is_Un)
-                  then have "S \<subseteq> {G} \<union> S'"
-                    using \<open>S \<subseteq> insert G S'\<close> by simp (*Pendiente*)
+                  have "S \<subseteq> {G} \<union> S'"
+                    using \<open>S \<subseteq> insert G S'\<close> by (simp only: \<open>insert G S' = {G} \<union> S'\<close>)
                   then have "{G} \<union> S \<subseteq> {G} \<union> S'"
                     by simp (*Pendiente*)
                   then have "{G} \<union> S \<in> ?E"
@@ -1711,7 +1711,7 @@ proof -
                   have "insert H S' = {H} \<union> S'"
                     by (rule insert_is_Un)
                   then have "S \<subseteq> {H} \<union> S'"
-                    using \<open>S \<subseteq> insert H S'\<close> by simp (*Pendiente*)
+                    using \<open>S \<subseteq> insert H S'\<close> by (simp only: \<open>insert H S' = {H} \<union> S'\<close>)
                   then have "{H} \<union> S \<subseteq> {H} \<union> S'"
                     by simp (*Pendiente*)
                   then have "{H} \<union> S \<in> ?E"
@@ -1767,8 +1767,6 @@ proof -
     by (rule exI)
 qed
 
-text \<open>\comentario{Pendientes}\<close>
-
 lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
@@ -1804,8 +1802,6 @@ proof (intro ballI sallI)
     using \<open>s \<subseteq> S\<close> \<open>t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S\<close> by simp
   with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
-
-text \<open>\comentario{Pendiente}\<close>
 
 lemma ex2: 
   assumes fc: "finite_character C"
@@ -1845,14 +1841,14 @@ proof -
        proof (rule impI)
          assume "finite s"
          have "S \<in> C \<or> S \<in> ?E"
-           using \<open>S \<in> C \<union> ?E\<close> by simp (*Pendiente*)
+           using \<open>S \<in> C \<union> ?E\<close> by (simp only: Un_iff)
          thus "s \<in> C \<union> ?E"
          proof (rule disjE)
            assume "S \<in> C"
            have "\<forall>S \<in> C. \<forall>s \<subseteq> S. s \<in> C"
              using assms by (simp only: subset_closed_def)
            then have "\<forall>s \<subseteq> S. s \<in> C"
-             using \<open>S \<in> C\<close> by blast (*Pendiente*)
+             using \<open>S \<in> C\<close> by (rule bspec)
            then have "s \<in> C"
              using \<open>s \<subseteq> S\<close> by blast (*Pendiente*)
            thus "s \<in> C \<union> ?E"
