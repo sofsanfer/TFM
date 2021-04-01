@@ -1648,23 +1648,19 @@ proof -
                   using C1 \<open>{G,H} \<union> S' \<in> C\<close> by (rule set_mp)
                 have "S \<subseteq> insert H S'"
                   using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
-                have "insert H S' = {H} \<union> S'"
-                  by (rule insert_is_Un)
-                have "S \<subseteq> {H} \<union> S'"
-                  using \<open>S \<subseteq> insert H S'\<close> by (simp only: \<open>insert H S' = {H} \<union> S'\<close>)
-                have "S \<subseteq> insert G ({H} \<union> S')"
-                  using \<open>S \<subseteq> {H} \<union> S'\<close> by (rule subset_insertI2)
-                have "insert G ({H} \<union> S') = {G} \<union> ({H} \<union> S')"
-                  by (rule insert_is_Un)
-                have "S \<subseteq> {G} \<union> ({H} \<union> S')"
-                  using \<open>S \<subseteq> insert G ({H} \<union> S')\<close> by (simp only: \<open>insert G ({H} \<union> S') = {G} \<union> ({H} \<union> S')\<close>)
-                then have "S \<subseteq> {G} \<union> {H} \<union> S'"
+                then have "insert H S \<subseteq> insert H (insert H S')"
+                  by (simp only: insert_mono)
+                then have "insert H S \<subseteq> insert H S'"
+                  by (simp only: insert_absorb2)
+                then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
+                  by (simp only: insert_mono)
+                have A:"insert G (insert H S) = {G,H} \<union> S"
                   by simp (*Pendiente*)
-                then have "S \<subseteq> {G,H} \<union> S'"
-                  by auto (*Pendiente*)
-                then have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'"
+                have B:"insert G (insert H S') = {G,H} \<union> S'"
                   by simp (*Pendiente*)
-                thus "{G,H} \<union> S \<in> ?E"
+                have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
+                  using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
+                thus "{G,H} \<union> S \<in> ?E" 
                   using \<open>{G, H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
               qed
             qed
@@ -1704,12 +1700,16 @@ proof -
                     using C1 \<open>{G} \<union> S' \<in> C\<close> by (rule set_mp)
                   have "S \<subseteq> insert G S'"
                     using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2)
-                  have "insert G S' = {G} \<union> S'"
+                  then have "insert G S \<subseteq> insert G (insert G S')"
+                    by (simp only: insert_mono)
+                  then have "insert G S \<subseteq> insert G S'"
+                    by (simp only: insert_absorb2)
+                  have C:"insert G S = {G} \<union> S"
                     by (rule insert_is_Un)
-                  have "S \<subseteq> {G} \<union> S'"
-                    using \<open>S \<subseteq> insert G S'\<close> by (simp only: \<open>insert G S' = {G} \<union> S'\<close>)
-                  then have "{G} \<union> S \<subseteq> {G} \<union> S'"
-                    by simp (*Pendiente*)
+                  have D:"insert G S' = {G} \<union> S'"
+                    by (rule insert_is_Un)
+                  have "{G} \<union> S \<subseteq> {G} \<union> S'"
+                    using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
                   then have "{G} \<union> S \<in> ?E"
                     using \<open>{G} \<union> S' \<in> C\<close> by blast (*Pendiente*)
                   thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
@@ -1720,12 +1720,16 @@ proof -
                     using C1 \<open>{H} \<union> S' \<in> C\<close> by (rule set_mp)
                   have "S \<subseteq> insert H S'"
                     using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2)
-                  have "insert H S' = {H} \<union> S'"
+                  then have "insert H S \<subseteq> insert H (insert H S')"
+                    by (simp only: insert_mono)
+                  then have "insert H S \<subseteq> insert H S'"
+                    by (simp only: insert_absorb2)
+                  have E:"insert H S = {H} \<union> S"
                     by (rule insert_is_Un)
-                  then have "S \<subseteq> {H} \<union> S'"
-                    using \<open>S \<subseteq> insert H S'\<close> by (simp only: \<open>insert H S' = {H} \<union> S'\<close>)
+                  have F:"insert H S' = {H} \<union> S'"
+                    by (rule insert_is_Un)
                   then have "{H} \<union> S \<subseteq> {H} \<union> S'"
-                    by simp (*Pendiente*)
+                    using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
                   then have "{H} \<union> S \<in> ?E"
                     using \<open>{H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
                   thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
