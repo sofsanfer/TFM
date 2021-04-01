@@ -1757,12 +1757,20 @@ proof (rule ballI)
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
   fix S
   assume "S \<in> ?E"
+  then have H:"\<exists>S'\<in> C. S \<subseteq> S'"
+    by (rule CollectD)
+  obtain S' where \<open>S' \<in> C\<close> and \<open>S \<subseteq> S'\<close> 
+    using H by (rule bexE) 
   show "\<forall>s \<subseteq> S. s \<in> ?E"
   proof (rule sallI)
     fix s
     assume "s \<subseteq> S" 
+    then have "s \<subseteq> S'"
+      using \<open>S \<subseteq> S'\<close> by (rule subset_trans)
+    then have "\<exists>S' \<in> C. s \<subseteq> S'"
+      using \<open>S' \<in> C\<close> by (rule bexI)
     thus "s \<in> ?E"
-      using \<open>S \<in> ?E\<close> by auto (*Pendiente*)
+      by (rule CollectI)
   qed
 qed
 
