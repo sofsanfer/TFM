@@ -2430,14 +2430,14 @@ next
   also have "\<dots> = {pcp_seq C S n |n. n = Suc m} \<union> {pcp_seq C S n |n. n \<le> m}"
     by simp (*Pendiente*)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m}"
-    by simp (*Pendiente*)
+    by (simp add: singleton_conv) (*Pendiente*)
   also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
     by blast (*Pendiente*)
-  finally have 2:"{pcp_seq C S n |n. n \<le> Suc m} = 
+  finally have 3:"{pcp_seq C S n |n. n \<le> Suc m} = 
           insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
     by this
   have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" 
-    using 2 by auto
+    using 3 by auto (*Pendiente*)
   also have "\<dots> = pcp_seq C S m \<union> pcp_seq C S (Suc m)"
     by (simp only: HI)
   also have "\<dots> = pcp_seq C S (Suc m)"
@@ -2470,15 +2470,21 @@ definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
-  have "pcp_seq C S 0 \<in> {pcp_seq C S 0}" 
-    by (simp only: singletonI)
-  thus "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
+  have D0:"pcp_seq C S 0 \<union> \<Union> {pcp_seq C S n|n. True} = \<Union> {pcp_seq C S n|n. True}"
     by blast (*Pendiente*)
+  have "pcp_seq C S 0 \<subseteq> pcp_seq C S 0 \<union> \<Union> {pcp_seq C S n|n. True}"
+    by (rule Un_upper1)
+  thus "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
+    by (simp only: D0)
 next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
-  show "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n|n. True}"
+  have Dn:"pcp_seq C S (Suc n) \<union> \<Union> {pcp_seq C S n|n. True} = \<Union> {pcp_seq C S n|n. True}"
     by blast (*Pendiente*)
+  have "pcp_seq C S (Suc n) \<subseteq> pcp_seq C S (Suc n) \<union> \<Union> {pcp_seq C S n|n. True}"
+    by (rule Un_upper1)
+  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n|n. True}"
+    by (simp only: Dn)
 qed
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
