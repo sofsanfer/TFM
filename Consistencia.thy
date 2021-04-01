@@ -2504,13 +2504,19 @@ lemma pcp_lim_inserted_at_ex:
     "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
-lemma pcp_lim_in_detallada:
+(*lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
           "subset_closed C"
           "finite_character C"
-  shows "pcp_lim C S \<in> C" (is "?cl \<in> C")
+  shows "pcp_lim C S \<in> C" 
 proof -
+  have "\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+    using assms(4) unfolding finite_character_def by this
+  then have FC1:"pcp_lim C S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> (pcp_lim C S). finite s \<longrightarrow> s \<in> C)"
+    by (rule allE)
+  have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+    using assms(3) unfolding subset_closed_def by this
   have "\<forall>n. pcp_seq C S n \<in> C" 
   proof (rule allI)
     fix n
@@ -2519,30 +2525,33 @@ proof -
   qed
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
-  have "\<forall>s \<subseteq> ?cl. finite s \<longrightarrow> s \<in> C" (*Pendiente*)
-  proof safe
+  have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C" (*Pendiente*)
+  proof (rule sallI)
     fix s :: "'a formula set"
-    have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
-      using pcp_seq_sub by blast
-    assume \<open>finite s\<close> \<open>s \<subseteq> pcp_lim C S\<close>
-    hence "\<exists>k. s \<subseteq> pcp_seq C S k" 
-    proof(induction s rule: finite_induct) 
-      case (insert x s)
-      hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast
-      then guess k1 ..
-      moreover obtain k2 where "x \<in> pcp_seq C S k2"
-        by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
-      ultimately have "insert x s \<subseteq> pcp_seq C S (max k1 k2)"
-        by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
+    assume "s \<subseteq> pcp_lim C S"
+    show "finite s \<longrightarrow> s \<in> C"
+    proof (rule impI)
+      assume "finite s" 
+      have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
+        using pcp_seq_sub by blast
+      hence "\<exists>k. s \<subseteq> pcp_seq C S k" 
+      proof(induction s rule: finite_induct) 
+        case (insert x s)
+        hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast+
+        then guess k1 ..
+        moreover obtain k2 where "x \<in> pcp_seq C S k2"
+          by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
+        ultimately have "insert x s \<subseteq> pcp_seq C S (max k1 k2)"
+          by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
       thus ?case by blast
     qed simp
     with pcp_seq_in[OF assms(1) assms(2)] assms(3)
     show "s \<in> C" 
       unfolding subset_closed_def by blast
   qed
-  thus "?cl \<in> C" 
-    using assms(4) unfolding finite_character_def by blast
-qed
+  show "pcp_lim C S \<in> C" 
+    using FC1 FC2 by (rule forw_subst)
+qed*)
 
 lemma pcp_lim_in:
   assumes c: "pcp C"
