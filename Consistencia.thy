@@ -1812,22 +1812,38 @@ lemma ex2_detallada:
 proof (intro ballI sallI)
   fix s S
   assume  \<open>S \<in> C\<close> and \<open>s \<subseteq> S\<close>
-  then have "t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S" for t 
-    by (simp only: subset_trans)
-  have "\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+  have H:"\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
     using assms unfolding finite_character_def by this
   then have 1:"S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
     by (rule allE)
-  have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+  have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
     using \<open>S \<in> C\<close> 1 by (rule back_subst)
-  then have "t \<subseteq> S \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
-    using \<open>S \<in> C\<close> by blast (*Pendiente*)
-  then have "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
-    using \<open>s \<subseteq> S\<close> \<open>t \<subseteq> s \<Longrightarrow> s \<subseteq> S \<Longrightarrow> t \<subseteq> S\<close> by simp
-  with assms show \<open>s \<in> C\<close> unfolding finite_character_def by blast
+  have 3:"t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
+  proof -
+    assume "t \<subseteq> s" and "finite t"
+    then have "t \<subseteq> S"
+      using \<open>s \<subseteq> S\<close> by (simp only: subset_trans)
+    have "finite t \<longrightarrow> t \<in> C"
+      using 2  \<open>t \<subseteq> S\<close> by (rule sspec)
+    thus "t \<in> C"
+      using \<open>finite t\<close> by (rule mp)
+  qed
+  have 4:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
+  proof (rule sallI)
+    fix t
+    assume "t \<subseteq> s"
+    show "finite t \<longrightarrow> t \<in> C"
+    proof (rule impI)
+      assume "finite t"
+      show "t \<in> C"
+        using \<open>t \<subseteq> s\<close> \<open>finite t\<close> by (simp only: 3)
+    qed
+  qed
+  have "s \<in> C \<longleftrightarrow> (\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C)"
+    using H by (rule allE)
+  thus "s \<in> C"
+    using 4 by (rule forw_subst)
 qed
-
-text \<open>\comentario{Entender y demostrar bien detallada}\<close>
 
 lemma ex2: 
   assumes fc: "finite_character C"
