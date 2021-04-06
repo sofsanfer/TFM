@@ -2654,11 +2654,11 @@ proof -
     by blast (*Pendiente*)
 qed
 
-(*lemma pcp_lim_inserted_at_ex: 
+lemma pcp_lim_inserted_at_ex: 
     "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
-lemma pcp_lim_in_detallada:
+(*lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
           "subset_closed C"
