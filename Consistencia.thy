@@ -446,7 +446,7 @@ text \<open>Procedamos a la demostración del resultado.
   Por tanto, queda probado el resultado.
 \end{demostracion}
 
-  Para probar de manera detallada el lema en Isabelle, vamos a demostrar inicialmenre 
+  Para probar de manera detallada el lema en Isabelle, vamos a demostrar inicialmente 
   cada una de las implicaciones de la equivalencia por separado. 
 
   La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
@@ -1025,9 +1025,94 @@ text \<open>En primer lugar, veamos la demostración del lema.
 
   De este modo, queda probada la primera implicación de la equivalencia. Veamos la prueba de la 
   implicación contraria.
-\end{demostracion}\<close>
 
-text \<open>El lema \<open>pcp_alt1\<close> es el lema auxiliar para la primera implicación.\<close>
+\textbf{\<open>2) \<Longrightarrow> 1)\<close>}
+
+  Supongamos que, dada una colección de conjuntos de fórmulas proposicionales \<open>C\<close>, para cualquier
+  conjunto \<open>S\<close> de la colección se verifica:
+  \begin{itemize}
+    \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+  \end{itemize}
+
+  Probemos que \<open>C\<close> verifica la propiedad de consistencia proposicional. Por la definición
+  de la propiedad basta probar que, dado un conjunto cualquiera \<open>S\<close> perteneciente a \<open>C\<close>, se
+  verifican las siguientes condiciones:
+  \begin{enumerate}
+    \item \<open>\<bottom> \<notin> S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a la colección.
+    \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la
+      colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
+    \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
+      colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
+    \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
+    \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
+      colección, o bien el conjunto \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
+    \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la 
+      colección. 
+    \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a la
+      colección. 
+  \end{enumerate}
+
+  En primer lugar, se observa que por hipótesis se cumplen las dos primeras condiciones de
+  la definición.
+
+  Por otra parte, vamos a deducir las condiciones tercera, sexta, octava y novena de la
+  definición de la propiedad de consistencia proposicional a partir de la hipótesis sobre las 
+  fórmulas de tipo \<open>\<alpha>\<close>.
+  \begin{enumerate}
+    \item[\<open>3)\<close>:] Supongamos que la fórmula \<open>G \<and> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
+    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que \<open>{G, H} \<union> S\<close> pertenece a la colección.
+    \item[\<open>6)\<close>:] Supongamos que la fórmula \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close> para la fórmula \<open>G\<close> 
+    cualquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes conjuntivas 
+    son ambas la fórmula \<open>G\<close>. Por hipótesis, tenemos que el conjunto \<open>{G,G} \<union> S\<close> pertence a la
+    colección y, puesto que dicho conjunto es equivalente a \<open>{G} \<union> S\<close>, tenemos el resultado.
+    \item[\<open>8)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<or> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
+    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la colección.
+    \item[\<open>9)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<longrightarrow> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
+    \<open>G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{G, \<not> H} \<union> S\<close> pertenece a la colección.
+  \end{enumerate} 
+
+  Finalmente, deduzcamos el resto de condiciones de la definición de propiedad de consistencia
+  proposicional a partir de la hipótesis referente a las fórmulas de tipo \<open>\<beta>\<close>.
+  \begin{enumerate}
+    \item[\<open>4)\<close>:] Supongamos que la fórmula \<open>G \<or> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
+    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{G} \<union> S\<close> pertenece a la colección o bien
+    \<open>{H} \<union> S\<close> pertenece a la colección.
+    \item[\<open>5)\<close>:] Supongamos que la fórmula \<open>G \<longrightarrow> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
+    \<open>\<not> G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a la colección o
+    bien \<open>{H} \<union> S\<close> pertenece a la colección.
+    \item[\<open>7)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<and> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
+    cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
+    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a la colección o
+    bien \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
+  \end{enumerate} 
+
+  De este modo, hemos probado a partir de la hipótesis todas las condiciones que garantizan que la
+  colección \<open>C\<close> cumple la propiedad de consistencia proposicional. Por lo tanto, queda demostrado el
+  resultado.
+\end{demostracion}
+
+  Análogamente a la demostración del lema anterior de caracterización, para probar este resultado en 
+  Isabelle, vamos a demostrar cada una de las implicaciones de la equivalencia por separado. 
+
+  La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
+  deduce la condición de \<open>2)\<close> sobre fórmulas de tipo \<open>\<alpha>\<close> a partir de las condiciones tercera, sexta, 
+  octava y novena de la definición de propiedad de consistencia proposicional. Su demostración 
+  detallada en Isabelle se muestra a continuación.\<close>
 
 lemma pcp_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -1455,32 +1540,6 @@ qed
 
 lemma pcp_alt2Dis3:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  shows "\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-  proof (rule impI)
-    assume "\<^bold>\<not> (\<^bold>\<not>G) \<in> S"
-    then have "Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G"
-      by (simp only: Dis.intros(4))
-    let ?F="\<^bold>\<not> (\<^bold>\<not> G)" 
-    have "\<forall>G H. Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      using assms by (rule allE)
-    then have "\<forall>H. Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      by (rule allE)
-    then have "Dis ?F G G \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-      by (rule allE)
-    then have "?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-      using \<open>Dis (\<^bold>\<not> (\<^bold>\<not>G)) G G\<close> by (rule mp)
-    then have "{G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-      using \<open>(\<^bold>\<not> (\<^bold>\<not>G)) \<in> S\<close> by (rule mp)
-    thus "{G} \<union> S \<in> C"
-      by (simp only: disj_absorb)
-  qed
-qed
-
-lemma pcp_alt2Dis4:
-  assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
 proof (rule allI)
   fix G
@@ -1509,19 +1568,16 @@ lemma pcp_alt2Dis:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
   \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
-  \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
   \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
 proof -
   have 1:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
     using assms by (rule pcp_alt2Dis1)
   have 2:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
     using assms by (rule pcp_alt2Dis2)
-  have 3:"\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+  have 3:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
     using assms by (rule pcp_alt2Dis3)
-  have 4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-    using assms by (rule pcp_alt2Dis4)
   show ?thesis
-    using 1 2 3 4 by (iprover intro: conjI)
+    using 1 2 3 by (iprover intro: conjI)
 qed
 
 lemma pcp_alt2: 
@@ -1550,7 +1606,6 @@ proof (rule ballI)
     using H by (iprover elim: conjunct1 conjunct2)
   then have D:"(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
     \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
-    \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C)
     \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C)"
     by (rule pcp_alt2Dis)
   have 1:"\<bottom> \<notin> S
