@@ -296,9 +296,10 @@ lemma "Hintikka S = (\<bottom> \<notin> S
 text \<open>Procedamos a la demostración del resultado.
 
 \begin{demostracion}
-Para probar la equivalencia, veamos cada una de las implicaciones por separado.
+  Para probar la equivalencia, veamos cada una de las implicaciones por separado.
 
 \textbf{\<open>1) \<Longrightarrow> 2)\<close>}
+
   Supongamos que \<open>S\<close> es un conjunto de Hintikka. Vamos a probar que, en efecto, se 
   verifican las condiciones del enunciado del lema.
 
@@ -379,6 +380,7 @@ Para probar la equivalencia, veamos cada una de las implicaciones por separado.
   \end{enumerate}
 
 \textbf{\<open>2) \<Longrightarrow> 1)\<close>}
+
   Supongamos que se verifican las condiciones del enunciado del lema:
 
   \begin{itemize}
@@ -921,7 +923,115 @@ text\<open>Finalmente mostremos un resultado que permite la caracterización de 
       \end{itemize} 
     \end{enumerate}
   \end{lema}
-\<close>
+
+  En Isabelle/HOL se formaliza el resultado como sigue.\<close>
+
+lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+  oops
+
+text \<open>En primer lugar, veamos la demostración del lema.
+
+\begin{demostracion}
+  Para probar la equivalencia, veamos cada una de las implicaciones por separado.
+
+\textbf{\<open>1) \<Longrightarrow> 2)\<close>}
+  
+  Supongamos que \<open>C\<close> es una colección de conjuntos de fórmulas proposicionales que
+  verifica la condición de consistencia proposicional. Vamos a probar que, en efecto,
+  cumple las condiciones de \<open>2)\<close>. 
+
+  Consideremos un conjunto de fórmulas cualquiera \<open>S\<close> perteneciente a la colección \<open>C\<close>.
+  Por hipótesis, de la definición de condición de consistencia proposicional obtenemos
+  que \<open>S\<close> verifica las siguientes condiciones:
+ \begin{enumerate}
+      \item \<open>\<bottom> \<notin> S\<close>.
+      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+      \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
+        colección, o bien el conjunto \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
+      \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la 
+        colección. 
+      \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a la
+        colección. 
+ \end{enumerate}
+
+  Las dos primeras condiciones se corresponden con las dos primeras que queríamos probar.
+  De este modo, falta probar:
+  \begin{itemize}
+     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+     pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+     pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
+     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.   
+  \end{itemize} 
+
+  En primer lugar, vamos a deducir el primer resultado correspondiente a las fórmulas
+  de tipo \<open>\<alpha>\<close> de las condiciones tercera, sexta, octava y novena de la definición de 
+  condición de consistencia proposicional. En efecto, consideremos una fórmula de tipo 
+  \<open>\<alpha>\<close> cualquiera con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close> pertenece a \<open>S\<close>. Por 
+  simplificación, sabemos que la fórmula, al ser del tipo \<open>\<alpha>\<close>, es de la forma \<open>G \<and> H\<close>, 
+  \<open>\<not> (\<not> G)\<close>, \<open>\<not> (G \<or> H)\<close> o \<open>\<not>(G \<longrightarrow> H)\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close>. Vamos a probar 
+  que para cada caso se cumple que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección:
+  \begin{itemize}
+    \item Supongamos que la fórmula es de la forma \<open>G \<and> H\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y \<open>H\<close>
+    respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
+    la tercera condición de la definición de condición de consistencia proposicional.
+    \item Supongamos que la fórmula es de la forma \<open>\<not> (\<not> G)\<close> para cierta fórmula \<open>G\<close>.
+    En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son ambas \<open>G\<close>. Luego tenemos que 
+    el conjunto \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección por la sexta condición de la 
+    definición de condición de consistencia proposicional.
+    \item Supongamos que la fórmula es de la forma \<open>\<not>(G \<or> H)\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>\<not> G\<close> y \<open>\<not> H\<close>
+    respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
+    la octava condición de la definición de condición de consistencia proposicional.
+    \item Supongamos que la fórmula es de la forma \<open>\<not>(G \<longrightarrow> H)\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y \<open>\<not> H\<close>
+    respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
+    la novena condición de la definición de condición de consistencia proposicional.
+  \end{itemize}
+
+  Finalmente, el resultado correspondiente a las fórmulas de tipo \<open>\<beta>\<close> se obtiene de las 
+  condiciones cuarta, quinta, sexta y séptima de la definición de condición de consistencia 
+  proposicional. Para probarlo, consideremos una fórmula cualquiera de tipo \<open>\<beta>\<close> perteneciente
+  al conjunto \<open>S\<close> y cuyas componentes disyuntivas son \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>. Por simplificación, sabemos 
+  que dicha fórmula es de la forma \<open>G \<or> H\<close>, \<open>G \<longrightarrow> H\<close>, \<open>\<not> (\<not> G)\<close> o \<open>\<not>(G \<and> H)\<close> para ciertas 
+  fórmulas \<open>G\<close> y \<open>H\<close>. Deduzcamos que, en efecto, tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la
+  colección \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección \<open>C\<close>.
+  \begin{itemize}
+    \item Supongamos que la fórmula es de la forma \<open>G \<or> H\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>G\<close> y \<open>H\<close>
+    respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección 
+    o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la cuarta condición de la definición de 
+    condición de consistencia proposicional.
+    \item Supongamos que la fórmula es de la forma \<open>G \<longrightarrow> H\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>\<not> G\<close> y \<open>H\<close>
+    respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección o bien
+    \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la quinta condición de la definición de condición 
+    de consistencia proposicional.
+    \item Supongamos que la fórmula es de la forma \<open>\<not> (\<not> G)\<close> para cierta fórmula \<open>G\<close>.
+    En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son ambas \<open>G\<close>. Luego tenemos que,
+    en particular, el conjunto \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección por la sexta condición de la 
+    definición de condición de consistencia proposicional. Por tanto, se verifica que o bien
+    \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la colección o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección.
+    \item Supongamos que la fórmula es de la forma \<open>\<not>(G \<and> H)\<close> para ciertas fórmulas \<open>G\<close>
+    y \<open>H\<close>. En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>\<not> G\<close> y \<open>\<not> H\<close>
+    respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección o bien 
+    \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la séptima condición de la definición de condición 
+    de consistencia proposicional.
+  \end{itemize}
+
+  De este modo, queda probada la primera implicación de la equivalencia.
+\end{demostracion}\<close>
 
 text \<open>El lema \<open>pcp_alt1\<close> es el lema auxiliar para la primera implicación.\<close>
 
