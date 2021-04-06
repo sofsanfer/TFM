@@ -1371,8 +1371,10 @@ proof (rule ballI)
 qed
 
 text \<open>Por otro lado, veamos la demostración detallada de la implicación contraria de la
-  equivalencia. Para ello, utilizaremos fundamentalmente dos lemas auxiliares: \<open>pcp_alt2Con\<close> y
-  \<open>pcp_alt2Dis\<close>. \<close>
+  equivalencia. Para ello, utilizaremos distintos lemas auxiliares para deducir cada una de las 
+  condiciones de la definición de propiedad de consistencia proposicional a partir de las
+  hipótesis sobre las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>. En primer lugar, veamos los lemas que deducen
+  condiciones a partir de la hipótesis referente a las fórmulas de tipo \<open>\<alpha>\<close>.\<close>
 
 lemma pcp_alt2Con1:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
@@ -1472,9 +1474,9 @@ proof (rule allI)
   qed
 qed
 
-text \<open>Lemas auxiliares para \<open>pcp_alt2Dis\<close> para las distintas conectivas (análogos)
-  Idea: hacer estas demostraciones a mano resumidas en una sola demostración
-  donde se considera la fórmula beta y sus componentes.\<close>
+text \<open>Por otro lado, los siguientes lemas auxiliares prueban el resto de condiciones de la
+  definición de propiedad de consistencia proposicional a partir de la hipótesis referente a 
+  fórmulas de tipo \<open>\<beta>\<close>.\<close>
 
 lemma pcp_alt2Dis1:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
@@ -1548,6 +1550,9 @@ proof (rule allI)
   qed
 qed
 
+text \<open>De este modo, procedemos a la demostración detallada de esta implicación en Isabelle como
+  sigue.\<close>
+
 lemma pcp_alt2: 
   assumes "\<forall>S \<in> C. \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -1617,6 +1622,9 @@ proof (rule ballI)
     by (iprover intro: conj_assoc)
 qed
 
+text \<open>Una vez probadas detalladamente en Isabelle cada una de las implicaciones de la
+  equivalencia, podemos finalmente concluir con la demostración del lema completo.\<close>
+
 lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -1637,6 +1645,9 @@ next
     by (rule pcp_alt2)
 qed
 
+text \<open>La demostración automática del resultado en Isabelle/HOL se muestra finalmente a 
+  continuación.\<close>
+
 lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -1645,6 +1656,8 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   apply(simp add: pcp_def con_dis_simps)
   apply(rule iffI; unfold Ball_def; elim all_forward)
   by (auto simp add: insert_absorb split: formula.splits)
+
+text \<open>\comentario{Voy redactando por aquí.}\<close>
 
 text\<open> Definición: C es cerrado bajo subconjunto.\<close>
 definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"
