@@ -1203,6 +1203,10 @@ proof -
   qed
 qed
 
+text \<open>Finalmente, el siguiente lema auxiliar deduce la condición de \<open>2)\<close> sobre fórmulas de tipo \<open>\<beta>\<close> 
+  a partir de las condiciones cuarta, quinta, sexta y séptima de la definición de propiedad de 
+  consistencia proposicional.\<close>
+
 lemma pcp_alt1Dis:
   assumes "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
   \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)
@@ -1294,6 +1298,9 @@ proof -
   qed
 qed 
 
+text \<open>De esta manera, mediante los anteriores lemas auxiliares, podemos probar la primera
+  implicación detalladamente en Isabelle como se muestra a continuación.\<close>
+
 lemma pcp_alt1: 
   assumes "pcp C"
   shows "\<forall>S \<in> C. \<bottom> \<notin> S
@@ -1362,12 +1369,6 @@ proof (rule ballI)
   \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using C1 C2 Con Dis by (iprover intro: conjI)
 qed
-
-text \<open>El lema \<open>pcp_alt2\<close> es para la implicación contraria.\<close>
-
-text \<open>Lemas auxiliares para \<open>pcp_alt2Con\<close> para las distintas conectivas (análogos)
-  Idea: hacer estas demostraciones a mano resumidas en una sola demostración
-  donde se considera la fórmula beta y sus componentes.\<close>
 
 lemma pcp_alt2Con1:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
