@@ -244,8 +244,12 @@ text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducció
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
   by (simp only: Con.intros(4) Dis.intros(4))+
 
-text \<open>Ejemplos:
- \comentario{Redactar esto con enlace.}\<close>
+text \<open>Por otra parte, de la propia definición de las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>
+  obtenemos reglas de simplificación. De este modo, dada una fórmula de tipo
+  \<open>\<alpha>\<close> o \<open>\<beta>\<close> deducimos que se correponde con uno de los cuatro casos de fórmula 
+  definidos para cada tipo con sus correspondientes componentes.
+  En Isabelle, hemos formalizado las reglas de simplificación de ambos tipos de 
+  fórmulas en un resultado conjunto.\<close>
 
 lemma con_dis_simps:
   "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
@@ -895,10 +899,29 @@ lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
   subgoal by safe metis+
   done
 
-text \<open>\comentario{Voy redactando por aqui.}\<close>
+text\<open>Finalmente mostremos un resultado que permite la caracterización de la 
+  propiedad de consistencia proposicional empleando la notación uniforme.
 
-text\<open> Lema: caracterización de la propiedad de consistencia proposicional
- mediante las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>.\<close>
+  \begin{lema}[Caracterización de la propiedad de consistencia proposicional mediante la
+  notación uniforme]
+    Dada una colección \<open>C\<close> de conjuntos de fórmulas proposicionales, son equivalentes:
+    \begin{enumerate}
+      \item \<open>C\<close> verifica la condición de consistencia proposicional.
+      \item Para cualquier conjunto de fórmulas \<open>S\<close> de la colección, se verifican las 
+      condiciones:
+      \begin{itemize}
+        \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
+        \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+        \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+        pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+        \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+        pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
+        bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+      \end{itemize} 
+    \end{enumerate}
+  \end{lema}
+\<close>
 
 text \<open>El lema \<open>pcp_alt1\<close> es el lema auxiliar para la primera implicación.\<close>
 
@@ -2500,11 +2523,11 @@ proof -
     by blast (*Pendiente*)
 qed
 
-lemma pcp_lim_inserted_at_ex: 
+(*lemma pcp_lim_inserted_at_ex: 
     "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
-(*lemma pcp_lim_in_detallada:
+lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
           "subset_closed C"
@@ -2526,15 +2549,13 @@ proof -
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
   have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C" (*Pendiente*)
-  proof (rule sallI)
+  proof safe
     fix s :: "'a formula set"
     assume "s \<subseteq> pcp_lim C S"
-    show "finite s \<longrightarrow> s \<in> C"
-    proof (rule impI)
-      assume "finite s" 
-      have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
-        using pcp_seq_sub by blast
-      hence "\<exists>k. s \<subseteq> pcp_seq C S k" 
+    assume "finite s"
+    have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
+      using pcp_seq_sub by blast
+    have "\<exists>k. s \<subseteq> pcp_seq C S k" 
       proof(induction s rule: finite_induct) 
         case (insert x s)
         hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast+
@@ -2562,7 +2583,6 @@ lemma pcp_lim_in:
 proof -
   from pcp_seq_in[OF c el, THEN allI] have "\<forall>n. pcp_seq C S n \<in> C" .
   hence "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" unfolding pcp_seq_UN .
-  
   have "\<forall>s \<subseteq> ?cl. finite s \<longrightarrow> s \<in> C"
   proof safe
     fix s :: "'a formula set"
