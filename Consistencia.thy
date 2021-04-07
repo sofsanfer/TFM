@@ -2669,14 +2669,26 @@ next
     by (simp only: monoid_add_class.add_0_right)
   have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
-  have "{pcp_seq C S n |n. n \<le> Suc m} = {pcp_seq C S n |n. (n \<le> m \<or> n = Suc m)}"
+  have "{n. n \<le> Suc m}  = {n. (n \<le> m \<or> n = Suc m)}"
     by (simp only: le_Suc_eq)
-  also have "\<dots> = {pcp_seq C S n |n. n \<le> m} \<union> {pcp_seq C S n |n. n = Suc m}"
-    by blast (*Pendiente*)
-  also have "\<dots> = {pcp_seq C S n |n. n = Suc m} \<union> {pcp_seq C S n |n. n \<le> m}"
+  also have "\<dots> = {n. n \<le> m} \<union> {n. n = Suc m}"
+    by blast (*Collect_disj_eq*) (*Pendiente*) find_theorems name: Collect "?P ?x \<or> ?Q ?y" 
+  also have "\<dots> = {n. n = Suc m} \<union> {n. n \<le> m}"
+    by (rule Un_commute) find_theorems name:map name: set
+  also have "\<dots> = {Suc m} \<union> {n. n \<le> m}"
     by simp (*Pendiente*)
-  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m}"
-    by (simp add: singleton_conv) (*Pendiente*)
+  finally have S:"{n. n \<le> Suc m} = {Suc m} \<union> {n. n \<le> m}"
+    by this
+  have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
+    by blast (*Pendiente*)
+  also have "\<dots> = (pcp_seq C S) ` ({Suc m} \<union> {n. n \<le> m})"
+    by (simp only: S)
+  also have "\<dots> = (pcp_seq C S) ` {Suc m} \<union> (pcp_seq C S) ` {n. n \<le> m}"
+    by simp (*Pendiente*)
+  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}"
+    by simp (*Pendiente*)
+  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
+    by blast (*Pendiente*)
   also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
     by blast (*Pendiente*)
   finally have 3:"{pcp_seq C S n |n. n \<le> Suc m} = 
