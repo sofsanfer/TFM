@@ -2672,11 +2672,11 @@ next
   have "{n. n \<le> Suc m}  = {n. (n \<le> m \<or> n = Suc m)}"
     by (simp only: le_Suc_eq)
   also have "\<dots> = {n. n \<le> m} \<union> {n. n = Suc m}"
-    by blast (*Collect_disj_eq*) (*Pendiente*) find_theorems name: Collect "?P ?x \<or> ?Q ?y" 
+    by (rule Collect_disj_eq) 
   also have "\<dots> = {n. n = Suc m} \<union> {n. n \<le> m}"
-    by (rule Un_commute) find_theorems name:map name: set
+    by (rule Un_commute)
   also have "\<dots> = {Suc m} \<union> {n. n \<le> m}"
-    by simp (*Pendiente*)
+    by (simp only: singleton_conv)
   finally have S:"{n. n \<le> Suc m} = {Suc m} \<union> {n. n \<le> m}"
     by this
   have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
