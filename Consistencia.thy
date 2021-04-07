@@ -1657,6 +1657,12 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   apply(rule iffI; unfold Ball_def; elim all_forward)
   by (auto simp add: insert_absorb split: formula.splits)
 
+subsection \<open>Propiedades de las colecciones\<close>
+
+text \<open>En esta sección vamos a definir varias propiedades sobre las colecciones y resultados sobre
+  las mismas que utilizaremos posteriormente para la probar la consistencia de la lógica
+  proposicional. (Fatal redactado, pensar bien.)\<close>
+
 text \<open>\comentario{Voy redactando por aquí.}\<close>
 
 text\<open> Definición: C es cerrado bajo subconjunto.\<close>
@@ -1712,6 +1718,86 @@ proof (rule subsetI)
     using \<open>s \<in> C\<close> by (rule bexI)
   thus "s \<in> {s. \<exists>S\<in>C. s \<subseteq> S}" 
     by (simp only: mem_Collect_eq)
+qed
+
+text \<open>Lema auxiliar sobre conjuntos de dos elementos.\<close>
+
+lemma elemSet: "{b} \<union> {a} = {a,b}"
+proof -
+  have C1:"{b} \<union> {a} \<subseteq> {a,b}" 
+  proof -
+    have "\<forall>x \<in> ({b} \<union> {a}). x \<in> {a,b}"
+    proof (rule ballI)
+      fix x
+      assume "x \<in> {b} \<union> {a}"
+      then have "x \<in> {b} \<or> x \<in> {a}"
+        by (simp only: Un_iff)
+      thus "x \<in> {a,b}"
+      proof (rule disjE)
+        assume "x \<in> {b}"
+        then have "x = b" 
+          by (simp only: singleton_iff) 
+        thus "x \<in> {a,b}" using [[simp_trace]]
+          by simp (*Pendiente*) 
+      next
+        assume "x \<in> {a}"
+        then have "x = a"
+          by (simp only: singleton_iff) 
+        thus "x \<in> {a,b}"
+          by simp (*PEndiente*)
+      qed
+    qed
+    thus "{b} \<union> {a} \<subseteq> {a,b}"
+      by (simp only: subset_eq)
+  qed
+  have C2:"{a,b} \<subseteq> {b} \<union> {a}"
+  proof -
+    have "\<forall>x \<in> {a,b}. x \<in> {b} \<union> {a}"
+    proof (rule ballI)
+      fix x
+      assume "x \<in> {a,b}"
+      then have "x = a \<or> x = b"
+        by simp (*Pendiente*)
+      thus "x \<in> {b} \<union> {a}"
+      proof (rule disjE)
+        assume "x = b"
+        then have "x \<in> {b}"
+          by simp (*Pendiente*)
+        thus "x \<in> {b} \<union> {a}"
+          by simp (*PEndiente*)
+      next
+        assume "x = a"
+        then have "x \<in> {a}"
+          by simp (*Pendiente*)
+        thus "x \<in> {b} \<union> {a}"
+          by simp (*Pendiente*)
+      qed
+    qed
+    thus "{a,b} \<subseteq> {b} \<union> {a}"
+      by (simp only: subset_eq)
+  qed
+  show "{b} \<union> {a} = {a,b}"
+    using C1 C2 by (simp only: set_eq_subset) 
+qed
+
+lemma insertSetElem: "insert a (insert b C) = {a,b} \<union> C"
+proof -
+  have "insert a C = {a} \<union> C"
+    by (rule insert_is_Un)
+  have "{b} \<union> {a} = {a,b}"
+    by (rule elemSet)
+  have "insert a (insert b C) = insert b (insert a C)"
+    by (rule insert_commute)
+  also have "\<dots> = {b} \<union> (insert a C)"
+    by (rule insert_is_Un)
+  also have "\<dots> = {b} \<union> ({a} \<union> C)"
+    by (simp only: \<open>insert a C = {a} \<union> C\<close>)
+  also have "\<dots> = {b} \<union> {a} \<union> C"
+    by (simp only: Un_assoc)
+  also have "\<dots> = {a,b} \<union> C"
+    by (simp only: \<open>{b} \<union> {a} = {a,b}\<close>) 
+  finally show ?thesis
+    by this
 qed
 
 lemma ex1_pcp: 
@@ -1809,13 +1895,15 @@ proof -
                 then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
                   by (simp only: insert_mono)
                 have A:"insert G (insert H S) = {G,H} \<union> S"
-                  by simp (*Pendiente*)
+                  by (rule insertSetElem) 
                 have B:"insert G (insert H S') = {G,H} \<union> S'"
-                  by simp (*Pendiente*)
+                  by (rule insertSetElem)
                 have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
                   using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
+                then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
+                  using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
                 thus "{G,H} \<union> S \<in> ?E" 
-                  using \<open>{G, H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+                  by (rule CollectI)
               qed
             qed
           qed
@@ -1864,8 +1952,10 @@ proof -
                     by (rule insert_is_Un)
                   have "{G} \<union> S \<subseteq> {G} \<union> S'"
                     using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
+                  then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
+                    using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
                   then have "{G} \<union> S \<in> ?E"
-                    using \<open>{G} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+                    by (rule CollectI)
                   thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
                     by (rule disjI1)
                 next
@@ -1884,8 +1974,10 @@ proof -
                     by (rule insert_is_Un)
                   then have "{H} \<union> S \<subseteq> {H} \<union> S'"
                     using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
+                  then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
+                    using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
                   then have "{H} \<union> S \<in> ?E"
-                    using \<open>{H} \<union> S' \<in> C\<close> by blast (*Pendiente*)
+                    by (rule CollectI)
                   thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
                     by (rule disjI2)
                 qed
