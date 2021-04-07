@@ -2680,15 +2680,15 @@ next
   finally have S:"{n. n \<le> Suc m} = {Suc m} \<union> {n. n \<le> m}"
     by this
   have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
-    by blast (*Pendiente*)
+    by (simp only: image_Collect)
   also have "\<dots> = (pcp_seq C S) ` ({Suc m} \<union> {n. n \<le> m})"
     by (simp only: S)
   also have "\<dots> = (pcp_seq C S) ` {Suc m} \<union> (pcp_seq C S) ` {n. n \<le> m}"
     by simp (*Pendiente*)
-  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}"
+  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}" 
     by simp (*Pendiente*)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
-    by blast (*Pendiente*)
+    by (simp only: image_Collect)
   also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
     by blast (*Pendiente*)
   finally have 3:"{pcp_seq C S n |n. n \<le> Suc m} = 
