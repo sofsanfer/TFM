@@ -2817,8 +2817,8 @@ proof -
     using H by (simp only: 2)
   then have "\<exists>k \<in> {n | n. True}. x \<in> pcp_seq C S k"
     by (simp only: UN_iff)
-  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k"
-    by simp (*Pendiente*)
+  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k" 
+    by (simp only: simp_thms(40))
   then have "\<exists>k \<in> UNIV. x \<in> pcp_seq C S k" 
     by (simp only: UNIV_def)
   thus "\<exists>k. x \<in> pcp_seq C S k" 
