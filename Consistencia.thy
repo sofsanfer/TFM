@@ -2983,8 +2983,8 @@ proof (rule ccontr)
 qed
 
 lemma cl_max'_detallada:
-  assumes c: "pcp C"
-  assumes sc: "subset_closed C"
+  assumes "pcp C"
+  assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 using cl_max[OF assms] by blast+
@@ -2997,25 +2997,125 @@ lemma cl_max':
 using cl_max[OF assms] by blast+
 
 lemma pcp_lim_Hintikka_detallada:
-  assumes c: "pcp C"
-  assumes sc: "subset_closed C"
-  assumes fc: "finite_character C"
-  assumes el: "S \<in> C"
+  assumes "pcp C"
+  assumes "subset_closed C"
+  assumes "finite_character C"
+  assumes "S \<in> C"
   shows "Hintikka (pcp_lim C S)"
-proof -
+proof (rule Hintikka_alt2)
   let ?cl = "pcp_lim C S"
-  have "?cl \<in> C" using pcp_lim_in[OF c el sc fc] .
-  from c[unfolded pcp_alt, THEN bspec, OF this]
-  have d: "\<bottom> \<notin> ?cl"
-    "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
-    "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
-    "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
-  for k F G H by force+
-  have "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-       "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-    for F G H
-       by(auto dest: d(3-) cl_max'[OF c sc])
-  with d(1,2) show ?thesis unfolding Hintikka_alt by fast
+  have "?cl \<in> C"
+    using assms(1) assms(4) assms(2) assms(3) by (rule pcp_lim_in)
+  have "(\<forall>S \<in> C.
+  \<bottom> \<notin> S
+\<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C))"
+    using assms(1) by (rule pcp_alt1)
+  then have d:"\<bottom> \<notin> ?cl
+\<and> (\<forall>k. Atom k \<in> ?cl \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<longrightarrow> False)
+\<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C)
+\<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C)"
+    using \<open>?cl \<in> C\<close> by (rule bspec)
+  then have H1:"\<bottom> \<notin> ?cl"
+    by (rule conjunct1)
+  have H2:"\<forall>k. Atom k \<in> ?cl \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<longrightarrow> False"
+    using d by (iprover elim: conjunct2 conjunct1)
+  have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+    using d by (iprover elim: conjunct2 conjunct1)
+  have H3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+      proof (rule allI)
+        fix H
+        show "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+        proof (rule impI)
+          assume "Con F G H"
+          show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+          proof (rule impI)
+            assume "F \<in> ?cl"
+            have "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+              using Con by (iprover elim: allE)
+            then have "F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+              using \<open>Con F G H\<close> by (rule mp)
+            then have "{G,H} \<union> ?cl \<in> C"
+              using \<open>F \<in> ?cl\<close> by (rule mp)
+            have "(insert G (insert H ?cl)) = {G,H} \<union> ?cl"
+              by (rule insertSetElem)
+            then have "(insert G (insert H ?cl)) \<in> C"
+              using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
+            have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+              using assms(1) assms(2) by (rule cl_max')
+            thus "G \<in> ?cl \<and> H \<in> ?cl"
+              by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
+          qed
+        qed
+      qed
+    qed
+  qed
+  have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+    using d by (iprover elim: conjunct2 conjunct1)
+  have H4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+  proof (rule allI)
+    fix F
+    show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+    proof (rule allI)
+      fix G
+      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+      proof (rule allI)
+        fix H
+        show "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+        proof (rule impI)
+          assume "Dis F G H"
+          show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+          proof (rule impI)
+            assume "F \<in> ?cl"
+            have "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+              using Dis by (iprover elim: allE)
+            then have "F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+              using \<open>Dis F G H\<close> by (rule mp)
+            then have "{G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+              using \<open>F \<in> ?cl\<close> by (rule mp)
+            thus "G \<in> ?cl \<or> H \<in> ?cl"
+            proof (rule disjE)
+              assume "{G} \<union> ?cl \<in> C"
+              have "insert G ?cl = {G} \<union> ?cl"
+                by (rule insert_is_Un)
+              have "insert G ?cl \<in> C"
+                using \<open>{G} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert G ?cl = {G} \<union> ?cl\<close>)
+              have "insert G ?cl \<in> C \<Longrightarrow> G \<in> ?cl"
+                using assms(1) assms(2) by (rule cl_max')
+              then have "G \<in> ?cl"
+                by (simp only: \<open>insert G ?cl \<in> C\<close>)
+              thus "G \<in> ?cl \<or> H \<in> ?cl"
+                by (rule disjI1)
+            next
+              assume "{H} \<union> ?cl \<in> C"
+              have "insert H ?cl = {H} \<union> ?cl"
+                by (rule insert_is_Un)
+              have "insert H ?cl \<in> C"
+                using \<open>{H} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert H ?cl = {H} \<union> ?cl\<close>)
+              have "insert H ?cl \<in> C \<Longrightarrow> H \<in> ?cl"
+                using assms(1) assms(2) by (rule cl_max')
+              then have "H \<in> ?cl"
+                by (simp only: \<open>insert H ?cl \<in> C\<close>)
+              thus "G \<in> ?cl \<or> H \<in> ?cl"
+                by (rule disjI2)
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+  show "\<bottom> \<notin> ?cl \<and>
+    (\<forall>k. Atom k \<in> ?cl \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<longrightarrow> False) \<and>
+    (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl) \<and>
+    (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl)"
+    using H1 H2 H3 H4 by (iprover intro: conjI)
 qed
 
 lemma pcp_lim_Hintikka:
