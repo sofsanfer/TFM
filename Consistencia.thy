@@ -2654,11 +2654,6 @@ proof -
     by (simp only: insert_def)
 qed
 
-lemma imageCollect: "f ` {x | x. P x} = {f x | x. P x}"
-  by blast (*Pendiente*)
-
-text \<open>\comentario{DUDA: image Collect}\<close>
-
 lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
   have n0:"{n. n = 0} = {0}"
@@ -2756,11 +2751,9 @@ lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
-    by (rule imageCollect)
-  have "{0} \<union> {n. True} = {n. True}"
-    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right)
-  then have 0:"{0} \<union> {n | n. True} = {n | n. True}"
-    by (simp only: simp_thms(40))
+    by (simp only: image_Collect simp_thms(40))
+  have 0:"{0} \<union> {n | n. True} = {n | n. True}"
+    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right simp_thms(40))
   have "(pcp_seq C S)`({0} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
     by (simp only: 0) 
   then have "(pcp_seq C S)`{0} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
@@ -2779,11 +2772,9 @@ next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
-    by (rule imageCollect)
-  have "{Suc n} \<union> {n. True} = {n. True}"
-    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right)  
-  then have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
-    by (simp only: simp_thms(40))
+    by (simp only: image_Collect simp_thms(40)) 
+  have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
+    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right simp_thms(40))
   have "(pcp_seq C S)`({Suc n} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
     by (simp only: n) 
   then have "(pcp_seq C S)`{Suc n} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
@@ -2812,15 +2803,13 @@ proof -
   have H:"x \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
   have 1:"(pcp_seq C S) ` {n | n. True} = {pcp_seq C S n | n. True}"
-    by (simp only: imageCollect)
+    by (simp only: image_Collect simp_thms(40))
   have 2:"\<Union>((pcp_seq C S) ` {n | n. True}) = \<Union>{pcp_seq C S n | n. True}"
     by (simp only: 1)
   have "x \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
     using H by (simp only: 2)
-  then have "\<exists>k \<in> {n | n. True}. x \<in> pcp_seq C S k"
-    by (simp only: UN_iff)
-  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k" 
-    by (simp only: simp_thms(40))
+  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k"
+    by (simp only: UN_iff simp_thms(40))
   then have "\<exists>k \<in> UNIV. x \<in> pcp_seq C S k" 
     by (simp only: UNIV_def)
   thus "\<exists>k. x \<in> pcp_seq C S k" 
