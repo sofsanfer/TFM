@@ -2759,8 +2759,10 @@ lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
 proof (induction n)
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
     by (rule imageCollect)
-  have 0:"{0} \<union> {n | n. True} = {n | n. True}"
-    by simp (*Pendiente*)
+  have "{0} \<union> {n. True} = {n. True}"
+    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right)
+  then have 0:"{0} \<union> {n | n. True} = {n | n. True}"
+    by (simp only: simp_thms(40))
   have "(pcp_seq C S)`({0} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
     by (simp only: 0) 
   then have "(pcp_seq C S)`{0} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
@@ -2780,8 +2782,10 @@ next
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
     by (rule imageCollect)
-  have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
-    by simp (*Pendiente*)
+  have "{Suc n} \<union> {n. True} = {n. True}" using [[simp_trace]]
+    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right)  
+  then have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
+    by (simp only: simp_thms(40))
   have "(pcp_seq C S)`({Suc n} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
     by (simp only: n) 
   then have "(pcp_seq C S)`{Suc n} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
