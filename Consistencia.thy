@@ -2654,6 +2654,11 @@ proof -
     by (simp only: insert_def)
 qed
 
+lemma imageCollect: "f ` {x | x. P x} = {f x | x. P x}"
+  by blast (*Pendiente*)
+
+text \<open>\comentario{DUDA: image Collect}\<close>
+
 lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
   have n0:"{n. n = 0} = {0}"
@@ -2672,12 +2677,8 @@ proof(induct m)
     by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
   also have "\<dots> = \<Union>{pcp_seq C S 0}"
     by (simp only: 0)
-  also have "\<dots> = (pcp_seq C S 0) \<union> \<Union>{}"
-    by (simp only: complete_lattice_class.Sup_insert)
-  also have "\<dots> = (pcp_seq C S 0) \<union> {}"
-    by (simp only: complete_lattice_class.Sup_empty)
   also have "\<dots> = pcp_seq C S 0"
-    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
+    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
   finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
     by this
 next
@@ -2713,15 +2714,19 @@ next
     by (simp only: imageUnElem)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
     by (simp only: image_Collect)
-  also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
-    by blast (*Pendiente*)
   finally have 3:"{pcp_seq C S n |n. n \<le> Suc m} = 
-          insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
+          {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m}"
     by this
-  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n \<le> m} \<union> pcp_seq C S (Suc m)" 
-    using 3 by auto (*Pendiente*)
-  also have "\<dots> = pcp_seq C S m \<union> pcp_seq C S (Suc m)"
+  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
+    by (simp only: 3)
+  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)}) \<union> (\<Union>{pcp_seq C S n |n. n \<le> m})"
+    by simp (*Pendiente*)
+  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>{pcp_seq C S n |n. n \<le> m}"
+    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
+  also have "\<dots> = pcp_seq C S (Suc m) \<union> (pcp_seq C S m)"
     by (simp only: HI)
+  also have "\<dots> = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
+    by (simp only: Un_commute)
   also have "\<dots> = pcp_seq C S (Suc m)"
     using 1 by (simp only: subset_Un_eq)
   finally show "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
@@ -2753,8 +2758,8 @@ lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
-    by blast (*Pendiente*) 
-  have 0:"{0} \<union> {n | n. True} = {n | n. True}" 
+    by (rule imageCollect)
+  have 0:"{0} \<union> {n | n. True} = {n | n. True}"
     by simp (*Pendiente*)
   have "(pcp_seq C S)`({0} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
     by (simp only: 0) 
@@ -2768,21 +2773,13 @@ proof (induction n)
     by (simp only: U)
   then have 3:"\<Union>{pcp_seq C S 0} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
     by (simp only: Union_mono)
-  have "\<Union>{pcp_seq C S 0} = pcp_seq C S 0 \<union> \<Union>{}"
-    by (simp only: complete_lattice_class.Sup_insert)
-  also have "\<dots> = (pcp_seq C S 0) \<union> {}"
-    by (simp only: complete_lattice_class.Sup_empty)
-  also have "\<dots> = pcp_seq C S 0"
-    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
-  finally have 4:"\<Union>{pcp_seq C S 0} = pcp_seq C S 0"
-    by this
-  show "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    using 3 by (simp only: 4)
+  thus "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
+    using 3 by (simp only: conditionally_complete_lattice_class.cSup_singleton)
 next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
-    by blast (*Pendiente*) 
+    by (rule imageCollect)
   have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
     by simp (*Pendiente*)
   have "(pcp_seq C S)`({Suc n} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
@@ -2797,16 +2794,8 @@ next
     by (simp only: U)
   then have 3:"\<Union>{pcp_seq C S (Suc n)} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
     by (simp only: Union_mono)
-  have "\<Union>{pcp_seq C S (Suc n)} = pcp_seq C S (Suc n) \<union> \<Union>{}"
-    by (simp only: complete_lattice_class.Sup_insert)
-  also have "\<dots> = (pcp_seq C S (Suc n)) \<union> {}"
-    by (simp only: complete_lattice_class.Sup_empty)
-  also have "\<dots> = pcp_seq C S (Suc n)"
-    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
-  finally have 4:"\<Union>{pcp_seq C S (Suc n)} = pcp_seq C S (Suc n)"
-    by this
-  show "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    using 3 by (simp only: 4)
+  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
+    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
 qed
 
 text \<open>\comentario{DUDA: no funciona image Collect}\<close>
