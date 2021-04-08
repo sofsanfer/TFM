@@ -2757,12 +2757,32 @@ proof (induction n)
 next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
-  have Dn:"pcp_seq C S (Suc n) \<union> \<Union> {pcp_seq C S n|n. True} = \<Union> {pcp_seq C S n|n. True}"
+  have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
+    by blast (*Pendiente*) 
+  have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
+    by simp (*Pendiente*)
+  have "(pcp_seq C S)`({Suc n} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
+    by (simp only: n) 
+  then have "(pcp_seq C S)`{Suc n} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
+    by (simp only: image_Un)
+  then have 1:"(pcp_seq C S)`{Suc n} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    by (simp only: subset_Un_eq)
+  have "(pcp_seq C S)`{Suc n} = (pcp_seq C S)`(insert (Suc n) {})" 
+    by (simp only: insert_def)
+  then have "(pcp_seq C S)`{Suc n} = insert (pcp_seq C S (Suc n)) ((pcp_seq C S)`{})"
+    by (simp only: image_insert)
+  then have "(pcp_seq C S)`{Suc n} = insert (pcp_seq C S (Suc n)) {}"
+    by (simp only: image_empty)
+  then have 2:"(pcp_seq C S)`{Suc n} = {pcp_seq C S (Suc n)}"
+    by (simp only: insert_def)
+  have "{pcp_seq C S (Suc n)} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    using 1 by (simp only: 2) 
+  then have "{pcp_seq C S (Suc n)} \<subseteq> {pcp_seq C S n | n. True}"
+    by (simp only: U)
+  then have "\<Union>{pcp_seq C S (Suc n)} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
+    by (simp only: Union_mono)
+  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
     by blast (*Pendiente*)
-  have "pcp_seq C S (Suc n) \<subseteq> pcp_seq C S (Suc n) \<union> \<Union> {pcp_seq C S n|n. True}"
-    by (rule Un_upper1)
-  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n|n. True}"
-    by (simp only: Dn)
 qed
 
 text \<open>\comentario{DUDA: no funciona image Collect}\<close>
