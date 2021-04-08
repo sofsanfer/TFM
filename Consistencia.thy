@@ -2663,16 +2663,14 @@ lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S 
 proof(induct m)
   have n0:"{n. n = 0} = {0}"
     by (simp only: singleton_conv)
-  then have n1:"{n | n. n = 0} = {0}" 
-    by simp (*Pendiente*)
-  have 1:"(pcp_seq C S)`{n | n. n = 0} = (pcp_seq C S)`{0}"
-    by (simp only: n1)
-  then have "(pcp_seq C S)`{n | n. n = 0} = {pcp_seq C S 0}"
+  have "(pcp_seq C S)`{n. n = 0} = (pcp_seq C S)`{0}"
+    by (simp only: n0)
+  then have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}"
     by (simp only: imageUnElem)
-  then have "{pcp_seq C S n | n. n = 0} = {pcp_seq C S 0}"
-    by blast (*Pendiente*)
+  then have 1:"{pcp_seq C S n | n. n = 0} = {pcp_seq C S 0}"
+    by (simp only: image_Collect)
   have 0:"\<Union>{pcp_seq C S n|n. n = 0} = \<Union>{pcp_seq C S 0}" 
-    by simp (*Pendiente*)
+    by (simp only: 1)
   have "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
     by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
   also have "\<dots> = \<Union>{pcp_seq C S 0}"
@@ -2782,7 +2780,7 @@ next
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
     by (rule imageCollect)
-  have "{Suc n} \<union> {n. True} = {n. True}" using [[simp_trace]]
+  have "{Suc n} \<union> {n. True} = {n. True}"
     by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right)  
   then have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
     by (simp only: simp_thms(40))
