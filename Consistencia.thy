@@ -2820,8 +2820,6 @@ next
     by (simp only: conditionally_complete_lattice_class.cSup_singleton)
 qed
 
-text \<open>\comentario{DUDA: no funciona image Collect}\<close>
-
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
 
@@ -2929,21 +2927,37 @@ proof -
 qed
 
 lemma cl_max_detallada:
-  assumes c: "pcp C"
-  assumes sc: "subset_closed C"
-  assumes el: "K \<in> C"
-  assumes su: "pcp_lim C S \<subseteq> K"
-  shows "pcp_lim C S = K" (is ?e)
+  assumes "pcp C"
+  assumes "subset_closed C"
+  assumes "K \<in> C"
+  assumes "pcp_lim C S \<subseteq> K"
+  shows "pcp_lim C S = K"
 proof (rule ccontr)
-  assume \<open>\<not>?e\<close>
-  with su have "pcp_lim C S \<subset> K" by simp
-  then obtain F where e: "F \<in> K" and ne: "F \<notin> pcp_lim C S" by blast
-  from ne have "F \<notin> pcp_seq C S (Suc (to_nat F))" using pcp_seq_sub by fast
-  hence 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" by (simp add: Let_def split: if_splits)
-  have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" using pcp_seq_sub e su by blast
-  hence "insert F (pcp_seq C S (to_nat F)) \<in> C" using sc 
-    unfolding subset_closed_def using el by blast
-  with 1 show False ..
+  assume "\<not>(pcp_lim C S = K)"
+  then have "pcp_lim C S \<subset> K"
+    using assms(4) by simp (*Pendiente*)
+  then have "\<exists>F. F \<in> (K - (pcp_lim C S))"
+    by (simp only: psubset_imp_ex_mem)
+  then have E:"\<exists>F. F \<in> K \<and> F \<notin> (pcp_lim C S)"
+    by blast (*Pendiente*)
+  obtain F where F:"F \<in> K \<and> F \<notin> pcp_lim C S" 
+    using E by (rule exE)
+  have "F \<in> K" 
+    using F by (rule conjunct1)
+  have "F \<notin> pcp_lim C S"
+    using F by (rule conjunct2)
+  then have "F \<notin> \<Union>{pcp_seq C S n | n. True}"
+    by (simp add: pcp_lim_def) (*Pendiente*)
+  then have "F \<notin> pcp_seq C S (Suc (to_nat F))" 
+    using pcp_seq_sub by fast (*Pendiente*)
+  then have 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
+    by (simp add: Let_def split: if_splits) (*Pendiente*)
+  have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" 
+    using pcp_seq_sub \<open>F \<in> K\<close> assms(4) by blast (*Pendiente*)
+  then have "insert F (pcp_seq C S (to_nat F)) \<in> C" 
+    using assms(2) unfolding subset_closed_def using assms(3) by blast (*Pendiente*)
+  thus "False"
+    using 1 by blast (*Pendiente*)
 qed
 
 lemma cl_max:
