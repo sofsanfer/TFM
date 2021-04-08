@@ -2684,7 +2684,7 @@ next
   also have "\<dots> = (pcp_seq C S) ` ({Suc m} \<union> {n. n \<le> m})"
     by (simp only: S)
   also have "\<dots> = (pcp_seq C S) ` {Suc m} \<union> (pcp_seq C S) ` {n. n \<le> m}"
-    by simp (*Pendiente*)
+    by (simp only: image_Un)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}" 
     by simp (*Pendiente*)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
@@ -2728,12 +2728,32 @@ definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
-  have D0:"pcp_seq C S 0 \<union> \<Union> {pcp_seq C S n|n. True} = \<Union> {pcp_seq C S n|n. True}"
+  have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
+    by blast (*Pendiente*) 
+  have 0:"{0} \<union> {n | n. True} = {n | n. True}" 
+    by simp (*Pendiente*)
+  have "(pcp_seq C S)`({0} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
+    by (simp only: 0) 
+  then have "(pcp_seq C S)`{0} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
+    by (simp only: image_Un)
+  then have 1:"(pcp_seq C S)`{0} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    by (simp only: subset_Un_eq)
+  have "(pcp_seq C S)`{0} = (pcp_seq C S)`(insert 0 {})" 
+    by (simp only: insert_def)
+  then have "(pcp_seq C S)`{0} = insert (pcp_seq C S 0) ((pcp_seq C S)`{})"
+    by (simp only: image_insert)
+  then have "(pcp_seq C S)`{0} = insert (pcp_seq C S 0) {}"
+    by (simp only: image_empty)
+  then have 2:"(pcp_seq C S)`{0} = {pcp_seq C S 0}"
+    by (simp only: insert_def)
+  have "{pcp_seq C S 0} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    using 1 by (simp only: 2) 
+  then have "{pcp_seq C S 0} \<subseteq> {pcp_seq C S n | n. True}"
+    by (simp only: U)
+  then have "\<Union>{pcp_seq C S 0} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
+    by (simp only: Union_mono)
+  thus "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
     by blast (*Pendiente*)
-  have "pcp_seq C S 0 \<subseteq> pcp_seq C S 0 \<union> \<Union> {pcp_seq C S n|n. True}"
-    by (rule Un_upper1)
-  thus "pcp_seq C S 0 \<subseteq> \<Union> {pcp_seq C S n|n. True}"
-    by (simp only: D0)
 next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
@@ -2744,6 +2764,8 @@ next
   thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n|n. True}"
     by (simp only: Dn)
 qed
+
+text \<open>\comentario{DUDA: no funciona image Collect}\<close>
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
