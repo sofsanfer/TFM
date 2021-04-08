@@ -2720,7 +2720,7 @@ next
   have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
     by (simp only: 3)
   also have "\<dots> = \<Union>({pcp_seq C S (Suc m)}) \<union> (\<Union>{pcp_seq C S n |n. n \<le> m})"
-    by simp (*Pendiente*)
+    by (simp only: complete_lattice_class.Sup_union_distrib)
   also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>{pcp_seq C S n |n. n \<le> m}"
     by (simp only: conditionally_complete_lattice_class.cSup_singleton)
   also have "\<dots> = pcp_seq C S (Suc m) \<union> (pcp_seq C S m)"
@@ -2807,10 +2807,22 @@ lemma pcp_lim_inserted_at_ex_detallada:
   assumes "x \<in> pcp_lim C S"
   shows "\<exists>k. x \<in> pcp_seq C S k"
 proof -
-  have "x \<in> \<Union>{pcp_seq C S n|n. True}"
+  have H:"x \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
+  have 1:"(pcp_seq C S) ` {n | n. True} = {pcp_seq C S n | n. True}"
+    by (simp only: imageCollect)
+  have 2:"\<Union>((pcp_seq C S) ` {n | n. True}) = \<Union>{pcp_seq C S n | n. True}"
+    by (simp only: 1)
+  have "x \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
+    using H by (simp only: 2)
+  then have "\<exists>k \<in> {n | n. True}. x \<in> pcp_seq C S k"
+    by (simp only: UN_iff)
+  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k"
+    by simp (*Pendiente*)
+  then have "\<exists>k \<in> UNIV. x \<in> pcp_seq C S k" 
+    by (simp only: UNIV_def)
   thus "\<exists>k. x \<in> pcp_seq C S k" 
-    by blast (*Pendiente*)
+    by (simp only: bex_UNIV)
 qed
 
 lemma pcp_lim_inserted_at_ex: 
