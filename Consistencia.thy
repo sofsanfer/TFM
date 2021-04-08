@@ -3140,24 +3140,48 @@ proof -
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
 qed
 
-theorem pcp_sat_detallada: \<comment> \<open>model existence theorem\<close>
+theorem pcp_sat_detallada:
   fixes S :: "'a :: countable formula set"
-  assumes c: "pcp C"
-  assumes el: "S \<in> C"
+  assumes "pcp C"
+  assumes "S \<in> C"
   shows "sat S"
 proof -
-  note [[show_types]]
-  from c obtain Ce where 
-      "C \<subseteq> Ce" "pcp Ce" "subset_closed Ce" "finite_character Ce" 
-      using ex1[where 'a='a] ex2[where 'a='a] ex3[where 'a='a]
-    by (meson dual_order.trans ex2)
-  have "S \<in> Ce" using \<open>C \<subseteq> Ce\<close> el ..
-  with pcp_lim_Hintikka \<open>pcp Ce\<close> \<open>subset_closed Ce\<close> \<open>finite_character Ce\<close>
-  have  "Hintikka (pcp_lim Ce S)" .
-  with Hintikkaslemma have "sat (pcp_lim Ce S)" .
+  have "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+    by (rule ex1)
+  then have E1:"\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+    by (simp only: assms(1))
+  obtain Ce' where H1:"C \<subseteq> Ce' \<and> pcp Ce' \<and> subset_closed Ce'"
+    using E1 by (rule exE)
+  have "C \<subseteq> Ce'"
+    using H1 by (rule conjunct1)
+  have "pcp Ce'"
+    using H1 by (iprover elim: conjunct2 conjunct1)
+  have "subset_closed Ce'"
+    using H1 by (iprover elim: conjunct2 conjunct1)
+  have E2:"\<exists>Ce. Ce' \<subseteq> Ce \<and> pcp Ce \<and> finite_character Ce"
+    using \<open>pcp Ce'\<close> \<open>subset_closed Ce'\<close> by (rule ex3)
+  obtain Ce where H2:"Ce' \<subseteq> Ce \<and> pcp Ce \<and> finite_character Ce"
+    using E2 by (rule exE)
+  have "Ce' \<subseteq> Ce"
+    using H2 by (rule conjunct1)
+  then have Subset:"C \<subseteq> Ce"
+    using \<open>C \<subseteq> Ce'\<close> by (simp only: subset_trans)
+  have Pcp:"pcp Ce"
+    using H2 by (iprover elim: conjunct2 conjunct1)
+  have FC:"finite_character Ce"
+    using H2 by (iprover elim: conjunct2 conjunct1)
+  then have SC:"subset_closed Ce"
+    by (rule ex2)
+  have "S \<in> Ce" 
+    using \<open>C \<subseteq> Ce\<close> assms(2) by auto (*Pendiente*)
+  have "Hintikka (pcp_lim Ce S)"
+    using Pcp SC FC \<open>S \<in> Ce\<close> by (rule pcp_lim_Hintikka)
+  then have "sat (pcp_lim Ce S)"
+    by (rule Hintikkaslemma)
   moreover have "S \<subseteq> pcp_lim Ce S" 
-    using pcp_seq.simps(1) pcp_seq_sub by fast
-  ultimately show ?thesis unfolding sat_def by fast
+    using pcp_seq.simps(1) pcp_seq_sub by fast (*Pendiente*)
+  ultimately show ?thesis 
+    unfolding sat_def by fast (*Pendiente*)
 qed
   
 theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
