@@ -2160,14 +2160,39 @@ proof -
       qed
    next
      assume "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<union> ?E"
-     then have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<or> s \<in> ?E"
-       by simp (*Pendiente*)
-     then have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<or> s \<in> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-       by simp (*Pendiente*)
-     then have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-       by blast (*Pendiente*)
+     then have F:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<or> s \<in> ?E"
+       by (simp only: Un_iff)
+     have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+     proof (rule sallI)
+       fix s
+       assume "s \<subseteq> S"
+       show "finite s \<longrightarrow> s \<in> C"
+       proof (rule impI)
+         assume "finite s"
+         have "finite s \<longrightarrow> s \<in> C \<or> s \<in> ?E"
+           using F \<open>s \<subseteq> S\<close> by (rule sspec)
+         then have "s \<in> C \<or> s \<in> ?E"
+           using \<open>finite s\<close> by (rule mp)
+         thus "s \<in> C"
+         proof (rule disjE)
+           assume "s \<in> C"
+           thus "s \<in> C"
+             by this
+         next
+           assume "s \<in> ?E"
+           then have S':"\<forall>s' \<subseteq> s. finite s' \<longrightarrow> s' \<in> C"
+             by (rule CollectD)
+           have "s \<subseteq> s"
+             by (simp only: subset_refl)
+           have "finite s \<longrightarrow> s \<in> C"
+             using S' \<open>s \<subseteq> s\<close> by (rule sspec)
+           thus "s \<in> C"
+             using \<open>finite s\<close> by (rule mp)
+         qed
+       qed
+     qed
      then have "S \<in> ?E"
-       by simp (*Pendiente*)
+       by (rule CollectI)
      thus "S \<in> C \<union> ?E"
        by (simp only: UnI2)
    qed
