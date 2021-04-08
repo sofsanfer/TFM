@@ -2933,9 +2933,13 @@ lemma cl_max_detallada:
   assumes "pcp_lim C S \<subseteq> K"
   shows "pcp_lim C S = K"
 proof (rule ccontr)
-  assume "\<not>(pcp_lim C S = K)"
-  then have "pcp_lim C S \<subset> K"
-    using assms(4) by simp (*Pendiente*)
+  assume H:"\<not>(pcp_lim C S = K)"
+  have CE:"pcp_lim C S \<subseteq> K \<and> pcp_lim C S \<noteq> K"
+    using assms(4) H by (rule conjI)
+  have "pcp_lim C S \<subseteq> K \<and> pcp_lim C S \<noteq> K \<longleftrightarrow> pcp_lim C S \<subset> K"
+    by (simp only: psubset_eq)
+  then have "pcp_lim C S \<subset> K" 
+    using CE by (rule iffD1)
   then have "\<exists>F. F \<in> (K - (pcp_lim C S))"
     by (simp only: psubset_imp_ex_mem)
   then have E:"\<exists>F. F \<in> K \<and> F \<notin> (pcp_lim C S)"
