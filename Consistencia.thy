@@ -2642,12 +2642,36 @@ proof(induction m)
   thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
 qed simp
 
+lemma imageUnElem: "f ` {x} = {f x}"
+proof -
+  have "f`{x} = f`(insert x {})" 
+    by (simp only: insert_def)
+  then have "f`{x} = insert (f x) (f`{})"
+    by (simp only: image_insert)
+  then have "f`{x} = insert (f x) {}"
+    by (simp only: image_empty)
+  thus "f`{x} = {f x}"
+    by (simp only: insert_def)
+qed
+
 lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
+  have n0:"{n. n = 0} = {0}"
+    by (simp only: singleton_conv)
+  then have n1:"{n | n. n = 0} = {0}" 
+    by simp (*Pendiente*)
+  have 1:"(pcp_seq C S)`{n | n. n = 0} = (pcp_seq C S)`{0}"
+    by (simp only: n1)
+  then have "(pcp_seq C S)`{n | n. n = 0} = {pcp_seq C S 0}"
+    by (simp only: imageUnElem)
+  then have "{pcp_seq C S n | n. n = 0} = {pcp_seq C S 0}"
+    by blast (*Pendiente*)
+  have 0:"\<Union>{pcp_seq C S n|n. n = 0} = \<Union>{pcp_seq C S 0}" 
+    by simp (*Pendiente*)
   have "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
     by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
   also have "\<dots> = \<Union>{pcp_seq C S 0}"
-    by simp
+    by (simp only: 0)
   also have "\<dots> = (pcp_seq C S 0) \<union> \<Union>{}"
     by (simp only: complete_lattice_class.Sup_insert)
   also have "\<dots> = (pcp_seq C S 0) \<union> {}"
@@ -2673,7 +2697,7 @@ next
     by (simp only: le_Suc_eq)
   also have "\<dots> = {n. n \<le> m} \<union> {n. n = Suc m}"
     by (rule Collect_disj_eq) 
-  also have "\<dots> = {n. n = Suc m} \<union> {n. n \<le> m}"
+  also have "\<dots> = {n. n = Suc m} \<union> {n. n \<le> m}" 
     by (rule Un_commute)
   also have "\<dots> = {Suc m} \<union> {n. n \<le> m}"
     by (simp only: singleton_conv)
@@ -2686,7 +2710,7 @@ next
   also have "\<dots> = (pcp_seq C S) ` {Suc m} \<union> (pcp_seq C S) ` {n. n \<le> m}"
     by (simp only: image_Un)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}" 
-    by simp (*Pendiente*)
+    by (simp only: imageUnElem)
   also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
     by (simp only: image_Collect)
   also have "\<dots> = insert (pcp_seq C S (Suc m)) {pcp_seq C S n |n. n \<le> m}"
@@ -2738,22 +2762,22 @@ proof (induction n)
     by (simp only: image_Un)
   then have 1:"(pcp_seq C S)`{0} \<subseteq> (pcp_seq C S)`{n | n. True}"
     by (simp only: subset_Un_eq)
-  have "(pcp_seq C S)`{0} = (pcp_seq C S)`(insert 0 {})" 
-    by (simp only: insert_def)
-  then have "(pcp_seq C S)`{0} = insert (pcp_seq C S 0) ((pcp_seq C S)`{})"
-    by (simp only: image_insert)
-  then have "(pcp_seq C S)`{0} = insert (pcp_seq C S 0) {}"
-    by (simp only: image_empty)
-  then have 2:"(pcp_seq C S)`{0} = {pcp_seq C S 0}"
-    by (simp only: insert_def)
-  have "{pcp_seq C S 0} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    using 1 by (simp only: 2) 
+  then have "{pcp_seq C S 0} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    by (simp only: imageUnElem) 
   then have "{pcp_seq C S 0} \<subseteq> {pcp_seq C S n | n. True}"
     by (simp only: U)
-  then have "\<Union>{pcp_seq C S 0} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
+  then have 3:"\<Union>{pcp_seq C S 0} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
     by (simp only: Union_mono)
-  thus "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    by blast (*Pendiente*)
+  have "\<Union>{pcp_seq C S 0} = pcp_seq C S 0 \<union> \<Union>{}"
+    by (simp only: complete_lattice_class.Sup_insert)
+  also have "\<dots> = (pcp_seq C S 0) \<union> {}"
+    by (simp only: complete_lattice_class.Sup_empty)
+  also have "\<dots> = pcp_seq C S 0"
+    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
+  finally have 4:"\<Union>{pcp_seq C S 0} = pcp_seq C S 0"
+    by this
+  show "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
+    using 3 by (simp only: 4)
 next
   fix n
   assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
@@ -2767,22 +2791,22 @@ next
     by (simp only: image_Un)
   then have 1:"(pcp_seq C S)`{Suc n} \<subseteq> (pcp_seq C S)`{n | n. True}"
     by (simp only: subset_Un_eq)
-  have "(pcp_seq C S)`{Suc n} = (pcp_seq C S)`(insert (Suc n) {})" 
-    by (simp only: insert_def)
-  then have "(pcp_seq C S)`{Suc n} = insert (pcp_seq C S (Suc n)) ((pcp_seq C S)`{})"
-    by (simp only: image_insert)
-  then have "(pcp_seq C S)`{Suc n} = insert (pcp_seq C S (Suc n)) {}"
-    by (simp only: image_empty)
-  then have 2:"(pcp_seq C S)`{Suc n} = {pcp_seq C S (Suc n)}"
-    by (simp only: insert_def)
-  have "{pcp_seq C S (Suc n)} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    using 1 by (simp only: 2) 
+  then have "{pcp_seq C S (Suc n)} \<subseteq> (pcp_seq C S)`{n | n. True}"
+    by (simp only: imageUnElem) 
   then have "{pcp_seq C S (Suc n)} \<subseteq> {pcp_seq C S n | n. True}"
     by (simp only: U)
-  then have "\<Union>{pcp_seq C S (Suc n)} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
+  then have 3:"\<Union>{pcp_seq C S (Suc n)} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
     by (simp only: Union_mono)
-  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    by blast (*Pendiente*)
+  have "\<Union>{pcp_seq C S (Suc n)} = pcp_seq C S (Suc n) \<union> \<Union>{}"
+    by (simp only: complete_lattice_class.Sup_insert)
+  also have "\<dots> = (pcp_seq C S (Suc n)) \<union> {}"
+    by (simp only: complete_lattice_class.Sup_empty)
+  also have "\<dots> = pcp_seq C S (Suc n)"
+    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
+  finally have 4:"\<Union>{pcp_seq C S (Suc n)} = pcp_seq C S (Suc n)"
+    by this
+  show "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
+    using 3 by (simp only: 4)
 qed
 
 text \<open>\comentario{DUDA: no funciona image Collect}\<close>
