@@ -1737,14 +1737,20 @@ proof -
         assume "x \<in> {b}"
         then have "x = b" 
           by (simp only: singleton_iff) 
-        thus "x \<in> {a,b}" using [[simp_trace]]
-          by simp (*Pendiente*) 
+        then have "x \<in> {b}"
+          by (simp only: singletonI)
+        then have "x = a \<or> x \<in> {b}"
+          by (simp only: disjI2)
+        thus "x \<in> {a,b}"
+          by (simp only: insert_iff)
       next
         assume "x \<in> {a}"
         then have "x = a"
           by (simp only: singleton_iff) 
+        then have "x = a \<or> x \<in> {b}"
+          by (simp only: disjI1)
         thus "x \<in> {a,b}"
-          by simp (*PEndiente*)
+          by (simp only: insert_iff)
       qed
     qed
     thus "{b} \<union> {a} \<subseteq> {a,b}"
@@ -1756,21 +1762,19 @@ proof -
     proof (rule ballI)
       fix x
       assume "x \<in> {a,b}"
-      then have "x = a \<or> x = b"
-        by simp (*Pendiente*)
+      then have "x = a \<or> x \<in> {b}"
+        by (simp only: insert_iff)
       thus "x \<in> {b} \<union> {a}"
       proof (rule disjE)
-        assume "x = b"
-        then have "x \<in> {b}"
-          by simp (*Pendiente*)
+        assume "x \<in> {b}"
         thus "x \<in> {b} \<union> {a}"
-          by simp (*PEndiente*)
+          by (simp only: UnI1)
       next
         assume "x = a"
         then have "x \<in> {a}"
-          by simp (*Pendiente*)
+          by (simp only: singletonI)
         thus "x \<in> {b} \<union> {a}"
-          by simp (*Pendiente*)
+          by (simp only: UnI2)
       qed
     qed
     thus "{a,b} \<subseteq> {b} \<union> {a}"
