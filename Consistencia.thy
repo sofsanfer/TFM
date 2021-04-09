@@ -3145,6 +3145,7 @@ theorem pcp_sat_detallada:
   assumes "pcp C"
   assumes "S \<in> C"
   shows "sat S"
+  unfolding sat_def
 proof -
   have "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
     by (rule ex1)
@@ -3172,18 +3173,39 @@ proof -
     using H2 by (iprover elim: conjunct2 conjunct1)
   then have SC:"subset_closed Ce"
     by (rule ex2)
-  have "S \<in> Ce" 
-    using \<open>C \<subseteq> Ce\<close> assms(2) by auto (*Pendiente*)
+  have "S \<in> C \<longrightarrow> S \<in> Ce"
+    using \<open>C \<subseteq> Ce\<close> by (rule in_mono)
+  then have "S \<in> Ce" 
+    using assms(2) by (rule mp)
   have "Hintikka (pcp_lim Ce S)"
     using Pcp SC FC \<open>S \<in> Ce\<close> by (rule pcp_lim_Hintikka)
   then have "sat (pcp_lim Ce S)"
     by (rule Hintikkaslemma)
-  moreover have "S \<subseteq> pcp_lim Ce S" 
-    using pcp_seq.simps(1) pcp_seq_sub by fast (*Pendiente*)
-  ultimately show ?thesis 
-    unfolding sat_def by fast (*Pendiente*)
+  then have E3:"\<exists>\<A>. \<forall>F \<in> (pcp_lim Ce S). \<A> \<Turnstile> F"
+    by (simp only: sat_def)
+  obtain \<A> where H3:"\<forall>F \<in> (pcp_lim Ce S). \<A> \<Turnstile> F" 
+    using E3 by (rule exE)
+  have "pcp_seq Ce S 0 = S"
+    by (simp only: pcp_seq.simps(1))
+  have "pcp_seq Ce S 0 \<subseteq> pcp_lim Ce S"
+    by (rule pcp_seq_sub)
+  then have "S \<subseteq> pcp_lim Ce S"
+    by (simp only: \<open>pcp_seq Ce S 0 = S\<close>)
+  have "\<forall>F \<in> S. \<A> \<Turnstile> F"
+  proof (rule ballI)
+    fix F
+    assume "F \<in> S"
+    have "F \<in> S \<longrightarrow> F \<in> pcp_lim Ce S"
+      using \<open>S \<subseteq> pcp_lim Ce S\<close> by (rule in_mono)
+    then have "F \<in> pcp_lim Ce S"
+      using \<open>F \<in> S\<close> by (rule mp)
+    show "\<A> \<Turnstile> F"
+      using H3 \<open>F \<in> pcp_lim Ce S\<close> by (rule bspec)
+  qed
+  thus "\<exists>\<A>. \<forall>F \<in> S. \<A> \<Turnstile> F"
+    by (simp only: exI)
 qed
-  
+
 theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
   fixes S :: "'a :: countable formula set"
   assumes c: "pcp C"
