@@ -2941,9 +2941,9 @@ proof (rule ccontr)
   then have "pcp_lim C S \<subset> K" 
     using CE by (rule iffD1)
   then have "\<exists>F. F \<in> (K - (pcp_lim C S))"
-    by (simp only: psubset_imp_ex_mem)
+    by (simp only: psubset_imp_ex_mem) 
   then have E:"\<exists>F. F \<in> K \<and> F \<notin> (pcp_lim C S)"
-    by blast (*Pendiente*)
+    by (simp only: Diff_iff)
   obtain F where F:"F \<in> K \<and> F \<notin> pcp_lim C S" 
     using E by (rule exE)
   have "F \<in> K" 
@@ -2951,17 +2951,25 @@ proof (rule ccontr)
   have "F \<notin> pcp_lim C S"
     using F by (rule conjunct2)
   then have "F \<notin> \<Union>{pcp_seq C S n | n. True}"
-    by (simp add: pcp_lim_def) (*Pendiente*)
+    by (simp only: pcp_lim_def simp_thms(8))
   then have "F \<notin> pcp_seq C S (Suc (to_nat F))" 
     using pcp_seq_sub by fast (*Pendiente*)
   then have 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
     by (simp add: Let_def split: if_splits) (*Pendiente*)
-  have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" 
-    using pcp_seq_sub \<open>F \<in> K\<close> assms(4) by blast (*Pendiente*)
-  then have "insert F (pcp_seq C S (to_nat F)) \<in> C" 
-    using assms(2) unfolding subset_closed_def using assms(3) by blast (*Pendiente*)
-  thus "False"
-    using 1 by blast (*Pendiente*)
+  have "pcp_seq C S (to_nat F) \<subseteq> pcp_lim C S"
+    by (rule pcp_seq_sub)
+  then have "pcp_seq C S (to_nat F) \<subseteq> K"
+    using assms(4) by (rule subset_trans)
+  then have "insert F (pcp_seq C S (to_nat F)) \<subseteq> K" 
+    using \<open>F \<in> K\<close> by (simp only: insert_subset)
+  have "\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+    using assms(2) by (simp only: subset_closed_def)
+  then have "\<forall>s \<subseteq> K. s \<in> C"
+    using assms(3) by (rule bspec)
+  then have 2:"insert F (pcp_seq C S (to_nat F)) \<in> C" 
+    using \<open>insert F (pcp_seq C S (to_nat F)) \<subseteq> K\<close> by (rule sspec)
+  show "False"
+    using 1 2 by (rule notE)
 qed
 
 lemma cl_max:
