@@ -2501,8 +2501,8 @@ lemma ex3_detallada:
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
 proof -
   let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  have C1:"C \<subseteq> C \<union> ?E" 
-    by simp (*Pendiente*)
+  have C1:"C \<subseteq> C \<union> ?E"
+    by (simp only: Un_upper1)
   have C2:"finite_character (C \<union> ?E)"
     using assms(2) by (rule ex3_finite_character)
   have C3:"pcp (C \<union> ?E)"
@@ -2612,7 +2612,7 @@ next
   fix n
   assume HI:"pcp_seq C S n \<in> C"
   then have "(if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
-        else (pcp_seq C S n)) \<in> C"
+        else (pcp_seq C S n)) \<in> C" using [[simp_trace]]
     by simp (*Pendiente*)
   then have "(let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn) \<in> C"
@@ -2869,14 +2869,14 @@ proof -
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
   have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C" (*Pendiente*)
-  proof safe
+  proof 
     fix s :: "'a formula set"
     assume "s \<subseteq> pcp_lim C S"
     assume "finite s"
     have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
       using pcp_seq_sub by blast
     have "\<exists>k. s \<subseteq> pcp_seq C S k" 
-      proof(induction s rule: finite_induct) 
+      proof (induction s rule: finite_induct) 
         case (insert x s)
         hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast+
         then guess k1 ..
@@ -2950,10 +2950,12 @@ proof (rule ccontr)
     using F by (rule conjunct1)
   have "F \<notin> pcp_lim C S"
     using F by (rule conjunct2)
-  then have "F \<notin> \<Union>{pcp_seq C S n | n. True}"
-    by (simp only: pcp_lim_def simp_thms(8))
-  then have "F \<notin> pcp_seq C S (Suc (to_nat F))" 
-    using pcp_seq_sub by fast (*Pendiente*)
+  have "pcp_seq C S (Suc (to_nat F)) \<subseteq> pcp_lim C S"
+    by (rule pcp_seq_sub)
+  then have "F \<in> pcp_seq C S (Suc (to_nat F)) \<longrightarrow> F \<in> pcp_lim C S"
+    by (rule in_mono)
+  then have "F \<notin> pcp_seq C S (Suc (to_nat F))"
+    using \<open>F \<notin> pcp_lim C S\<close> by (rule mt)
   then have 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
     by (simp add: Let_def split: if_splits) (*Pendiente*)
   have "pcp_seq C S (to_nat F) \<subseteq> pcp_lim C S"
