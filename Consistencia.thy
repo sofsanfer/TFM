@@ -1731,9 +1731,30 @@ lemma "\<not> finite_character {{Atom 0}}"
 lemma "finite_character {{Atom 0},{}}"
   unfolding finite_character_def by auto
 
-text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
-entonces tiene un subconjunto con la propiedad de consistencia
-proposicional y cerrado bajo subconjunto.\<close>
+text \<open>Una vez introducidas las definiciones anteriores, veamos tres resultados sobre colecciones
+  de conjuntos.
+
+  \begin{lema}
+    Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces
+    podemos hallar una subcolección de la misma que también tiene la propiedad de consistencia
+    proposicional y es cerrada bajo subconjuntos.
+  \end{lema}
+
+  En Isabelle se formaliza el resultado de la siguiente manera.\<close>
+
+lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
+  oops
+
+text \<open>Procedamos con su demostración.
+
+\begin{demostracion}
+  Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la subcolección formada por los 
+  conjuntos tales que existe en \<open>C\<close> un conjunto del cual son subconjuntos. Notemos por \<open>C'\<close> a esta
+  subcolección, de modo que \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamor a probar que, en efecto, \<open>C'\<close> verifica 
+  las condiciones del lema.
+
+  En primer lugar, es fácil observar que \<open>C'\<close> es una subcolección de \<open>C\<close>
+\end{demostracion}\<close>
 
 text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
 
