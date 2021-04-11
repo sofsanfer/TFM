@@ -1665,7 +1665,7 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   apply(rule iffI; unfold Ball_def; elim all_forward)
   by (auto simp add: insert_absorb split: formula.splits)
 
-section \<open>Propiedades de las colecciones\<close>
+section \<open>Otras propiedades de las colecciones\<close>
 
 text \<open>En este apartado definiremos una serie de  propiedades y resultados referentes a las 
   colecciones que utilizaremos posteriormente para la probar la consistencia de la lógica 
@@ -1673,7 +1673,7 @@ text \<open>En este apartado definiremos una serie de  propiedades y resultados 
 
   \begin{definicion}
     Una colección de conjuntos es cerrada bajo subconjuntos si todo subconjunto de cada conjunto 
-    de la colección pertence a la colección.
+    de la colección pertenece a la colección.
   \end{definicion}
 
   En Isabelle se formaliza de la siguiente manera.\<close>
@@ -1758,7 +1758,7 @@ text \<open>Procedamos con su demostración.
 \begin{demostracion}
   Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la colección formada por los 
   conjuntos tales que existe en \<open>C\<close> un conjunto del cual son subconjuntos. Notemos por \<open>C'\<close> a esta
-  colección, de modo que \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamor a probar que, en efecto, \<open>C'\<close> verifica 
+  colección, de modo que \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica 
   las condiciones del lema.
 
   En primer lugar, veamos que \<open>C\<close> está contenida en \<open>C'\<close>. Para ello, consideremos un conjunto
@@ -1768,7 +1768,7 @@ text \<open>Procedamos con su demostración.
 
   Por otro lado, comprobemos que \<open>C'\<close> tiene la propiedad de consistencia proposicional.
   Por el lema de caracterización de la propiedad de consistencia proposicional mediante la
-  notación uniforme, basta probar que para cualquier conjunto de fórmulas \<open>S\<close> de \<open>C'\<close>, se 
+  notación uniforme basta probar que, para cualquier conjunto de fórmulas \<open>S\<close> de \<open>C'\<close>, se 
   verifican las condiciones:
   \begin{itemize}
     \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
@@ -1798,17 +1798,18 @@ text \<open>Procedamos con su demostración.
   \end{itemize} 
 
   Por tanto, como \<open>S\<close> está contenida en \<open>S'\<close>, se verifica análogamente que \<open>\<bottom>\<close> no pertence a \<open>S\<close>
-  y que dada una fórmula atómica cualquiera \<open>p\<close>, no se tiene simultáneamente que \<open>p \<in> S\<close> y 
+  y que dada una fórmula atómica cualquiera \<open>p\<close>, no se tiene simultáneamente que\\ \<open>p \<in> S\<close> y 
   \<open>\<not> p \<in> S.\<close> Veamos que se verifican el resto de condiciones del lema de caracterización:
-  \begin{enumerate}
-    \item[\<open>Condición para fórmulas de tipo \<alpha>\<close>]: Sea una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y 
+
+  \<open>\<sqdot> Condición para fórmulas de tipo \<alpha>\<close>: Sea una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y 
     \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close> pertenece a \<open>S\<close>. Como \<open>S\<close> está contenida en \<open>S'\<close>, tenemos que la fórmula 
     pertence también a \<open>S'\<close>. De este modo, se verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a la colección 
-    \<open>C\<close>. Por otro lado, como el conjunto \<open>S\<close> está contenido en \<open>S'\<close>, se observa fácilmente que +
+    \<open>C\<close>. Por otro lado, como el conjunto \<open>S\<close> está contenido en \<open>S'\<close>, se observa fácilmente que\\
     \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> está contenido en \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close>. Por lo tanto, el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> está en 
     la colección \<open>C'\<close> por definición de esta, ya que es subconjunto de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> que pertence 
     a \<open>C\<close>.
-    \item[\<open>Condición para fórmulas de tipo \<beta>\<close>]: Sea una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y
+
+  \<open>\<sqdot> Condición para fórmulas de tipo \<beta>\<close>: Sea una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y
     \<open>\<beta>\<^sub>2\<close> tal que la fórmula pertenece a \<open>S\<close>. Como el conjunto \<open>S\<close> está contenido en \<open>S'\<close>, tenemos 
     que la fórmula pertence, a su vez, a \<open>S'\<close>. De este modo, se verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S'\<close>
     pertenece a la colección \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertence a la colección \<open>C\<close>. Por eliminación de
@@ -1816,7 +1817,7 @@ text \<open>Procedamos con su demostración.
     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C'\<close>.
     \begin{itemize}
       \item Supongamos, en primer lugar, que \<open>{\<beta>\<^sub>1} \<union> S'\<close> pertenece a \<open>C\<close>. Puesto que el conjunto \<open>S\<close>
-      está contenido en \<open>S'\<close>, se observa fácilmente que \<open>{\<beta>\<^sub>1} \<union> S\<close> está contenido en \<open>{\<beta>\<^sub>1} \<union> S'\<close>.
+      está contenido en \<open>S'\<close>, se observa fácilmente que \<open>{\<beta>\<^sub>1} \<union> S\<close> está contenido en\\ \<open>{\<beta>\<^sub>1} \<union> S'\<close>.
       Por definición de la colección \<open>C'\<close>, tenemos que \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close>, ya que es
       subconjunto de \<open>{\<beta>\<^sub>1} \<union> S'\<close> que pertenece a la colección \<open>C\<close>. Por tanto, hemos probado que o 
       bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
@@ -1827,7 +1828,6 @@ text \<open>Procedamos con su demostración.
     De esta manera, queda probado que dada una fórmula de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
     pertenezca al conjunto \<open>S\<close>, se verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close>
     pertenece a \<open>C'\<close>.
-  \end{enumerate}
 
   En conclusión, por el lema de caracterización de la propiedad de consistencia proposicional
   mediante la notación uniforme, queda probado que \<open>C'\<close> tiene la propiedad de consistencia
