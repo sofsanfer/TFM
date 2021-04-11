@@ -1833,9 +1833,13 @@ text \<open>Procedamos con su demostración.
   se tiene que \<open>s\<close> es, a su vez, subconjunto de \<open>S'\<close>. De este modo, existe un conjunto perteneciente
   a la colección \<open>C\<close> del cual \<open>s\<close> es subconjunto. Por tanto, por definición de \<open>C'\<close>, \<open>s\<close> pertenece
   a la colección \<open>C'\<close>, como quería demostrar.
-\end{demostracion}\<close>
+\end{demostracion}
 
-text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
+  Procedamos con las demostraciones del lema en Isabelle/HOL.
+
+  En primer lugar, vamos a introducir dos lemas auxiliares que emplearemos a lo largo de
+  esta sección. El primero se trata de un lema similar al lema \<open>ballI\<close> definido en Isabelle pero 
+  considerando la relación de contención en lugar de la de pertenencia.\<close>
 
 lemma 
   assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
@@ -1853,7 +1857,8 @@ qed
 lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
   by simp
 
-text\<open>Lema auxiliar similar a bspec para contención y propiedades.\<close>
+text \<open>Por último definimos el siguiente lema auxiliar similar al lema \<open>bspec\<close> de Isabelle/HOL
+  considerando, análogamente, la relación de contención en lugar de la de pertenencia.\<close>
 
 lemma 
   assumes "\<forall>x \<subseteq> A. P x"
@@ -1867,6 +1872,12 @@ qed
 lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x"
   by simp
 
+text \<open>Veamos la prueba detallada del lema en Isabelle/HOL. Esta se fundamenta en tres lemas
+  auxiliares: el primero prueba que la colección \<open>C\<close> está contenida en \<open>C'\<close>, el segundo que
+  \<open>C'\<close> tiene la propiedad de consistencia proposicional y, finalmente, el tercer lema demuestra que
+  \<open>C'\<close> es cerrada bajo subconjuntos. En primer lugar, mostremos la demostración detallada de 
+  la relación de contención de las colecciones.\<close>
+
 lemma ex1_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
 proof (rule subsetI)
   fix s
@@ -1879,7 +1890,16 @@ proof (rule subsetI)
     by (simp only: mem_Collect_eq)
 qed
 
-text \<open>Lema auxiliar sobre conjuntos de dos elementos.\<close>
+text \<open>Prosigamos con la prueba del lema auxiliar que demuestra que \<open>C'\<close> tiene la propiedad
+  de consistencia proposicional. Para ello, emplearemos un lema auxiliar que amplia el lema de 
+  Isabelle \<open>insert_is_Un\<close> para la unión de dos elementos y un conjunto, como se muestra a 
+  continuación.\<close>
+
+lemma "insert a (insert b C) = {a,b} \<union> C"
+  oops
+
+text \<open>Emplearemos para demostrarlo, a su vez, el siguiente lema auxiliar que prueba una propiedad 
+  trivial sobre conjuntos de dos elementos.\<close>
 
 lemma elemSet: "{b} \<union> {a} = {a,b}"
 proof -
@@ -1943,6 +1963,9 @@ proof -
     using C1 C2 by (simp only: set_eq_subset) 
 qed
 
+text \<open>De este modo, podemos demostrar el lema auxiliar \<open>insertSetElem\<close> de manera detallada como
+  sigue.\<close>
+
 lemma insertSetElem: "insert a (insert b C) = {a,b} \<union> C"
 proof -
   have "insert a C = {a} \<union> C"
@@ -1962,6 +1985,9 @@ proof -
   finally show ?thesis
     by this
 qed
+
+text \<open>Una vez introducidos los lemas auxiliares anteriores, podemos dar la prueba detallada del
+  lema que demuestra que \<open>C'\<close> tiene la propiedad de consistencia proposicional.\<close>
 
 lemma ex1_pcp: 
   assumes "pcp C"
@@ -2144,6 +2170,8 @@ proof -
   qed
 qed
 
+text \<open>Finalmente, el siguiente lema auxiliar prueba que \<open>C'\<close> es cerrada bajo subconjuntos.\<close>
+
 lemma ex1_subset_closed:
   assumes "pcp C"
   shows "subset_closed {s. \<exists>S\<in>C. s \<subseteq> S}"
@@ -2169,7 +2197,9 @@ proof (rule ballI)
   qed
 qed
 
-lemma ex1_detallada:
+text \<open>En conclusión, la prueba detallada del lema completo se muestra a continuación.\<close>
+
+lemma 
   assumes "pcp C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof -
@@ -2186,6 +2216,8 @@ proof -
     by (rule exI)
 qed
 
+text \<open>Por último, su demostración automática es la siguiente.\<close>
+
 lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
   let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
@@ -2196,11 +2228,12 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
     by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
+text \<open>\comentario{Voy redactando por aquí.}\<close>
 
 text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
 
-lemma ex2_detallada:
+lemma
   assumes "finite_character C"
   shows "subset_closed C"
   unfolding subset_closed_def
@@ -2640,7 +2673,7 @@ proof -
   done
 qed*)
 
-lemma ex3_detallada:
+lemma
   assumes "pcp C"
           "subset_closed C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
