@@ -926,6 +926,8 @@ text\<open>Finalmente mostremos un resultado que permite la caracterización de 
     \end{enumerate}
   \end{lema}
 
+  \comentario{No consigo hacer que baje de línea el título del lema.}
+
   En Isabelle/HOL se formaliza el resultado como sigue.\<close>
 
 lemma "pcp C = (\<forall>S \<in> C. \<bottom> \<notin> S
@@ -983,21 +985,23 @@ text \<open>En primer lugar, veamos la demostración del lema.
   simplificación, sabemos que la fórmula es de la forma \<open>G \<and> H\<close>, \<open>\<not> (\<not> G)\<close>, \<open>\<not> (G \<or> H)\<close> o 
   \<open>\<not>(G \<longrightarrow> H)\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close>. Vamos a probar que para cada caso se cumple que 
   \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección:
-  \begin{enumerate}
-    \item[Fórmula de tipo \<open>G \<and> H\<close>:] En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> 
+
+  \<open>\<sqdot> Fórmula de tipo G \<and> H\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> 
     y \<open>H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
     la tercera condición de la definición de propiedad de consistencia proposicional.
-    \item[Fórmula de tipo \<open>\<not> (\<not> G)\<close>:] En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son 
+
+  \<open>\<sqdot> Fórmula de tipo \<not> (\<not> G)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son 
     ambas \<open>G\<close>. Como el conjunto \<open>{\<alpha>\<^sub>1} \<union> S\<close> es equivalente al conjunto conjunto \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> ya
     que \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son iguales, tenemos que este último pertenece a la colección por la sexta 
     condición de la definición de propiedad de consistencia proposicional.
-    \item[Fórmula de tipo \<open>\<not>(G \<or> H)\<close>:] En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son 
+
+  \<open>\<sqdot> Fórmula de tipo \<not>(G \<or> H)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son\\ 
     \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
     la octava condición de la definición de propiedad de consistencia proposicional.
-    \item[Fórmula de tipo \<open>\<not>(G \<longrightarrow> H)\<close>:] En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y \<open>\<not> H\<close>
+
+  \<open>\<sqdot> Fórmula de tipo \<not>(G \<longrightarrow> H)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y \<open>\<not> H\<close>
     respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por la novena 
     condición de la definición de propiedad de consistencia proposicional.
-  \end{enumerate}
 
   Finalmente, el resultado correspondiente a las fórmulas de tipo \<open>\<beta>\<close> se obtiene de las 
   condiciones cuarta, quinta, sexta y séptima de la definición de propiedad de consistencia 
@@ -1006,24 +1010,26 @@ text \<open>En primer lugar, veamos la demostración del lema.
   que dicha fórmula es de la forma \<open>G \<or> H\<close>, \<open>G \<longrightarrow> H\<close>, \<open>\<not> (\<not> G)\<close> o \<open>\<not>(G \<and> H)\<close> para ciertas 
   fórmulas \<open>G\<close> y \<open>H\<close>. Deduzcamos que, en efecto, tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la
   colección \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección \<open>C\<close>.
-  \begin{enumerate}
-    \item[Fórmula de tipo \<open>G \<or> H\<close>:] En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>G\<close> y 
+
+  \<open>\<sqdot> Fórmula de tipo G \<or> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>G\<close> y 
     \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección o bien 
     \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la cuarta condición de la definición de propiedad de 
     consistencia proposicional.
-    \item[Fórmula de tipo \<open>G \<longrightarrow> H\<close>:] En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son 
+
+  \<open>\<sqdot> Fórmula de tipo G \<longrightarrow> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son 
     \<open>\<not> G\<close> y \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección o 
     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la quinta condición de la definición de propiedad 
     de consistencia proposicional.
-    \item[Fórmula de tipo \<open>\<not>(\<not> G)\<close>:] En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son ambas 
+
+  \<open>\<sqdot> Fórmula de tipo \<not>(\<not> G)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son ambas 
     \<open>G\<close>. Luego tenemos que, en particular, el conjunto \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección por la 
     sexta condición de la definición de propiedad de consistencia proposicional. Por tanto, se 
     verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la colección o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección.
-    \item[Fórmula de tipo \<open>\<not>(G \<and> H)\<close>:] En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son 
+
+  \<open>\<sqdot> Fórmula de tipo \<not>(G \<and> H)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son\\ 
     \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección o 
     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la séptima condición de la definición de propiedad 
     de consistencia proposicional.
-  \end{enumerate}
 
   De este modo, queda probada la primera implicación de la equivalencia. Veamos la prueba de la 
   implicación contraria.
@@ -1109,7 +1115,7 @@ text \<open>En primer lugar, veamos la demostración del lema.
 \end{demostracion}
 
   Análogamente a la demostración del lema anterior de caracterización, para probar este resultado en 
-  Isabelle, vamos a demostrar cada una de las implicaciones de la equivalencia por separado. 
+  Isabelle vamos a demostrar cada una de las implicaciones de la equivalencia por separado. 
 
   La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
   deduce la condición de \<open>2)\<close> sobre fórmulas de tipo \<open>\<alpha>\<close> a partir de las condiciones tercera, sexta, 
@@ -1301,7 +1307,7 @@ proof -
 qed 
 
 text \<open>De esta manera, mediante los anteriores lemas auxiliares, podemos probar la primera
-  implicación detalladamente en Isabelle como se muestra a continuación.\<close>
+  implicación detalladamente en Isabelle.\<close>
 
 lemma pcp_alt1: 
   assumes "pcp C"
