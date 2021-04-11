@@ -7,16 +7,16 @@ theory Consistencia
 begin
 (*>*)
 
-section\<open>Consistencia\<close>
+text \<open>En esta sección probaremos la consistencia de la lógica proposicional demostrando el \<open>teorema 
+  de existencia de modelos\<close>. Para ello, consideraremos colecciones de conjuntos de fórmulas 
+  proposicionales y definiremos propiedades y resultados sobre las mismas.\<close>
 
-subsection \<open>Propiedad de consistencia proposicional\<close>
+section \<open>Propiedad de consistencia proposicional\<close>
 
-text \<open>En esta sección probaremos la consistencia de la lógica proposicional
-  demostrando el \<open>teorema de existencia de modelos\<close>. Para ello, definiremos 
-  inicialmente una propiedad de consistencia proposicional para una colección 
-  de conjuntos de fórmulas proposicionales. De este modo, cualquier conjunto de
-  fórmulas proposicionales perteneciente a una colección que verifique dicha
-  propiedad será satisfacible por el \<open>teorema de existencia de modelos\<close>.\<close>
+text \<open>En primer lugar, definiremos la propiedad de consistencia proposicional para una colección 
+  de conjuntos de fórmulas proposicionales. Probaremos que cualquier conjunto de fórmulas 
+  proposicionales perteneciente a una colección que verifique dicha propiedad será satisfacible por 
+  el \<open>teorema de existencia de modelos\<close>.\<close>
 
 text \<open>
   \begin{definicion}
@@ -157,7 +157,7 @@ proof -
     using assms(2) by (rule bspec)
 qed
 
-subsection \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
+section \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
 
 text \<open>En esta subsección vamos a introducir una notación uniforme inicialmente 
   desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
@@ -168,7 +168,7 @@ text \<open>En esta subsección vamos a introducir una notación uniforme inicia
   \comentario{Añadir referencia bibliográfica.}
 
   De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
-  actúan de manera \<open>conjuntiva\<close> (las fórmulas \<open>\<alpha>\<close>) y las que actúan de manera 
+  actúan de manera conjuntiva (las fórmulas \<open>\<alpha>\<close>) y las que actúan de manera 
   disyuntiva (las fórmulas \<open>\<beta>\<close>). Para cada fórmula \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, se definen 
   dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. 
 
@@ -325,29 +325,30 @@ text \<open>Procedamos a la demostración del resultado.
   componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica que si la fórmula pertenece al conjunto 
   \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también. Para ello, supongamos que una fórmula 
   cualquiera de tipo \<open>\<alpha>\<close> pertence a \<open>S\<close>. Por definición de este tipo de
-  fórmulas, tenemos que \<open>\<alpha>\<close> puede ser de la forma \<open>G \<and> H\<close>, \<open>\<not>(\<not> G)\<close>, \<open>\<not>(G \<or> H)\<close> 
+  fórmulas, tenemos que \<open>\<alpha>\<close> puede ser de la forma \<open>G \<and> H\<close>, \<open>\<not>(\<not> G)\<close>,\\ \<open>\<not>(G \<or> H)\<close> 
   o \<open>\<not>(G \<longrightarrow> H)\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera. Probemos que, para cada
   tipo de fórmula \<open>\<alpha>\<close> perteneciente a \<open>S\<close>, sus componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> están en
   \<open>S\<close>.
 
-  \begin{enumerate}
-    \item[Fórmula del tipo \<open>G \<and> H\<close>:] Sus componentes conjuntivas son \<open>G\<close> y \<open>H\<close>. 
-    Por la tercera condición de la definición de conjunto de Hintikka, obtenemos 
-    que si \<open>G \<and> H\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>H\<close> están ambas en el conjunto,
-    lo que prueba este caso.
-    \item[Fórmula del tipo \<open>\<not>(\<not> G)\<close>:] Sus componentes conjuntivas son ambas \<open>G\<close>.
-    Por la sexta condición de la definición de conjunto de Hintikka, obtenemos que
-    si \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> pertenece al conjunto, lo que prueba
-    este caso.
-    \item[Fórmula del tipo \<open>\<not>(G \<or> H)\<close>:] Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
-    Por la octava condición de la definición de conjunto de Hintikka, obtenemos 
-    que si \<open>\<not>(G \<or> H)\<close> pertenece a \<open>S\<close>, entonces \<open>\<not> G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
-    lo que prueba este caso.
-    \item[Fórmula del tipo \<open>\<not>(G \<longrightarrow> H)\<close>:] Sus componentes conjuntivas son \<open>G\<close> y \<open>\<not> H\<close>. 
-    Por la novena condición de la definición de conjunto de Hintikka, obtenemos 
-    que si \<open>\<not>(G \<longrightarrow> H)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
-    lo que prueba este caso.
-  \end{enumerate}
+  \<open>\<sqdot> Fórmula del tipo G \<and> H\<close>: Sus componentes conjuntivas son \<open>G\<close> y \<open>H\<close>. 
+  Por la tercera condición de la definición de conjunto de Hintikka, obtenemos 
+  que si \<open>G \<and> H\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>H\<close> están ambas en el conjunto,
+  lo que prueba este caso.
+    
+  \<open>\<sqdot> Fórmula del tipo \<not>(\<not> G)\<close>: Sus componentes conjuntivas son ambas \<open>G\<close>.
+  Por la sexta condición de la definición de conjunto de Hintikka, obtenemos que
+  si \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> pertenece al conjunto, lo que prueba
+  este caso.
+
+  \<open>\<sqdot> Fórmula del tipo \<not>(G \<or> H)\<close>: Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
+  Por la octava condición de la definición de conjunto de Hintikka, obtenemos 
+  que si \<open>\<not>(G \<or> H)\<close> pertenece a \<open>S\<close>, entonces \<open>\<not> G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
+  lo que prueba este caso.
+
+  \<open>\<sqdot> Fórmula del tipo \<not>(G \<longrightarrow> H)\<close>: Sus componentes conjuntivas son \<open>G\<close> y \<open>\<not> H\<close>. 
+  Por la novena condición de la definición de conjunto de Hintikka, obtenemos 
+  que si\\ \<open>\<not>(G \<longrightarrow> H)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> y \<open>\<not> H\<close> están ambas en el conjunto,
+  lo que prueba este caso.
 
   Finalmente, probemos que para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y 
   \<open>\<beta>\<^sub>2\<close> se verifica que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> 
@@ -358,26 +359,27 @@ text \<open>Procedamos a la demostración del resultado.
   tipo de fórmula \<open>\<beta>\<close> perteneciente a \<open>S\<close>, o bien su componente \<open>\<beta>\<^sub>1\<close> pertenece a \<open>S\<close> 
   o bien su componente \<open>\<beta>\<^sub>2\<close> pertenece a \<open>S\<close>.
 
-  \begin{enumerate}
-    \item[Fórmula del tipo \<open>G \<or> H\<close>:] Sus componentes disyuntivas son \<open>G\<close> y \<open>H\<close>. 
+  \<open>\<sqdot> Fórmula del tipo G \<or> H\<close>: Sus componentes disyuntivas son \<open>G\<close> y \<open>H\<close>. 
     Por la cuarta condición de la definición de conjunto de Hintikka, obtenemos 
     que si \<open>G \<or> H\<close> pertenece a \<open>S\<close>, entonces o bien \<open>G\<close> está en \<open>S\<close> o bien \<open>H\<close> está
     en \<open>S\<close>, lo que prueba este caso.
-    \item[Fórmula del tipo \<open>G \<longrightarrow> H\<close>:] Sus componentes disyuntivas son \<open>\<not> G\<close> y \<open>H\<close>.
+
+  \<open>\<sqdot> Fórmula del tipo G \<longrightarrow> H\<close>: Sus componentes disyuntivas son \<open>\<not> G\<close> y \<open>H\<close>.
     Por la quinta condición de la definición de conjunto de Hintikka, obtenemos que
     si \<open>G \<longrightarrow> H\<close> pertenece a \<open>S\<close>, entonces o bien \<open>\<not> G\<close> pertenece al conjunto o bien
     \<open>H\<close> pertenece al conjunto, lo que prueba este caso.
-    \item[Fórmula del tipo \<open>\<not>(\<not> G)\<close>:] Sus componentes conjuntivas son ambas \<open>G\<close>.
+
+  \<open>\<sqdot> Fórmula del tipo \<not>(\<not> G)\<close>: Sus componentes conjuntivas son ambas \<open>G\<close>.
     Por la sexta condición de la definición de conjunto de Hintikka, obtenemos 
     que si \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close>, entonces \<open>G\<close> pertenece al conjunto. De este modo,
     por la regla de introducción a la disyunción, se prueba que o bien una de las 
     componentes está en el conjunto o bien lo está la otra pues, en este caso,
     coinciden.
-    \item[Fórmula del tipo \<open>\<not>(G \<and> H)\<close>:] Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
+
+  \<open>\<sqdot> Fórmula del tipo \<not>(G \<and> H)\<close>: Sus componentes conjuntivas son \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
     Por la séptima condición de la definición de conjunto de Hintikka, obtenemos 
-    que si \<open>\<not>(G \<and> H)\<close> pertenece a \<open>S\<close>, entonces o bien \<open>\<not> G\<close> pertenece al conjunto
+    que si\\ \<open>\<not>(G \<and> H)\<close> pertenece a \<open>S\<close>, entonces o bien \<open>\<not> G\<close> pertenece al conjunto
     o bien \<open>\<not> H\<close> pertenece al conjunto, lo que prueba este caso.
-  \end{enumerate}
 
 \textbf{\<open>2) \<Longrightarrow> 1)\<close>}
 
@@ -418,27 +420,27 @@ text \<open>Procedamos a la demostración del resultado.
 
   \begin{enumerate}
     \item[\<open>3)\<close>] Supongamos que \<open>G \<and> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
-    Por definición, \<open>G \<and> H\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>G\<close> y \<open>H\<close>.
+    Por definición, \<open>G \<and> H\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>G\<close> y \<open>H\<close>. 
     Por lo tanto, por hipótesis se cumple que \<open>G\<close> y \<open>H\<close> están en \<open>S\<close>.
     \item[\<open>4)\<close>] Supongamos que \<open>G \<or> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
-    Por definición, \<open>G \<or> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>G\<close> y \<open>H\<close>.
+    Por definición, \<open>G \<or> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>G\<close> y \<open>H\<close>. 
     Por lo tanto, por hipótesis se cumple que o bien \<open>G\<close> está en \<open>S\<close> o bien \<open>H\<close> está 
     en \<open>S\<close>.
     \item[\<open>5)\<close>] Supongamos que \<open>G \<longrightarrow> H\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
-    Por definición, \<open>G \<longrightarrow> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>H\<close>.
+    Por definición, \<open>G \<longrightarrow> H\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>H\<close>. 
     Por lo tanto, por hipótesis se cumple que o bien \<open>\<not> G\<close> está en \<open>S\<close> o bien \<open>H\<close> está 
     en \<open>S\<close>.
     \item[\<open>6)\<close>] Supongamos que \<open>\<not>(\<not> G)\<close> está en \<open>S\<close> para una fórmula \<open>G\<close> cualquiera.
-    Por definición, \<open>\<not>(\<not> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son ambas \<open>G\<close>.
+    Por definición, \<open>\<not>(\<not> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son ambas \<open>G\<close>. 
     Por lo tanto, por hipótesis se cumple que \<open>G\<close> está en \<open>S\<close>.
     \item[\<open>7)\<close>] Supongamos que \<open>\<not>(G \<and> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
-    Por definición, \<open>\<not>(G \<and> H)\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>.
+    Por definición, \<open>\<not>(G \<and> H)\<close> es una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
     Por lo tanto, por hipótesis se cumple que o bien \<open>\<not> G\<close> está en \<open>S\<close> o bien \<open>\<not> H\<close> está 
     en \<open>S\<close>.
     \item[\<open>8)\<close>] Supongamos que \<open>\<not>(G \<or> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
-    Por definición, \<open>\<not>(G \<or> H)\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>.
+    Por definición, \<open>\<not>(G \<or> H)\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<not> G\<close> y \<open>\<not> H\<close>. 
     Por lo tanto, por hipótesis se cumple que \<open>\<not> G\<close> y \<open>\<not> H\<close> están en \<open>S\<close>.
-    \item[\<open>9)\<close>] Supongamos que \<open>\<not>(G \<longrightarrow> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera.
+    \item[\<open>9)\<close>] Supongamos que \<open>\<not>(G \<longrightarrow> H)\<close> está en \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close> cualesquiera. 
     Por definición, \<open>\<not>(G \<longrightarrow> H)\<close> es una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>G\<close> y \<open>\<not> H\<close>.
     Por lo tanto, por hipótesis se cumple que \<open>G\<close> y \<open>\<not> H\<close> están en \<open>S\<close>.
   \end{enumerate}
@@ -446,7 +448,7 @@ text \<open>Procedamos a la demostración del resultado.
   Por tanto, queda probado el resultado.
 \end{demostracion}
 
-  Para probar de manera detallada el lema en Isabelle, vamos a demostrar inicialmente 
+  Para probar de manera detallada el lema en Isabelle vamos a demostrar
   cada una de las implicaciones de la equivalencia por separado. 
 
   La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
@@ -1657,7 +1659,7 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   apply(rule iffI; unfold Ball_def; elim all_forward)
   by (auto simp add: insert_absorb split: formula.splits)
 
-subsection \<open>Propiedades de las colecciones\<close>
+section \<open>Propiedades de las colecciones\<close>
 
 text \<open>En este apartado definiremos una serie de  propiedades y resultados referentes a las 
   colecciones que utilizaremos posteriormente para la probar la consistencia de la lógica 
