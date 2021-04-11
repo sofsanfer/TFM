@@ -1659,18 +1659,81 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
 
 subsection \<open>Propiedades de las colecciones\<close>
 
-text \<open>En esta sección vamos a definir varias propiedades sobre las colecciones y resultados sobre
-  las mismas que utilizaremos posteriormente para la probar la consistencia de la lógica
-  proposicional. (Fatal redactado, pensar bien.)\<close>
+text \<open>En este apartado definiremos una serie de  propiedades y resultados referentes a las 
+  colecciones que utilizaremos posteriormente para la probar la consistencia de la lógica 
+  proposicional.
 
-text \<open>\comentario{Voy redactando por aquí.}\<close>
+  \begin{definicion}
+    Una colección de conjuntos es cerrada bajo subconjuntos si todo subconjunto de cada conjunto 
+    de la colección pertence a la colección.
+  \end{definicion}
 
-text\<open> Definición: C es cerrado bajo subconjunto.\<close>
+  En Isabelle se formaliza de la siguiente manera.\<close>
+
 definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"
 
-text \<open> Definición: C tiene la propiedad de carácter finito.\<close>
+text \<open>Mostremos algunos ejemplos para ilustrar la definición. Para ello, veamos si las colecciones
+  de conjuntos de fórmulas proposicionales expuestas en los ejemplos anteriores son cerradas bajo 
+  subconjuntos.\<close>
+
+lemma "subset_closed {{}}"
+  unfolding subset_closed_def by simp
+
+lemma "\<not> subset_closed {{Atom 0}}"
+  unfolding subset_closed_def by auto
+
+text \<open>Observemos que, puesto que el conjunto vacío es subconjunto de todo conjunto, una
+  condición necesaria para que una colección sea cerrada bajo subconjuntos es que contenga al
+  conjunto vacío.\<close>
+
+lemma "subset_closed {{Atom 0},{}}"
+  unfolding subset_closed_def by auto
+
+text \<open>De este modo, se deduce fácilmente que el resto de colecciones expuestas en los ejemplos
+  anteriores no son cerradas bajo subconjuntos.\<close>
+
+lemma "\<not> subset_closed {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
+   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))},
+  {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1)),  Atom 1}}" 
+  unfolding subset_closed_def by auto
+
+lemma "\<not> subset_closed {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
+   {((\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2), \<^bold>\<not>(\<^bold>\<not> (Atom 1))}}" 
+  unfolding subset_closed_def by auto
+
+text \<open>Continuemos con la noción de propiedad de carácter finito.
+
+\begin{definicion}
+  Una colección de conjuntos tiene la propiedad de carácter finito si para cualquier conjunto
+  son equivalentes:
+  \begin{enumerate}
+    \item El conjunto pertenece a la colección.
+    \item Todo subconjunto finito suyo pertenece a la colección.
+  \end{enumerate}
+\end{definicion}
+
+  La formalización en Isabelle/HOL de dicha definición se muestra a continuación.\<close>
+
 definition "finite_character C \<equiv> 
             (\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C))"
+
+text \<open>Distingamos las colecciones de los ejemplos anteriores que tengan la propiedad de carácter 
+  finito. Análogamente, puesto que el conjunto vacío es finito y subconjunto de cualquier conjunto, 
+  se observa que una condición necesaria para que una colección tenga la propiedad de carácter 
+  finito es que contenga al conjunto vacío.\<close>
+
+lemma "finite_character {{}}"
+  unfolding finite_character_def by auto
+
+lemma "\<not> finite_character {{Atom 0}}"
+  unfolding finite_character_def by auto
+
+lemma "finite_character {{Atom 0},{}}"
+  unfolding finite_character_def by auto
+
+text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
+entonces tiene un subconjunto con la propiedad de consistencia
+proposicional y cerrado bajo subconjunto.\<close>
 
 text\<open>Lema auxiliar similar a ballI para contención y propiedades.\<close>
 
@@ -1703,10 +1766,6 @@ qed
 
 lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x"
   by simp
-
-text \<open> Lema: Si C verifica la propidad de consistencia proposicional, 
-entonces tiene un subconjunto con la propiedad de consistencia
-proposicional y cerrado bajo subconjunto.\<close>
 
 lemma ex1_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
 proof (rule subsetI)
