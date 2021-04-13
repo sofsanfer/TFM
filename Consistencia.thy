@@ -110,8 +110,6 @@ text \<open>En esta subsección vamos a introducir la notación uniforme inicial
   Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, tiene asociada sus  
   dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. 
 
-\comentario {he modificado ligeramente el párrafo anterior}
-
   \begin{definicion}
     Las fórmulas de tipo \<open>\<alpha>\<close> (\<open>fórmulas conjuntivas\<close>) y sus correspondientes componentes
     \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen como sigue: dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera,
@@ -126,7 +124,7 @@ text \<open>En esta subsección vamos a introducir la notación uniforme inicial
   Realizamos su formalización en Isabelle como un predicado definido de
   forma inductiva, es decir, especificando las reglas que cumple.
 
-\comentario {He modificado ligeramente el párrafo anterior}\<close>
+\comentario {He modificado ligeramente el párrafo anterior. Cambiar explicaciones y def.}\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
@@ -1612,20 +1610,19 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
   apply(rule iffI; unfold Ball_def; elim all_forward)
   by (auto simp add: insert_absorb split: formula.splits)
 
-section \<open>Otras propiedades de las colecciones\<close>
+section \<open>Colecciones cerradas bajo subconjuntos y colecciones de carácter finito\<close>
 
 text\<open>
-\comentario{Título de la sección: El teorema de existencia de modelo}
 \comentario{Explicar lo que se quiere demostrar en esta sección, dar
 la idea de la prueba  y cómo se necesita la propiedad de que una clase 
 sea cerrada bajo subconjunto (ver Fitting pg. 53 y 54)}
-
-\comentario{Qué significa consistencia de la lógica proposicional}
 \<close>
 
-text \<open>En este apartado definiremos una serie de  propiedades y resultados referentes a las 
-  colecciones que utilizaremos posteriormente para la probar la consistencia de la lógica 
-  proposicional.
+text \<open>En este apartado definiremos dos propiedades referentes a colecciones que utilizaremos 
+  posteriormente para la probar la consistencia de la lógica proposicional.
+
+  \comentario{Explicar mejor la relación de las propiedades con el th de ex. de modelos. Redactar
+  bien el párrafo anterior.}
 
   \begin{definicion}
     Una colección de conjuntos es cerrada bajo subconjuntos si todo subconjunto de cada conjunto 
