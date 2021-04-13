@@ -2997,7 +2997,14 @@ lemma finite_pcp_lim_EX:
   using assms
 proof (induction s rule: finite_induct)
   case empty
-  then show ?case by blast (*Pendiente*)
+  have "pcp_seq C S 0 = S"
+    by (simp only: pcp_seq.simps(1))
+  have "{} \<subseteq> S"
+    by (rule order_bot_class.bot.extremum)
+  then have "{} \<subseteq> pcp_seq C S 0"
+    by (simp only: \<open>pcp_seq C S 0 = S\<close>)
+  then show ?case 
+    by (rule exI)
 next
   case (insert x s)
   then have "insert x s \<subseteq> pcp_lim C S"
@@ -3026,7 +3033,7 @@ next
     by (rule pcp_seq_mono)
   have "s \<subseteq> pcp_seq C S (max k1 k2)"
     using \<open>s \<subseteq> pcp_seq C S k1\<close> \<open>pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule subset_trans)
-  have "x \<in> pcp_seq C S (max k1 k2)" find_theorems "?x \<le> max ?x ?y"
+  have "x \<in> pcp_seq C S (max k1 k2)"
     using \<open>x \<in> pcp_seq C S k2\<close> \<open>pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule rev_subsetD)
   then have 1:"insert x s \<subseteq> pcp_seq C S (max k1 k2)"
     using \<open>s \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
