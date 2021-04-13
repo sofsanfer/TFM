@@ -2990,6 +2990,44 @@ lemma pcp_lim_inserted_at_ex:
 
 section \<open>El teorema de existencia de modelo\<close>
 
+lemma finite_pcp_lim_EX:
+  assumes "finite s"
+          "s \<subseteq> pcp_lim C S"
+        shows "\<exists>k. s \<subseteq> pcp_seq C S k"
+  using assms
+proof (induction s rule: finite_induct)
+  case empty
+  then show ?case by blast (*Pendiente*)
+next
+  case (insert x s)
+  then have "insert x s \<subseteq> pcp_lim C S"
+    by (simp only: insert.prems)
+  then have C:"x \<in> (pcp_lim C S) \<and> s \<subseteq> pcp_lim C S"
+    by (simp only: insert_subset) 
+  then have "s \<subseteq> pcp_lim C S"
+    by (rule conjunct2)
+  then have EX1:"\<exists>k. s \<subseteq> pcp_seq C S k"
+    by (simp only: insert.IH)
+  obtain k1 where "s \<subseteq> pcp_seq C S k1"
+    using EX1 by (rule exE)
+  have "x \<in> pcp_lim C S"
+    using C by (rule conjunct1)
+  then have EX2:"\<exists>k. x \<in> pcp_seq C S k"
+    by (rule pcp_lim_inserted_at_ex)
+  obtain k2 where "x \<in> pcp_seq C S k2" 
+    using EX2 by (rule exE)
+  have "s \<subseteq> pcp_seq C S (max k1 k2)"
+    using \<open>s \<subseteq> pcp_seq C S k1\<close> 
+by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
+  have "x \<in> pcp_seq C S (max k1 k2)"
+    using \<open>x \<in> pcp_seq C S k2\<close> 
+by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
+  then have 1:"insert x s \<subseteq> pcp_seq C S (max k1 k2)"
+    using \<open>s \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
+  thus ?case
+    by (rule exI)
+qed
+          
 lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
@@ -3012,47 +3050,23 @@ proof -
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
   have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C"
-  proof safe
+  proof (rule sallI)
     fix s :: "'a formula set"
-    have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
-      using pcp_seq_sub by blast (*Pendiente*)
-    assume "finite s" "s \<subseteq> pcp_lim C S"
-    then have "\<exists>k. s \<subseteq> pcp_seq C S k" 
-    proof (induction s rule: finite_induct)
-      case empty
-      then show ?case by blast (*Pendiente*)
-    next
-      case (insert x s)
-      then have "insert x s \<subseteq> pcp_lim C S"
-        by (simp only: insert.prems)
-      then have C:"x \<in> (pcp_lim C S) \<and> s \<subseteq> pcp_lim C S"
-        by (simp only: insert_subset) 
-      then have "s \<subseteq> pcp_lim C S"
-        by (rule conjunct2)
-      then have EX1:"\<exists>k. s \<subseteq> pcp_seq C S k"
-        by (simp only: insert.IH)
-      obtain k1 where "s \<subseteq> pcp_seq C S k1"
-        using EX1 by (rule exE)
-      have "x \<in> pcp_lim C S"
-        using C by (rule conjunct1)
-      then have EX2:"\<exists>k. x \<in> pcp_seq C S k"
-        by (rule pcp_lim_inserted_at_ex)
-      obtain k2 where "x \<in> pcp_seq C S k2" 
-        using EX2 by (rule exE)
-      have "s \<subseteq> pcp_seq C S (max k1 k2)"
-        using \<open>s \<subseteq> pcp_seq C S k1\<close> 
-by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
-      have "x \<in> pcp_seq C S (max k1 k2)"
-        using \<open>x \<in> pcp_seq C S k2\<close> 
-by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
-      then have 1:"insert x s \<subseteq> pcp_seq C S (max k1 k2)"
-        using \<open>s \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
-      thus ?case
-        by (rule exI)
+    assume "s \<subseteq> pcp_lim C S"
+    show "finite s \<longrightarrow> s \<in> C"
+    proof (rule impI)
+      assume "finite s"
+      then have EX:"\<exists>k. s \<subseteq> pcp_seq C S k" 
+        using \<open>s \<subseteq> pcp_lim C S\<close> by (rule finite_pcp_lim_EX)
+      obtain n where "s \<subseteq> pcp_seq C S n"
+        using EX by (rule exE)
+      have "pcp_seq C S n \<in> C"
+        using assms(1) assms(2) by (rule pcp_seq_in)
+      have "\<forall>s \<subseteq> (pcp_seq C S n). s \<in> C"
+        using SC \<open>pcp_seq C S n \<in> C\<close> by (rule bspec)
+      thus "s \<in> C"
+        using \<open>s \<subseteq> pcp_seq C S n\<close> by (rule sspec)
     qed
-    with pcp_seq_in[OF assms(1) assms(2)] assms(3)
-    show "s \<in> C" 
-      unfolding subset_closed_def by blast
   qed
   show "pcp_lim C S \<in> C" 
     using FC1 FC2 by (rule forw_subst)
