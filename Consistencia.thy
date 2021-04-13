@@ -42,22 +42,18 @@ text \<open>
       \item \<open>\<bottom> \<notin> S\<close>.
       \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
         simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
-      \item Si \<open>F \<and> G \<in> S\<close>, entonces el conjunto \<open>{F,G} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>F \<or> G \<in> S\<close>, entonces o bien el conjunto \<open>{F} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>F \<rightarrow> G \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(\<not> F) \<in> S\<close>, entonces el conjunto \<open>{F} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(F \<and> G) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(F \<or> G) \<in> S\<close>, entonces el conjunto \<open>{\<not> F, \<not> G} \<union> S\<close> pertenece a la 
-        colección. 
-      \item Si \<open>\<not>(F \<rightarrow> G) \<in> S\<close>, entonces el conjunto \<open>{F, \<not> G} \<union> S\<close> pertenece a la
-        colección. 
+      \item Si \<open>F \<and> G \<in> S\<close>, entonces el conjunto \<open>{F,G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>F \<or> G \<in> S\<close>, entonces o bien el conjunto \<open>{F} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>F \<rightarrow> G \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(\<not> F) \<in> S\<close>, entonces el conjunto \<open>{F} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(F \<and> G) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> F} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(F \<or> G) \<in> S\<close>, entonces el conjunto \<open>{\<not> F, \<not> G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(F \<rightarrow> G) \<in> S\<close>, entonces el conjunto \<open>{F, \<not> G} \<union> S\<close> pertenece a \<open>C\<close>.
     \end{enumerate}
   \end{definicion}
-
-\comentario {terminar cada item co "pertenece a  \<open>C\<close>}
 
   Veamos, a continuación, su formalización en Isabelle mediante el tipo \<open>definition\<close>.\<close>
 
@@ -311,10 +307,10 @@ text\<open>Veamos a continuación resultados que permiten caracterizar los conju
         \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
         simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
         \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
-        que si la fórmula pertenece al conjunto \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+        que si la fórmula pertenece a \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
         \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
-        que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
-        al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto.
+        que si la fórmula pertenece a \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+        a \<open>S\<close> o bien \<open>\<beta>\<^sub>2\<close> pertenece a \<open>S\<close>.
       \end{itemize} 
     \end{enumerate}
   \end{lema}
@@ -424,10 +420,10 @@ text \<open>Procedamos a la demostración del resultado.
     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
     simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
-    que si la fórmula pertenece al conjunto \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+    que si la fórmula pertenece a \<open>S\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
-    que si la fórmula pertenece al conjunto \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
-    al conjunto o bien \<open>\<beta>\<^sub>2\<close> pertenece al conjunto.
+    que si la fórmula pertenece a \<open>S\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+    a \<open>S\<close> o bien \<open>\<beta>\<^sub>2\<close> pertenece a \<open>S\<close>.
   \end{itemize}  
 
   Vamos a probar que \<open>S\<close> es un conjunto de Hintikka.
@@ -951,10 +947,10 @@ text\<open>A continuación veamos un resultado que permite la caracterización d
         \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
         simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
         \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-        pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+        pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
         \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-        pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
-        bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+        pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
+        bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
       \end{itemize} 
     \end{enumerate}
   \end{lema}
@@ -987,28 +983,26 @@ text \<open>En primer lugar, veamos la demostración del lema.
       \item \<open>\<bottom> \<notin> S\<close>.
       \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
         simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
-      \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
-        colección, o bien el conjunto \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
-      \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la 
-        colección. 
-      \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a la
-        colección. 
+      \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+        conjunto \<open>{\<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
+      \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
  \end{enumerate}
 
   Las dos primeras condiciones se corresponden con los dos primeros resultados que queríamos
   demostrar. De este modo, falta probar:
   \begin{itemize}
      \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-     pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+     pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
      \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-     pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
-     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.   
+     pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
+     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.   
   \end{itemize} 
 
   En primer lugar, vamos a deducir el primer resultado correspondiente a las fórmulas
@@ -1020,21 +1014,21 @@ text \<open>En primer lugar, veamos la demostración del lema.
   \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección:
 
   \<open>\<sqdot> Fórmula de tipo G \<and> H\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> 
-    y \<open>H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
+    y \<open>H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a \<open>C\<close> por
     la tercera condición de la definición de propiedad de consistencia
     proposicional.
 
   \<open>\<sqdot> Fórmula de tipo \<not> (\<not> G)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son 
-    ambas \<open>G\<close>. Como el conjunto \<open>{\<alpha>\<^sub>1} \<union> S\<close> es equivalente al conjunto conjunto \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> ya
-    que \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son iguales, tenemos que este último pertenece a la colección por la sexta 
+    ambas \<open>G\<close>. Como el conjunto \<open>{\<alpha>\<^sub>1} \<union> S\<close> es equivalente a \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> ya
+    que \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son iguales, tenemos que este último pertenece a \<open>C\<close> por la sexta 
     condición de la definición de propiedad de consistencia proposicional.
 
   \<open>\<sqdot> Fórmula de tipo \<not>(G \<or> H)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son\\ 
-    \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
+    \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a \<open>C\<close> por
     la octava condición de la definición de propiedad de consistencia proposicional.
 
-  \<open>\<sqdot> Fórmula de tipo \<not>(G \<longrightarrow> H)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y \<open>\<not> H\<close>
-    respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por la novena 
+  \<open>\<sqdot> Fórmula de tipo \<not>(G \<longrightarrow> H)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> y 
+    \<open>\<not> H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a \<open>C\<close> por la novena 
     condición de la definición de propiedad de consistencia proposicional.
 
   Finalmente, el resultado correspondiente a las fórmulas de tipo \<open>\<beta>\<close> se obtiene de las 
@@ -1042,27 +1036,27 @@ text \<open>En primer lugar, veamos la demostración del lema.
   proposicional. Para probarlo, consideremos una fórmula cualquiera de tipo \<open>\<beta>\<close> perteneciente
   al conjunto \<open>S\<close> y cuyas componentes disyuntivas son \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>. Por simplificación, sabemos 
   que dicha fórmula es de la forma \<open>G \<or> H\<close>, \<open>G \<longrightarrow> H\<close>, \<open>\<not> (\<not> G)\<close> o \<open>\<not>(G \<and> H)\<close> para ciertas 
-  fórmulas \<open>G\<close> y \<open>H\<close>. Deduzcamos que, en efecto, tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la
-  colección \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección \<open>C\<close>.
+  fórmulas \<open>G\<close> y \<open>H\<close>. Deduzcamos que, en efecto, tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en \<open>C\<close> o bien 
+  \<open>{\<beta>\<^sub>2} \<union> S\<close> está en \<open>C\<close>.
 
   \<open>\<sqdot> Fórmula de tipo G \<or> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>G\<close> y 
-    \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección o bien 
-    \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la cuarta condición de la definición de propiedad de 
+    \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a \<open>C\<close> o bien 
+    \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la cuarta condición de la definición de propiedad de 
     consistencia proposicional.
 
   \<open>\<sqdot> Fórmula de tipo G \<longrightarrow> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son 
-    \<open>\<not> G\<close> y \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a la colección o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la quinta condición de la definición de propiedad 
+    \<open>\<not> G\<close> y \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la quinta condición de la definición de propiedad 
     de consistencia proposicional.
 
   \<open>\<sqdot> Fórmula de tipo \<not>(\<not> G)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son ambas 
-    \<open>G\<close>. Luego tenemos que, en particular, el conjunto \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección por la 
+    \<open>G\<close>. Luego tenemos que, en particular, el conjunto \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> por la 
     sexta condición de la definición de propiedad de consistencia proposicional. Por tanto, se 
-    verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en la colección o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en la colección.
+    verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en \<open>C\<close>.
 
   \<open>\<sqdot> Fórmula de tipo \<not>(G \<and> H)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son\\ 
-    \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección por la séptima condición de la definición de propiedad 
+    \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la séptima condición de la definición de propiedad 
     de consistencia proposicional.
 
   De este modo, queda probada la primera implicación de la equivalencia. Veamos la prueba de la 
@@ -1077,10 +1071,10 @@ text \<open>En primer lugar, veamos la demostración del lema.
     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
     simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C\<close>.
+    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
   \end{itemize}
 
   Probemos que \<open>C\<close> verifica la propiedad de consistencia proposicional. Por la definición
@@ -1090,18 +1084,16 @@ text \<open>En primer lugar, veamos la demostración del lema.
     \item \<open>\<bottom> \<notin> S\<close>.
     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
       simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
-    \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a la colección.
-    \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a la
-      colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
-    \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
-      colección, o bien el conjunto \<open>{H} \<union> S\<close> pertenece a la colección.
-    \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a la colección.
-    \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a la
-      colección, o bien el conjunto \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
-    \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la 
-      colección. 
-    \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a la
-      colección. 
+    \item Si \<open>G \<and> H \<in> S\<close>, entonces el conjunto \<open>{G,H} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>G \<or> H \<in> S\<close>, entonces o bien el conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el conjunto 
+      \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>G \<rightarrow> H \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+      conjunto \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>\<not>(\<not> G) \<in> S\<close>, entonces el conjunto \<open>{G} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>\<not>(G \<and> H) \<in> S\<close>, entonces o bien el conjunto \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close>, o bien el 
+      conjunto \<open>{\<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>\<not>(G \<or> H) \<in> S\<close>, entonces el conjunto \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
+    \item Si \<open>\<not>(G \<rightarrow> H) \<in> S\<close>, entonces el conjunto \<open>{G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
   \end{enumerate}
 
   En primer lugar, se observa que por hipótesis se cumplen las dos primeras condiciones de
@@ -1113,17 +1105,17 @@ text \<open>En primer lugar, veamos la demostración del lema.
   \begin{enumerate}
     \item[\<open>3)\<close>:] Supongamos que la fórmula \<open>G \<and> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
-    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que \<open>{G, H} \<union> S\<close> pertenece a la colección.
+    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que \<open>{G, H} \<union> S\<close> pertenece a \<open>C\<close>.
     \item[\<open>6)\<close>:] Supongamos que la fórmula \<open>\<not>(\<not> G)\<close> pertenece a \<open>S\<close> para la fórmula \<open>G\<close> 
     cualquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes conjuntivas 
-    son ambas la fórmula \<open>G\<close>. Por hipótesis, tenemos que el conjunto \<open>{G,G} \<union> S\<close> pertence a la
-    colección y, puesto que dicho conjunto es equivalente a \<open>{G} \<union> S\<close>, tenemos el resultado.
+    son ambas la fórmula \<open>G\<close>. Por hipótesis, tenemos que el conjunto \<open>{G,G} \<union> S\<close> pertence a \<open>C\<close>
+    y, puesto que dicho conjunto es equivalente a \<open>{G} \<union> S\<close>, tenemos el resultado.
     \item[\<open>8)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<or> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
-    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a la colección.
+    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{\<not> G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
     \item[\<open>9)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<longrightarrow> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<alpha>\<close> de componentes conjuntivas
-    \<open>G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{G, \<not> H} \<union> S\<close> pertenece a la colección.
+    \<open>G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que \<open>{G, \<not> H} \<union> S\<close> pertenece a \<open>C\<close>.
   \end{enumerate} 
 
   Finalmente, deduzcamos el resto de condiciones de la definición de propiedad de consistencia
@@ -1131,16 +1123,16 @@ text \<open>En primer lugar, veamos la demostración del lema.
   \begin{enumerate}
     \item[\<open>4)\<close>:] Supongamos que la fórmula \<open>G \<or> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
-    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{G} \<union> S\<close> pertenece a la colección o bien
-    \<open>{H} \<union> S\<close> pertenece a la colección.
+    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{G} \<union> S\<close> pertenece a \<open>C\<close> o bien
+    \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
     \item[\<open>5)\<close>:] Supongamos que la fórmula \<open>G \<longrightarrow> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
-    \<open>\<not> G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a la colección o
-    bien \<open>{H} \<union> S\<close> pertenece a la colección.
+    \<open>\<not> G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close> o
+    bien \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
     \item[\<open>7)\<close>:] Supongamos que la fórmula \<open>\<not>(G \<and> H)\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
-    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a la colección o
-    bien \<open>{\<not> H} \<union> S\<close> pertenece a la colección.
+    \<open>\<not> G\<close> y \<open>\<not> H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{\<not> G} \<union> S\<close> pertenece a \<open>C\<close> o
+    bien \<open>{\<not> H} \<union> S\<close> pertenece \<open>C\<close>.
   \end{enumerate} 
 
   De este modo, hemos probado a partir de la hipótesis todas las condiciones que garantizan que la
@@ -1820,10 +1812,10 @@ text \<open>Procedamos con su demostración.
     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
     simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C'\<close>.
+    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C'\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C'\<close>.
+    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
   \end{itemize} 
 
   De este modo, sea \<open>S\<close> un conjunto de fórmulas cualquiera de la colección \<open>C'\<close>. Por definición de
@@ -1836,10 +1828,10 @@ text \<open>Procedamos con su demostración.
     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
     simultáneamente que\\ \<open>p \<in> S'\<close> y \<open>\<not> p \<in> S'\<close>.
     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-    pertenece a \<open>S'\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a la colección \<open>C\<close>.
+    pertenece a \<open>S'\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>.
     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-    pertenece a \<open>S'\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S'\<close> pertenece a la colección \<open>C\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertenece a la colección \<open>C\<close>.
+    pertenece a \<open>S'\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S'\<close> pertenece a \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>.
   \end{itemize} 
 
   Por tanto, como \<open>S\<close> está contenida en \<open>S'\<close>, se verifica análogamente que \<open>\<bottom>\<close> no pertence a \<open>S\<close>
@@ -1851,21 +1843,19 @@ text \<open>Procedamos con su demostración.
     pertence también a \<open>S'\<close>. De este modo, se verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a la colección 
     \<open>C\<close>. Por otro lado, como el conjunto \<open>S\<close> está contenido en \<open>S'\<close>, se observa fácilmente que\\
     \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> está contenido en \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close>. Por lo tanto, el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> está en 
-    la colección \<open>C'\<close> por definición de esta, ya que es subconjunto de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> que pertence 
-    a \<open>C\<close>.
+    \<open>C'\<close> por definición de esta, ya que es subconjunto de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> que pertence a \<open>C\<close>.
 
   \<open>\<sqdot> Condición para fórmulas de tipo \<beta>\<close>: Sea una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y
     \<open>\<beta>\<^sub>2\<close> tal que la fórmula pertenece a \<open>S\<close>. Como el conjunto \<open>S\<close> está contenido en \<open>S'\<close>, tenemos 
     que la fórmula pertence, a su vez, a \<open>S'\<close>. De este modo, se verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S'\<close>
-    pertenece a la colección \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertence a la colección \<open>C\<close>. Por eliminación de
-    la disyunción anterior, vamos a probar que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a la colección \<open>C'\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a la colección \<open>C'\<close>.
+    pertenece a \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertence a \<open>C\<close>. Por eliminación de la disyunción anterior, 
+    vamos a probar que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
     \begin{itemize}
       \item Supongamos, en primer lugar, que \<open>{\<beta>\<^sub>1} \<union> S'\<close> pertenece a \<open>C\<close>. Puesto que el conjunto \<open>S\<close>
       está contenido en \<open>S'\<close>, se observa fácilmente que \<open>{\<beta>\<^sub>1} \<union> S\<close> está contenido en\\ \<open>{\<beta>\<^sub>1} \<union> S'\<close>.
       Por definición de la colección \<open>C'\<close>, tenemos que \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close>, ya que es
-      subconjunto de \<open>{\<beta>\<^sub>1} \<union> S'\<close> que pertenece a la colección \<open>C\<close>. Por tanto, hemos probado que o 
-      bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
+      subconjunto de \<open>{\<beta>\<^sub>1} \<union> S'\<close> que pertenece a \<open>C\<close>. Por tanto, hemos probado que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> 
+      pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
       \item Supongamos, finalmente, que \<open>{\<beta>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>. Análogamente obtenemos que
       \<open>{\<beta>\<^sub>2} \<union> S\<close> está contenido en \<open>{\<beta>\<^sub>2} \<union> S'\<close>, luego \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close> por definición.
       Por tanto, o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
