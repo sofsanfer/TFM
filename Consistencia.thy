@@ -3026,7 +3026,14 @@ proof -
       next
         fix x s
         assume HI1:"finite s" and HI2:"x \<notin> s" and HI3:"\<exists>k. s \<subseteq> pcp_seq C S k"
-        
+        then have EX1:"\<exists>k. s \<subseteq> pcp_seq C S k" by fast+ (*Pendiente*)
+        obtain k1 where "s \<subseteq> pcp_seq C S k1"
+          using EX1 by (rule exE)
+        have "x \<in> pcp_lim C S"
+          using \<open>x \<notin> s\<close>
+
+        moreover obtain k2 where "x \<in> pcp_seq C S k2"
+          using HI3 by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
         show "\<exists>k. {x} \<union> s \<subseteq> pcp_seq C S k"
         case (insert x s)
         hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast+
