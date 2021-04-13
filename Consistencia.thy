@@ -7,9 +7,24 @@ theory Consistencia
 begin
 (*>*)
 
+text \<open>
+\comentario{Localización de sello.png.}
+
+\comentario{Pone trabajo fin de grado}
+\comentario{Cambiar los directores}
+\comentario{Introducción}
+
+\comentario{Título del capítulo: El teorema de existencia de modelo}
+\<close>
+
 text \<open>En esta sección probaremos la consistencia de la lógica proposicional demostrando el \<open>teorema 
   de existencia de modelos\<close>. Para ello, consideraremos colecciones de conjuntos de fórmulas 
-  proposicionales y definiremos propiedades y resultados sobre las mismas.\<close>
+  proposicionales y definiremos propiedades y resultados sobre las
+  mismas.
+
+\comentario{Ver Fitting pg. 53 y 54}
+
+\<close>
 
 section \<open>Propiedad de consistencia proposicional\<close>
 
@@ -41,6 +56,8 @@ text \<open>
         colección. 
     \end{enumerate}
   \end{definicion}
+
+\comentario {terminar cada item co "pertenece a  \<open>C\<close>}
 
   Veamos, a continuación, su formalización en Isabelle mediante el tipo \<open>definition\<close>.\<close>
 
@@ -88,7 +105,11 @@ text \<open>Seguidamente presentaremos dos lemas auxiliares derivados de la defi
   lemas indican que la verificación de la conjunción de las nueve condiciones de la 
   definición para cualquier conjunto perteneciente a la colección es una condición 
   necesaria y suficiente para que la colección verifique la propiedad de consistencia 
-  proposicional.\<close>
+  proposicional.
+
+\comentario{Los lemas siguientes  permiten  descomponer la definición en 
+condiciones necesaria y suficiente (los nombres no son acertados)}
+\<close>
 
 lemma auxEq1:
   assumes "\<forall>S \<in> C.
@@ -159,22 +180,24 @@ qed
 
 section \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
 
-text \<open>En esta subsección vamos a introducir una notación uniforme inicialmente 
+text \<open>En esta subsección vamos a introducir la notación uniforme inicialmente 
   desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
   de dicha notación es reducir el número de casos a considerar sobre la estructura de 
-  las fórmulas al clasificar estas en dos categorías, facilitando las demostraciones
+  las fórmulas al clasificar éstas en dos categorías, facilitando las demostraciones
   y métodos empleados en adelante.
 
   \comentario{Añadir referencia bibliográfica.}
 
   De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
-  actúan de manera conjuntiva (las fórmulas \<open>\<alpha>\<close>) y las que actúan de manera 
-  disyuntiva (las fórmulas \<open>\<beta>\<close>). Para cada fórmula \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, se definen 
+  de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
+  Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, tiene asociada sus  
   dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. 
+
+\comentario {he modificado ligeramente el párrafo anterior}
 
   \begin{definicion}
     Las fórmulas de tipo \<open>\<alpha>\<close> (\<open>fórmulas conjuntivas\<close>) y sus correspondientes componentes
-    \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen inductivamente, dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera, como sigue:
+    \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen como sigue: dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera,
     \begin{enumerate}
       \item \<open>F \<and> G\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
       \item \<open>\<not>(F \<or> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>\<not> G\<close>.
@@ -183,14 +206,17 @@ text \<open>En esta subsección vamos a introducir una notación uniforme inicia
     \end{enumerate} 
   \end{definicion}
 
-  Como se trata de una definición inductiva, su formalización en Isabelle emplea el tipo
-  \<open>inductive\<close>.\<close>
+  Realizamos su formalización en Isabelle como un predicado definido de
+  forma inductiva, es decir, especificando las reglas que cumple.
+
+\comentario {He modificado ligeramente el párrafo anterior}\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
 "Con (Not (Or F G)) (Not F) (Not G)" |
 "Con (Not (Imp F G)) F (Not G)" |
 "Con (Not (Not F)) F F"
+
 
 text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona la formalización de cada
   una de las reglas de introducción que conforman la definición inductiva de manera 
@@ -201,11 +227,11 @@ text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona l
       \hfill (@{text Con.intros})
   \end{itemize}
 
-  Finalmente, definamos las fórmulas disyuntivas.
+  A continuación, definamos las fórmulas disyuntivas.
 
   \begin{definicion}
     Las fórmulas de tipo \<open>\<beta>\<close> (\<open>fórmulas disyuntivas\<close>) y sus correspondientes componentes
-    \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se definen inductivamente, dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera, como sigue:
+    \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se definen como sigue: dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera,
     \begin{enumerate}
       \item \<open>F \<or> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
       \item \<open>F \<longrightarrow> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>G\<close>.
@@ -214,8 +240,8 @@ text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona l
     \end{enumerate} 
   \end{definicion}
 
-  Su formalización en Isabelle emplea análogamente el tipo \<open>inductive\<close>, como se muestra
-  a continuación.\<close>
+  Análogamente, su formalización en Isabelle se realiza como un predicado
+  definido de forma inductiva, como se muestra a continuación.\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
@@ -230,6 +256,10 @@ text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducció
     \item[] @{thm[mode=Rule] Dis.intros[no_vars]} 
       \hfill (@{text Dis.intros})
   \end{itemize}
+
+\comentario{Comentar si todas las fórmulas proposicionales son de uno de estos dos
+tipos, p. ejemplo, las atómicas. Comentar si ee usa el esquema de inducción proporcionado
+por la definición inductiva. }
 
   Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
   deducir el siguiente lema.
@@ -246,10 +276,14 @@ lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F"
 
 text \<open>Por otra parte, de la propia definición de las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>
   obtenemos reglas de simplificación. De este modo, dada una fórmula de tipo
-  \<open>\<alpha>\<close> o \<open>\<beta>\<close> deducimos que se correponde con uno de los cuatro casos de fórmula 
+  \<open>\<alpha>\<close> o \<open>\<beta>\<close> deducimos que se corresponde con uno de los cuatro casos de fórmula 
   definidos para cada tipo con sus correspondientes componentes.
   En Isabelle, hemos formalizado las reglas de simplificación de ambos tipos de 
-  fórmulas en un resultado conjunto.\<close>
+  fórmulas en un resultado conjunto.
+
+\comentario{Creo que el siguiente lema es facilitar el uso de las fórmulas
+en notación uniforme, pues caracteriza como son las fórmulas  \<open>\<alpha>\<close> y las \<open>\<beta>\<close>.}
+\<close>
 
 lemma con_dis_simps:
   "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
@@ -271,7 +305,7 @@ text\<open>Veamos a continuación resultados que permiten caracterizar los conju
     Dado un conjunto de fórmulas proposicionales \<open>S\<close>, son equivalentes:
     \begin{enumerate}
       \item \<open>S\<close> es un conjunto de Hintikka.
-      \item Se verifican las condiciones siguientes.
+      \item Se verifican las condiciones siguientes:
       \begin{itemize}
         \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
         \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
@@ -703,7 +737,7 @@ proof -
     using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
 
-text \<open>Por último, probamos la implicación contraria de forma detallada en Isabelle mediante
+text \<open>Por último, probamos la implicación recíproca de forma detallada en Isabelle mediante
   el siguiente lema.\<close>
 
 lemma Hintikka_alt2:
@@ -903,11 +937,10 @@ lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
   subgoal by safe metis+
   done
 
-text\<open>Finalmente mostremos un resultado que permite la caracterización de la 
-  propiedad de consistencia proposicional empleando la notación uniforme.
+text\<open>A continuación veamos un resultado que permite la caracterización de la 
+  propiedad de consistencia proposicional mediante la notación uniforme.
 
-  \begin{lema}[Caracterización de la propiedad de consistencia proposicional mediante la
-  notación uniforme]
+  \begin{lema}[Caracterización de \<open>pcp\<close> mediante la notación uniforme]
     Dada una colección \<open>C\<close> de conjuntos de fórmulas proposicionales, son equivalentes:
     \begin{enumerate}
       \item \<open>C\<close> verifica la propiedad de consistencia proposicional.
@@ -947,7 +980,7 @@ text \<open>En primer lugar, veamos la demostración del lema.
   verifica la propiedad de consistencia proposicional. Vamos a probar que, en efecto,
   cumple las condiciones de \<open>2)\<close>. 
 
-  Consideremos un conjunto de fórmulas cualquiera \<open>S\<close> perteneciente a la colección \<open>C\<close>.
+  Consideremos un conjunto de fórmulas \<open>S\<close> perteneciente a la colección \<open>C\<close>.
   Por hipótesis, de la definición de propiedad de consistencia proposicional obtenemos
   que \<open>S\<close> verifica las siguientes condiciones:
  \begin{enumerate}
@@ -981,14 +1014,15 @@ text \<open>En primer lugar, veamos la demostración del lema.
   En primer lugar, vamos a deducir el primer resultado correspondiente a las fórmulas
   de tipo \<open>\<alpha>\<close> de las condiciones tercera, sexta, octava y novena de la definición de 
   propiedad de consistencia proposicional. En efecto, consideremos una fórmula de tipo 
-  \<open>\<alpha>\<close> cualquiera con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close> pertenece a \<open>S\<close>. Por 
-  simplificación, sabemos que la fórmula es de la forma \<open>G \<and> H\<close>, \<open>\<not> (\<not> G)\<close>, \<open>\<not> (G \<or> H)\<close> o 
+  \<open>\<alpha>\<close> cualquiera con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close> pertenece a \<open>S\<close>. Sabemos que 
+  la fórmula es de la forma \<open>G \<and> H\<close>, \<open>\<not> (\<not> G)\<close>, \<open>\<not> (G \<or> H)\<close> o 
   \<open>\<not>(G \<longrightarrow> H)\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close>. Vamos a probar que para cada caso se cumple que 
   \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> pertenece a la colección:
 
   \<open>\<sqdot> Fórmula de tipo G \<and> H\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son \<open>G\<close> 
     y \<open>H\<close> respectivamente. Luego tenemos que \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close>  pertenece a la colección por
-    la tercera condición de la definición de propiedad de consistencia proposicional.
+    la tercera condición de la definición de propiedad de consistencia
+    proposicional.
 
   \<open>\<sqdot> Fórmula de tipo \<not> (\<not> G)\<close>: En este caso, sus componentes conjuntivas \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son 
     ambas \<open>G\<close>. Como el conjunto \<open>{\<alpha>\<^sub>1} \<union> S\<close> es equivalente al conjunto conjunto \<open>{\<alpha>\<^sub>1, \<alpha>\<^sub>2} \<union> S\<close> ya
@@ -1378,10 +1412,10 @@ proof (rule ballI)
     using C1 C2 Con Dis by (iprover intro: conjI)
 qed
 
-text \<open>Por otro lado, veamos la demostración detallada de la implicación contraria de la
+text \<open>Por otro lado, veamos la demostración detallada de la implicación recíproca de la
   equivalencia. Para ello, utilizaremos distintos lemas auxiliares para deducir cada una de las 
   condiciones de la definición de propiedad de consistencia proposicional a partir de las
-  hipótesis sobre las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>. En primer lugar, veamos los lemas que deducen
+  hipótesis sobre las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>. En primer lugar, veamos los lemas que se deducen
   condiciones a partir de la hipótesis referente a las fórmulas de tipo \<open>\<alpha>\<close>.\<close>
 
 lemma pcp_alt2Con1:
@@ -1667,6 +1701,15 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
 
 section \<open>Otras propiedades de las colecciones\<close>
 
+text\<open>
+\comentario{Título de la sección: El teorema de existencia de modelo}
+\comentario{Explicar lo que se quiere demostrar en esta sección, dar
+la idea de la prueba  y cómo se necesita la propiedad de que una clase 
+sea cerrada bajo subconjunto (ver Fitting pg. 53 y 54)}
+
+\comentario{Qué significa consistencia de la lógica proposicional}
+\<close>
+
 text \<open>En este apartado definiremos una serie de  propiedades y resultados referentes a las 
   colecciones que utilizaremos posteriormente para la probar la consistencia de la lógica 
   proposicional.
@@ -1742,6 +1785,9 @@ lemma "finite_character {{Atom 0},{}}"
 text \<open>Una vez introducidas las definiciones anteriores, veamos tres resultados sobre colecciones
   de conjuntos.
 
+\comentario{La descripción previa es excesivamente genérica. Es conveniente 
+precisar más.}
+
   \begin{lema}
     Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces
     podemos hallar una colección que la contenga de manera que también verifique la propiedad de 
@@ -1757,9 +1803,8 @@ text \<open>Procedamos con su demostración.
 
 \begin{demostracion}
   Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la colección formada por los 
-  conjuntos tales que existe en \<open>C\<close> un conjunto del cual son subconjuntos. Notemos por \<open>C'\<close> a esta
-  colección, de modo que \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica 
-  las condiciones del lema.
+  conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta clase por \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. 
+ Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
 
   En primer lugar, veamos que \<open>C\<close> está contenida en \<open>C'\<close>. Para ello, consideremos un conjunto
   cualquiera perteneciente a la colección inicial \<open>C\<close>. Puesto que la propiedad de contención es 
