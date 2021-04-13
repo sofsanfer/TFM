@@ -2988,6 +2988,8 @@ lemma pcp_lim_inserted_at_ex:
     "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
+section \<open>El teorema de existencia de modelo\<close>
+
 (*lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
@@ -3009,15 +3011,23 @@ proof -
   qed
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
-  have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C" (*Pendiente*)
-  proof 
+  have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C"
+  proof (rule sallI)
     fix s :: "'a formula set"
     assume "s \<subseteq> pcp_lim C S"
-    assume "finite s"
     have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
-      using pcp_seq_sub by blast
-    have "\<exists>k. s \<subseteq> pcp_seq C S k" 
-      proof (induction s rule: finite_induct) 
+      using pcp_seq_sub by blast (*Pendiente*)
+    show "finite s \<longrightarrow> s \<in> C"
+    proof (rule impI)
+      assume "finite s"
+      then have "\<exists>k. s \<subseteq> pcp_seq C S k" 
+      proof (induction s rule: finite_induct)
+        show "\<exists>k. {} \<subseteq> pcp_seq C S k" by blast (*Pendiente*)
+      next
+        fix x s
+        assume HI1:"finite s" and HI2:"x \<notin> s" and HI3:"\<exists>k. s \<subseteq> pcp_seq C S k"
+        
+        show "\<exists>k. {x} \<union> s \<subseteq> pcp_seq C S k"
         case (insert x s)
         hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast+
         then guess k1 ..
@@ -3034,8 +3044,6 @@ proof -
   show "pcp_lim C S \<in> C" 
     using FC1 FC2 by (rule forw_subst)
 qed*)
-
-section \<open>El teorema de existencia de modelo\<close>
 
 lemma pcp_lim_in:
   assumes c: "pcp C"
