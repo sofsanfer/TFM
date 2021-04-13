@@ -3016,12 +3016,18 @@ next
     by (rule pcp_lim_inserted_at_ex)
   obtain k2 where "x \<in> pcp_seq C S k2" 
     using EX2 by (rule exE)
+  have "k1 \<le> max k1 k2"
+    by (simp only: linorder_class.max.cobounded1)
+  then have "pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)"
+    by (rule pcp_seq_mono)
+  have "k2 \<le> max k1 k2"
+    by (simp only: linorder_class.max.cobounded2)
+  then have "pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)"
+    by (rule pcp_seq_mono)
   have "s \<subseteq> pcp_seq C S (max k1 k2)"
-    using \<open>s \<subseteq> pcp_seq C S k1\<close> 
-by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
-  have "x \<in> pcp_seq C S (max k1 k2)"
-    using \<open>x \<in> pcp_seq C S k2\<close> 
-by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE) (*Pendiente*)
+    using \<open>s \<subseteq> pcp_seq C S k1\<close> \<open>pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule subset_trans)
+  have "x \<in> pcp_seq C S (max k1 k2)" find_theorems "?x \<le> max ?x ?y"
+    using \<open>x \<in> pcp_seq C S k2\<close> \<open>pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule rev_subsetD)
   then have 1:"insert x s \<subseteq> pcp_seq C S (max k1 k2)"
     using \<open>s \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
   thus ?case
