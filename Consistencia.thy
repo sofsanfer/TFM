@@ -2725,6 +2725,8 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
   done
 qed
 
+section \<open>Sucesiones de conjuntos en una colección\<close>
+
 text\<open> Definición: definición de una sucesión de conjuntos a partir de 
 C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
 
