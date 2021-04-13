@@ -3035,6 +3035,8 @@ proof -
     using FC1 FC2 by (rule forw_subst)
 qed*)
 
+section \<open>El teorema de existencia de modelo\<close>
+
 lemma pcp_lim_in:
   assumes c: "pcp C"
   and el: "S \<in> C"
