@@ -3290,6 +3290,11 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
+lemma 
+  assumes "insert a A = A"
+  shows "a \<in> A"
+  oops
+
 lemma cl_max'_detallada:
   assumes "pcp C"
   assumes "subset_closed C"
@@ -3300,7 +3305,7 @@ proof -
   proof -
     assume "insert F (pcp_lim C S) \<in> C"
     have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
-      by blast (*Pendiente*)
+      by (rule subset_insertI) 
     have "pcp_lim C S = insert F (pcp_lim C S)"
       using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
     thus "F \<in> pcp_lim C S"
