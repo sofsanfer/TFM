@@ -2368,13 +2368,18 @@ proof -
         then have E:"\<forall>s'\<subseteq>s. finite s' \<longrightarrow> s' \<in> C"
           by (rule CollectD)
         have "s \<subseteq> s"
-          by blast (*Pendiente*)
+          by (rule subset_refl)
         have "finite s \<longrightarrow> s \<in> C"
           using E \<open>s \<subseteq> s\<close> by (rule sspec)
         then have "s \<in> C"
           using \<open>finite s\<close> by (rule mp)
-        have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
-          using 1 \<open>s \<in> C\<close> by blast (*Pendiente*)
+        have "\<bottom> \<notin> s
+              \<and> (\<forall>k. Atom k \<in> s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> s \<longrightarrow> False)
+              \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C)
+              \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> s \<longrightarrow> {G} \<union> s \<in> C \<or> {H} \<union> s \<in> C)"
+          using 1 \<open>s \<in> C\<close> by (rule bspec)
+        then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+          by (iprover elim: conjunct2 conjunct1)
         then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
           by (iprover elim: allE)
         then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
@@ -2402,8 +2407,8 @@ proof -
         using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
     qed
   qed
-  thus "{G, H} \<union> S \<in> C \<union> ?E" 
-    by simp (*Pendiente*)
+  thus "{G,H} \<union> S \<in> C \<union> ?E"
+    by (rule UnI2)
 qed
 
 (*lemma ex3_pcp_DIS:
