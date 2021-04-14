@@ -3295,7 +3295,28 @@ lemma cl_max'_detallada:
   assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
-using cl_max[OF assms] by blast+
+proof -
+  show "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+  proof -
+    assume "insert F (pcp_lim C S) \<in> C"
+    have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
+      by blast (*Pendiente*)
+    have "pcp_lim C S = insert F (pcp_lim C S)"
+      using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
+    thus "F \<in> pcp_lim C S"
+      by blast (*Pendiente*)
+  qed
+  show "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+  proof -
+    assume "insert F (insert G (pcp_lim C S)) \<in> C"
+    have "pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))"
+      by blast (*Pendiente*)
+    have "pcp_lim C S = insert F (insert G (pcp_lim C S))"
+      using assms(1) assms(2) \<open>insert F (insert G (pcp_lim C S)) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))\<close> by (rule cl_max)
+    thus "F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+      by blast (*Pendiente*)
+  qed
+qed
 
 lemma cl_max':
   assumes c: "pcp C"
