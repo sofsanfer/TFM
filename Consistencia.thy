@@ -2460,10 +2460,10 @@ proof -
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
 \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  have H1:"\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
-        if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
-          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+  have "insert G S \<in> (C \<union> ?E) \<or> insert H S \<in> (C \<union> ?E)"
   proof -
+voy x aqui
+    proof 
     let ?s = "s1 \<union> s2"
     have "?s \<subseteq> S" "finite ?s" 
       using that by simp_all (*Pendiente*)
