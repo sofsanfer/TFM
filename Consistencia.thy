@@ -2363,14 +2363,10 @@ proof -
       show "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
       proof (rule impI)
         assume "F \<in> s" 
-        have "s \<in> ?E"
-          using \<open>s \<subseteq> S\<close> assms(3) by auto (*Pendiente*)
-        then have E:"\<forall>s'\<subseteq>s. finite s' \<longrightarrow> s' \<in> C"
-          by (rule CollectD)
-        have "s \<subseteq> s"
-          by (rule subset_refl)
-        have "finite s \<longrightarrow> s \<in> C"
-          using E \<open>s \<subseteq> s\<close> by (rule sspec)
+        have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+          using \<open>S \<in> ?E\<close> by (rule CollectD)
+        then have "finite s \<longrightarrow> s \<in> C"
+          using \<open>s \<subseteq> S\<close> by (rule sspec)
         then have "s \<in> C"
           using \<open>finite s\<close> by (rule mp)
         have "\<bottom> \<notin> s
@@ -2397,14 +2393,52 @@ proof -
     show "finite s \<longrightarrow> s \<in> C"
     proof (rule impI)
       assume "finite s"
-      have "insert F  (s - {G,H}) \<subseteq> S" 
-        using assms(5) H by blast (*Pendiente*)
-      then have "insert G  (insert H (insert F (s - {G,H}))) \<in> C"
-        using 2 \<open>finite s\<close> by simp (*Pendiente*)
-      then have "insert F (insert G (insert H  s)) \<in> C" 
-        using insert_absorb by fastforce (*Pendiente*)
-      thus "s \<in> C" 
-        using assms(2) unfolding subset_closed_def by fast (*Pendiente*) 
+      have "s - {G,H} \<subseteq> S"
+        using H by (simp only: Diff_subset_conv)
+      have "F \<in> S \<and> (s - {G,H} \<subseteq> S)"
+        using assms(5) \<open>s - {G,H} \<subseteq> S\<close> by (rule conjI)
+      then have "insert F  (s - {G,H}) \<subseteq> S" 
+        by (simp only: insert_subset)
+      have F1:"finite (insert F  (s - {G,H})) \<longrightarrow> F \<in> (insert F  (s - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (s - {G,H})) \<in> C"
+        using 2 \<open>insert F  (s - {G,H}) \<subseteq> S\<close> by (rule sspec)
+      have "finite (s - {G,H})"
+        using \<open>finite s\<close> by (rule finite_Diff)
+      then have "finite (insert F (s - {G,H}))" 
+        by (rule finite.insertI)
+      have F2:"F \<in> (insert F  (s - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (s - {G,H})) \<in> C"
+        using F1 \<open>finite (insert F (s - {G,H}))\<close> by (rule mp)
+      have "F \<in> (insert F  (s - {G,H}))"
+        by (simp only: insertI1)
+      have F3:"{G,H} \<union> (insert F (s - {G,H})) \<in> C"
+        using F2 \<open>F \<in> insert F (s - {G,H})\<close> by (rule mp)
+      have IU1:"insert F (s - {G,H}) = {F} \<union> (s - {G,H})"
+        by (rule insert_is_Un)
+      have IU2:"insert F ({G,H} \<union> s) = {F} \<union> ({G,H} \<union> s)"
+        by (rule insert_is_Un)
+      have GH:"insert G (insert H s) = {G,H} \<union> s"
+        by (rule insertSetElem)
+      have "{G,H} \<union> (insert F (s - {G,H})) = {G,H} \<union> ({F} \<union> (s - {G,H}))"
+        by (simp only: IU1)
+      also have "\<dots> = {F} \<union> ({G,H} \<union> (s - {G,H}))"
+        by (simp only: Un_left_commute)
+      also have "\<dots> = {F} \<union> ({G,H} \<union> s)"
+        by (simp only: Un_Diff_cancel)
+      also have "\<dots> = insert F ({G,H} \<union> s)"
+        by (simp only: IU2)
+      also have "\<dots> = insert F (insert G (insert H s))"
+        by (simp only: GH)
+      finally have F4:"{G,H} \<union> (insert F (s - {G,H})) = insert F (insert G (insert H s))"
+        by this
+      have C1:"insert F (insert G (insert H s)) \<in> C"
+        using F3 by (simp only: F4)
+      have "s \<subseteq> insert F s"
+        by (rule subset_insertI)
+      then have C2:"s \<subseteq> insert F (insert G (insert H s))"
+        by (simp only: subset_insertI2)
+      have "\<forall>S \<in> C. \<forall>s \<subseteq> S. s \<in> C"
+        using assms(2) by (simp only: subset_closed_def)
+      thus "s \<in> C"
+        using C1 C2 by blast (*Pendiente*)
     qed
   qed
   thus "{G,H} \<union> S \<in> C \<union> ?E"
