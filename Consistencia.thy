@@ -161,6 +161,13 @@ inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
 
+text \<open>\comentario{Es necesario añadir que la doble negación es una fórmula de 
+  de los tipos para que en el lema Hintikka alt se verifique la sexta condición de la
+  definición de conjunto de Hintikka. Para ser más precisos, se incluye la doble
+  negación en ambos tipos de fórmula ya que, efectivamente, es de ambos tipos. Sin
+  embargo, bastaría añadirlo en uno de ellos para poder cumplir la sexta condición 
+  de la definición de Hintikka.}\<close>
+
 text \<open>Del mismo modo, las reglas de introducción que proporciona esta formalización se muestran a 
   continuación.
 
@@ -171,7 +178,7 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
 
 \comentario{Comentar si todas las fórmulas proposicionales son de uno de estos dos
 tipos, p. ejemplo, las atómicas. Comentar si ee usa el esquema de inducción proporcionado
-por la definición inductiva. }
+por la definición inductiva.}
 
   Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
   deducir el siguiente lema.
