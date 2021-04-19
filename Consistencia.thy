@@ -176,11 +176,22 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
       \hfill (@{text Dis.intros})
   \end{itemize}
 
-\comentario{Comentar si todas las fórmulas proposicionales son de uno de estos dos
-tipos, p. ejemplo, las atómicas. Comentar si ee usa el esquema de inducción proporcionado
-por la definición inductiva.}
+  Veamos, a continuación, distintos ejemplos de fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>. En primer
+  lugar, según hemos definido la fórmula \<open>\<top>\<close>, es fácil observar que se trata de una
+  fórmula de tipo \<open>\<beta>\<close>.\<close>
 
-  Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
+lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>"
+  unfolding Top_def by (simp only: Dis.intros(2))
+
+text \<open>
+\comentario{La intuición semántica nos dice que las fórmulas atómicas y bot son ambas conjuntivas y 
+  disyuntivas. Sin embargo, sintácticamente no forman parte del tipo de fórmulas alpha y beta, pues
+  estos conjuntos conforman una definición basada en la sintaxis (más o menos la explicación).}\<close>
+
+lemma "\<forall>k. Con (Atom k) (Atom k) \<top> \<and> Dis (Atom k) (Atom k) \<top>"
+  oops
+
+text \<open>Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
   deducir el siguiente lema.
 
   \begin{lema}
