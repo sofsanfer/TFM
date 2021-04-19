@@ -9,8 +9,6 @@ begin
 
 text \<open>
 \comentario{Localización de sello.png.}
-
-\comentario{Pone trabajo fin de grado}
 \comentario{Cambiar los directores}
 \comentario{Introducción}
 
@@ -121,10 +119,9 @@ text \<open>En esta subsección vamos a introducir la notación uniforme inicial
     \end{enumerate} 
   \end{definicion}
 
-  Realizamos su formalización en Isabelle como un predicado definido de
-  forma inductiva, es decir, especificando las reglas que cumple.
-
-\comentario {He modificado ligeramente el párrafo anterior. Cambiar explicaciones y def.}\<close>
+  Para su formalización emplearemos el tipo \<open>inductive\<close> para definiciones inductivas. De este modo,
+  las cuatro reglas anteriores que contruyen el conjunto de fórmulas de tipo \<open>\<alpha>\<close> se formalizan en
+  Isabelle como reglas de introducción.\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
@@ -133,9 +130,8 @@ inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (Not (Not F)) F F"
 
 
-text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona la formalización de cada
-  una de las reglas de introducción que conforman la definición inductiva de manera 
-  simultánea.
+text \<open>Las reglas de introducción que proporciona el tipo \<open>inductive\<close> en la definición anterior son
+  las siguientes.
 
   \begin{itemize}
     \item[] @{thm[mode=Rule] Con.intros[no_vars]} 
@@ -155,8 +151,9 @@ text \<open>De este modo, el uso del tipo \<open>inductive\<close> proporciona l
     \end{enumerate} 
   \end{definicion}
 
-  Análogamente, su formalización en Isabelle se realiza como un predicado
-  definido de forma inductiva, como se muestra a continuación.\<close>
+  Análogamente, su formalización se realiza mediante el tipo \<open>inductive\<close> de manera que las reglas 
+  que definen el conjunto de fórmulas de tipo \<open>\<beta>\<close> se formalizan en Isabelle como reglas de 
+  introducción.\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
@@ -164,8 +161,8 @@ inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
 
-text \<open>Del mismo modo, se formalizan en Isabelle las reglas de introducción de la definición
-  anterior como sigue.
+text \<open>Del mismo modo, las reglas de introducción que proporciona esta formalización se muestran a 
+  continuación.
 
   \begin{itemize}
     \item[] @{thm[mode=Rule] Dis.intros[no_vars]} 
