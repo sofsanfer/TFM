@@ -2445,6 +2445,8 @@ proof -
     by (rule UnI2)
 qed
 
+text \<open>\comentario{No entiendo por qué no me permite usar bspec y luego sspec en el último pendiente.}\<close>
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -2981,6 +2983,11 @@ text \<open>He introducido una instancia en Sintaxis que señala que las fórmul
   son contables si sus átomos lo son. En caso contrario hay interferencias
   entre los tipos.\<close>
 
+lemma 
+  assumes "P a"
+  shows "P a = P (if (Q b) then b else a)"
+  oops
+
 lemma pcp_seq_in_detallada: 
   assumes "pcp C" 
           "S \<in> C"
@@ -2993,7 +3000,7 @@ next
   assume HI:"pcp_seq C S n \<in> C"
   then have "(if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
         else (pcp_seq C S n)) \<in> C" using [[simp_trace]]
-    by simp (*Pendiente*)
+    by simp (*Pendiente*) find_theorems "?P ?b" "(if (?Q ?a) then ?a else ?b)" -name: division -name: Division
   then have "(let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn) \<in> C"
     by (simp only: Let_def)
@@ -3384,10 +3391,10 @@ proof (rule ccontr)
     by (rule pcp_seq_sub)
   then have "F \<in> pcp_seq C S (Suc (to_nat F)) \<longrightarrow> F \<in> pcp_lim C S"
     by (rule in_mono)
-  then have "F \<notin> pcp_seq C S (Suc (to_nat F))"
+  then have 1:"F \<notin> pcp_seq C S (Suc (to_nat F))"
     using \<open>F \<notin> pcp_lim C S\<close> by (rule mt)
-  then have 1: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
-    by (simp add: Let_def split: if_splits) (*Pendiente*)
+  have 2: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
+    using 1  by (simp add: Let_def split: if_splits) (*Pendiente*)
   have "pcp_seq C S (to_nat F) \<subseteq> pcp_lim C S"
     by (rule pcp_seq_sub)
   then have "pcp_seq C S (to_nat F) \<subseteq> K"
@@ -3398,10 +3405,10 @@ proof (rule ccontr)
     using assms(2) by (simp only: subset_closed_def)
   then have "\<forall>s \<subseteq> K. s \<in> C"
     using assms(3) by (rule bspec)
-  then have 2:"insert F (pcp_seq C S (to_nat F)) \<in> C" 
+  then have 3:"insert F (pcp_seq C S (to_nat F)) \<in> C" 
     using \<open>insert F (pcp_seq C S (to_nat F)) \<subseteq> K\<close> by (rule sspec)
   show "False"
-    using 1 2 by (rule notE)
+    using 2 3 by (rule notE)
 qed
 
 lemma cl_max:
