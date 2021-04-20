@@ -600,58 +600,42 @@ proof -
   have C2: "\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
     using Hk by (iprover elim: conjunct2 conjunct1)
   have C3: "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H.  Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-    proof (rule allI)
-      fix G 
-      show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-      proof (rule allI)
-        fix H
-        have C31:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C32:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C33:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C34:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
-        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
-        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
-        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)" 
-          using C31 C32 C33 C34 by (iprover intro: conjI)
-        thus "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-          by (rule Hintikka_alt1Con)
-      qed
-    qed
+  proof (rule allI)+
+    fix F G H
+    have C31:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C32:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C33:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C34:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S)
+          \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+          \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S)
+          \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S)" 
+      using C31 C32 C33 C34 by (iprover intro: conjI)
+    thus "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      by (rule Hintikka_alt1Con)
   qed
   have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H.  Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-    proof (rule allI)
-      fix G 
-      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-      proof (rule allI)
-        fix H
-        have C41:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C42:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C43:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have C44:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
-          using Hk by (iprover elim: conjunct2 conjunct1)
-        have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
-        \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)
-        \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
-        \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)"
-          using C41 C42 C43 C44 by (iprover intro: conjI)
-        thus "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-          by (rule Hintikka_alt1Dis)
-      qed
-    qed
+  proof (rule allI)+
+    fix F G H
+    have C41:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C42:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C43:"\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have C44:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+      using Hk by (iprover elim: conjunct2 conjunct1)
+    have "(\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S)
+          \<and> (\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S)
+          \<and> (\<forall>G. \<^bold>\<not> (\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S)
+          \<and> (\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S)"
+      using C41 C42 C43 C44 by (iprover intro: conjI)
+    thus "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      by (rule Hintikka_alt1Dis)
   qed
   show "\<bottom> \<notin> S
   \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -689,45 +673,51 @@ proof -
     have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
       using assms by (iprover elim: conjunct2 conjunct1)
     have C3:"\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+      proof (rule impI)
+        assume "G \<^bold>\<and> H \<in> S"
         have "Con (G \<^bold>\<and> H) G H"
           by (simp only: Con.intros(1))
         have "Con (G \<^bold>\<and> H) G H \<longrightarrow> G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
           using Con by (iprover elim: allE)
-        thus "G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
+        then have "G \<^bold>\<and> H \<in> S \<longrightarrow> G \<in> S \<and> H \<in> S"
           using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
+        thus "G \<in> S \<and> H \<in> S"
+          using \<open>G \<^bold>\<and> H \<in> S\<close> by (rule mp)
       qed
     qed
     have C4:"\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+      proof (rule impI)
+        assume "G \<^bold>\<or> H \<in> S"
         have "Dis (G \<^bold>\<or> H) G H"
           by (simp only: Dis.intros(1))
         have "Dis (G \<^bold>\<or> H) G H \<longrightarrow> G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
           using Dis by (iprover elim: allE)
-        thus "G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
+        then have "G \<^bold>\<or> H \<in> S \<longrightarrow> G \<in> S \<or> H \<in> S"
           using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
+        thus "G \<in> S \<or> H \<in> S"
+          using \<open>G \<^bold>\<or> H \<in> S\<close> by (rule mp)
       qed
     qed
     have C5:"\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
+      proof (rule impI)
+        assume "G \<^bold>\<rightarrow> H \<in> S" 
         have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H"
           by (simp only: Dis.intros(2))
         have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H \<longrightarrow> G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S"
           using Dis by (iprover elim: allE)
-        thus "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S" 
+        then have "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> H \<in> S" 
           using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not> G) H\<close> by (rule mp)
+        thus "\<^bold>\<not> G \<in> S \<or> H \<in> S"
+          using \<open>G \<^bold>\<rightarrow> H \<in> S\<close> by (rule mp)
       qed
     qed
     have C6:"\<forall>G. \<^bold>\<not>(\<^bold>\<not> G) \<in> S \<longrightarrow> G \<in> S"
@@ -749,45 +739,51 @@ proof -
       qed
     qed
     have C7:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
         have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)"
           by (simp only: Dis.intros(3))
         have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
           using Dis by (iprover elim: allE)
-        thus "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+        then have "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
           using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)\<close> by (rule mp)
+        thus "\<^bold>\<not> G \<in> S \<or> \<^bold>\<not> H \<in> S"
+          using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
       qed
     qed
     have C8:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
         have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)"
           by (simp only: Con.intros(2))
         have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
           using Con by (iprover elim: allE)
-        thus "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+        then have "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> \<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
           using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not> G) (\<^bold>\<not> H)\<close> by (rule mp)
+        thus "\<^bold>\<not> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
       qed
     qed
     have C9:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
-      proof (rule allI)
-        fix H
+    proof (rule allI)+
+      fix G H
+      show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+      proof (rule impI)
+        assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
         have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H)"
           by (simp only: Con.intros(3))
         have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H) \<longrightarrow> \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
           using Con by (iprover elim: allE)
-        thus "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
+        then have "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> G \<in> S \<and> \<^bold>\<not> H \<in> S"
           using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not> H)\<close> by (rule mp)
+        thus "G \<in> S \<and> \<^bold>\<not> H \<in> S"
+          using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
       qed
     qed
     have A:"\<bottom> \<notin> S
@@ -1091,72 +1087,64 @@ proof -
   have C4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
     using assms by (iprover elim: conjunct2) 
   show "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-      proof (rule allI)
-        fix H
-        show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        proof (rule impI)
-          assume "Con F G H"
-          then have "F = G \<^bold>\<and> H \<or> 
-          ((\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
-          (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
-           F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
-            by (simp only: con_dis_simps(1))
+  proof (rule allI)+
+    fix F G H
+    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "Con F G H"
+      then have "F = G \<^bold>\<and> H \<or> 
+                ((\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+                (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+                F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
+        by (simp only: con_dis_simps(1))
+      thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      proof (rule disjE)
+        assume "F = G \<^bold>\<and> H"
+        show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+          using C1 \<open>F = G \<^bold>\<and> H\<close> by (iprover elim: allE)
+      next
+        assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+                (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+                F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        proof (rule disjE)
+          assume E1:"\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+          obtain G1 H1 where A1:"F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+            using E1 by (iprover elim: exE)
+          have "F = \<^bold>\<not> (G1 \<^bold>\<or> H1)"
+            using A1 by (rule conjunct1)
+          have "G = \<^bold>\<not> G1"
+            using A1 by (iprover elim: conjunct2 conjunct1)
+          have "H = \<^bold>\<not> H1"
+            using A1 by (iprover elim: conjunct2)
+          show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+            using C3 \<open>F = \<^bold>\<not> (G1 \<^bold>\<or> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = \<^bold>\<not> H1\<close> by (iprover elim: allE)
+        next
+          assume "(\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
+                   F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
           thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
           proof (rule disjE)
-            assume "F = G \<^bold>\<and> H"
+            assume E2:"\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+            obtain H2 where A2:"F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
+              using E2 by (rule exE)
+            have "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)"
+              using A2 by (rule conjunct1)
+            have "H = \<^bold>\<not> H2"
+              using A2 by (rule conjunct2)
             show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-              using C1 \<open>F = G \<^bold>\<and> H\<close> by (iprover elim: allE)
+              using C4 \<open>F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
           next
-            assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
-          (\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
-           F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
-            thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-            proof (rule disjE)
-              assume E1:"\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
-              obtain G1 H1 where A1:"F = \<^bold>\<not> (G1 \<^bold>\<or> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
-                using E1 by (iprover elim: exE)
-              have "F = \<^bold>\<not> (G1 \<^bold>\<or> H1)"
-                using A1 by (rule conjunct1)
-              have "G = \<^bold>\<not> G1"
-                using A1 by (iprover elim: conjunct2 conjunct1)
-              have "H = \<^bold>\<not> H1"
-                using A1 by (iprover elim: conjunct2)
-              show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-                using C3 \<open>F = \<^bold>\<not> (G1 \<^bold>\<or> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = \<^bold>\<not> H1\<close> by (iprover elim: allE)
-            next
-              assume "(\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2) \<or> 
-              F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
-              thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-              proof (rule disjE)
-                assume E2:"\<exists>H2. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
-                obtain H2 where A2:"F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2) \<and> H = \<^bold>\<not> H2"
-                  using E2 by (rule exE)
-                have "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)"
-                  using A2 by (rule conjunct1)
-                have "H = \<^bold>\<not> H2"
-                  using A2 by (rule conjunct2)
-                show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-                  using C4 \<open>F = \<^bold>\<not> (G \<^bold>\<rightarrow> H2)\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
-              next
-                assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
-                then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
-                  by (rule conjunct1)
-                have "H = G"
-                  using A3 by (rule conjunct2)
-                have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-                  using C2 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
-                then have "F \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
-                  by (simp only: insert_absorb2)
-                thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C" 
-                  by (simp only: \<open>H = G\<close>)
-              qed
-            qed
+            assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
+            then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
+              by (rule conjunct1)
+            have "H = G"
+              using A3 by (rule conjunct2)
+            have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+              using C2 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
+            then have "F \<in> S \<longrightarrow> {G,G} \<union> S \<in> C"
+              by (simp only: insert_absorb2)
+            thus "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C" 
+              by (simp only: \<open>H = G\<close>)
           qed
         qed
       qed
@@ -1184,80 +1172,72 @@ proof -
   have C4:"\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
     using assms by (iprover elim: conjunct2) 
   show "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-      proof (rule allI)
-        fix H
-        show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        proof (rule impI)
-          assume "Dis F G H"
-          then have "F = G \<^bold>\<or> H \<or> 
-          (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
-          (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
-          F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
-            by (simp only: con_dis_simps(2))
+  proof (rule allI)+
+    fix F G H
+    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    proof (rule impI)
+      assume "Dis F G H"
+      then have "F = G \<^bold>\<or> H \<or> 
+                (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+                (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+                F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
+        by (simp only: con_dis_simps(2))
+      thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      proof (rule disjE)
+        assume "F = G \<^bold>\<or> H"
+        show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+          using C1 \<open>F = G \<^bold>\<or> H\<close> by (iprover elim: allE)
+      next
+        assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+              (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+              F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        proof (rule disjE)
+          assume E1:"\<exists>G1 H1. F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+          obtain G1 H1 where A1:" F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+            using E1 by (iprover elim: exE)
+          have "F = (G1 \<^bold>\<rightarrow> H1)"
+            using A1 by (rule conjunct1)
+          have "G = \<^bold>\<not> G1"
+            using A1 by (iprover elim: conjunct2 conjunct1)
+          have "H = H1"
+            using A1 by (iprover elim: conjunct2)
+          show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            using C2 \<open>F = (G1 \<^bold>\<rightarrow> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = H1\<close> by (iprover elim: allE)
+        next
+          assume "(\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
+                  F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
           thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
           proof (rule disjE)
-            assume "F = G \<^bold>\<or> H"
+            assume E2:"\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
+            obtain G2 H2 where A2:"F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
+              using E2 by (iprover elim: exE)
+            have "F = \<^bold>\<not> (G2 \<^bold>\<and> H2)"
+              using A2 by (rule conjunct1)
+            have "G = \<^bold>\<not> G2"
+              using A2 by (iprover elim: conjunct2 conjunct1)
+            have "H = \<^bold>\<not> H2"
+              using A2 by (iprover elim: conjunct2)
             show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-              using C1 \<open>F = G \<^bold>\<or> H\<close> by (iprover elim: allE)
+              using C4 \<open>F = \<^bold>\<not> (G2 \<^bold>\<and> H2)\<close> \<open>G = \<^bold>\<not> G2\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
           next
-            assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
-            (\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
-            F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+            assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
+            then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
+              by (rule conjunct1)
+            have "H = G"
+              using A3 by (rule conjunct2)
+            have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
+              using C3 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
+            then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
+              by (simp only: disj_absorb)
             thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-            proof (rule disjE)
-              assume E1:"\<exists>G1 H1. F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
-              obtain G1 H1 where A1:" F = (G1 \<^bold>\<rightarrow> H1) \<and> G = \<^bold>\<not> G1 \<and> H = H1"
-                using E1 by (iprover elim: exE)
-              have "F = (G1 \<^bold>\<rightarrow> H1)"
-                using A1 by (rule conjunct1)
-              have "G = \<^bold>\<not> G1"
-                using A1 by (iprover elim: conjunct2 conjunct1)
-              have "H = H1"
-                using A1 by (iprover elim: conjunct2)
-              show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                using C2 \<open>F = (G1 \<^bold>\<rightarrow> H1)\<close> \<open>G = \<^bold>\<not> G1\<close> \<open>H = H1\<close> by (iprover elim: allE)
-            next
-              assume "(\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2) \<or> 
-                        F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G" 
-              thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-              proof (rule disjE)
-                assume E2:"\<exists>G2 H2. F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
-                obtain G2 H2 where A2:"F = \<^bold>\<not> (G2 \<^bold>\<and> H2) \<and> G = \<^bold>\<not> G2 \<and> H = \<^bold>\<not> H2"
-                  using E2 by (iprover elim: exE)
-                have "F = \<^bold>\<not> (G2 \<^bold>\<and> H2)"
-                  using A2 by (rule conjunct1)
-                have "G = \<^bold>\<not> G2"
-                  using A2 by (iprover elim: conjunct2 conjunct1)
-                have "H = \<^bold>\<not> H2"
-                  using A2 by (iprover elim: conjunct2)
-                show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                  using C4 \<open>F = \<^bold>\<not> (G2 \<^bold>\<and> H2)\<close> \<open>G = \<^bold>\<not> G2\<close> \<open>H = \<^bold>\<not> H2\<close> by (iprover elim: allE)
-              next
-                assume A3:"F = \<^bold>\<not>(\<^bold>\<not> G) \<and> H = G"
-                then have "F = \<^bold>\<not>(\<^bold>\<not> G)"
-                  by (rule conjunct1)
-                have "H = G"
-                  using A3 by (rule conjunct2)
-                have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C"
-                  using C3 \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> by (iprover elim: allE)
-                then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {G} \<union> S \<in> C"
-                  by (simp only: disj_absorb)
-                thus "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                  by (simp only: \<open>H = G\<close>)
-              qed
-            qed
+              by (simp only: \<open>H = G\<close>)
           qed
         qed
       qed
     qed
   qed
-qed 
+qed
 
 text \<open>De esta manera, mediante los anteriores lemas auxiliares, podemos probar la primera
   implicación detalladamente en Isabelle.\<close>
@@ -1340,24 +1320,20 @@ text \<open>Por otro lado, veamos la demostración detallada de la implicación 
 lemma pcp_alt2Con1:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "G \<^bold>\<and> H \<in> S"
-      then have "Con (G \<^bold>\<and> H) G H"
-        by (simp only: Con.intros(1))
-      let ?F="G \<^bold>\<and> H"
-      have "Con ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
-      thus "{G,H} \<union> S \<in> C"
-        using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "G \<^bold>\<and> H \<in> S"
+    then have "Con (G \<^bold>\<and> H) G H"
+      by (simp only: Con.intros(1))
+    let ?F="G \<^bold>\<and> H"
+    have "Con ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+      using \<open>Con (G \<^bold>\<and> H) G H\<close> by (rule mp)
+    thus "{G,H} \<union> S \<in> C"
+      using \<open>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
@@ -1365,7 +1341,7 @@ lemma pcp_alt2Con2:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "\<forall>G. \<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
 proof (rule allI)
-  fix G
+  fix G 
   show "\<^bold>\<not> (\<^bold>\<not>G) \<in> S \<longrightarrow> {G} \<union> S \<in> C"
   proof (rule impI)
     assume "\<^bold>\<not>(\<^bold>\<not>G) \<in> S"
@@ -1390,48 +1366,40 @@ qed
 lemma pcp_alt2Con3:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
-      then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
-        by (simp only: Con.intros(2))
-      let ?F = "\<^bold>\<not>(G \<^bold>\<or> H)"
-      have "Con ?F (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-        using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
-      thus "{\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
-        using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S \<longrightarrow> {\<^bold>\<not> G, \<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "\<^bold>\<not>(G \<^bold>\<or> H) \<in> S"
+    then have "Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+      by (simp only: Con.intros(2))
+    let ?F = "\<^bold>\<not>(G \<^bold>\<or> H)"
+    have "Con ?F (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+      using \<open>Con (\<^bold>\<not>(G \<^bold>\<or> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+    thus "{\<^bold>\<not>G,\<^bold>\<not>H} \<union> S \<in> C"
+      using \<open>\<^bold>\<not>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
 lemma pcp_alt2Con4:
   assumes "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
   shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
-      then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)"
-        by (simp only: Con.intros(3))
-      let ?F = "\<^bold>\<not>(G \<^bold>\<rightarrow> H)"
-      have "Con ?F G (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"  
-        using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)\<close> by (rule mp)
-      thus "{G,\<^bold>\<not>H} \<union> S \<in> C"
-        using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S \<longrightarrow> {G,\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S"
+    then have "Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)"
+      by (simp only: Con.intros(3))
+    let ?F = "\<^bold>\<not>(G \<^bold>\<rightarrow> H)"
+    have "Con ?F G (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {G,\<^bold>\<not>H} \<union> S \<in> C"  
+      using \<open>Con (\<^bold>\<not>(G \<^bold>\<rightarrow> H)) G (\<^bold>\<not>H)\<close> by (rule mp)
+    thus "{G,\<^bold>\<not>H} \<union> S \<in> C"
+      using \<open>\<^bold>\<not>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
@@ -1442,72 +1410,60 @@ text \<open>Por otro lado, los siguientes lemas auxiliares prueban el resto de c
 lemma pcp_alt2Dis1:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "\<forall>G H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "G \<^bold>\<or> H \<in> S"
-      then have "Dis (G \<^bold>\<or> H) G H"
-        by (simp only: Dis.intros(1))
-      let ?F="G \<^bold>\<or> H"
-      have "Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
-      thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "G \<^bold>\<or> H \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "G \<^bold>\<or> H \<in> S"
+    then have "Dis (G \<^bold>\<or> H) G H"
+      by (simp only: Dis.intros(1))
+    let ?F="G \<^bold>\<or> H"
+    have "Dis ?F G H \<longrightarrow> ?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using \<open>Dis (G \<^bold>\<or> H) G H\<close> by (rule mp)
+    thus "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using \<open>(G \<^bold>\<or> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
 lemma pcp_alt2Dis2:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "\<forall>G H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "G \<^bold>\<rightarrow> H \<in> S"
-      then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
-        by (simp only: Dis.intros(2))
-      let ?F="G \<^bold>\<rightarrow> H" 
-      have "Dis ?F (\<^bold>\<not>G) H \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
-      thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "G \<^bold>\<rightarrow> H \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "G \<^bold>\<rightarrow> H \<in> S"
+    then have "Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H"
+      by (simp only: Dis.intros(2))
+    let ?F="G \<^bold>\<rightarrow> H" 
+    have "Dis ?F (\<^bold>\<not>G) H \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using \<open>Dis (G \<^bold>\<rightarrow> H) (\<^bold>\<not>G) H\<close> by (rule mp)
+    thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+      using \<open>(G \<^bold>\<rightarrow> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
 lemma pcp_alt2Dis3:
   assumes "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
   shows "\<forall>G H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-proof (rule allI)
-  fix G
-  show "\<forall>H. \<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-  proof (rule allI)
-    fix H
-    show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
-    proof (rule impI)
-      assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
-      then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
-        by (simp only: Dis.intros(3))
-      let ?F="\<^bold>\<not>(G \<^bold>\<and> H)"
-      have "Dis ?F (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-        using assms by (iprover elim: allE)
-      then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-        using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
-      thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
-        using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
-    qed
+proof (rule allI)+
+  fix G H
+  show "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S \<longrightarrow> {\<^bold>\<not> G} \<union> S \<in> C \<or> {\<^bold>\<not> H} \<union> S \<in> C"
+  proof (rule impI)
+    assume "\<^bold>\<not>(G \<^bold>\<and> H) \<in> S"
+    then have "Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)"
+      by (simp only: Dis.intros(3))
+    let ?F="\<^bold>\<not>(G \<^bold>\<and> H)"
+    have "Dis ?F (\<^bold>\<not>G) (\<^bold>\<not>H) \<longrightarrow> ?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+      using assms by (iprover elim: allE)
+    then have "?F \<in> S \<longrightarrow> {\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+      using \<open>Dis (\<^bold>\<not>(G \<^bold>\<and> H)) (\<^bold>\<not>G) (\<^bold>\<not>H)\<close> by (rule mp)
+    thus "{\<^bold>\<not>G} \<union> S \<in> C \<or> {\<^bold>\<not>H} \<union> S \<in> C"
+      using \<open>\<^bold>\<not>(G \<^bold>\<and> H) \<in> S\<close> by (rule mp)
   qed
 qed
 
@@ -1834,7 +1790,7 @@ lemma
           "x \<subseteq> A"
   shows "P x"
 proof -
-  show "P x"
+  show "P x" using [[simp_trace]] find_theorems "\<forall>x \<subseteq> ?A. ?P x"
     using assms(1) assms(2) by simp (*Pendiente*)
 qed
 
@@ -2020,112 +1976,96 @@ proof -
       have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
         using H by (iprover elim: conjunct1 conjunct2)
       have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-      proof (rule allI)
-        fix F
-        show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-        proof (rule allI)
-          fix G
-          show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-          proof (rule allI)
-            fix H
-            show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-            proof (rule impI)
-              assume "Con F G H"
-              show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-              proof (rule impI)
-                assume "F \<in> S"
-                have "F \<in> S'"
-                  using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-                have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-                  using Con by (iprover elim: allE)
-                then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-                  using \<open>Con F G H\<close> by (rule mp)
-                then have "{G,H} \<union> S' \<in> C"
-                  using \<open>F \<in> S'\<close> by (rule mp)
-                have "S \<subseteq> insert H S'"
-                  using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
-                then have "insert H S \<subseteq> insert H (insert H S')"
-                  by (simp only: insert_mono)
-                then have "insert H S \<subseteq> insert H S'"
-                  by (simp only: insert_absorb2)
-                then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
-                  by (simp only: insert_mono)
-                have A:"insert G (insert H S) = {G,H} \<union> S"
-                  by (rule insertSetElem) 
-                have B:"insert G (insert H S') = {G,H} \<union> S'"
-                  by (rule insertSetElem)
-                have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
-                  using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
-                then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
-                  using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
-                thus "{G,H} \<union> S \<in> ?E" 
-                  by (rule CollectI)
-              qed
-            qed
+      proof (rule allI)+
+        fix F G H
+        show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+        proof (rule impI)
+          assume "Con F G H"
+          show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+          proof (rule impI)
+            assume "F \<in> S"
+            have "F \<in> S'"
+              using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+            have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+              using Con by (iprover elim: allE)
+            then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+              using \<open>Con F G H\<close> by (rule mp)
+            then have "{G,H} \<union> S' \<in> C"
+              using \<open>F \<in> S'\<close> by (rule mp)
+            have "S \<subseteq> insert H S'"
+              using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
+            then have "insert H S \<subseteq> insert H (insert H S')"
+              by (simp only: insert_mono)
+            then have "insert H S \<subseteq> insert H S'"
+              by (simp only: insert_absorb2)
+            then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
+              by (simp only: insert_mono)
+            have A:"insert G (insert H S) = {G,H} \<union> S"
+              by (rule insertSetElem) 
+            have B:"insert G (insert H S') = {G,H} \<union> S'"
+              by (rule insertSetElem)
+            have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
+              using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
+            then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
+              using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
+            thus "{G,H} \<union> S \<in> ?E" 
+              by (rule CollectI)
           qed
         qed
       qed
       have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
         using H by (iprover elim: conjunct2)
       have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-      proof (rule allI)
-        fix F
-        show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-        proof (rule allI)
-          fix G
-          show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-          proof (rule allI)
-            fix H
-            show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-            proof (rule impI)
-              assume "Dis F G H"
-              show "F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-              proof (rule impI)
-                assume "F \<in> S"
-                have "F \<in> S'"
-                  using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-                have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-                  using Dis by (iprover elim: allE)
-                then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-                  using \<open>Dis F G H\<close> by (rule mp)
-                then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-                  using \<open>F \<in> S'\<close> by (rule mp)
-                show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-                  using 9
-                proof (rule disjE)
-                  assume "{G} \<union> S' \<in> C"
-                  have "insert G S \<subseteq> insert G S'"
-                    using \<open>S \<subseteq> S'\<close> by (simp only: insert_mono)
-                  have C:"insert G S = {G} \<union> S"
-                    by (rule insert_is_Un)
-                  have D:"insert G S' = {G} \<union> S'"
-                    by (rule insert_is_Un)
-                  have "{G} \<union> S \<subseteq> {G} \<union> S'"
-                    using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
-                  then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
-                    using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
-                  then have "{G} \<union> S \<in> ?E"
-                    by (rule CollectI)
-                  thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-                    by (rule disjI1)
-                next
-                  assume "{H} \<union> S' \<in> C"
-                  have "insert H S \<subseteq> insert H S'"
-                    using \<open>S \<subseteq> S'\<close>by (simp only: insert_mono)
-                  have E:"insert H S = {H} \<union> S"
-                    by (rule insert_is_Un)
-                  have F:"insert H S' = {H} \<union> S'"
-                    by (rule insert_is_Un)
-                  then have "{H} \<union> S \<subseteq> {H} \<union> S'"
-                    using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
-                  then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
-                    using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
-                  then have "{H} \<union> S \<in> ?E"
-                    by (rule CollectI)
-                  thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-                    by (rule disjI2)
-                qed
-              qed
+      proof (rule allI)+
+        fix F G H
+        show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+        proof (rule impI)
+          assume "Dis F G H"
+          show "F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+          proof (rule impI)
+            assume "F \<in> S"
+            have "F \<in> S'"
+              using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+            have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+              using Dis by (iprover elim: allE)
+            then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+              using \<open>Dis F G H\<close> by (rule mp)
+            then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+              using \<open>F \<in> S'\<close> by (rule mp)
+            show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+              using 9
+            proof (rule disjE)
+              assume "{G} \<union> S' \<in> C"
+              have "insert G S \<subseteq> insert G S'"
+                using \<open>S \<subseteq> S'\<close> by (simp only: insert_mono)
+              have C:"insert G S = {G} \<union> S"
+                by (rule insert_is_Un)
+              have D:"insert G S' = {G} \<union> S'"
+                by (rule insert_is_Un)
+              have "{G} \<union> S \<subseteq> {G} \<union> S'"
+                using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
+              then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
+                using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
+              then have "{G} \<union> S \<in> ?E"
+                by (rule CollectI)
+              thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+                by (rule disjI1)
+            next
+              assume "{H} \<union> S' \<in> C"
+              have "insert H S \<subseteq> insert H S'"
+                using \<open>S \<subseteq> S'\<close>by (simp only: insert_mono)
+              have E:"insert H S = {H} \<union> S"
+                by (rule insert_is_Un)
+              have F:"insert H S' = {H} \<union> S'"
+                by (rule insert_is_Un)
+              then have "{H} \<union> S \<subseteq> {H} \<union> S'"
+                using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
+              then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
+                using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
+              then have "{H} \<union> S \<in> ?E"
+                by (rule CollectI)
+              thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+                by (rule disjI2)
             qed
           qed
         qed
@@ -2197,9 +2137,9 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
     by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
-text \<open>\comentario{Voy redactando por aquí.}\<close>
+text \<open>\comentario{Redactar conexión.}\<close>
 
-text\<open> Lema: Si C tiene la propiedad de carácter finito, entonces C es 
+text\<open> Si C tiene la propiedad de carácter finito, entonces C es 
 cerrado bajo subconjunto.\<close>
 
 lemma
@@ -2653,71 +2593,55 @@ proof (rule ballI)
     have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
       using 2 by (iprover elim: conjunct2 conjunct1)
     have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
-    proof (rule allI)
-      fix F
-      show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
-      proof (rule allI)
-        fix G
-        show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
-        proof (rule allI)
-          fix H
-          show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
-          proof (rule impI)
-            assume "Con F G H"
-            show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-            proof (rule impI)
-              assume "F \<in> S"
-              have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-                using A3 by (iprover elim: allE)
-              then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-                using \<open>Con F G H\<close> by (rule mp)
-              then have "{G,H} \<union> S \<in> C"
-                using \<open>F \<in> S\<close> by (rule mp)
-              thus "{G,H} \<union> S \<in> C \<union> ?E"
-                by blast (*Pendiente*)
-            qed
-          qed
+    proof (rule allI)+
+      fix F G H
+      show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
+      proof (rule impI)
+        assume "Con F G H"
+        show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
+        proof (rule impI)
+          assume "F \<in> S"
+          have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+            using A3 by (iprover elim: allE)
+          then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+            using \<open>Con F G H\<close> by (rule mp)
+          then have "{G,H} \<union> S \<in> C"
+            using \<open>F \<in> S\<close> by (rule mp)
+          thus "{G,H} \<union> S \<in> C \<union> ?E"
+            by blast (*Pendiente*)
         qed
       qed
     qed
     have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
       using 2 by (iprover elim: conjunct2)
     have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-    proof (rule allI)
-      fix F 
-      show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-      proof (rule allI)
-        fix G
-        show "\<forall>H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-        proof (rule allI)
-          fix H
-          show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-          proof (rule impI)
-            assume "Dis F G H"
-            show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-            proof (rule impI)
-              assume "F \<in> S" 
-              have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                using A4 by (iprover elim: allE)
-              then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                using \<open>Dis F G H\<close> by (rule mp)
-              then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-                using \<open>F \<in> S\<close> by (rule mp)
-              thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-              proof (rule disjE)
-                assume "{G} \<union> S \<in> C"
-                then have "{G} \<union> S \<in> C \<union> ?E"
-                  by blast (*Pendiente*)
-                thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-                  by (rule disjI1)
-              next
-                assume "{H} \<union> S \<in> C"
-                then have "{H} \<union> S \<in> C \<union> ?E"
-                  by blast (*Pendiente*)
-                thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-                  by (rule disjI2)
-              qed
-            qed
+    proof (rule allI)+
+      fix F G H
+      show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+      proof (rule impI)
+        assume "Dis F G H"
+        show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+        proof (rule impI)
+          assume "F \<in> S" 
+          have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            using A4 by (iprover elim: allE)
+          then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            using \<open>Dis F G H\<close> by (rule mp)
+          then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            using \<open>F \<in> S\<close> by (rule mp)
+          thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+          proof (rule disjE)
+            assume "{G} \<union> S \<in> C"
+            then have "{G} \<union> S \<in> C \<union> ?E"
+              by blast (*Pendiente*)
+            thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+              by (rule disjI1)
+          next
+            assume "{H} \<union> S \<in> C"
+            then have "{H} \<union> S \<in> C \<union> ?E"
+              by blast (*Pendiente*)
+            thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+              by (rule disjI2)
           qed
         qed
       qed
@@ -2753,24 +2677,16 @@ proof (rule ballI)
     have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
       sorry
     have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-    proof (rule allI)
-      fix F
-      show "\<forall>G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-      proof (rule allI)
-        fix G
-        show "\<forall>H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-        proof (rule allI)
-          fix H
-          show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-          proof (rule impI)
-            assume "Con F G H"
-            show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-            proof (rule impI)
-              assume "F \<in> S"
-              show "{G,H} \<union> S \<in> C \<union> ?E" 
-                using \<open>pcp C\<close> \<open>subset_closed C\<close> \<open>S \<in> ?E\<close> \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
-            qed
-          qed
+    proof (rule allI)+
+      fix F G H
+      show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
+      proof (rule impI)
+        assume "Con F G H"
+        show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
+        proof (rule impI)
+          assume "F \<in> S"
+          show "{G,H} \<union> S \<in> C \<union> ?E" 
+            using \<open>pcp C\<close> \<open>subset_closed C\<close> \<open>S \<in> ?E\<close> \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
         qed
       qed
     qed
@@ -3516,89 +3432,73 @@ proof (rule Hintikka_alt2)
   have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
     using d by (iprover elim: conjunct2 conjunct1)
   have H3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-      proof (rule allI)
-        fix H
-        show "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-        proof (rule impI)
-          assume "Con F G H"
-          show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-          proof (rule impI)
-            assume "F \<in> ?cl"
-            have "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
-              using Con by (iprover elim: allE)
-            then have "F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
-              using \<open>Con F G H\<close> by (rule mp)
-            then have "{G,H} \<union> ?cl \<in> C"
-              using \<open>F \<in> ?cl\<close> by (rule mp)
-            have "(insert G (insert H ?cl)) = {G,H} \<union> ?cl"
-              by (rule insertSetElem)
-            then have "(insert G (insert H ?cl)) \<in> C"
-              using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
-            have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-              using assms(1) assms(2) by (rule cl_max')
-            thus "G \<in> ?cl \<and> H \<in> ?cl"
-              by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
-          qed
-        qed
+  proof (rule allI)+
+    fix F G H
+    show "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+    proof (rule impI)
+      assume "Con F G H"
+      show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+      proof (rule impI)
+        assume "F \<in> ?cl"
+        have "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+          using Con by (iprover elim: allE)
+        then have "F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+          using \<open>Con F G H\<close> by (rule mp)
+        then have "{G,H} \<union> ?cl \<in> C"
+          using \<open>F \<in> ?cl\<close> by (rule mp)
+        have "(insert G (insert H ?cl)) = {G,H} \<union> ?cl"
+          by (rule insertSetElem)
+        then have "(insert G (insert H ?cl)) \<in> C"
+          using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
+        have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+          using assms(1) assms(2) by (rule cl_max')
+        thus "G \<in> ?cl \<and> H \<in> ?cl"
+          by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
       qed
     qed
   qed
   have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
     using d by (iprover elim: conjunct2 conjunct1)
   have H4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-  proof (rule allI)
-    fix F
-    show "\<forall>G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-    proof (rule allI)
-      fix G
-      show "\<forall>H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-      proof (rule allI)
-        fix H
-        show "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-        proof (rule impI)
-          assume "Dis F G H"
-          show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-          proof (rule impI)
-            assume "F \<in> ?cl"
-            have "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-              using Dis by (iprover elim: allE)
-            then have "F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-              using \<open>Dis F G H\<close> by (rule mp)
-            then have "{G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-              using \<open>F \<in> ?cl\<close> by (rule mp)
-            thus "G \<in> ?cl \<or> H \<in> ?cl"
-            proof (rule disjE)
-              assume "{G} \<union> ?cl \<in> C"
-              have "insert G ?cl = {G} \<union> ?cl"
-                by (rule insert_is_Un)
-              have "insert G ?cl \<in> C"
-                using \<open>{G} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert G ?cl = {G} \<union> ?cl\<close>)
-              have "insert G ?cl \<in> C \<Longrightarrow> G \<in> ?cl"
-                using assms(1) assms(2) by (rule cl_max')
-              then have "G \<in> ?cl"
-                by (simp only: \<open>insert G ?cl \<in> C\<close>)
-              thus "G \<in> ?cl \<or> H \<in> ?cl"
-                by (rule disjI1)
-            next
-              assume "{H} \<union> ?cl \<in> C"
-              have "insert H ?cl = {H} \<union> ?cl"
-                by (rule insert_is_Un)
-              have "insert H ?cl \<in> C"
-                using \<open>{H} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert H ?cl = {H} \<union> ?cl\<close>)
-              have "insert H ?cl \<in> C \<Longrightarrow> H \<in> ?cl"
-                using assms(1) assms(2) by (rule cl_max')
-              then have "H \<in> ?cl"
-                by (simp only: \<open>insert H ?cl \<in> C\<close>)
-              thus "G \<in> ?cl \<or> H \<in> ?cl"
-                by (rule disjI2)
-            qed
-          qed
+  proof (rule allI)+
+    fix F G H
+    show "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+    proof (rule impI)
+      assume "Dis F G H"
+      show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
+      proof (rule impI)
+        assume "F \<in> ?cl"
+        have "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+          using Dis by (iprover elim: allE)
+        then have "F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+          using \<open>Dis F G H\<close> by (rule mp)
+        then have "{G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+          using \<open>F \<in> ?cl\<close> by (rule mp)
+        thus "G \<in> ?cl \<or> H \<in> ?cl"
+        proof (rule disjE)
+          assume "{G} \<union> ?cl \<in> C"
+          have "insert G ?cl = {G} \<union> ?cl"
+            by (rule insert_is_Un)
+          have "insert G ?cl \<in> C"
+            using \<open>{G} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert G ?cl = {G} \<union> ?cl\<close>)
+          have "insert G ?cl \<in> C \<Longrightarrow> G \<in> ?cl"
+            using assms(1) assms(2) by (rule cl_max')
+          then have "G \<in> ?cl"
+            by (simp only: \<open>insert G ?cl \<in> C\<close>)
+          thus "G \<in> ?cl \<or> H \<in> ?cl"
+            by (rule disjI1)
+        next
+          assume "{H} \<union> ?cl \<in> C"
+          have "insert H ?cl = {H} \<union> ?cl"
+            by (rule insert_is_Un)
+          have "insert H ?cl \<in> C"
+            using \<open>{H} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert H ?cl = {H} \<union> ?cl\<close>)
+          have "insert H ?cl \<in> C \<Longrightarrow> H \<in> ?cl"
+            using assms(1) assms(2) by (rule cl_max')
+          then have "H \<in> ?cl"
+            by (simp only: \<open>insert H ?cl \<in> C\<close>)
+          thus "G \<in> ?cl \<or> H \<in> ?cl"
+            by (rule disjI2)
         qed
       qed
     qed
