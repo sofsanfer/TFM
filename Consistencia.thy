@@ -2152,9 +2152,33 @@ lemma
 
 text \<open>Procedamos con la demostración del resultado.
 
-\begin{demostracion}
-  
-\end{demostracion}\<close>
+  \begin{demostracion}
+    Consideremos una colección de conjuntos \<open>C\<close> con la propiedad de carácter finito. Probemos que, 
+    en efecto, es cerrada bajo subconjuntos. Por definición de esta última propiedad, basta 
+    demostrar que todo subconjunto de cada conjunto de \<open>C\<close> pertenece también a \<open>C\<close>.
+
+    Para ello, tomemos un conjunto \<open>S\<close> cualquiera perteneciente a \<open>C\<close> y un subconjunto cualquiera 
+    \<open>s\<close> de \<open>S\<close>. Probemos que \<open>s\<close> está en \<open>C\<close>. Por hipótesis, como \<open>C\<close> tiene la propiedad de carácter 
+    finito, verifica que, para cualquier conjunto \<open>S'\<close>, son equivalentes:
+    \begin{enumerate}
+      \item \<open>S'\<close> pertenece a \<open>C\<close>.
+      \item Todo subconjunto finito de \<open>S'\<close> pertenece a \<open>C\<close>.
+    \end{enumerate}
+
+    Para probar que el subconjunto \<open>s\<close> pertenece a \<open>C\<close>, vamos a demostrar que todo subconjunto 
+    finito de \<open>s\<close> pertenece a \<open>C\<close>.
+
+    De este modo, consideremos un subconjunto cualquiera \<open>t\<close> de \<open>s\<close>. Como \<open>s\<close> es subconjunto de \<open>S\<close>, 
+    por la transitividad de la relación de contención de conjuntos, se tiene que \<open>t\<close> es subconjunto 
+    de \<open>S\<close>. Aplicando la definición de propiedad de carácter finito de \<open>C\<close> para el conjunto \<open>S\<close>, 
+    como este pertenece a \<open>C\<close>, verifica que todo subconjunto finito de \<open>S\<close> pertenece a \<open>C\<close>. En
+    particular, como \<open>t\<close> es subconjunto de \<open>S\<close>, verifica que, si \<open>t\<close> es finito, entonces \<open>t\<close> 
+    pertenece a \<open>C\<close>. Por tanto, hemos probado que cualquier conjunto finito de \<open>s\<close> pertenece a la
+    colección. Finalmente por la propiedad de carácter finito de \<open>C\<close>, se verifica que \<open>s\<close> pertenece 
+    a \<open>C\<close>, como queríamos demostrar.
+  \end{demostracion}
+
+  Veamos, a continuación, la demostración detallada del resultado en Isabelle.\<close>
 
 lemma
   assumes "finite_character C"
@@ -2163,26 +2187,28 @@ lemma
 proof (intro ballI sallI)
   fix s S
   assume  \<open>S \<in> C\<close> and \<open>s \<subseteq> S\<close>
-  have H:"\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+  have H:"\<forall>S'. S' \<in> C \<longleftrightarrow> (\<forall>s' \<subseteq> S'. finite s' \<longrightarrow> s' \<in> C)"
     using assms unfolding finite_character_def by this
-  then have 1:"S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
-    by (rule allE)
-  have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-    using \<open>S \<in> C\<close> 1 by (rule back_subst)
-  have 3:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
+  have QPQ:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
   proof (rule sallI)
     fix t
     assume "t \<subseteq> s"
     then have "t \<subseteq> S"
       using \<open>s \<subseteq> S\<close> by (simp only: subset_trans)
-    show "finite t \<longrightarrow> t \<in> C"
-      using 2  \<open>t \<subseteq> S\<close> by (rule sspec)
+    have 1:"S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+      using H by (rule allE)
+    have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+      using \<open>S \<in> C\<close> 1 by (rule back_subst)
+    thus "finite t \<longrightarrow> t \<in> C"
+      using \<open>t \<subseteq> S\<close> by (rule sspec)
   qed
   have "s \<in> C \<longleftrightarrow> (\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C)"
     using H by (rule allE)
   thus "s \<in> C"
-    using 3 by (rule forw_subst)
+    using QPQ by (rule forw_subst)
 qed
+
+text \<open>Finalmente, su prueba automática en Isabelle/HOL es la siguiente.\<close>
 
 lemma ex2: 
   assumes fc: "finite_character C"
