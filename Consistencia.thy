@@ -2519,6 +2519,15 @@ qed
 
 text \<open>\comentario{No se como integrarlo como lema auxiliar en ex3pcp.}\<close>
 
+lemma ex3_pcp_disj1:
+  assumes "pcp C"
+          "subset_closed C"
+          "S \<in> C"
+  shows "\<bottom> \<notin> S \<and>
+         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
+
 lemma ex3_pcp:
   assumes "pcp C"
           "subset_closed C"
@@ -2687,60 +2696,59 @@ proof (rule ballI)
         qed
       qed
     qed
-  qed
-  have DIS: "{G} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+    have DIS: "{G} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     if H4:"\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and H5:"Dis F G H" and H6:"F \<in> S"
     for F G H S 
-  proof -
-    have l: "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+    proof -
+      have l: "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
         if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
           "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
-    proof -
-      let ?s = "s1 \<union> s2"
-      have "?s \<subseteq> S" "finite ?s" 
-        using that by simp_all (*Pendiente*)
-      then have "?s \<in> C" 
-        using H4 by simp (*Pendiente*)
-      then have "F \<in> ?s" 
-        using that by simp (*Pendiente*)
-      have "\<bottom> \<notin> ?s
-      \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
-      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
-      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
-        using 1 \<open>?s \<in> C\<close> by (rule bspec)
-      then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
-        by (iprover elim: conjunct2)
-      then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
-        by (iprover elim: allE)
-      then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
-        using H5 by (rule mp)
-      then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
-        using \<open>F \<in> ?s\<close> by (rule mp)
-      then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+      proof -
+        let ?s = "s1 \<union> s2"
+        have "?s \<subseteq> S" "finite ?s" 
+          using that by simp_all (*Pendiente*)
+        then have "?s \<in> C" 
+          using H4 by simp (*Pendiente*)
+        then have "F \<in> ?s" 
+          using that by simp (*Pendiente*)
+        have "\<bottom> \<notin> ?s
+              \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+              \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+              \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+        using PCP \<open>?s \<in> C\<close> by (rule bspec)
+        then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+          by (iprover elim: conjunct2)
+        then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+          by (iprover elim: allE)
+        then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+          using H5 by (rule mp)
+        then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+          using \<open>F \<in> ?s\<close> by (rule mp)
+        then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+          by simp (*Pendiente*)
+        thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+          by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+      qed
+      have H7:"\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+        using l by blast (*Pendiente*)
+      have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
+      proof -
+        have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
+          using that H6 by simp_all (*Pendiente*)
+        have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
+          by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
+        from H7[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
+        show False . (*Pendiente*)
+      qed
+      then have "insert G S \<in> ?E \<or> insert H S \<in> ?E"
+        unfolding mem_Collect_eq Un_iff
+        by (metis (no_types, lifting) finite_Diff insert_Diff H4 subset_insert_iff) (*Pendiente*)
+      then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
+        by blast (*Pendiente*)
+      thus ?thesis
         by simp (*Pendiente*)
-      thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
-        by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
     qed
-    have H7:"\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
-      using l by blast (*Pendiente*)
-    have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
-    proof -
-      have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
-        using that H6 by simp_all (*Pendiente*)
-      have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
-        by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
-      from H7[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
-      show False . (*Pendiente*)
-    qed
-    then have "insert G S \<in> ?E \<or> insert H S \<in> ?E"
-      unfolding mem_Collect_eq Un_iff
-      by (metis (no_types, lifting) finite_Diff insert_Diff H4 subset_insert_iff) (*Pendiente*)
-    then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
-      by blast (*Pendiente*)
-    thus ?thesis
-      by simp (*Pendiente*)
-  qed
-  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
+    have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
                                    \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
       \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
   by fast (*Pendiente*)
