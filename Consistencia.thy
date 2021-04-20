@@ -1955,22 +1955,19 @@ proof -
       proof (rule allI)
         fix k
         show "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
-        proof (rule impI)
+        proof (rule impI)+
           assume "Atom k \<in> S"
+          assume "\<^bold>\<not> (Atom k) \<in> S"
           have "Atom k \<in> S'" 
             using \<open>S \<subseteq> S'\<close> \<open>Atom k \<in> S\<close> by (rule set_mp)
-          show "\<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
-          proof (rule impI)
-            assume "\<^bold>\<not> (Atom k) \<in> S"
-            have "\<^bold>\<not> (Atom k) \<in> S'"
-              using \<open>S \<subseteq> S'\<close> \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule set_mp)
-            have "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
-              using Atom by (rule allE)
-            then have "\<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
-              using \<open>Atom k \<in> S'\<close> by (rule mp)
-            thus "False"
-              using \<open>\<^bold>\<not> (Atom k) \<in> S'\<close> by (rule mp)
-          qed
+          have "\<^bold>\<not> (Atom k) \<in> S'"
+            using \<open>S \<subseteq> S'\<close> \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule set_mp)
+          have "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+            using Atom by (rule allE)
+          then have "\<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+            using \<open>Atom k \<in> S'\<close> by (rule mp)
+          thus "False"
+            using \<open>\<^bold>\<not> (Atom k) \<in> S'\<close> by (rule mp)
         qed
       qed
       have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
@@ -1979,38 +1976,35 @@ proof -
       proof (rule allI)+
         fix F G H
         show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-        proof (rule impI)
+        proof (rule impI)+
           assume "Con F G H"
-          show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
-          proof (rule impI)
-            assume "F \<in> S"
-            have "F \<in> S'"
-              using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-            have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-              using Con by (iprover elim: allE)
-            then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
-              using \<open>Con F G H\<close> by (rule mp)
-            then have "{G,H} \<union> S' \<in> C"
-              using \<open>F \<in> S'\<close> by (rule mp)
-            have "S \<subseteq> insert H S'"
-              using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
-            then have "insert H S \<subseteq> insert H (insert H S')"
-              by (simp only: insert_mono)
-            then have "insert H S \<subseteq> insert H S'"
-              by (simp only: insert_absorb2)
-            then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
-              by (simp only: insert_mono)
-            have A:"insert G (insert H S) = {G,H} \<union> S"
-              by (rule insertSetElem) 
-            have B:"insert G (insert H S') = {G,H} \<union> S'"
-              by (rule insertSetElem)
-            have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
-              using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
-            then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
-              using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
-            thus "{G,H} \<union> S \<in> ?E" 
-              by (rule CollectI)
-          qed
+          assume "F \<in> S"
+          have "F \<in> S'"
+            using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+          have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+            using Con by (iprover elim: allE)
+          then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+            using \<open>Con F G H\<close> by (rule mp)
+          then have "{G,H} \<union> S' \<in> C"
+            using \<open>F \<in> S'\<close> by (rule mp)
+          have "S \<subseteq> insert H S'"
+            using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
+          then have "insert H S \<subseteq> insert H (insert H S')"
+            by (simp only: insert_mono)
+          then have "insert H S \<subseteq> insert H S'"
+            by (simp only: insert_absorb2)
+          then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
+            by (simp only: insert_mono)
+          have A:"insert G (insert H S) = {G,H} \<union> S"
+            by (rule insertSetElem) 
+          have B:"insert G (insert H S') = {G,H} \<union> S'"
+            by (rule insertSetElem)
+          have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
+            using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
+          then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
+            using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
+          thus "{G,H} \<union> S \<in> ?E" 
+            by (rule CollectI)
         qed
       qed
       have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
@@ -2019,54 +2013,51 @@ proof -
       proof (rule allI)+
         fix F G H
         show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-        proof (rule impI)
+        proof (rule impI)+
           assume "Dis F G H"
-          show "F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-          proof (rule impI)
-            assume "F \<in> S"
-            have "F \<in> S'"
-              using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-            have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-              using Dis by (iprover elim: allE)
-            then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-              using \<open>Dis F G H\<close> by (rule mp)
-            then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-              using \<open>F \<in> S'\<close> by (rule mp)
-            show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-              using 9
-            proof (rule disjE)
-              assume "{G} \<union> S' \<in> C"
-              have "insert G S \<subseteq> insert G S'"
-                using \<open>S \<subseteq> S'\<close> by (simp only: insert_mono)
-              have C:"insert G S = {G} \<union> S"
-                by (rule insert_is_Un)
-              have D:"insert G S' = {G} \<union> S'"
-                by (rule insert_is_Un)
-              have "{G} \<union> S \<subseteq> {G} \<union> S'"
-                using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
-              then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
-                using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
-              then have "{G} \<union> S \<in> ?E"
-                by (rule CollectI)
-              thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-                by (rule disjI1)
-            next
-              assume "{H} \<union> S' \<in> C"
-              have "insert H S \<subseteq> insert H S'"
-                using \<open>S \<subseteq> S'\<close>by (simp only: insert_mono)
-              have E:"insert H S = {H} \<union> S"
-                by (rule insert_is_Un)
-              have F:"insert H S' = {H} \<union> S'"
-                by (rule insert_is_Un)
-              then have "{H} \<union> S \<subseteq> {H} \<union> S'"
-                using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
-              then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
-                using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
-              then have "{H} \<union> S \<in> ?E"
-                by (rule CollectI)
-              thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
-                by (rule disjI2)
-            qed
+          assume "F \<in> S"
+          have "F \<in> S'"
+            using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
+          have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+            using Dis by (iprover elim: allE)
+          then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+            using \<open>Dis F G H\<close> by (rule mp)
+          then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+            using \<open>F \<in> S'\<close> by (rule mp)
+          show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+            using 9
+          proof (rule disjE)
+            assume "{G} \<union> S' \<in> C"
+            have "insert G S \<subseteq> insert G S'"
+              using \<open>S \<subseteq> S'\<close> by (simp only: insert_mono)
+            have C:"insert G S = {G} \<union> S"
+              by (rule insert_is_Un)
+            have D:"insert G S' = {G} \<union> S'"
+              by (rule insert_is_Un)
+            have "{G} \<union> S \<subseteq> {G} \<union> S'"
+              using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
+            then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
+              using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
+            then have "{G} \<union> S \<in> ?E"
+              by (rule CollectI)
+            thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+              by (rule disjI1)
+          next
+            assume "{H} \<union> S' \<in> C"
+            have "insert H S \<subseteq> insert H S'"
+              using \<open>S \<subseteq> S'\<close>by (simp only: insert_mono)
+            have E:"insert H S = {H} \<union> S"
+              by (rule insert_is_Un)
+            have F:"insert H S' = {H} \<union> S'"
+              by (rule insert_is_Un)
+            then have "{H} \<union> S \<subseteq> {H} \<union> S'"
+              using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
+            then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
+              using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
+            then have "{H} \<union> S \<in> ?E"
+              by (rule CollectI)
+            thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+              by (rule disjI2)
           qed
         qed
       qed
@@ -2334,31 +2325,28 @@ proof -
     fix s
     assume "s \<subseteq> S"
     show "finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
-    proof (rule impI)
+    proof (rule impI)+
       assume "finite s"
-      show "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
-      proof (rule impI)
-        assume "F \<in> s" 
-        have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-          using \<open>S \<in> ?E\<close> by (rule CollectD)
-        then have "finite s \<longrightarrow> s \<in> C"
-          using \<open>s \<subseteq> S\<close> by (rule sspec)
-        then have "s \<in> C"
-          using \<open>finite s\<close> by (rule mp)
-        have "\<bottom> \<notin> s
-              \<and> (\<forall>k. Atom k \<in> s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> s \<longrightarrow> False)
-              \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C)
-              \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> s \<longrightarrow> {G} \<union> s \<in> C \<or> {H} \<union> s \<in> C)"
-          using 1 \<open>s \<in> C\<close> by (rule bspec)
-        then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
-          by (iprover elim: conjunct2 conjunct1)
-        then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
-          by (iprover elim: allE)
-        then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
-          using assms(4) by (rule mp)
-        thus "{G, H} \<union> s \<in> C"
-          using \<open>F \<in> s\<close> by (rule mp)
-      qed
+      assume "F \<in> s"
+      have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+        using \<open>S \<in> ?E\<close> by (rule CollectD)
+      then have "finite s \<longrightarrow> s \<in> C"
+        using \<open>s \<subseteq> S\<close> by (rule sspec)
+      then have "s \<in> C"
+        using \<open>finite s\<close> by (rule mp)
+      have "\<bottom> \<notin> s
+            \<and> (\<forall>k. Atom k \<in> s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> s \<longrightarrow> False)
+            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C)
+            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> s \<longrightarrow> {G} \<union> s \<in> C \<or> {H} \<union> s \<in> C)"
+        using 1 \<open>s \<in> C\<close> by (rule bspec)
+      then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+        by (iprover elim: conjunct2 conjunct1)
+      then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+        by (iprover elim: allE)
+      then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+        using assms(4) by (rule mp)
+      thus "{G, H} \<union> s \<in> C"
+        using \<open>F \<in> s\<close> by (rule mp)
     qed
   qed
   have "{G,H} \<union> S \<in> ?E"
@@ -2493,7 +2481,7 @@ proof -
     using assms(3) by (rule CollectD)
   have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  have aux: "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+  have aux:"\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
       if A:"s1 \<subseteq> S" "finite s1" "F \<in> s1" 
          "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
     using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_aux)
@@ -2516,8 +2504,6 @@ proof -
   thus ?thesis
     by simp (*Pendiente*)
 qed
-
-text \<open>\comentario{No se como integrarlo como lema auxiliar en ex3pcp.}\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
@@ -2550,20 +2536,17 @@ proof -
   proof (rule allI)+
     fix F G H
     show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Con F G H"
-      show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-      proof (rule impI)
-        assume "F \<in> S"
-        have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          using A3 by (iprover elim: allE)
-        then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-          using \<open>Con F G H\<close> by (rule mp)
-        then have "{G,H} \<union> S \<in> C"
-          using \<open>F \<in> S\<close> by (rule mp)
-        thus "{G,H} \<union> S \<in> C \<union> ?E"
-          by blast (*Pendiente*)
-      qed
+      assume "F \<in> S" 
+      have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using A3 by (iprover elim: allE)
+      then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using \<open>Con F G H\<close> by (rule mp)
+      then have "{G,H} \<union> S \<in> C"
+        using \<open>F \<in> S\<close> by (rule mp)
+      thus "{G,H} \<union> S \<in> C \<union> ?E"
+        by blast (*Pendiente*)
     qed
   qed
   have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
@@ -2572,31 +2555,28 @@ proof -
   proof (rule allI)+
     fix F G H
     show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Dis F G H"
-      show "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-      proof (rule impI)
-        assume "F \<in> S" 
-        have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using A4 by (iprover elim: allE)
-        then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>Dis F G H\<close> by (rule mp)
-        then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-          using \<open>F \<in> S\<close> by (rule mp)
+      assume "F \<in> S" 
+      have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using A4 by (iprover elim: allE)
+      then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>Dis F G H\<close> by (rule mp)
+      then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>F \<in> S\<close> by (rule mp)
+      thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+      proof (rule disjE)
+        assume "{G} \<union> S \<in> C"
+        then have "{G} \<union> S \<in> C \<union> ?E"
+          by blast (*Pendiente*)
         thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-        proof (rule disjE)
-          assume "{G} \<union> S \<in> C"
-          then have "{G} \<union> S \<in> C \<union> ?E"
-            by blast (*Pendiente*)
-          thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-            by (rule disjI1)
-        next
-          assume "{H} \<union> S \<in> C"
-          then have "{H} \<union> S \<in> C \<union> ?E"
-            by blast (*Pendiente*)
-          thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
-            by (rule disjI2)
-        qed
+          by (rule disjI1)
+      next
+        assume "{H} \<union> S \<in> C"
+        then have "{H} \<union> S \<in> C \<union> ?E"
+          by blast (*Pendiente*)
+        thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+          by (rule disjI2)
       qed
     qed
   qed
@@ -2648,52 +2628,46 @@ proof -
   proof (rule allI)
     fix k
     show "Atom k \<in> S \<longrightarrow> \<^bold>\<not>(Atom k) \<in> S \<longrightarrow> False"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Atom k \<in> S"
-      show "\<^bold>\<not>(Atom k) \<in> S \<longrightarrow> False"
-      proof (rule impI)
-        assume "\<^bold>\<not>(Atom k) \<in> S"
-        let ?s="{Atom k, \<^bold>\<not>(Atom k)}"
-        have "Atom k \<in> ?s"
-          by blast
-        have "\<^bold>\<not>(Atom k) \<in> ?s"
-          by blast
-        have "?s \<subseteq> S"
-          using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by blast (*Pendiente*)
-        have "finite ?s"
-          by blast (*Pendiente*)
-        have "finite ?s \<longrightarrow> ?s \<in> C"
-          using E \<open>?s \<subseteq> S\<close> by (rule sspec)
-        then have "?s \<in> C"
-          using \<open>finite ?s\<close> by (rule mp)
-        have "\<bottom> \<notin> ?s
-              \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
-              \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
-              \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
-          using PCP \<open>?s \<in> C\<close> by (rule bspec)
-        then have "\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
-          by (iprover elim: conjunct2 conjunct1)
-        then have "Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
-          by (iprover elim: allE)
-        then have "\<^bold>\<not>(Atom k) \<in> ?s \<longrightarrow> False"
-          using \<open>Atom k \<in> ?s\<close> by (rule mp)
-        thus "False"
-          using \<open>\<^bold>\<not>(Atom k) \<in> ?s\<close> by (rule mp)
-      qed
+      assume "\<^bold>\<not>(Atom k) \<in> S"
+      let ?s="{Atom k, \<^bold>\<not>(Atom k)}"
+      have "Atom k \<in> ?s"
+        by blast (*Pendiente*)
+      have "\<^bold>\<not>(Atom k) \<in> ?s"
+        by blast (*Pendiente*)
+      have "?s \<subseteq> S"
+        using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by blast (*Pendiente*)
+      have "finite ?s"
+        by blast (*Pendiente*)
+      have "finite ?s \<longrightarrow> ?s \<in> C"
+        using E \<open>?s \<subseteq> S\<close> by (rule sspec)
+      then have "?s \<in> C"
+        using \<open>finite ?s\<close> by (rule mp)
+      have "\<bottom> \<notin> ?s
+            \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+        using PCP \<open>?s \<in> C\<close> by (rule bspec)
+      then have "\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+        by (iprover elim: conjunct2 conjunct1)
+      then have "Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+        by (iprover elim: allE)
+      then have "\<^bold>\<not>(Atom k) \<in> ?s \<longrightarrow> False"
+        using \<open>Atom k \<in> ?s\<close> by (rule mp)
+      thus "False"
+        using \<open>\<^bold>\<not>(Atom k) \<in> ?s\<close> by (rule mp)
     qed
   qed
   have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
   proof (rule allI)+
     fix F G H
     show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Con F G H"
-      show "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
-      proof (rule impI)
-        assume "F \<in> S"
-        show "{G,H} \<union> S \<in> C \<union> ?E" 
-          using \<open>pcp C\<close> \<open>subset_closed C\<close> \<open>S \<in> ?E\<close> \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
-      qed
+      assume "F \<in> S" 
+      show "{G,H} \<union> S \<in> C \<union> ?E" 
+        using \<open>pcp C\<close> \<open>subset_closed C\<close> \<open>S \<in> ?E\<close> \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
     qed
   qed
   have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
@@ -3385,26 +3359,23 @@ proof (rule Hintikka_alt2)
   proof (rule allI)+
     fix F G H
     show "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Con F G H"
-      show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-      proof (rule impI)
-        assume "F \<in> ?cl"
-        have "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
-          using Con by (iprover elim: allE)
-        then have "F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
-          using \<open>Con F G H\<close> by (rule mp)
-        then have "{G,H} \<union> ?cl \<in> C"
-          using \<open>F \<in> ?cl\<close> by (rule mp)
-        have "(insert G (insert H ?cl)) = {G,H} \<union> ?cl"
-          by (rule insertSetElem)
-        then have "(insert G (insert H ?cl)) \<in> C"
-          using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
-        have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-          using assms(1) assms(2) by (rule cl_max')
-        thus "G \<in> ?cl \<and> H \<in> ?cl"
-          by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
-      qed
+      assume "F \<in> ?cl"
+      have "Con F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+        using Con by (iprover elim: allE)
+      then have "F \<in> ?cl \<longrightarrow> {G,H} \<union> ?cl \<in> C"
+        using \<open>Con F G H\<close> by (rule mp)
+      then have "{G,H} \<union> ?cl \<in> C"
+        using \<open>F \<in> ?cl\<close> by (rule mp)
+      have "(insert G (insert H ?cl)) = {G,H} \<union> ?cl"
+        by (rule insertSetElem)
+      then have "(insert G (insert H ?cl)) \<in> C"
+        using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
+      have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
+        using assms(1) assms(2) by (rule cl_max')
+      thus "G \<in> ?cl \<and> H \<in> ?cl"
+        by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
     qed
   qed
   have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
@@ -3413,43 +3384,40 @@ proof (rule Hintikka_alt2)
   proof (rule allI)+
     fix F G H
     show "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-    proof (rule impI)
+    proof (rule impI)+
       assume "Dis F G H"
-      show "F \<in> ?cl \<longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-      proof (rule impI)
-        assume "F \<in> ?cl"
-        have "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-          using Dis by (iprover elim: allE)
-        then have "F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-          using \<open>Dis F G H\<close> by (rule mp)
-        then have "{G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
-          using \<open>F \<in> ?cl\<close> by (rule mp)
+      assume "F \<in> ?cl"
+      have "Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+        using Dis by (iprover elim: allE)
+      then have "F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+        using \<open>Dis F G H\<close> by (rule mp)
+      then have "{G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
+        using \<open>F \<in> ?cl\<close> by (rule mp)
+      thus "G \<in> ?cl \<or> H \<in> ?cl"
+      proof (rule disjE)
+        assume "{G} \<union> ?cl \<in> C"
+        have "insert G ?cl = {G} \<union> ?cl"
+          by (rule insert_is_Un)
+        have "insert G ?cl \<in> C"
+          using \<open>{G} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert G ?cl = {G} \<union> ?cl\<close>)
+        have "insert G ?cl \<in> C \<Longrightarrow> G \<in> ?cl"
+          using assms(1) assms(2) by (rule cl_max')
+        then have "G \<in> ?cl"
+          by (simp only: \<open>insert G ?cl \<in> C\<close>)
         thus "G \<in> ?cl \<or> H \<in> ?cl"
-        proof (rule disjE)
-          assume "{G} \<union> ?cl \<in> C"
-          have "insert G ?cl = {G} \<union> ?cl"
-            by (rule insert_is_Un)
-          have "insert G ?cl \<in> C"
-            using \<open>{G} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert G ?cl = {G} \<union> ?cl\<close>)
-          have "insert G ?cl \<in> C \<Longrightarrow> G \<in> ?cl"
-            using assms(1) assms(2) by (rule cl_max')
-          then have "G \<in> ?cl"
-            by (simp only: \<open>insert G ?cl \<in> C\<close>)
-          thus "G \<in> ?cl \<or> H \<in> ?cl"
-            by (rule disjI1)
-        next
-          assume "{H} \<union> ?cl \<in> C"
-          have "insert H ?cl = {H} \<union> ?cl"
-            by (rule insert_is_Un)
-          have "insert H ?cl \<in> C"
-            using \<open>{H} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert H ?cl = {H} \<union> ?cl\<close>)
-          have "insert H ?cl \<in> C \<Longrightarrow> H \<in> ?cl"
-            using assms(1) assms(2) by (rule cl_max')
-          then have "H \<in> ?cl"
-            by (simp only: \<open>insert H ?cl \<in> C\<close>)
-          thus "G \<in> ?cl \<or> H \<in> ?cl"
-            by (rule disjI2)
-        qed
+          by (rule disjI1)
+      next
+        assume "{H} \<union> ?cl \<in> C"
+        have "insert H ?cl = {H} \<union> ?cl"
+          by (rule insert_is_Un)
+        have "insert H ?cl \<in> C"
+          using \<open>{H} \<union> ?cl \<in> C\<close> by (simp only: \<open>insert H ?cl = {H} \<union> ?cl\<close>)
+        have "insert H ?cl \<in> C \<Longrightarrow> H \<in> ?cl"
+          using assms(1) assms(2) by (rule cl_max')
+        then have "H \<in> ?cl"
+          by (simp only: \<open>insert H ?cl \<in> C\<close>)
+        thus "G \<in> ?cl \<or> H \<in> ?cl"
+          by (rule disjI2)
       qed
     qed
   qed
