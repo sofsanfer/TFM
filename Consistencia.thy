@@ -2411,17 +2411,18 @@ proof -
         by (rule subset_insertI)
       then have C2:"s \<subseteq> insert F (insert G (insert H s))"
         by (simp only: subset_insertI2)
+      let ?S="insert F (insert G (insert H s))"
       have "\<forall>S \<in> C. \<forall>s \<subseteq> S. s \<in> C"
         using assms(2) by (simp only: subset_closed_def)
+      then have "\<forall>s \<subseteq> ?S. s \<in> C"
+        using C1 by (rule bspec)
       thus "s \<in> C"
-        using C1 C2 by blast (*Pendiente*)
+        using C2 by (rule sspec)
     qed
   qed
   thus "{G,H} \<union> S \<in> C \<union> ?E"
     by (rule UnI2)
 qed
-
-text \<open>\comentario{No entiendo por qué no me permite usar bspec y luego sspec en el último pendiente.}\<close>
 
 lemma ex3_pcp_DIS:
   assumes "pcp C"
