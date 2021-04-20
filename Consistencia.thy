@@ -2427,17 +2427,17 @@ lemma ex3_pcp_DIS_aux:
 proof -
   let ?s = "s1 \<union> s2"
   have "finite ?s"
-    using assms(6) assms(9) by blast (*Pendiente*)
-  have "?s \<subseteq> S"
-    using assms(5) assms(8) by blast (*Pendiente*)
+    using assms(6) assms(9) by (rule finite_UnI)
+  have "?s \<subseteq> S" 
+    using assms(5) assms(8) by (simp only: Un_subset_iff)
   have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-    using assms(3) by blast (*Pendiente*)
+    using assms(3) by (rule CollectD)
   then have "finite ?s \<longrightarrow> ?s \<in> C"
     using \<open>?s \<subseteq> S\<close> by (rule sspec)
   then have "?s \<in> C" 
     using \<open>finite ?s\<close> by (rule mp)
   have "F \<in> ?s" 
-    using assms(7) assms(10) by blast (*Pendiente*)
+    using assms(7) by (rule UnI1)
   have "\<forall>S \<in> C. \<bottom> \<notin> S
   \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -2456,10 +2456,14 @@ proof -
     using assms(4) by (rule mp)
   then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
     using \<open>F \<in> ?s\<close> by (rule mp)
-  then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+  then have 1:"\<exists>I\<in>{G,H}. insert I ?s \<in> C"
     by simp (*Pendiente*)
-  thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
-    by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+  have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+    using assms(2) by (simp only: subset_closed_def)
+  then have "\<forall>s \<subseteq> ?s. s \<in> C"
+    using \<open>?s \<in> C\<close> by (rule bspec)
+  show "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+    using 1 by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
 qed
 
 lemma ex3_pcp_DIS:
