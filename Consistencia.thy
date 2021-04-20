@@ -2424,6 +2424,56 @@ proof -
     by (rule UnI2)
 qed
 
+lemma ex3_pcp_DIS_aux:
+  assumes "pcp C"
+          "subset_closed C"
+          "S \<in> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}"
+          "Dis F G H"
+          "s1 \<subseteq> S"
+          "finite s1"
+          "F \<in> s1"
+          "s2 \<subseteq> S"
+          "finite s2"
+          "F \<in> s2"
+  shows "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+proof -
+  let ?s = "s1 \<union> s2"
+  have "finite ?s"
+    using assms(6) assms(9) by blast (*Pendiente*)
+  have "?s \<subseteq> S"
+    using assms(5) assms(8) by blast (*Pendiente*)
+  have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+    using assms(3) by blast (*Pendiente*)
+  then have "finite ?s \<longrightarrow> ?s \<in> C"
+    using \<open>?s \<subseteq> S\<close> by (rule sspec)
+  then have "?s \<in> C" 
+    using \<open>finite ?s\<close> by (rule mp)
+  have "F \<in> ?s" 
+    using assms(7) assms(10) by blast (*Pendiente*)
+  have "\<forall>S \<in> C. \<bottom> \<notin> S
+  \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using assms(1) by (rule pcp_alt1)
+  then have "\<bottom> \<notin> ?s
+        \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+        \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+        \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+    using \<open>?s \<in> C\<close> by (rule bspec)
+  then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+    by (iprover elim: conjunct2)
+  then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+    by (iprover elim: allE)
+  then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+    using assms(4) by (rule mp)
+  then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+    using \<open>F \<in> ?s\<close> by (rule mp)
+  then have "\<exists>I\<in>{G,H}. insert I ?s \<in> C" 
+    by simp (*Pendiente*)
+  thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+    by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+qed
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -2736,9 +2786,9 @@ proof (rule ballI)
       then have "F \<in> ?s" 
         using that by simp (*Pendiente*)
       have "\<bottom> \<notin> ?s
-  \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
-  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
-  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+      \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
         using 1 \<open>?s \<in> C\<close> by (rule bspec)
       then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
         by (iprover elim: conjunct2)
