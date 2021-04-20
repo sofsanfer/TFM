@@ -2526,7 +2526,7 @@ lemma ex3_pcp:
   unfolding pcp_alt
 proof (rule ballI)
   let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  have  1:"\<forall>S \<in> C.
+  have PCP:"\<forall>S \<in> C.
     \<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
     \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
@@ -2546,7 +2546,7 @@ proof (rule ballI)
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
     \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
     \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
-      using 1 \<open>S \<in> C\<close> by (rule bspec)
+      using PCP \<open>S \<in> C\<close> by (rule bspec)
     then have A1:"\<bottom> \<notin> S"
       by (rule conjunct1)
     have A2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
@@ -2628,7 +2628,7 @@ proof (rule ballI)
   \<and> (\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G,H} \<union> {} \<in> C)
   \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G} \<union> {} \<in> C \<or> {H} \<union> {} \<in> C)"
-      using 1 \<open>{} \<in> C\<close> by auto (*Pendiente*)
+      using PCP \<open>{} \<in> C\<close> by auto (*Pendiente*)
     then have "\<bottom> \<notin> {}"
       by (rule conjunct1)
     have C1:"\<bottom> \<notin> S"
@@ -2636,7 +2636,43 @@ proof (rule ballI)
     have B2:"\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False"
       using 3 by (iprover elim: conjunct2 conjunct1)
     have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
-      sorry
+    proof (rule allI)
+      fix k
+      show "Atom k \<in> S \<longrightarrow> \<^bold>\<not>(Atom k) \<in> S \<longrightarrow> False"
+      proof (rule impI)
+        assume "Atom k \<in> S"
+        show "\<^bold>\<not>(Atom k) \<in> S \<longrightarrow> False"
+        proof (rule impI)
+          assume "\<^bold>\<not>(Atom k) \<in> S"
+          let ?s="{Atom k, \<^bold>\<not>(Atom k)}"
+          have "Atom k \<in> ?s"
+            by blast
+          have "\<^bold>\<not>(Atom k) \<in> ?s"
+            by blast
+          have "?s \<subseteq> S"
+            using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by blast (*Pendiente*)
+          have "finite ?s"
+            by blast (*Pendiente*)
+          have "finite ?s \<longrightarrow> ?s \<in> C"
+            using E \<open>?s \<subseteq> S\<close> by (rule sspec)
+          then have "?s \<in> C"
+            using \<open>finite ?s\<close> by (rule mp)
+          have "\<bottom> \<notin> ?s
+                \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
+                \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
+                \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
+            using PCP \<open>?s \<in> C\<close> by (rule bspec)
+          then have "\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+            by (iprover elim: conjunct2 conjunct1)
+          then have "Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+            by (iprover elim: allE)
+          then have "\<^bold>\<not>(Atom k) \<in> ?s \<longrightarrow> False"
+            using \<open>Atom k \<in> ?s\<close> by (rule mp)
+          thus "False"
+            using \<open>\<^bold>\<not>(Atom k) \<in> ?s\<close> by (rule mp)
+        qed
+      qed
+    qed
     have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
     proof (rule allI)+
       fix F G H
@@ -2651,7 +2687,7 @@ proof (rule ballI)
         qed
       qed
     qed
-
+  qed
   have DIS: "{G} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
     if H4:"\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and H5:"Dis F G H" and H6:"F \<in> S"
     for F G H S 
