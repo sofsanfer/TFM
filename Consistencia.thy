@@ -1589,7 +1589,7 @@ text \<open>En este apartado definiremos dos propiedades referentes a coleccione
   bien el párrafo anterior.}
 
   \begin{definicion}
-    Una colección de conjuntos es cerrada bajo subconjuntos si todo subconjunto de cada conjunto 
+    Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 
     de la colección pertenece a la colección.
   \end{definicion}
 
@@ -1629,7 +1629,7 @@ lemma "\<not> subset_closed {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> At
 text \<open>Continuemos con la noción de propiedad de carácter finito.
 
 \begin{definicion}
-  Una colección de conjuntos tiene la propiedad de carácter finito si para cualquier conjunto
+  Una colección de conjuntos tiene la \<open>propiedad de carácter finito\<close> si para cualquier conjunto
   son equivalentes:
   \begin{enumerate}
     \item El conjunto pertenece a la colección.
@@ -2139,8 +2139,22 @@ qed
 
 text \<open>\comentario{Redactar conexión.}\<close>
 
-text\<open> Si C tiene la propiedad de carácter finito, entonces C es 
-cerrado bajo subconjunto.\<close>
+text\<open>\begin{lema}
+  Toda colección de conjuntos con la propiedad de carácter finito es cerrada bajo subconjuntos.
+  \end{lema}
+
+  En Isabelle, se formaliza el resultado como sigue.\<close>
+
+lemma 
+  assumes "finite_character C"
+  shows "subset_closed C"
+  oops
+
+text \<open>Procedamos con la demostración del resultado.
+
+\begin{demostracion}
+  
+\end{demostracion}\<close>
 
 lemma
   assumes "finite_character C"
@@ -2155,31 +2169,19 @@ proof (intro ballI sallI)
     by (rule allE)
   have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
     using \<open>S \<in> C\<close> 1 by (rule back_subst)
-  have 3:"t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
-  proof -
-    assume "t \<subseteq> s" and "finite t"
-    then have "t \<subseteq> S"
-      using \<open>s \<subseteq> S\<close> by (simp only: subset_trans)
-    have "finite t \<longrightarrow> t \<in> C"
-      using 2  \<open>t \<subseteq> S\<close> by (rule sspec)
-    thus "t \<in> C"
-      using \<open>finite t\<close> by (rule mp)
-  qed
-  have 4:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
+  have 3:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
   proof (rule sallI)
     fix t
     assume "t \<subseteq> s"
+    then have "t \<subseteq> S"
+      using \<open>s \<subseteq> S\<close> by (simp only: subset_trans)
     show "finite t \<longrightarrow> t \<in> C"
-    proof (rule impI)
-      assume "finite t"
-      show "t \<in> C"
-        using \<open>t \<subseteq> s\<close> \<open>finite t\<close> by (simp only: 3)
-    qed
+      using 2  \<open>t \<subseteq> S\<close> by (rule sspec)
   qed
   have "s \<in> C \<longleftrightarrow> (\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C)"
     using H by (rule allE)
   thus "s \<in> C"
-    using 4 by (rule forw_subst)
+    using 3 by (rule forw_subst)
 qed
 
 lemma ex2: 
