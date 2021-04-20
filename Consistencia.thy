@@ -204,16 +204,9 @@ text \<open>Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
   by (simp only: Con.intros(4) Dis.intros(4))+
 
-text \<open>Por otra parte, de la propia definición de las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>
-  obtenemos reglas de simplificación. De este modo, dada una fórmula de tipo
-  \<open>\<alpha>\<close> o \<open>\<beta>\<close> deducimos que se corresponde con uno de los cuatro casos de fórmula 
-  definidos para cada tipo con sus correspondientes componentes.
-  En Isabelle, hemos formalizado las reglas de simplificación de ambos tipos de 
-  fórmulas en un resultado conjunto.
-
-\comentario{Creo que el siguiente lema es facilitar el uso de las fórmulas
-en notación uniforme, pues caracteriza como son las fórmulas  \<open>\<alpha>\<close> y las \<open>\<beta>\<close>.}
-\<close>
+text \<open>Veamos el siguiente lema deducido de las definiciones anteriores. Se trata de un resultado 
+  que caracteriza las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>, facilitando el uso de las fórmulas en notación 
+  uniforme en Isabelle.\<close>
 
 lemma con_dis_simps:
   "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
@@ -226,7 +219,7 @@ lemma con_dis_simps:
     a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
   by (simp_all add: Con.simps Dis.simps)
 
-text\<open>Veamos a continuación resultados que permiten caracterizar los conjuntos
+text\<open>Finalmente, introduzcamos resultados que permiten caracterizar los conjuntos
   de Hintikka y la propiedad de consistencia proposicional empleando la 
   notación uniforme.
 
