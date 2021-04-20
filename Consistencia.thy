@@ -2534,9 +2534,9 @@ proof -
     by (rule conjunct1)
   have A2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
     using H by (iprover elim: conjunct2 conjunct1)
-  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+  have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
     using H by (iprover elim: conjunct2 conjunct1)
-  have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
+  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
   proof (rule allI)+
     fix F G H
     show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
@@ -2544,18 +2544,18 @@ proof -
       assume "Con F G H"
       assume "F \<in> S" 
       have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using A3 by (iprover elim: allE)
+        using S3 by (iprover elim: allE)
       then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
         using \<open>Con F G H\<close> by (rule mp)
       then have "{G,H} \<union> S \<in> C"
         using \<open>F \<in> S\<close> by (rule mp)
       thus "{G,H} \<union> S \<in> C \<union> ?E"
-        by blast (*Pendiente*)
+        by (rule UnI1)
     qed
   qed
-  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+  have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
     using H by (iprover elim: conjunct2)
-  have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
   proof (rule allI)+
     fix F G H
     show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
@@ -2563,7 +2563,7 @@ proof -
       assume "Dis F G H"
       assume "F \<in> S" 
       have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using A4 by (iprover elim: allE)
+        using S4 by (iprover elim: allE)
       then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>Dis F G H\<close> by (rule mp)
       then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
@@ -2572,13 +2572,13 @@ proof -
       proof (rule disjE)
         assume "{G} \<union> S \<in> C"
         then have "{G} \<union> S \<in> C \<union> ?E"
-          by blast (*Pendiente*)
+          by (rule UnI1)
         thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
           by (rule disjI1)
       next
         assume "{H} \<union> S \<in> C"
         then have "{H} \<union> S \<in> C \<union> ?E"
-          by blast (*Pendiente*)
+          by (rule UnI1)
         thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
           by (rule disjI2)
       qed
@@ -2588,7 +2588,7 @@ proof -
         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E) \<and>
         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
-    using A1 A2 A3 A4 by blast (*Pendiente*)
+    using A1 A2 A3 A4 by (iprover intro: conjI)
 qed
 
 lemma ex3_pcp_SinE:
