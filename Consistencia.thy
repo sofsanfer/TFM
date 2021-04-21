@@ -15,10 +15,18 @@ text \<open>
 \<close>
 
 text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de existencia de modelos\<close>.
-  Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
-  colección de conjuntos que verifica la \<open>propiedad de consistencia proposicional\<close>. De este modo,
-  a lo largo de la sección definiremos distintas propiedades y sucesiones sobre las 
-  colecciones de conjuntos de fórmulas proposicionales para concluir con la prueba del teorema.\<close>
+  Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas \<open>S\<close> si este pertenece a una 
+  colección de conjuntos \<open>C\<close> que verifica la \<open>propiedad de consistencia proposicional\<close>. Para su 
+  prueba, definiremos las propiedades de \<open>carácter finito\<close> y \<open>ser cerrado bajo subconjuntos\<close> para
+  colecciones de conjuntos de fórmulas. De este modo, mediante distintos resultados que relacionan
+  estas propiedades con la \<open>propiedad de consistencia proposicional\<close>, dada una colección \<open>C\<close> 
+  cualquiera en las condiciones anteriormente descritas, podemos encontrar una colección \<open>C'\<close> que la 
+  contenga que verifique la \<open>propiedad de consistencia proposicional\<close>, sea \<open>cerrada bajo 
+  subconjuntos\<close> y de \<open>carácter finito\<close>. Por otro lado, definiremos una sucesión de conjuntos de
+  fórmulas a partir de la colección \<open>C'\<close> y el conjunto \<open>S\<close>. Además, definiremos el límite de dicha
+  sucesión que, en particular, contendrá al conjunto \<open>S\<close>. Finalmente probaremos que dicho límite es 
+  un conjunto satisfacible por el \<open>lema de Hintikka\<close> y, por contención, quedará probada la 
+  satisfacibilidad del conjunto \<open>S\<close>.\<close>
 
 section \<open>Propiedad de consistencia proposicional\<close>
 
