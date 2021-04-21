@@ -17,7 +17,7 @@ text \<open>
 text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de existencia de modelos\<close>.
   Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
   colección de conjuntos que verifica la \<open>propiedad de consistencia proposicional\<close>. De este modo,
-  a lo largo de la sección definiremos distintas propiedades y condiciones de clausura sobre las 
+  a lo largo de la sección definiremos distintas propiedades y sucesiones sobre las 
   colecciones de conjuntos de fórmulas proposicionales para concluir con la prueba del teorema.\<close>
 
 section \<open>Propiedad de consistencia proposicional\<close>
@@ -1648,11 +1648,15 @@ lemma "\<not> finite_character {{Atom 0}}"
 lemma "finite_character {{Atom 0},{}}"
   unfolding finite_character_def by auto
 
-text \<open>Una vez introducidas las definiciones anteriores, veamos tres resultados sobre colecciones
-  de conjuntos.
-
-\comentario{La descripción previa es excesivamente genérica. Es conveniente 
-precisar más.}
+text \<open>Una vez introducidas las definiciones anteriores, veamos tres resultados que relacionan
+  dichas propiedades con la propiedad de consistencia proposicional. El primero prueba que, dada una 
+  colección con la propiedad de consistencia proposicional, podemos encontrar una colección que la 
+  contenga de modo que también tenga la propiedad de consistencia proposicional y sea cerrada bajo 
+  subconjuntos. El segundo resultado demuestra que las colecciones de carácter finito son cerradas 
+  bajo subconjuntos. De este modo, podemos finalmente probar que dada una colección con la propiedad 
+  de consistencia proposicional que sea cerrada bajo subconjuntos, la unión de la colección con la 
+  obtenida por el primer resultado tiene la propiedad de consistencia proposicional y es de carácter 
+  finito. Comencemos introduciendo el primer resultado.
 
   \begin{lema}
     Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces
@@ -2120,13 +2124,13 @@ proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
     by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
-text \<open>\comentario{Redactar conexión.}\<close>
+text\<open>Continuemos con el segundo resultado de este apartado.
 
-text\<open>\begin{lema}
+  \begin{lema}
   Toda colección de conjuntos con la propiedad de carácter finito es cerrada bajo subconjuntos.
   \end{lema}
 
-  En Isabelle, se formaliza el resultado como sigue.\<close>
+  En Isabelle, se formaliza como sigue.\<close>
 
 lemma 
   assumes "finite_character C"
@@ -2206,6 +2210,8 @@ proof (intro ballI sallI)
   hence "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t using * by simp
   with fc show \<open>s \<in> C\<close> unfolding finite_character_def by blast
 qed
+
+text \<open>\comentario{Voy redactando por aquí.}\<close>
 
 text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es 
 cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
@@ -2822,7 +2828,7 @@ proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longri
   done
 qed
 
-section \<open>Sucesiones de conjuntos en una colección\<close>
+section \<open>Sucesiones de conjuntos de una colección\<close>
 
 text\<open> Definición: definición de una sucesión de conjuntos a partir de 
 C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
