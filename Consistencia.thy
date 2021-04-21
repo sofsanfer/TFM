@@ -964,13 +964,13 @@ text \<open>En primer lugar, veamos la demostración del lema.
   \<open>{\<beta>\<^sub>2} \<union> S\<close> está en \<open>C\<close>.
 
   \<open>\<sqdot> Fórmula de tipo G \<or> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \<open>G\<close> y 
-    \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a \<open>C\<close> o bien 
+    \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a \<open>C\<close> o bien\\
     \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la cuarta condición de la definición de propiedad de 
     consistencia proposicional.
 
-  \<open>\<sqdot> Fórmula de tipo G \<longrightarrow> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son 
+  \<open>\<sqdot> Fórmula de tipo G \<longrightarrow> H\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son\\ 
     \<open>\<not> G\<close> y \<open>H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close>  pertenece a \<open>C\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la quinta condición de la definición de propiedad 
+    bien\\ \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la quinta condición de la definición de propiedad 
     de consistencia proposicional.
 
   \<open>\<sqdot> Fórmula de tipo \<not>(\<not> G)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son ambas 
@@ -1047,7 +1047,7 @@ text \<open>En primer lugar, veamos la demostración del lema.
   \begin{enumerate}
     \item[\<open>4)\<close>:] Supongamos que la fórmula \<open>G \<or> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
-    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{G} \<union> S\<close> pertenece a \<open>C\<close> o bien
+    \<open>G\<close> y \<open>H\<close>. Luego, por hipótesis, tenemos que o bien \<open>{G} \<union> S\<close> pertenece a \<open>C\<close> o bien\\
     \<open>{H} \<union> S\<close> pertenece a \<open>C\<close>.
     \item[\<open>5)\<close>:] Supongamos que la fórmula \<open>G \<longrightarrow> H\<close> pertenece a \<open>S\<close> para fórmulas \<open>G\<close> y \<open>H\<close>
     cualesquiera. Observemos que se trata de una fórmula de tipo \<open>\<beta>\<close> de componentes disyuntivas
