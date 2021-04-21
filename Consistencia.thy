@@ -1787,7 +1787,7 @@ proof -
     using assms(1) assms(2) by simp (*Pendiente*)
 qed
 
-lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x"
+lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x" using [[simp_trace]]
   by simp
 
 text \<open>Veamos la prueba detallada del lema en Isabelle/HOL. Esta se fundamenta en tres lemas
