@@ -10,18 +10,15 @@ begin
 text \<open>
 \comentario{Localización de sello.png.}
 \comentario{Cambiar los directores}
-\comentario{Introducción}
+\comentario{Introducción. Mirar fitting p. 53 y 54}
 
 \<close>
 
-text \<open>En esta sección probaremos la consistencia de la lógica proposicional demostrando el \<open>teorema 
-  de existencia de modelos\<close>. Para ello, consideraremos colecciones de conjuntos de fórmulas 
-  proposicionales y definiremos propiedades y resultados sobre las
-  mismas.
-
-\comentario{Ver Fitting pg. 53 y 54}
-
-\<close>
+text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de existencia de modelos\<close>.
+  Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
+  colección de conjuntos que verifica la \<open>propiedad de consistencia proposicional\<close>. De este modo,
+  a lo largo de la sección definiremos distintas propiedades y condiciones de clausura sobre las 
+  colecciones de conjuntos de fórmulas proposicionales para concluir con la prueba del teorema.\<close>
 
 section \<open>Propiedad de consistencia proposicional\<close>
 
