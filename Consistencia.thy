@@ -2637,13 +2637,25 @@ proof -
       assume "\<^bold>\<not>(Atom k) \<in> S"
       let ?s="{Atom k, \<^bold>\<not>(Atom k)}"
       have "Atom k \<in> ?s"
-        by blast (*Pendiente*)
+        by (simp only: insert_iff simp_thms) 
       have "\<^bold>\<not>(Atom k) \<in> ?s"
-        by blast (*Pendiente*)
+        by (simp only: insert_iff simp_thms) 
       have "?s \<subseteq> S"
-        using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by blast (*Pendiente*)
+        using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by simp (*Pendiente*)
+      have "?s = {\<^bold>\<not>(Atom k)} \<union> {Atom k}"
+        by (simp only: elemSet)
+      have "finite {}"
+        by (simp only: finite.emptyI)
+      then have "finite (insert (\<^bold>\<not>(Atom k)) {})"
+        by (rule finite.insertI)
+      then have F1:"finite {\<^bold>\<not>(Atom k)}"
+        by this
+      have "finite (insert (Atom k) {})"
+        using \<open>finite {}\<close> by (rule finite.insertI)
+      then have F2:"finite {Atom k}"
+        by this
       have "finite ?s"
-        by blast (*Pendiente*)
+        using \<open>?s = {\<^bold>\<not>(Atom k)} \<union> {Atom k}\<close> F1 F2 by (simp only: finite_UnI)
       have "finite ?s \<longrightarrow> ?s \<in> C"
         using E \<open>?s \<subseteq> S\<close> by (rule sspec)
       then have "?s \<in> C"
@@ -2686,7 +2698,7 @@ proof -
     qed
   qed
   show ?thesis
-    using C1 C2 C3 C4 by blast (*Pendiente*)
+    using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
 
 lemma ex3_pcp:
