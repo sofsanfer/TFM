@@ -17,7 +17,7 @@ text \<open>
 text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de existencia de modelos\<close>.
   Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas \<open>S\<close> si este pertenece a una 
   colección de conjuntos \<open>C\<close> que verifica la \<open>propiedad de consistencia proposicional\<close>. Para su 
-  prueba, definiremos las propiedades de \<open>carácter finito\<close> y \<open>ser cerrado bajo subconjuntos\<close> para
+  prueba, definiremos las propiedades de \<open>carácter finito\<close> y \<open>ser cerrada bajo subconjuntos\<close> para
   colecciones de conjuntos de fórmulas. De este modo, mediante distintos resultados que relacionan
   estas propiedades con la \<open>propiedad de consistencia proposicional\<close>, dada una colección \<open>C\<close> 
   cualquiera en las condiciones anteriormente descritas, podemos encontrar una colección \<open>C'\<close> que la 
@@ -1576,17 +1576,10 @@ lemma pcp_alt: "pcp C = (\<forall>S \<in> C.
 
 section \<open>Colecciones cerradas bajo subconjuntos y colecciones de carácter finito\<close>
 
-text\<open>
-\comentario{Explicar lo que se quiere demostrar en esta sección, dar
-la idea de la prueba  y cómo se necesita la propiedad de que una clase 
-sea cerrada bajo subconjunto (ver Fitting pg. 53 y 54). Tiene que ver con Hintikka.}
-\<close>
-
-text \<open>En este apartado definiremos dos propiedades referentes a colecciones que utilizaremos 
-  posteriormente para la probar la consistencia de la lógica proposicional.
-
-  \comentario{Explicar mejor la relación de las propiedades con el th de ex. de modelos. Redactar
-  bien el párrafo anterior.}
+text \<open>En este apartado definiremos las propiedades sobre colecciones de conjuntos de ser \<open>cerrada 
+  bajo subconjuntos\<close> y de \<open>carácter finito\<close>. Posteriormente daremos distintos resultados que las
+  relacionan con la propiedad de consistencia proposicional y emplearemos en la prueba del 
+  \<open>teorema de existencia de modelo\<close>.
 
   \begin{definicion}
     Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 
@@ -1656,15 +1649,11 @@ lemma "\<not> finite_character {{Atom 0}}"
 lemma "finite_character {{Atom 0},{}}"
   unfolding finite_character_def by auto
 
-text \<open>Una vez introducidas las definiciones anteriores, veamos tres resultados que relacionan
-  dichas propiedades con la propiedad de consistencia proposicional. El primero prueba que, dada una 
-  colección con la propiedad de consistencia proposicional, podemos encontrar una colección que la 
-  contenga de modo que también tenga la propiedad de consistencia proposicional y sea cerrada bajo 
-  subconjuntos. El segundo resultado demuestra que las colecciones de carácter finito son cerradas 
-  bajo subconjuntos. De este modo, podemos finalmente probar que dada una colección con la propiedad 
-  de consistencia proposicional que sea cerrada bajo subconjuntos, la unión de la colección con la 
-  obtenida por el primer resultado tiene la propiedad de consistencia proposicional y es de carácter 
-  finito. Comencemos introduciendo el primer resultado.
+text \<open>Una vez introducidas las definiciones anteriores, veamos los resultados que las relacionan
+  con la propiedad de consistencia proposicional. De este modo, combinándolos en la prueba del 
+  \<open>teorema de existencia de modelo\<close>, dada una colección \<open>C\<close> cualquiera que verifique la propiedad 
+  de consistencia proposicional, hallaremos una colección \<open>C'\<close> que la contenga que también la 
+  verifique y además sea cerrada bajo subconjuntos y de carácter finito.
 
   \begin{lema}
     Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces
