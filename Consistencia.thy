@@ -22,10 +22,8 @@ text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de 
 
 section \<open>Propiedad de consistencia proposicional\<close>
 
-text \<open>En primer lugar, definiremos la propiedad de consistencia proposicional para una colección 
-  de conjuntos de fórmulas proposicionales. Probaremos que cualquier conjunto de fórmulas 
-  proposicionales perteneciente a una colección que verifique dicha propiedad será satisfacible por 
-  el \<open>teorema de existencia de modelos\<close>.\<close>
+text \<open>En primer lugar, definamos la \<open>propiedad de consistencia proposicional\<close> para una colección 
+  de conjuntos de fórmulas proposicionales.\<close>
 
 text \<open>
   \begin{definicion}
@@ -92,7 +90,7 @@ lemma "\<not> pcp {{(\<^bold>\<not> (Atom 1)) \<^bold>\<rightarrow> Atom 2},
 
 section \<open>Notación uniforme: fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>\<close>
 
-text \<open>En esta subsección vamos a introducir la notación uniforme inicialmente 
+text \<open>En esta subsección introduciremos la notación uniforme inicialmente 
   desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
   de dicha notación es reducir el número de casos a considerar sobre la estructura de 
   las fórmulas al clasificar éstas en dos categorías, facilitando las demostraciones
@@ -173,37 +171,39 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
       \hfill (@{text Dis.intros})
   \end{itemize}
 
-  Veamos, a continuación, distintos ejemplos de fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>. En primer
-  lugar, según hemos definido la fórmula \<open>\<top>\<close>, es fácil observar que se trata de una
-  fórmula de tipo \<open>\<beta>\<close>.\<close>
+  Cabe observar que no todas las fórmulas proposicionales son de alguno de estos dos tipos. Esto
+  se debe a que tanto el conjunto de fórmulas conjuntivas como el conjunto de fórmulas disyuntivas 
+  están contruidos a partir de una serie de reglas sintácticas que no incluyen a todos los casos de 
+  fórmulas. En concreto, las fórmulas atómicas y \<open>\<bottom>\<close> no son fórmulas ni de tipo \<open>\<alpha>\<close> ni de tipo \<open>\<beta>\<close>.
+
+\comentario{La intuición semántica nos dice que las fórmulas atómicas y bot son ambas conjuntivas y 
+  disyuntivas. Sin embargo, sintácticamente no forman parte del tipo de fórmulas alpha y beta, pues
+  estos conjuntos conforman una definición basada en la sintaxis (más o menos la explicación).}
+
+  En contraposición, según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una 
+  fórmula disyuntiva.\<close>
 
 lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>"
   unfolding Top_def by (simp only: Dis.intros(2))
 
-text \<open>
-\comentario{La intuición semántica nos dice que las fórmulas atómicas y bot son ambas conjuntivas y 
-  disyuntivas. Sin embargo, sintácticamente no forman parte del tipo de fórmulas alpha y beta, pues
-  estos conjuntos conforman una definición basada en la sintaxis (más o menos la explicación).}\<close>
+text \<open>Por otro lado, se observa a partir de las correspondientes definiciones que la conjunción
+  generalizada de una lista de fórmulas es una fórmula de tipo \<open>\<alpha>\<close> y la disyunción generalizada de
+  una lista de fórmulas es una fórmula de tipo \<open>\<beta>\<close>.\<close>
 
-lemma "\<forall>k. Con (Atom k) (Atom k) \<top> \<and> Dis (Atom k) (Atom k) \<top>"
-  oops
+lemma "Con (\<^bold>\<And>(F#Fs)) F (\<^bold>\<And>Fs)"
+  by (simp only: BigAnd.simps Con.intros(1))
 
-text \<open>Observando las definiciones dadas de las fórmulas \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos trivialmente
-  deducir el siguiente lema.
+lemma "Dis (\<^bold>\<Or>(F#Fs)) F (\<^bold>\<Or>Fs)"
+  by (simp only: BigOr.simps Dis.intros(1))
 
-  \begin{lema}
-    La doble negación de una fórmula cualquiera es una fórmula conjuntiva y disyuntiva
-    simultáneamente.
-  \end{lema}
-
-  Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
+text \<open>Finalmente, de las reglas que definen las fórmulas conjuntivas y disyuntivas se deduce que
+  la doble negación de una fórmula es una fórmula perteneciente a ambos tipos.\<close>
 
 lemma notDisCon: "Con (Not (Not F)) F F" "Dis (Not (Not F)) F F" 
   by (simp only: Con.intros(4) Dis.intros(4))+
 
-text \<open>Veamos el siguiente lema deducido de las definiciones anteriores. Se trata de un resultado 
-  que caracteriza las fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>, facilitando el uso de las fórmulas en notación 
-  uniforme en Isabelle.\<close>
+text \<open>A continuación vamos a introducir el siguiente lema que caracteriza las fórmulas de tipo \<open>\<alpha>\<close> 
+  y \<open>\<beta>\<close>, facilitando el uso de la notación uniforme en Isabelle.\<close>
 
 lemma con_dis_simps:
   "Con a1 a2 a3 = (a1 = a2 \<^bold>\<and> a3 \<or> 
@@ -216,12 +216,10 @@ lemma con_dis_simps:
     a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
   by (simp_all add: Con.simps Dis.simps)
 
-text\<open>Finalmente, introduzcamos resultados que permiten caracterizar los conjuntos
-  de Hintikka y la propiedad de consistencia proposicional empleando la 
-  notación uniforme.
+text\<open>Por último, introduzcamos resultados que permiten caracterizar los conjuntos de Hintikka y la 
+  propiedad de consistencia proposicional empleando la notación uniforme.
 
-  \begin{lema}[Caracterización de los conjuntos de Hintikka mediante la
-  notación uniforme]
+  \begin{lema}[Caracterización de los conjuntos de Hintikka mediante la notación uniforme]
     Dado un conjunto de fórmulas proposicionales \<open>S\<close>, son equivalentes:
     \begin{enumerate}
       \item \<open>S\<close> es un conjunto de Hintikka.
@@ -853,10 +851,10 @@ lemma Hintikka_alt: "Hintikka S = (\<bottom> \<notin> S
   subgoal by safe metis+
   done
 
-text\<open>A continuación veamos un resultado que permite la caracterización de la 
+text\<open>Por otra parte, veamos un resultado que permite la caracterización de la 
   propiedad de consistencia proposicional mediante la notación uniforme.
 
-  \begin{lema}[Caracterización de \<open>pcp\<close> mediante la notación uniforme]
+  \begin{lema}[Caracterización de \<open>P.C.P\<close> mediante la notación uniforme]
     Dada una colección \<open>C\<close> de conjuntos de fórmulas proposicionales, son equivalentes:
     \begin{enumerate}
       \item \<open>C\<close> verifica la propiedad de consistencia proposicional.
@@ -874,8 +872,6 @@ text\<open>A continuación veamos un resultado que permite la caracterización d
       \end{itemize} 
     \end{enumerate}
   \end{lema}
-
-  \comentario{No consigo hacer que baje de línea el título del lema.}
 
   En Isabelle/HOL se formaliza el resultado como sigue.\<close>
 
@@ -1236,7 +1232,7 @@ proof -
   qed
 qed
 
-text \<open>De esta manera, mediante los anteriores lemas auxiliares, podemos probar la primera
+text \<open>De esta manera, mediante los anteriores lemas auxiliares podemos probar la primera
   implicación detalladamente en Isabelle.\<close>
 
 lemma pcp_alt1: 
@@ -1464,8 +1460,7 @@ proof (rule allI)+
   qed
 qed
 
-text \<open>De este modo, procedemos a la demostración detallada de esta implicación en Isabelle como
-  sigue.\<close>
+text \<open>De este modo, procedemos a la demostración detallada de esta implicación en Isabelle.\<close>
 
 lemma pcp_alt2: 
   assumes "\<forall>S \<in> C. \<bottom> \<notin> S
