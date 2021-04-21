@@ -1571,7 +1571,7 @@ section \<open>Colecciones cerradas bajo subconjuntos y colecciones de carácter
 text\<open>
 \comentario{Explicar lo que se quiere demostrar en esta sección, dar
 la idea de la prueba  y cómo se necesita la propiedad de que una clase 
-sea cerrada bajo subconjunto (ver Fitting pg. 53 y 54)}
+sea cerrada bajo subconjunto (ver Fitting pg. 53 y 54). Tiene que ver con Hintikka.}
 \<close>
 
 text \<open>En este apartado definiremos dos propiedades referentes a colecciones que utilizaremos 
@@ -3464,12 +3464,36 @@ proof -
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
 qed
 
+lemma sat_mono:
+  assumes "A \<subseteq> B"
+          "sat B"
+        shows "sat A"
+  unfolding sat_def
+proof -
+ have satB:"\<exists>\<A>. \<forall>F \<in> B. \<A> \<Turnstile> F"
+   using assms(2) by (simp only: sat_def)
+ obtain \<A> where "\<forall>F \<in> B. \<A> \<Turnstile> F"
+    using satB by (rule exE)
+ have "\<forall>F \<in> A. \<A> \<Turnstile> F"
+  proof (rule ballI)
+    fix F
+    assume "F \<in> A"
+    have "F \<in> A \<longrightarrow> F \<in> B"
+      using assms(1) by (rule in_mono)
+    then have "F \<in> B"
+      using \<open>F \<in> A\<close> by (rule mp)
+    show "\<A> \<Turnstile> F"
+      using \<open>\<forall>F \<in> B. \<A> \<Turnstile> F\<close> \<open>F \<in> B\<close> by (rule bspec)
+  qed
+  thus "\<exists>\<A>. \<forall>F \<in> A. \<A> \<Turnstile> F"
+    by (simp only: exI)
+qed
+
 theorem pcp_sat_detallada:
   fixes S :: "'a :: countable formula set"
   assumes "pcp C"
   assumes "S \<in> C"
   shows "sat S"
-  unfolding sat_def
 proof -
   have "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
     by (rule ex1)
@@ -3515,19 +3539,8 @@ proof -
     by (rule pcp_seq_sub)
   then have "S \<subseteq> pcp_lim Ce S"
     by (simp only: \<open>pcp_seq Ce S 0 = S\<close>)
-  have "\<forall>F \<in> S. \<A> \<Turnstile> F"
-  proof (rule ballI)
-    fix F
-    assume "F \<in> S"
-    have "F \<in> S \<longrightarrow> F \<in> pcp_lim Ce S"
-      using \<open>S \<subseteq> pcp_lim Ce S\<close> by (rule in_mono)
-    then have "F \<in> pcp_lim Ce S"
-      using \<open>F \<in> S\<close> by (rule mp)
-    show "\<A> \<Turnstile> F"
-      using H3 \<open>F \<in> pcp_lim Ce S\<close> by (rule bspec)
-  qed
-  thus "\<exists>\<A>. \<forall>F \<in> S. \<A> \<Turnstile> F"
-    by (simp only: exI)
+  thus "sat S"
+    using \<open>sat (pcp_lim Ce S)\<close> by (rule sat_mono)
 qed
 
 theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
