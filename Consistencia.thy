@@ -1618,7 +1618,7 @@ text \<open>En este apartado definiremos las propiedades sobre colecciones de co
 
   En Isabelle se formaliza de la siguiente manera.\<close>
 
-definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C)"
+definition "subset_closed C \<equiv> (\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C)"
 
 text \<open>Mostremos algunos ejemplos para ilustrar la definición. Para ello, veamos si las colecciones
   de conjuntos de fórmulas proposicionales expuestas en los ejemplos anteriores son cerradas bajo 
@@ -1663,7 +1663,7 @@ text \<open>Continuemos con la noción de propiedad de carácter finito.
   La formalización en Isabelle/HOL de dicha definición se muestra a continuación.\<close>
 
 definition "finite_character C \<equiv> 
-            (\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C))"
+            (\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C))"
 
 text \<open>Distingamos las colecciones de los ejemplos anteriores que tengan la propiedad de carácter 
   finito. Análogamente, puesto que el conjunto vacío es finito y subconjunto de cualquier conjunto, 
@@ -1691,17 +1691,21 @@ text \<open>Una vez introducidas las definiciones anteriores, veamos los resulta
     consistencia proposicional y sea cerrada bajo subconjuntos.
   \end{lema}
 
+  \comentario{Cambiar forma de expresarlo por extender.}
+
   En Isabelle se formaliza el resultado de la siguiente manera.\<close>
 
 lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
   oops
 
-text \<open>Procedamos con su demostración.
+  text \<open>Procedamos con su demostración.
+
+\comentario{Cambiar notación s y S en la demostración.}
 
 \begin{demostracion}
   Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la colección formada por los 
-  conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta clase por \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. 
- Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
+  conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta clase por 
+  \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
 
   En primer lugar, veamos que \<open>C\<close> está contenida en \<open>C'\<close>. Para ello, consideremos un conjunto
   cualquiera perteneciente a la colección inicial \<open>C\<close>. Puesto que la propiedad de contención es 
@@ -1790,43 +1794,48 @@ text \<open>Procedamos con su demostración.
   considerando la relación de contención en lugar de la de pertenencia.\<close>
 
 lemma 
-  assumes "(\<And>s. s \<subseteq> S \<Longrightarrow> P s)"
-  shows "\<forall>s \<subseteq> S. P s" 
+  assumes "(\<And>S. S \<subseteq> A \<Longrightarrow> P S)"
+  shows "\<forall>S \<subseteq> A. P S" 
 proof (rule allI)
-  fix s
-  show "s \<subseteq> S \<longrightarrow> P s"
+  fix S
+  show "S \<subseteq> A \<longrightarrow> P S"
   proof (rule impI)
-    assume "s \<subseteq> S"
-    thus "P s" 
+    assume "S \<subseteq> A"
+    thus "P S" 
       by (rule assms)
   qed
 qed
 
-lemma sallI: "(\<And>s. s \<subseteq> S \<Longrightarrow> P s) \<Longrightarrow> \<forall>s \<subseteq> S. P s"
+lemma sallI: "(\<And>S. S \<subseteq> A \<Longrightarrow> P S) \<Longrightarrow> \<forall>S \<subseteq> A. P S"
   by simp
 
 text \<open>Por último definimos el siguiente lema auxiliar similar al lema \<open>bspec\<close> de Isabelle/HOL
   considerando, análogamente, la relación de contención en lugar de la de pertenencia.\<close>
 
 lemma 
-  assumes "\<forall>x \<subseteq> A. P x"
-          "x \<subseteq> A"
-  shows "P x"
+  assumes "\<forall>S \<subseteq> A. P S"
+          "S \<subseteq> A"
+  shows "P S"
 proof -
-  show "P x" using [[simp_trace]] find_theorems "\<forall>x \<subseteq> ?A. ?P x"
+  show "P S" using [[simp_trace]] find_theorems "\<forall>x \<subseteq> ?A. ?P x"
     using assms(1) assms(2) by simp (*Pendiente*)
 qed
 
-lemma sspec: "\<forall>x \<subseteq> A. P x \<Longrightarrow> x \<subseteq> A \<Longrightarrow> P x" using [[simp_trace]]
+lemma sspec: "\<forall>S \<subseteq> A. P S \<Longrightarrow> S \<subseteq> A \<Longrightarrow> P S" using [[simp_trace]]
   by simp
 
 text \<open>Veamos la prueba detallada del lema en Isabelle/HOL. Esta se fundamenta en tres lemas
   auxiliares: el primero prueba que la colección \<open>C\<close> está contenida en \<open>C'\<close>, el segundo que
   \<open>C'\<close> tiene la propiedad de consistencia proposicional y, finalmente, el tercer lema demuestra que
   \<open>C'\<close> es cerrada bajo subconjuntos. En primer lugar, mostremos la demostración detallada de 
-  la relación de contención de las colecciones.\<close>
+  la relación de contención de las colecciones.
 
-lemma ex1_subset: "C \<subseteq> {s. \<exists>S\<in>C. s \<subseteq> S}"
+  \comentario{Explicar la formalización de la extensionSC.}\<close>
+
+definition extensionSC :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
+  where extensionSC: "extensionSC C = {s. \<exists>S\<in>C. s \<subseteq> S}"
+
+lemma ex1_subset: "C \<subseteq> (extensionSC C)"
 proof (rule subsetI)
   fix s
   assume "s \<in> C"
@@ -1834,8 +1843,8 @@ proof (rule subsetI)
     by (rule subset_refl)
   then have "\<exists>S\<in>C. s \<subseteq> S"
     using \<open>s \<in> C\<close> by (rule bexI)
-  thus "s \<in> {s. \<exists>S\<in>C. s \<subseteq> S}" 
-    by (simp only: mem_Collect_eq)
+  thus "s \<in> (extensionSC C)"
+    by (simp only: mem_Collect_eq extensionSC)
 qed
 
 text \<open>Prosigamos con la prueba del lema auxiliar que demuestra que \<open>C'\<close> tiene la propiedad
@@ -1939,23 +1948,22 @@ text \<open>Una vez introducidos los lemas auxiliares anteriores, podemos dar la
 
 lemma ex1_pcp: 
   assumes "pcp C"
-  shows "pcp {s. \<exists>S\<in>C. s \<subseteq> S}"
+  shows "pcp (extensionSC C)"
 proof -
-  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
-  have C1: "C \<subseteq> ?E"
+  have C1: "C \<subseteq> (extensionSC C)"
     by (rule ex1_subset)
-  show "pcp ?E"
+  show "pcp (extensionSC C)"
   proof (rule pcp_alt2)
-    show "\<forall>S \<in> ?E. (\<bottom> \<notin> S
+    show "\<forall>S \<in> (extensionSC C). (\<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
-    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E))"
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> (extensionSC C))
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionSC C) \<or> {H} \<union> S \<in> (extensionSC C)))"
     proof (rule ballI)
-      fix S
-      assume "S \<in> ?E"
-      then have 1:"\<exists>S'\<in> C. S \<subseteq> S'"
-        by (rule CollectD)  
-      obtain S' where "S' \<in> C" "S \<subseteq> S'"
+      fix S'
+      assume "S' \<in> (extensionSC C)"
+      then have 1:"\<exists>S \<in> C. S' \<subseteq> S"
+        unfolding extensionSC by (rule CollectD)  
+      obtain S where "S \<in> C" "S' \<subseteq> S"
         using 1 by (rule bexE)
       have "\<forall>S \<in> C.
       \<bottom> \<notin> S
@@ -1963,131 +1971,131 @@ proof -
       \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
       \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
         using assms by (rule pcp_alt1)
-      then have H:"\<bottom> \<notin> S'
-      \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
-      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
-      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using \<open>S' \<in> C\<close> by (rule bspec)
-      then have "\<bottom> \<notin> S'"
+      then have H:"\<bottom> \<notin> S
+      \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+      \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+      \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+        using \<open>S \<in> C\<close> by (rule bspec)
+      then have "\<bottom> \<notin> S"
         by (rule conjunct1)
-      have S1:"\<bottom> \<notin> S"
-        using \<open>S \<subseteq> S'\<close> \<open>\<bottom> \<notin> S'\<close> by (rule contra_subsetD)
-      have Atom:"\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+      have S1:"\<bottom> \<notin> S'"
+        using \<open>S' \<subseteq> S\<close> \<open>\<bottom> \<notin> S\<close> by (rule contra_subsetD)
+      have Atom:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
         using H by (iprover elim: conjunct1 conjunct2)
-      have S2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+      have S2:"\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
       proof (rule allI)
         fix k
-        show "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+        show "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
         proof (rule impI)+
-          assume "Atom k \<in> S"
-          assume "\<^bold>\<not> (Atom k) \<in> S"
-          have "Atom k \<in> S'" 
-            using \<open>S \<subseteq> S'\<close> \<open>Atom k \<in> S\<close> by (rule set_mp)
-          have "\<^bold>\<not> (Atom k) \<in> S'"
-            using \<open>S \<subseteq> S'\<close> \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule set_mp)
-          have "Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
+          assume "Atom k \<in> S'"
+          assume "\<^bold>\<not> (Atom k) \<in> S'"
+          have "Atom k \<in> S" 
+            using \<open>S' \<subseteq> S\<close> \<open>Atom k \<in> S'\<close> by (rule set_mp)
+          have "\<^bold>\<not> (Atom k) \<in> S"
+            using \<open>S' \<subseteq> S\<close> \<open>\<^bold>\<not> (Atom k) \<in> S'\<close> by (rule set_mp)
+          have "Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
             using Atom by (rule allE)
-          then have "\<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False"
-            using \<open>Atom k \<in> S'\<close> by (rule mp)
+          then have "\<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+            using \<open>Atom k \<in> S\<close> by (rule mp)
           thus "False"
-            using \<open>\<^bold>\<not> (Atom k) \<in> S'\<close> by (rule mp)
+            using \<open>\<^bold>\<not> (Atom k) \<in> S\<close> by (rule mp)
         qed
       qed
-      have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+      have Con:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
         using H by (iprover elim: conjunct1 conjunct2)
-      have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+      have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> (extensionSC C)"
       proof (rule allI)+
         fix F G H
-        show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E"
+        show "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> (extensionSC C)"
         proof (rule impI)+
           assume "Con F G H"
-          assume "F \<in> S"
-          have "F \<in> S'"
-            using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-          have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+          assume "F \<in> S'"
+          have "F \<in> S"
+            using \<open>S' \<subseteq> S\<close> \<open>F \<in> S'\<close> by (rule set_mp)
+          have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
             using Con by (iprover elim: allE)
-          then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+          then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
             using \<open>Con F G H\<close> by (rule mp)
-          then have "{G,H} \<union> S' \<in> C"
-            using \<open>F \<in> S'\<close> by (rule mp)
-          have "S \<subseteq> insert H S'"
-            using \<open>S \<subseteq> S'\<close> by (rule subset_insertI2) 
-          then have "insert H S \<subseteq> insert H (insert H S')"
+          then have "{G,H} \<union> S \<in> C"
+            using \<open>F \<in> S\<close> by (rule mp)
+          have "S' \<subseteq> insert H S"
+            using \<open>S' \<subseteq> S\<close> by (rule subset_insertI2) 
+          then have "insert H S' \<subseteq> insert H (insert H S)"
             by (simp only: insert_mono)
-          then have "insert H S \<subseteq> insert H S'"
+          then have "insert H S' \<subseteq> insert H S"
             by (simp only: insert_absorb2)
-          then have "insert G (insert H S) \<subseteq> insert G (insert H S')"
+          then have "insert G (insert H S') \<subseteq> insert G (insert H S)"
             by (simp only: insert_mono)
-          have A:"insert G (insert H S) = {G,H} \<union> S"
+          have A:"insert G (insert H S') = {G,H} \<union> S'"
             by (rule insertSetElem) 
-          have B:"insert G (insert H S') = {G,H} \<union> S'"
+          have B:"insert G (insert H S) = {G,H} \<union> S"
             by (rule insertSetElem)
-          have "{G,H} \<union> S \<subseteq> {G,H} \<union> S'" 
-            using \<open>insert G (insert H S) \<subseteq> insert G (insert H S')\<close> by (simp only: A B)
-          then have "\<exists>S' \<in> C. {G,H} \<union> S \<subseteq> S'"
-            using \<open>{G,H} \<union> S' \<in> C\<close> by (rule bexI)
-          thus "{G,H} \<union> S \<in> ?E" 
-            by (rule CollectI)
+          have "{G,H} \<union> S' \<subseteq> {G,H} \<union> S" 
+            using \<open>insert G (insert H S') \<subseteq> insert G (insert H S)\<close> by (simp only: A B)
+          then have "\<exists>S \<in> C. {G,H} \<union> S' \<subseteq> S"
+            using \<open>{G,H} \<union> S \<in> C\<close> by (rule bexI)
+          thus "{G,H} \<union> S' \<in> (extensionSC C)" 
+            unfolding extensionSC by (rule CollectI)
         qed
       qed
-      have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+      have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using H by (iprover elim: conjunct2)
-      have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+      have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C)"
       proof (rule allI)+
         fix F G H
-        show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+        show "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C)"
         proof (rule impI)+
           assume "Dis F G H"
-          assume "F \<in> S"
-          have "F \<in> S'"
-            using \<open>S \<subseteq> S'\<close> \<open>F \<in> S\<close> by (rule set_mp)
-          have "Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+          assume "F \<in> S'"
+          have "F \<in> S"
+            using \<open>S' \<subseteq> S\<close> \<open>F \<in> S'\<close> by (rule set_mp)
+          have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
             using Dis by (iprover elim: allE)
-          then have "F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
+          then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
             using \<open>Dis F G H\<close> by (rule mp)
-          then have 9:"{G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C"
-            using \<open>F \<in> S'\<close> by (rule mp)
-          show "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+          then have 9:"{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+            using \<open>F \<in> S\<close> by (rule mp)
+          show "{G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C)"
             using 9
           proof (rule disjE)
-            assume "{G} \<union> S' \<in> C"
-            have "insert G S \<subseteq> insert G S'"
-              using \<open>S \<subseteq> S'\<close> by (simp only: insert_mono)
-            have C:"insert G S = {G} \<union> S"
+            assume "{G} \<union> S \<in> C"
+            have "insert G S' \<subseteq> insert G S"
+              using \<open>S' \<subseteq> S\<close> by (simp only: insert_mono)
+            have C:"insert G S' = {G} \<union> S'"
               by (rule insert_is_Un)
-            have D:"insert G S' = {G} \<union> S'"
+            have D:"insert G S = {G} \<union> S"
               by (rule insert_is_Un)
-            have "{G} \<union> S \<subseteq> {G} \<union> S'"
-              using \<open>insert G S \<subseteq> insert G S'\<close> by (simp only: C D)
-            then have "\<exists>S' \<in> C. {G} \<union> S \<subseteq> S'"
-              using \<open>{G} \<union> S' \<in> C\<close> by (rule bexI)
-            then have "{G} \<union> S \<in> ?E"
-              by (rule CollectI)
-            thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+            have "{G} \<union> S' \<subseteq> {G} \<union> S"
+              using \<open>insert G S' \<subseteq> insert G S\<close> by (simp only: C D)
+            then have "\<exists>S \<in> C. {G} \<union> S' \<subseteq> S"
+              using \<open>{G} \<union> S \<in> C\<close> by (rule bexI)
+            then have "{G} \<union> S' \<in> (extensionSC C)"
+              unfolding extensionSC by (rule CollectI)
+            thus "{G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C)"
               by (rule disjI1)
           next
-            assume "{H} \<union> S' \<in> C"
-            have "insert H S \<subseteq> insert H S'"
-              using \<open>S \<subseteq> S'\<close>by (simp only: insert_mono)
-            have E:"insert H S = {H} \<union> S"
+            assume "{H} \<union> S \<in> C"
+            have "insert H S' \<subseteq> insert H S"
+              using \<open>S' \<subseteq> S\<close> by (simp only: insert_mono)
+            have E:"insert H S' = {H} \<union> S'"
               by (rule insert_is_Un)
-            have F:"insert H S' = {H} \<union> S'"
+            have F:"insert H S = {H} \<union> S"
               by (rule insert_is_Un)
-            then have "{H} \<union> S \<subseteq> {H} \<union> S'"
-              using \<open>insert H S \<subseteq> insert H S'\<close> by (simp only: E F)
-            then have "\<exists>S' \<in> C. {H} \<union> S \<subseteq> S'"
-              using \<open>{H} \<union> S' \<in> C\<close> by (rule bexI)
-            then have "{H} \<union> S \<in> ?E"
-              by (rule CollectI)
-            thus "{G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E"
+            then have "{H} \<union> S' \<subseteq> {H} \<union> S"
+              using \<open>insert H S' \<subseteq> insert H S\<close> by (simp only: E F)
+            then have "\<exists>S \<in> C. {H} \<union> S' \<subseteq> S"
+              using \<open>{H} \<union> S \<in> C\<close> by (rule bexI)
+            then have "{H} \<union> S' \<in> (extensionSC C)"
+              unfolding extensionSC by (rule CollectI)
+            thus "{G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C)"
               by (rule disjI2)
           qed
         qed
       qed
-      show "\<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> ?E)
-    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> ?E \<or> {H} \<union> S \<in> ?E)"
+      show "\<bottom> \<notin> S'
+    \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> (extensionSC C))
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> (extensionSC C) \<or> {H} \<union> S' \<in> (extensionSC C))"
         using S1 S2 S3 S4 by (iprover intro: conjI)
     qed
   qed
@@ -2097,26 +2105,25 @@ text \<open>Finalmente, el siguiente lema auxiliar prueba que \<open>C'\<close> 
 
 lemma ex1_subset_closed:
   assumes "pcp C"
-  shows "subset_closed {s. \<exists>S\<in>C. s \<subseteq> S}"
+  shows "subset_closed (extensionSC C)"
   unfolding subset_closed_def
 proof (rule ballI)
-  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
-  fix S
-  assume "S \<in> ?E"
-  then have H:"\<exists>S'\<in> C. S \<subseteq> S'"
-    by (rule CollectD)
-  obtain S' where \<open>S' \<in> C\<close> and \<open>S \<subseteq> S'\<close> 
+  fix S'
+  assume "S' \<in> (extensionSC C)"
+  then have H:"\<exists>S \<in> C. S' \<subseteq> S"
+    unfolding extensionSC by (rule CollectD)
+  obtain S where \<open>S \<in> C\<close> and \<open>S' \<subseteq> S\<close> 
     using H by (rule bexE) 
-  show "\<forall>s \<subseteq> S. s \<in> ?E"
+  show "\<forall>S'' \<subseteq> S'. S'' \<in> (extensionSC C)"
   proof (rule sallI)
-    fix s
-    assume "s \<subseteq> S" 
-    then have "s \<subseteq> S'"
-      using \<open>S \<subseteq> S'\<close> by (rule subset_trans)
-    then have "\<exists>S' \<in> C. s \<subseteq> S'"
-      using \<open>S' \<in> C\<close> by (rule bexI)
-    thus "s \<in> ?E"
-      by (rule CollectI)
+    fix S''
+    assume "S'' \<subseteq> S'" 
+    then have "S'' \<subseteq> S"
+      using \<open>S' \<subseteq> S\<close> by (rule subset_trans)
+    then have "\<exists>S \<in> C. S'' \<subseteq> S"
+      using \<open>S \<in> C\<close> by (rule bexI)
+    thus "S'' \<in> (extensionSC C)"
+      unfolding extensionSC by (rule CollectI)
   qed
 qed
 
@@ -2126,14 +2133,13 @@ lemma
   assumes "pcp C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof -
-  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
-  have C1:"C \<subseteq> ?E"
+  have C1:"C \<subseteq> (extensionSC C)"
     by (rule ex1_subset)
-  have C2:"pcp ?E"
+  have C2:"pcp (extensionSC C)"
     using assms by (rule ex1_pcp)
-  have C3:"subset_closed ?E"
+  have C3:"subset_closed (extensionSC C)"
     using assms by (rule ex1_subset_closed)
-  have "C \<subseteq> ?E \<and> pcp ?E \<and> subset_closed ?E" 
+  have "C \<subseteq> (extensionSC C) \<and> pcp (extensionSC C) \<and> subset_closed (extensionSC C)" 
     using C1 C2 C3 by (iprover intro: conjI)
   thus ?thesis
     by (rule exI)
@@ -2172,23 +2178,23 @@ text \<open>Procedamos con la demostración del resultado.
     demostrar que todo subconjunto de cada conjunto de \<open>C\<close> pertenece también a \<open>C\<close>.
 
     Para ello, tomemos un conjunto \<open>S\<close> cualquiera perteneciente a \<open>C\<close> y un subconjunto cualquiera 
-    \<open>s\<close> de \<open>S\<close>. Probemos que \<open>s\<close> está en \<open>C\<close>. Por hipótesis, como \<open>C\<close> tiene la propiedad de carácter 
-    finito, verifica que, para cualquier conjunto \<open>S'\<close>, son equivalentes:
+    \<open>S'\<close> de \<open>S\<close>. Probemos que \<open>S'\<close> está en \<open>C\<close>. Por hipótesis, como \<open>C\<close> tiene la propiedad de carácter 
+    finito, verifica que, para cualquier conjunto \<open>A\<close>, son equivalentes:
     \begin{enumerate}
-      \item \<open>S'\<close> pertenece a \<open>C\<close>.
-      \item Todo subconjunto finito de \<open>S'\<close> pertenece a \<open>C\<close>.
+      \item \<open>A\<close> pertenece a \<open>C\<close>.
+      \item Todo subconjunto finito de \<open>A\<close> pertenece a \<open>C\<close>.
     \end{enumerate}
 
-    Para probar que el subconjunto \<open>s\<close> pertenece a \<open>C\<close>, vamos a demostrar que todo subconjunto 
-    finito de \<open>s\<close> pertenece a \<open>C\<close>.
+    Para probar que el subconjunto \<open>S'\<close> pertenece a \<open>C\<close>, vamos a demostrar que todo subconjunto 
+    finito de \<open>S'\<close> pertenece a \<open>C\<close>.
 
-    De este modo, consideremos un subconjunto cualquiera \<open>t\<close> de \<open>s\<close>. Como \<open>s\<close> es subconjunto de \<open>S\<close>, 
-    por la transitividad de la relación de contención de conjuntos, se tiene que \<open>t\<close> es subconjunto 
+    De este modo, consideremos un subconjunto cualquiera \<open>S''\<close> de \<open>S'\<close>. Como \<open>S'\<close> es subconjunto de \<open>S\<close>, 
+    por la transitividad de la relación de contención de conjuntos, se tiene que \<open>S''\<close> es subconjunto 
     de \<open>S\<close>. Aplicando la definición de propiedad de carácter finito de \<open>C\<close> para el conjunto \<open>S\<close>, 
     como este pertenece a \<open>C\<close>, verifica que todo subconjunto finito de \<open>S\<close> pertenece a \<open>C\<close>. En
-    particular, como \<open>t\<close> es subconjunto de \<open>S\<close>, verifica que, si \<open>t\<close> es finito, entonces \<open>t\<close> 
-    pertenece a \<open>C\<close>. Por tanto, hemos probado que cualquier conjunto finito de \<open>s\<close> pertenece a la
-    colección. Finalmente por la propiedad de carácter finito de \<open>C\<close>, se verifica que \<open>s\<close> pertenece 
+    particular, como \<open>S''\<close> es subconjunto de \<open>S\<close>, verifica que, si \<open>S''\<close> es finito, entonces \<open>S''\<close> 
+    pertenece a \<open>C\<close>. Por tanto, hemos probado que cualquier conjunto finito de \<open>S'\<close> pertenece a la
+    colección. Finalmente por la propiedad de carácter finito de \<open>C\<close>, se verifica que \<open>S'\<close> pertenece 
     a \<open>C\<close>, como queríamos demostrar.
   \end{demostracion}
 
@@ -2199,26 +2205,26 @@ lemma
   shows "subset_closed C"
   unfolding subset_closed_def
 proof (intro ballI sallI)
-  fix s S
-  assume  \<open>S \<in> C\<close> and \<open>s \<subseteq> S\<close>
-  have H:"\<forall>S'. S' \<in> C \<longleftrightarrow> (\<forall>s' \<subseteq> S'. finite s' \<longrightarrow> s' \<in> C)"
+  fix S' S
+  assume  \<open>S \<in> C\<close> and \<open>S' \<subseteq> S\<close>
+  have H:"\<forall>A. A \<in> C \<longleftrightarrow> (\<forall>A' \<subseteq> A. finite A' \<longrightarrow> A' \<in> C)"
     using assms unfolding finite_character_def by this
-  have QPQ:"\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C"
+  have QPQ:"\<forall>S'' \<subseteq> S'. finite S'' \<longrightarrow> S'' \<in> C"
   proof (rule sallI)
-    fix t
-    assume "t \<subseteq> s"
-    then have "t \<subseteq> S"
-      using \<open>s \<subseteq> S\<close> by (simp only: subset_trans)
-    have 1:"S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+    fix S''
+    assume "S'' \<subseteq> S'"
+    then have "S'' \<subseteq> S"
+      using \<open>S' \<subseteq> S\<close> by (simp only: subset_trans)
+    have 1:"S \<in> C \<longleftrightarrow> (\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C)"
       using H by (rule allE)
-    have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+    have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
       using \<open>S \<in> C\<close> 1 by (rule back_subst)
-    thus "finite t \<longrightarrow> t \<in> C"
-      using \<open>t \<subseteq> S\<close> by (rule sspec)
+    thus "finite S'' \<longrightarrow> S'' \<in> C"
+      using \<open>S'' \<subseteq> S\<close> by (rule sspec)
   qed
-  have "s \<in> C \<longleftrightarrow> (\<forall>t \<subseteq> s. finite t \<longrightarrow> t \<in> C)"
+  have "S' \<in> C \<longleftrightarrow> (\<forall>S'' \<subseteq> S'. finite S'' \<longrightarrow> S'' \<in> C)"
     using H by (rule allE)
-  thus "s \<in> C"
+  thus "S' \<in> C"
     using QPQ by (rule forw_subst)
 qed
 
@@ -2229,13 +2235,13 @@ lemma ex2:
   shows "subset_closed C"
   unfolding subset_closed_def
 proof (intro ballI sallI)
-  fix s S
-  assume e: \<open>S \<in> C\<close> and s: \<open>s \<subseteq> S\<close>
-  hence *: "t \<subseteq> s \<Longrightarrow> t \<subseteq> S" for t by simp
-  from fc have "t \<subseteq> S \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t 
+  fix S' S
+  assume e: \<open>S \<in> C\<close> and s: \<open>S' \<subseteq> S\<close>
+  hence *: "S'' \<subseteq> S' \<Longrightarrow> S'' \<subseteq> S" for S'' by simp
+  from fc have "S'' \<subseteq> S \<Longrightarrow> finite S'' \<Longrightarrow> S'' \<in> C" for S'' 
     unfolding finite_character_def using e by blast
-  hence "t \<subseteq> s \<Longrightarrow> finite t \<Longrightarrow> t \<in> C" for t using * by simp
-  with fc show \<open>s \<in> C\<close> unfolding finite_character_def by blast
+  hence "S'' \<subseteq> S' \<Longrightarrow> finite S'' \<Longrightarrow> S'' \<in> C" for S'' using * by simp
+  with fc show \<open>S' \<in> C\<close> unfolding finite_character_def by blast
 qed
 
 text \<open>\comentario{Voy redactando por aquí.}\<close>
@@ -2244,88 +2250,93 @@ text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es
 cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
 de consistencia proposicional y de carácter finito.\<close>
 
+definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
+  where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
+
+definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
+  where extensionFin: "extensionFin C = C \<union> (extF C)"
+
 lemma ex3_finite_character:
   assumes "subset_closed C"
-        shows "finite_character (C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C})"
+        shows "finite_character (extensionFin C)"
 proof -
-  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  show "finite_character (C \<union> ?E)"
+  show "finite_character (extensionFin C)"
     unfolding finite_character_def
   proof (rule allI)
    fix S
-   show "S \<in> C \<union> ?E \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<union> ?E)"
+   show "S \<in> (extensionFin C) \<longleftrightarrow> (\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> (extensionFin C))"
    proof (rule iffI)
-     assume "S \<in> C \<union> ?E"
-     show "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<union> ?E"
+     assume "S \<in> (extensionFin C)"
+     show "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> (extensionFin C)"
      proof (intro sallI)
-       fix s 
-       assume "s \<subseteq> S"
-       show "finite s \<longrightarrow> s \<in> C \<union> ?E"
+       fix S'
+       assume "S' \<subseteq> S"
+       show "finite S' \<longrightarrow> S' \<in> (extensionFin C)"
        proof (rule impI)
-         assume "finite s"
-         have "S \<in> C \<or> S \<in> ?E"
-           using \<open>S \<in> C \<union> ?E\<close> by (simp only: Un_iff)
-         thus "s \<in> C \<union> ?E"
+         assume "finite S'"
+         have "S \<in> C \<or> S \<in> (extF C)"
+           using \<open>S \<in> (extensionFin C)\<close> by (simp only: extensionFin Un_iff)
+         thus "S' \<in> (extensionFin C)"
          proof (rule disjE)
            assume "S \<in> C"
-           have "\<forall>S \<in> C. \<forall>s \<subseteq> S. s \<in> C"
+           have "\<forall>S \<in> C. \<forall>S' \<subseteq> S. S' \<in> C"
              using assms by (simp only: subset_closed_def)
-           then have "\<forall>s \<subseteq> S. s \<in> C"
+           then have "\<forall>S' \<subseteq> S. S' \<in> C"
              using \<open>S \<in> C\<close> by (rule bspec)
-           then have "s \<in> C"
-             using \<open>s \<subseteq> S\<close> by (rule sspec)
-           thus "s \<in> C \<union> ?E" 
-             by (simp only: UnI1)
+           then have "S' \<in> C"
+             using \<open>S' \<subseteq> S\<close> by (rule sspec)
+           thus "S' \<in> (extensionFin C)" 
+             by (simp only: extensionFin UnI1)
          next
-           assume "S \<in> ?E"
-           then have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-             by (rule CollectD)
-           then have "finite s \<longrightarrow> s \<in> C"
-             using \<open>s \<subseteq> S\<close> by (rule sspec)
-           then have "s \<in> C"
-             using \<open>finite s\<close> by (rule mp)
-           thus "s \<in> C \<union> ?E"
-             by (simp only: UnI1)
+           assume "S \<in> (extF C)"
+           then have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+             unfolding extF by (rule CollectD)
+           then have "finite S' \<longrightarrow> S' \<in> C"
+             using \<open>S' \<subseteq> S\<close> by (rule sspec)
+           then have "S' \<in> C"
+             using \<open>finite S'\<close> by (rule mp)
+           thus "S' \<in> (extensionFin C)"
+             by (simp only: extensionFin UnI1)
         qed
        qed
       qed
    next
-     assume "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<union> ?E"
-     then have F:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C \<or> s \<in> ?E"
-       by (simp only: Un_iff)
-     have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
+     assume "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> (extensionFin C)"
+     then have F:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C \<or> S' \<in> (extF C)"
+       by (simp only: extensionFin Un_iff)
+     have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
      proof (rule sallI)
-       fix s
-       assume "s \<subseteq> S"
-       show "finite s \<longrightarrow> s \<in> C"
+       fix S'
+       assume "S' \<subseteq> S"
+       show "finite S' \<longrightarrow> S' \<in> C"
        proof (rule impI)
-         assume "finite s"
-         have "finite s \<longrightarrow> s \<in> C \<or> s \<in> ?E"
-           using F \<open>s \<subseteq> S\<close> by (rule sspec)
-         then have "s \<in> C \<or> s \<in> ?E"
-           using \<open>finite s\<close> by (rule mp)
-         thus "s \<in> C"
+         assume "finite S'"
+         have "finite S' \<longrightarrow> S' \<in> C \<or> S' \<in> (extF C)"
+           using F \<open>S' \<subseteq> S\<close> by (rule sspec)
+         then have "S' \<in> C \<or> S' \<in> (extF C)"
+           using \<open>finite S'\<close> by (rule mp)
+         thus "S' \<in> C"
          proof (rule disjE)
-           assume "s \<in> C"
-           thus "s \<in> C"
+           assume "S' \<in> C"
+           thus "S' \<in> C"
              by this
          next
-           assume "s \<in> ?E"
-           then have S':"\<forall>s' \<subseteq> s. finite s' \<longrightarrow> s' \<in> C"
-             by (rule CollectD)
-           have "s \<subseteq> s"
+           assume "S' \<in> (extF C)"
+           then have S':"\<forall>S'' \<subseteq> S'. finite S'' \<longrightarrow> S'' \<in> C"
+             unfolding extF by (rule CollectD)
+           have "S' \<subseteq> S'"
              by (simp only: subset_refl)
-           have "finite s \<longrightarrow> s \<in> C"
-             using S' \<open>s \<subseteq> s\<close> by (rule sspec)
-           thus "s \<in> C"
-             using \<open>finite s\<close> by (rule mp)
+           have "finite S' \<longrightarrow> S' \<in> C"
+             using S' \<open>S' \<subseteq> S'\<close> by (rule sspec)
+           thus "S' \<in> C"
+             using \<open>finite S'\<close> by (rule mp)
          qed
        qed
      qed
-     then have "S \<in> ?E"
+     then have "S \<in> {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
        by (rule CollectI)
-     thus "S \<in> C \<union> ?E"
-       by (simp only: UnI2)
+     thus "S \<in> (extensionFin C)"
+       by (simp only: extF extensionFin UnI2)
    qed
  qed
 qed
@@ -2333,206 +2344,204 @@ qed
 lemma ex3_pcp_CON:
   assumes "pcp C"
           "subset_closed C"
-          "S \<in> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}"
+          "S \<in> (extF C)"
           "Con F G H"
           "F \<in> S"
-  shows "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
+  shows "{G,H} \<union> S \<in> (extensionFin C)" 
 proof -
-  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   have 1:"\<forall>S \<in> C.
   \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
 \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  have 2:"\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+  have 2:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
   proof (rule sallI)
-    fix s
-    assume "s \<subseteq> S"
-    show "finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+    fix S'
+    assume "S' \<subseteq> S"
+    show "finite S' \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
     proof (rule impI)+
-      assume "finite s"
-      assume "F \<in> s"
-      have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-        using \<open>S \<in> ?E\<close> by (rule CollectD)
-      then have "finite s \<longrightarrow> s \<in> C"
-        using \<open>s \<subseteq> S\<close> by (rule sspec)
-      then have "s \<in> C"
-        using \<open>finite s\<close> by (rule mp)
-      have "\<bottom> \<notin> s
-            \<and> (\<forall>k. Atom k \<in> s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> s \<longrightarrow> False)
-            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C)
-            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> s \<longrightarrow> {G} \<union> s \<in> C \<or> {H} \<union> s \<in> C)"
-        using 1 \<open>s \<in> C\<close> by (rule bspec)
-      then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+      assume "finite S'"
+      assume "F \<in> S'"
+      have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+        using assms(3) unfolding extF by (rule CollectD)
+      then have "finite S' \<longrightarrow> S' \<in> C"
+        using \<open>S' \<subseteq> S\<close> by (rule sspec)
+      then have "S' \<in> C"
+        using \<open>finite S'\<close> by (rule mp)
+      have "\<bottom> \<notin> S'
+            \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
+            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
+            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
+        using 1 \<open>S' \<in> C\<close> by (rule bspec)
+      then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G, H} \<union> S' \<in> C"
         by (iprover elim: conjunct2 conjunct1)
-      then have "Con F G H \<longrightarrow> F \<in> s \<longrightarrow> {G, H} \<union> s \<in> C"
+      then have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G, H} \<union> S' \<in> C"
         by (iprover elim: allE)
-      then have "F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
+      then have "F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
         using assms(4) by (rule mp)
-      thus "{G, H} \<union> s \<in> C"
-        using \<open>F \<in> s\<close> by (rule mp)
+      thus "{G, H} \<union> S' \<in> C"
+        using \<open>F \<in> S'\<close> by (rule mp)
     qed
   qed
-  have "{G,H} \<union> S \<in> ?E"
-    unfolding mem_Collect_eq Un_iff
+  have "{G,H} \<union> S \<in> (extF C)"
+    unfolding mem_Collect_eq Un_iff extF
   proof (rule sallI)
-    fix s
-    assume H:"s \<subseteq> {G,H} \<union> S"
-    show "finite s \<longrightarrow> s \<in> C"
+    fix S'
+    assume H:"S' \<subseteq> {G,H} \<union> S"
+    show "finite S' \<longrightarrow> S' \<in> C"
     proof (rule impI)
-      assume "finite s"
-      have "s - {G,H} \<subseteq> S"
+      assume "finite S'"
+      have "S' - {G,H} \<subseteq> S"
         using H by (simp only: Diff_subset_conv)
-      have "F \<in> S \<and> (s - {G,H} \<subseteq> S)"
-        using assms(5) \<open>s - {G,H} \<subseteq> S\<close> by (rule conjI)
-      then have "insert F  (s - {G,H}) \<subseteq> S" 
+      have "F \<in> S \<and> (S' - {G,H} \<subseteq> S)"
+        using assms(5) \<open>S' - {G,H} \<subseteq> S\<close> by (rule conjI)
+      then have "insert F  (S' - {G,H}) \<subseteq> S" 
         by (simp only: insert_subset)
-      have F1:"finite (insert F  (s - {G,H})) \<longrightarrow> F \<in> (insert F  (s - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (s - {G,H})) \<in> C"
-        using 2 \<open>insert F  (s - {G,H}) \<subseteq> S\<close> by (rule sspec)
-      have "finite (s - {G,H})"
-        using \<open>finite s\<close> by (rule finite_Diff)
-      then have "finite (insert F (s - {G,H}))" 
+      have F1:"finite (insert F  (S' - {G,H})) \<longrightarrow> F \<in> (insert F  (S' - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (S' - {G,H})) \<in> C"
+        using 2 \<open>insert F  (S' - {G,H}) \<subseteq> S\<close> by (rule sspec)
+      have "finite (S' - {G,H})"
+        using \<open>finite S'\<close> by (rule finite_Diff)
+      then have "finite (insert F (S' - {G,H}))" 
         by (rule finite.insertI)
-      have F2:"F \<in> (insert F  (s - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (s - {G,H})) \<in> C"
-        using F1 \<open>finite (insert F (s - {G,H}))\<close> by (rule mp)
-      have "F \<in> (insert F  (s - {G,H}))"
+      have F2:"F \<in> (insert F  (S' - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (S' - {G,H})) \<in> C"
+        using F1 \<open>finite (insert F (S' - {G,H}))\<close> by (rule mp)
+      have "F \<in> (insert F  (S' - {G,H}))"
         by (simp only: insertI1)
-      have F3:"{G,H} \<union> (insert F (s - {G,H})) \<in> C"
-        using F2 \<open>F \<in> insert F (s - {G,H})\<close> by (rule mp)
-      have IU1:"insert F (s - {G,H}) = {F} \<union> (s - {G,H})"
+      have F3:"{G,H} \<union> (insert F (S' - {G,H})) \<in> C"
+        using F2 \<open>F \<in> insert F (S' - {G,H})\<close> by (rule mp)
+      have IU1:"insert F (S' - {G,H}) = {F} \<union> (S' - {G,H})"
         by (rule insert_is_Un)
-      have IU2:"insert F ({G,H} \<union> s) = {F} \<union> ({G,H} \<union> s)"
+      have IU2:"insert F ({G,H} \<union> S') = {F} \<union> ({G,H} \<union> S')"
         by (rule insert_is_Un)
-      have GH:"insert G (insert H s) = {G,H} \<union> s"
+      have GH:"insert G (insert H S') = {G,H} \<union> S'"
         by (rule insertSetElem)
-      have "{G,H} \<union> (insert F (s - {G,H})) = {G,H} \<union> ({F} \<union> (s - {G,H}))"
+      have "{G,H} \<union> (insert F (S' - {G,H})) = {G,H} \<union> ({F} \<union> (S' - {G,H}))"
         by (simp only: IU1)
-      also have "\<dots> = {F} \<union> ({G,H} \<union> (s - {G,H}))"
+      also have "\<dots> = {F} \<union> ({G,H} \<union> (S' - {G,H}))"
         by (simp only: Un_left_commute)
-      also have "\<dots> = {F} \<union> ({G,H} \<union> s)"
+      also have "\<dots> = {F} \<union> ({G,H} \<union> S')"
         by (simp only: Un_Diff_cancel)
-      also have "\<dots> = insert F ({G,H} \<union> s)"
+      also have "\<dots> = insert F ({G,H} \<union> S')"
         by (simp only: IU2)
-      also have "\<dots> = insert F (insert G (insert H s))"
+      also have "\<dots> = insert F (insert G (insert H S'))"
         by (simp only: GH)
-      finally have F4:"{G,H} \<union> (insert F (s - {G,H})) = insert F (insert G (insert H s))"
+      finally have F4:"{G,H} \<union> (insert F (S' - {G,H})) = insert F (insert G (insert H S'))"
         by this
-      have C1:"insert F (insert G (insert H s)) \<in> C"
+      have C1:"insert F (insert G (insert H S')) \<in> C"
         using F3 by (simp only: F4)
-      have "s \<subseteq> insert F s"
+      have "S' \<subseteq> insert F S'"
         by (rule subset_insertI)
-      then have C2:"s \<subseteq> insert F (insert G (insert H s))"
+      then have C2:"S' \<subseteq> insert F (insert G (insert H S'))"
         by (simp only: subset_insertI2)
-      let ?S="insert F (insert G (insert H s))"
-      have "\<forall>S \<in> C. \<forall>s \<subseteq> S. s \<in> C"
+      let ?S="insert F (insert G (insert H S'))"
+      have "\<forall>S \<in> C. \<forall>S' \<subseteq> S. S' \<in> C"
         using assms(2) by (simp only: subset_closed_def)
-      then have "\<forall>s \<subseteq> ?S. s \<in> C"
+      then have "\<forall>S' \<subseteq> ?S. S' \<in> C"
         using C1 by (rule bspec)
-      thus "s \<in> C"
+      thus "S' \<in> C"
         using C2 by (rule sspec)
     qed
   qed
-  thus "{G,H} \<union> S \<in> C \<union> ?E"
-    by (rule UnI2)
+  thus "{G,H} \<union> S \<in> (extensionFin C)"
+    unfolding extensionFin by (rule UnI2)
 qed
 
 lemma ex3_pcp_DIS_aux:
   assumes "pcp C"
           "subset_closed C"
-          "S \<in> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}"
+          "S \<in> (extF C)"
           "Dis F G H"
-          "s1 \<subseteq> S"
-          "finite s1"
-          "F \<in> s1"
-          "s2 \<subseteq> S"
-          "finite s2"
-          "F \<in> s2"
-  shows "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
+          "S1 \<subseteq> S"
+          "finite S1"
+          "F \<in> S1"
+          "S2 \<subseteq> S"
+          "finite S2"
+          "F \<in> S2"
+  shows "\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C" 
 proof -
-  let ?s = "s1 \<union> s2"
-  have "finite ?s"
+  let ?S = "S1 \<union> S2"
+  have "finite ?S"
     using assms(6) assms(9) by (rule finite_UnI)
-  have "?s \<subseteq> S" 
+  have "?S \<subseteq> S" 
     using assms(5) assms(8) by (simp only: Un_subset_iff)
-  have "\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-    using assms(3) by (rule CollectD)
-  then have "finite ?s \<longrightarrow> ?s \<in> C"
-    using \<open>?s \<subseteq> S\<close> by (rule sspec)
-  then have "?s \<in> C" 
-    using \<open>finite ?s\<close> by (rule mp)
-  have "F \<in> ?s" 
+  have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+    using assms(3) unfolding extF by (rule CollectD)
+  then have "finite ?S \<longrightarrow> ?S \<in> C"
+    using \<open>?S \<subseteq> S\<close> by (rule sspec)
+  then have "?S \<in> C" 
+    using \<open>finite ?S\<close> by (rule mp)
+  have "F \<in> ?S" 
     using assms(7) by (rule UnI1)
   have "\<forall>S \<in> C. \<bottom> \<notin> S
   \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
   \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  then have "\<bottom> \<notin> ?s
-        \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
-        \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
-        \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
-    using \<open>?s \<in> C\<close> by (rule bspec)
-  then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+  then have "\<bottom> \<notin> ?S
+        \<and> (\<forall>k. Atom k \<in> ?S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?S \<longrightarrow> False)
+        \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?S \<longrightarrow> {G,H} \<union> ?S \<in> C)
+        \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?S \<longrightarrow> {G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C)"
+    using \<open>?S \<in> C\<close> by (rule bspec)
+  then have "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?S \<longrightarrow> {G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     by (iprover elim: conjunct2)
-  then have "Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+  then have "Dis F G H \<longrightarrow> F \<in> ?S \<longrightarrow> {G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     by (iprover elim: allE)
-  then have "F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
+  then have "F \<in> ?S \<longrightarrow> {G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     using assms(4) by (rule mp)
-  then have "{G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C"
-    using \<open>F \<in> ?s\<close> by (rule mp)
-  then have 1:"\<exists>I\<in>{G,H}. insert I ?s \<in> C"
+  then have "{G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
+    using \<open>F \<in> ?S\<close> by (rule mp)
+  then have 1:"\<exists>I\<in>{G,H}. insert I ?S \<in> C"
     by simp (*Pendiente*)
-  have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+  have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  then have "\<forall>s \<subseteq> ?s. s \<in> C"
-    using \<open>?s \<in> C\<close> by (rule bspec)
-  show "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
+  then have "\<forall>S' \<subseteq> ?S. S' \<in> C"
+    using \<open>?S \<in> C\<close> by (rule bspec)
+  show "\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C"
     using 1 by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
 qed
 
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
-          "S \<in> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}"
+          "S \<in> (extF C)"
           "Dis F G H"
           "F \<in> S"
-  shows "{G} \<union> S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}) \<or> {H} \<union> S \<in> (C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C})"
+  shows "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
 proof -
-  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   have PCP:"\<forall>S \<in> C.
             \<bottom> \<notin> S
             \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
             \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
             \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-    using assms(3) by (rule CollectD)
-  have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+  have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+    using assms(3) unfolding extF by (rule CollectD)
+  have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  have aux:"\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
-      if A:"s1 \<subseteq> S" "finite s1" "F \<in> s1" 
-         "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
+  have aux:"\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C" 
+      if A:"S1 \<subseteq> S" "finite S1" "F \<in> S1" 
+         "S2 \<subseteq> S" "finite S2" "F \<in> S2" for S1 S2
     using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_aux)
-  have H:"\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
+  have H:"\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False" for S1 S2
     using aux by blast (*Pendiente*)
-  have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
+  have "False" if "S1 \<subseteq> S" "finite S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "insert H S2 \<notin> C" for S1 S2
   proof -
-    have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
+    have *: "insert F  S1 \<subseteq> S" "finite (insert F S1)" "F \<in> insert F S1" if  "S1 \<subseteq> S" "finite S1" for S1
       using that assms(5) by simp_all (*Pendiente*)
-    have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
+    have  "insert G (insert F S1) \<notin> C" "insert H (insert F S2) \<notin> C" 
       by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
     from H[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
     show False . (*Pendiente*)
   qed
-  then have "insert G S \<in> ?E \<or> insert H S \<in> ?E"
-    unfolding mem_Collect_eq Un_iff 
+  then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)"
+    unfolding mem_Collect_eq Un_iff extF
       by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
-  then have "{G} \<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" 
-    by blast (*Pendiente*)
-  thus ?thesis
-    by simp (*Pendiente*)
+  thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)" 
+    unfolding extensionFin by (smt Un_iff insert_is_Un) (*Pendiente*)
 qed
+
+text \<open>\comentario{Voy por aquí con el cambio de notación.}\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
