@@ -109,8 +109,25 @@ text \<open>En esta subsección introduciremos la notación uniforme inicialment
   De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
   de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
   Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, tiene asociada sus  
-  dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. 
+  dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente.
 
+\comentario{Explicar semánticamente equivalentes.}\<close>
+
+definition "equivalentes F G \<equiv> \<forall>\<A>. (\<A> \<Turnstile> F) \<longleftrightarrow> (\<A> \<Turnstile> G)"
+
+lemma "equivalentes (Atom p) (Or (Atom p) (Atom p))" 
+  by (simp add: equivalentes_def)
+
+lemma "equivalentes (Atom p) (And (Atom p) (Atom p))" 
+  by (simp add: equivalentes_def)
+
+lemma "equivalentes Bot (And Bot Bot)" 
+  by (simp add: equivalentes_def)
+
+lemma "equivalentes Bot (Or Bot Bot)" 
+  by (simp add: equivalentes_def)
+
+text \<open>
   \begin{definicion}
     Las fórmulas de tipo \<open>\<alpha>\<close> (\<open>fórmulas conjuntivas\<close>) y sus correspondientes componentes
     \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen como sigue: dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera,
@@ -123,8 +140,12 @@ text \<open>En esta subsección introduciremos la notación uniforme inicialment
   \end{definicion}
 
   Para su formalización emplearemos el tipo \<open>inductive\<close> para definiciones inductivas. De este modo,
-  las cuatro reglas anteriores que contruyen el conjunto de fórmulas de tipo \<open>\<alpha>\<close> se formalizan en
-  Isabelle como reglas de introducción.\<close>
+  las cuatro reglas anteriores que construyen el conjunto de fórmulas de tipo \<open>\<alpha>\<close> se formalizan en
+  Isabelle como reglas de introducción.
+
+\comentario{Formalizamos el conjunto de fŕomulas \<open>\<alpha>\<close> como un predicado 
+inductivo. De este modo, ...}
+\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
@@ -133,7 +154,7 @@ inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (Not (Not F)) F F"
 
 
-text \<open>Las reglas de introducción que proporciona el tipo \<open>inductive\<close> en la definición anterior son
+text \<open>Las reglas de introducción que proporciona la definición anterior son
   las siguientes.
 
   \begin{itemize}
@@ -156,13 +177,18 @@ text \<open>Las reglas de introducción que proporciona el tipo \<open>inductive
 
   Análogamente, su formalización se realiza mediante el tipo \<open>inductive\<close> de manera que las reglas 
   que definen el conjunto de fórmulas de tipo \<open>\<beta>\<close> se formalizan en Isabelle como reglas de 
-  introducción.\<close>
+  introducción.
+
+\comentario{El mismo comentario que para las fórmula \<open>\<alpha>\<close>}
+\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
 "Dis (Imp F G) (Not F) G" |
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
+
+
 
 text \<open>\comentario{Es necesario añadir que la doble negación es una fórmula de 
   de los tipos para que en el lema Hintikka alt se verifique la sexta condición de la
@@ -184,6 +210,9 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
   están contruidos a partir de una serie de reglas sintácticas que no incluyen a todos los casos de 
   fórmulas. En concreto, las fórmulas atómicas y \<open>\<bottom>\<close> no son fórmulas ni de tipo \<open>\<alpha>\<close> ni de tipo \<open>\<beta>\<close>.
 
+\comentario{No es correcto: las fórmulas atómicas se pueden considerar de ambos tipos.
+\<questiondown>De qué tipo es la fórmula p <--> q?}
+
 \comentario{La intuición semántica nos dice que las fórmulas atómicas y bot son ambas conjuntivas y 
   disyuntivas. Sin embargo, sintácticamente no forman parte del tipo de fórmulas alpha y beta, pues
   estos conjuntos conforman una definición basada en la sintaxis (más o menos la explicación).}
@@ -191,8 +220,9 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
   En contraposición, según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una 
   fórmula disyuntiva.\<close>
 
-lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>"
+lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>" 
   unfolding Top_def by (simp only: Dis.intros(2))
+
 
 text \<open>Por otro lado, se observa a partir de las correspondientes definiciones que la conjunción
   generalizada de una lista de fórmulas es una fórmula de tipo \<open>\<alpha>\<close> y la disyunción generalizada de
@@ -978,7 +1008,7 @@ text \<open>En primer lugar, veamos la demostración del lema.
     sexta condición de la definición de propiedad de consistencia proposicional. Por tanto, se 
     verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> está en \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<close> está en \<open>C\<close>.
 
-  \<open>\<sqdot> Fórmula de tipo \<not>(G \<and> H)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son\\ 
+  \<open>\<sqdot> Fórmula de tipo \<not>(G \<and> H)\<close>: En este caso, sus componentes disyuntivas \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son \\ 
     \<open>\<not> G\<close> y \<open>\<not> H\<close> respectivamente. Luego tenemos que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
     bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close> por la séptima condición de la definición de propiedad 
     de consistencia proposicional.
