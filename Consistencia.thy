@@ -2541,18 +2541,15 @@ proof -
     unfolding extensionFin by (smt Un_iff insert_is_Un) (*Pendiente*)
 qed
 
-text \<open>\comentario{Voy por aquí con el cambio de notación.}\<close>
-
 lemma ex3_pcp_SinC:
   assumes "pcp C"
           "subset_closed C"
           "S \<in> C" 
   shows "\<bottom> \<notin> S \<and>
          (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}) \<and>
-         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C} \<or> {H} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C})"
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in>(extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
 proof -
-  let ?E="{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   have PCP:"\<forall>S \<in> C.
     \<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -2570,10 +2567,10 @@ proof -
     using H by (iprover elim: conjunct2 conjunct1)
   have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
     using H by (iprover elim: conjunct2 conjunct1)
-  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
+  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
   proof (rule allI)+
     fix F G H
-    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E"
+    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
     proof (rule impI)+
       assume "Con F G H"
       assume "F \<in> S" 
@@ -2583,16 +2580,16 @@ proof -
         using \<open>Con F G H\<close> by (rule mp)
       then have "{G,H} \<union> S \<in> C"
         using \<open>F \<in> S\<close> by (rule mp)
-      thus "{G,H} \<union> S \<in> C \<union> ?E"
-        by (rule UnI1)
+      thus "{G,H} \<union> S \<in> (extensionFin C)"
+        unfolding extensionFin by (rule UnI1)
     qed
   qed
   have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
     using H by (iprover elim: conjunct2)
-  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
   proof (rule allI)+
     fix F G H
-    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
     proof (rule impI)+
       assume "Dis F G H"
       assume "F \<in> S" 
@@ -2602,47 +2599,46 @@ proof -
         using \<open>Dis F G H\<close> by (rule mp)
       then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
         using \<open>F \<in> S\<close> by (rule mp)
-      thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+      thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
       proof (rule disjE)
         assume "{G} \<union> S \<in> C"
-        then have "{G} \<union> S \<in> C \<union> ?E"
-          by (rule UnI1)
-        thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+        then have "{G} \<union> S \<in> (extensionFin C)"
+          unfolding extensionFin by (rule UnI1)
+        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
           by (rule disjI1)
       next
         assume "{H} \<union> S \<in> C"
-        then have "{H} \<union> S \<in> C \<union> ?E"
-          by (rule UnI1)
-        thus "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+        then have "{H} \<union> S \<in> (extensionFin C)"
+          unfolding extensionFin by (rule UnI1)
+        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
           by (rule disjI2)
       qed
     qed
   qed
   show "\<bottom> \<notin> S \<and>
         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-        (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E) \<and>
-        (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
+        (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+        (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
     using A1 A2 A3 A4 by (iprover intro: conjI)
 qed
 
 lemma ex3_pcp_SinE:
   assumes "pcp C"
           "subset_closed C"
-          "S \<in> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}" 
+          "S \<in> (extF C)" 
   shows "\<bottom> \<notin> S \<and>
          (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}) \<and>
-         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C} \<or> {H} \<union> S \<in> C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C})"
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
 proof -
-  let ?E="{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   have PCP:"\<forall>S \<in> C.
          \<bottom> \<notin> S \<and>
          (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
          (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C) \<and>
          (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  have E:"\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C"
-    using assms(3) by (rule CollectD)
+  have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+    using assms(3) unfolding extF by (rule CollectD)
   have "{} \<subseteq> S"
     by (rule empty_subsetI)
   have "finite {}"
@@ -2669,14 +2665,14 @@ proof -
     proof (rule impI)+
       assume "Atom k \<in> S"
       assume "\<^bold>\<not>(Atom k) \<in> S"
-      let ?s="{Atom k, \<^bold>\<not>(Atom k)}"
-      have "Atom k \<in> ?s"
+      let ?A="{Atom k, \<^bold>\<not>(Atom k)}"
+      have "Atom k \<in> ?A"
         by (simp only: insert_iff simp_thms) 
-      have "\<^bold>\<not>(Atom k) \<in> ?s"
+      have "\<^bold>\<not>(Atom k) \<in> ?A"
         by (simp only: insert_iff simp_thms) 
-      have "?s \<subseteq> S"
+      have "?A \<subseteq> S"
         using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by simp (*Pendiente*)
-      have "?s = {\<^bold>\<not>(Atom k)} \<union> {Atom k}"
+      have "?A = {\<^bold>\<not>(Atom k)} \<union> {Atom k}"
         by (simp only: elemSet)
       have "finite {}"
         by (simp only: finite.emptyI)
@@ -2688,46 +2684,46 @@ proof -
         using \<open>finite {}\<close> by (rule finite.insertI)
       then have F2:"finite {Atom k}"
         by this
-      have "finite ?s"
-        using \<open>?s = {\<^bold>\<not>(Atom k)} \<union> {Atom k}\<close> F1 F2 by (simp only: finite_UnI)
-      have "finite ?s \<longrightarrow> ?s \<in> C"
-        using E \<open>?s \<subseteq> S\<close> by (rule sspec)
-      then have "?s \<in> C"
-        using \<open>finite ?s\<close> by (rule mp)
-      have "\<bottom> \<notin> ?s
-            \<and> (\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False)
-            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G,H} \<union> ?s \<in> C)
-            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?s \<longrightarrow> {G} \<union> ?s \<in> C \<or> {H} \<union> ?s \<in> C)"
-        using PCP \<open>?s \<in> C\<close> by (rule bspec)
-      then have "\<forall>k. Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+      have "finite ?A"
+        using \<open>?A = {\<^bold>\<not>(Atom k)} \<union> {Atom k}\<close> F1 F2 by (simp only: finite_UnI)
+      have "finite ?A \<longrightarrow> ?A \<in> C"
+        using E \<open>?A \<subseteq> S\<close> by (rule sspec)
+      then have "?A \<in> C"
+        using \<open>finite ?A\<close> by (rule mp)
+      have "\<bottom> \<notin> ?A
+            \<and> (\<forall>k. Atom k \<in> ?A \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?A \<longrightarrow> False)
+            \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> ?A \<longrightarrow> {G,H} \<union> ?A \<in> C)
+            \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?A \<longrightarrow> {G} \<union> ?A \<in> C \<or> {H} \<union> ?A \<in> C)"
+        using PCP \<open>?A \<in> C\<close> by (rule bspec)
+      then have "\<forall>k. Atom k \<in> ?A \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?A \<longrightarrow> False"
         by (iprover elim: conjunct2 conjunct1)
-      then have "Atom k \<in> ?s \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?s \<longrightarrow> False"
+      then have "Atom k \<in> ?A \<longrightarrow> \<^bold>\<not> (Atom k) \<in> ?A \<longrightarrow> False"
         by (iprover elim: allE)
-      then have "\<^bold>\<not>(Atom k) \<in> ?s \<longrightarrow> False"
-        using \<open>Atom k \<in> ?s\<close> by (rule mp)
+      then have "\<^bold>\<not>(Atom k) \<in> ?A \<longrightarrow> False"
+        using \<open>Atom k \<in> ?A\<close> by (rule mp)
       thus "False"
-        using \<open>\<^bold>\<not>(Atom k) \<in> ?s\<close> by (rule mp)
+        using \<open>\<^bold>\<not>(Atom k) \<in> ?A\<close> by (rule mp)
     qed
   qed
-  have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
+  have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> (extensionFin C)"
   proof (rule allI)+
     fix F G H
-    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C \<union> ?E"
+    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> (extensionFin C)"
     proof (rule impI)+
       assume "Con F G H"
       assume "F \<in> S" 
-      show "{G,H} \<union> S \<in> C \<union> ?E" 
-        using \<open>pcp C\<close> \<open>subset_closed C\<close> \<open>S \<in> ?E\<close> \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
+      show "{G,H} \<union> S \<in> (extensionFin C)" 
+        using assms(1) assms(2) assms(3) \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
     qed
   qed
-  have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+  have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
   proof (rule allI)+
     fix F G H
-    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
     proof (rule impI)+
       assume "Dis F G H"
       assume "F \<in> S" 
-      show "{G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E"
+      show "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
         using assms(1) assms(2) assms(3) \<open>Dis F G H\<close> \<open>F \<in> S\<close> by (rule ex3_pcp_DIS)
     qed
   qed
@@ -2738,10 +2734,9 @@ qed
 lemma ex3_pcp:
   assumes "pcp C"
           "subset_closed C"
-        shows "pcp (C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C})"
+        shows "pcp ((extensionFin C))"
   unfolding pcp_alt
 proof (rule ballI)
-  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
   have PCP:"\<forall>S \<in> C.
     \<bottom> \<notin> S
     \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -2749,21 +2744,21 @@ proof (rule ballI)
     \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
   fix S
-  assume "S \<in> C \<union> ?E"
-  then have "S \<in> C \<or> S \<in> ?E"
-    by (simp only: Un_iff)
+  assume "S \<in> (extensionFin C)"
+  then have "S \<in> C \<or> S \<in> (extF C)"
+    unfolding extensionFin by (simp only: Un_iff)
   thus "\<bottom> \<notin> S \<and>
          (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> C \<union> ?E) \<and>
-         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<union> ?E \<or> {H} \<union> S \<in> C \<union> ?E)"
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
   proof (rule disjE)
     assume "S \<in> C"
     show ?thesis
       using assms \<open>S \<in> C\<close> by (rule ex3_pcp_SinC)
   next
-    assume "S \<in> ?E"
+    assume "S \<in> (extF C)"
     show ?thesis
-      using assms \<open>S \<in> ?E\<close> by (rule ex3_pcp_SinE)
+      using assms \<open>S \<in> (extF C)\<close> by (rule ex3_pcp_SinE)
   qed
 qed
 
@@ -2772,10 +2767,9 @@ lemma
           "subset_closed C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
 proof -
-  let ?E = "{S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  let ?C'="C \<union> ?E"
+  let ?C'="extensionFin C"
   have C1:"C \<subseteq> ?C'"
-    by (simp only: Un_upper1)
+    unfolding extensionFin by (simp only: Un_upper1)
   have C2:"finite_character (?C')"
     using assms(2) by (rule ex3_finite_character)
   have C3:"pcp (?C')"
@@ -2881,11 +2875,6 @@ text \<open>He introducido una instancia en Sintaxis que señala que las fórmul
   son contables si sus átomos lo son. En caso contrario hay interferencias
   entre los tipos.\<close>
 
-lemma 
-  assumes "P a"
-  shows "P a = P (if (Q b) then b else a)"
-  oops
-
 lemma pcp_seq_in_detallada: 
   assumes "pcp C" 
           "S \<in> C"
@@ -2905,8 +2894,6 @@ next
   thus "pcp_seq C S (Suc n) \<in> C"
     by (simp only: pcp_seq.simps(2))
 qed
-
-text \<open>\comentario{Entender y terminar.}\<close>
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
 proof(induction n)
@@ -3109,37 +3096,37 @@ lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
 
 lemma pcp_lim_inserted_at_ex_detallada: 
-  assumes "x \<in> pcp_lim C S"
-  shows "\<exists>k. x \<in> pcp_seq C S k"
+  assumes "S' \<in> pcp_lim C S"
+  shows "\<exists>k. S' \<in> pcp_seq C S k"
 proof -
-  have H:"x \<in> \<Union>{pcp_seq C S n|n. True}"
+  have H:"S' \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
   have 1:"(pcp_seq C S) ` {n | n. True} = {pcp_seq C S n | n. True}"
     by (simp only: image_Collect simp_thms(40))
   have 2:"\<Union>((pcp_seq C S) ` {n | n. True}) = \<Union>{pcp_seq C S n | n. True}"
     by (simp only: 1)
-  have "x \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
+  have "S' \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
     using H by (simp only: 2)
-  then have "\<exists>k \<in> {n. True}. x \<in> pcp_seq C S k"
+  then have "\<exists>k \<in> {n. True}. S' \<in> pcp_seq C S k"
     by (simp only: UN_iff simp_thms(40))
-  then have "\<exists>k \<in> UNIV. x \<in> pcp_seq C S k" 
+  then have "\<exists>k \<in> UNIV. S' \<in> pcp_seq C S k" 
     by (simp only: UNIV_def)
-  thus "\<exists>k. x \<in> pcp_seq C S k" 
+  thus "\<exists>k. S' \<in> pcp_seq C S k" 
     by (simp only: bex_UNIV)
 qed
 
 lemma pcp_lim_inserted_at_ex: 
-    "x \<in> pcp_lim C S \<Longrightarrow> \<exists>k. x \<in> pcp_seq C S k"
+    "S' \<in> pcp_lim C S \<Longrightarrow> \<exists>k. S' \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
 section \<open>El teorema de existencia de modelo\<close>
 
 lemma finite_pcp_lim_EX:
-  assumes "finite s"
-          "s \<subseteq> pcp_lim C S"
-        shows "\<exists>k. s \<subseteq> pcp_seq C S k"
+  assumes "finite S'"
+          "S' \<subseteq> pcp_lim C S"
+        shows "\<exists>k. S' \<subseteq> pcp_seq C S k"
   using assms
-proof (induction s rule: finite_induct)
+proof (induction S' rule: finite_induct)
   case empty
   have "pcp_seq C S 0 = S"
     by (simp only: pcp_seq.simps(1))
@@ -3150,16 +3137,16 @@ proof (induction s rule: finite_induct)
   then show ?case 
     by (rule exI)
 next
-  case (insert x s)
-  then have "insert x s \<subseteq> pcp_lim C S"
+  case (insert x S')
+  then have "insert x S' \<subseteq> pcp_lim C S"
     by (simp only: insert.prems)
-  then have C:"x \<in> (pcp_lim C S) \<and> s \<subseteq> pcp_lim C S"
+  then have C:"x \<in> (pcp_lim C S) \<and> S' \<subseteq> pcp_lim C S"
     by (simp only: insert_subset) 
-  then have "s \<subseteq> pcp_lim C S"
+  then have "S' \<subseteq> pcp_lim C S"
     by (rule conjunct2)
-  then have EX1:"\<exists>k. s \<subseteq> pcp_seq C S k"
+  then have EX1:"\<exists>k. S' \<subseteq> pcp_seq C S k"
     by (simp only: insert.IH)
-  obtain k1 where "s \<subseteq> pcp_seq C S k1"
+  obtain k1 where "S' \<subseteq> pcp_seq C S k1"
     using EX1 by (rule exE)
   have "x \<in> pcp_lim C S"
     using C by (rule conjunct1)
@@ -3175,12 +3162,12 @@ next
     by (simp only: linorder_class.max.cobounded2)
   then have "pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)"
     by (rule pcp_seq_mono)
-  have "s \<subseteq> pcp_seq C S (max k1 k2)"
-    using \<open>s \<subseteq> pcp_seq C S k1\<close> \<open>pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule subset_trans)
+  have "S' \<subseteq> pcp_seq C S (max k1 k2)"
+    using \<open>S' \<subseteq> pcp_seq C S k1\<close> \<open>pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule subset_trans)
   have "x \<in> pcp_seq C S (max k1 k2)"
     using \<open>x \<in> pcp_seq C S k2\<close> \<open>pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule rev_subsetD)
-  then have 1:"insert x s \<subseteq> pcp_seq C S (max k1 k2)"
-    using \<open>s \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
+  then have 1:"insert x S' \<subseteq> pcp_seq C S (max k1 k2)"
+    using \<open>S' \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
   thus ?case
     by (rule exI)
 qed
@@ -3192,11 +3179,11 @@ lemma pcp_lim_in_detallada:
           "finite_character C"
   shows "pcp_lim C S \<in> C" 
 proof -
-  have "\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C)"
+  have "\<forall>S. S \<in> C \<longleftrightarrow> (\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C)"
     using assms(4) unfolding finite_character_def by this
-  then have FC1:"pcp_lim C S \<in> C \<longleftrightarrow> (\<forall>s \<subseteq> (pcp_lim C S). finite s \<longrightarrow> s \<in> C)"
+  then have FC1:"pcp_lim C S \<in> C \<longleftrightarrow> (\<forall>S' \<subseteq> (pcp_lim C S). finite S' \<longrightarrow> S' \<in> C)"
     by (rule allE)
-  have SC:"\<forall>S \<in> C. \<forall>s\<subseteq>S. s \<in> C"
+  have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(3) unfolding subset_closed_def by this
   have "\<forall>n. pcp_seq C S n \<in> C" 
   proof (rule allI)
@@ -3206,23 +3193,23 @@ proof -
   qed
   then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
     unfolding pcp_seq_UN by this
-  have FC2:"\<forall>s \<subseteq> pcp_lim C S. finite s \<longrightarrow> s \<in> C"
+  have FC2:"\<forall>S' \<subseteq> pcp_lim C S. finite S' \<longrightarrow> S' \<in> C"
   proof (rule sallI)
-    fix s :: "'a formula set"
-    assume "s \<subseteq> pcp_lim C S"
-    show "finite s \<longrightarrow> s \<in> C"
+    fix S' :: "'a formula set"
+    assume "S' \<subseteq> pcp_lim C S"
+    show "finite S' \<longrightarrow> S' \<in> C"
     proof (rule impI)
-      assume "finite s"
-      then have EX:"\<exists>k. s \<subseteq> pcp_seq C S k" 
-        using \<open>s \<subseteq> pcp_lim C S\<close> by (rule finite_pcp_lim_EX)
-      obtain n where "s \<subseteq> pcp_seq C S n"
+      assume "finite S'"
+      then have EX:"\<exists>k. S' \<subseteq> pcp_seq C S k" 
+        using \<open>S' \<subseteq> pcp_lim C S\<close> by (rule finite_pcp_lim_EX)
+      obtain n where "S' \<subseteq> pcp_seq C S n"
         using EX by (rule exE)
       have "pcp_seq C S n \<in> C"
         using assms(1) assms(2) by (rule pcp_seq_in)
-      have "\<forall>s \<subseteq> (pcp_seq C S n). s \<in> C"
+      have "\<forall>S' \<subseteq> (pcp_seq C S n). S' \<in> C"
         using SC \<open>pcp_seq C S n \<in> C\<close> by (rule bspec)
-      thus "s \<in> C"
-        using \<open>s \<subseteq> pcp_seq C S n\<close> by (rule sspec)
+      thus "S' \<in> C"
+        using \<open>S' \<subseteq> pcp_seq C S n\<close> by (rule sspec)
     qed
   qed
   show "pcp_lim C S \<in> C" 
@@ -3238,25 +3225,25 @@ lemma pcp_lim_in:
 proof -
   from pcp_seq_in[OF c el, THEN allI] have "\<forall>n. pcp_seq C S n \<in> C" .
   hence "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" unfolding pcp_seq_UN .
-  have "\<forall>s \<subseteq> ?cl. finite s \<longrightarrow> s \<in> C"
+  have "\<forall>S' \<subseteq> ?cl. finite S' \<longrightarrow> S' \<in> C"
   proof safe
-    fix s :: "'a formula set"
-    have "pcp_seq C S (Suc (Max (to_nat ` s))) \<subseteq> pcp_lim C S" 
+    fix S' :: "'a formula set"
+    have "pcp_seq C S (Suc (Max (to_nat ` S'))) \<subseteq> pcp_lim C S" 
       using pcp_seq_sub by blast
-    assume \<open>finite s\<close> \<open>s \<subseteq> pcp_lim C S\<close>
-    hence "\<exists>k. s \<subseteq> pcp_seq C S k" 
-    proof(induction s rule: finite_induct) 
-      case (insert x s)
-      hence "\<exists>k. s \<subseteq> pcp_seq C S k" by fast
+    assume \<open>finite S'\<close> \<open>S' \<subseteq> pcp_lim C S\<close>
+    hence "\<exists>k. S' \<subseteq> pcp_seq C S k" 
+    proof(induction S' rule: finite_induct) 
+      case (insert x S')
+      hence "\<exists>k. S' \<subseteq> pcp_seq C S k" by fast
       then guess k1 ..
       moreover obtain k2 where "x \<in> pcp_seq C S k2"
         by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
-      ultimately have "insert x s \<subseteq> pcp_seq C S (max k1 k2)"
+      ultimately have "insert x S' \<subseteq> pcp_seq C S (max k1 k2)"
         by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
       thus ?case by blast
     qed simp
     with pcp_seq_in[OF c el] sc
-    show "s \<in> C" unfolding subset_closed_def by blast
+    show "S' \<in> C" unfolding subset_closed_def by blast
   qed
   thus "?cl \<in> C" using fc unfolding finite_character_def by blast
 qed
