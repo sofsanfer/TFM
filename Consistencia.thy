@@ -1682,16 +1682,14 @@ lemma "finite_character {{Atom 0},{}}"
 text \<open>Una vez introducidas las definiciones anteriores, veamos los resultados que las relacionan
   con la propiedad de consistencia proposicional. De este modo, combinándolos en la prueba del 
   \<open>teorema de existencia de modelo\<close>, dada una colección \<open>C\<close> cualquiera que verifique la propiedad 
-  de consistencia proposicional, hallaremos una colección \<open>C'\<close> que la contenga que también la 
-  verifique y además sea cerrada bajo subconjuntos y de carácter finito.
+  de consistencia proposicional, podemos extenderla a una colección \<open>C'\<close> que también la verifique y 
+  además sea cerrada bajo subconjuntos y de carácter finito.
 
   \begin{lema}
-    Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces
-    podemos hallar una colección que la contenga de manera que también verifique la propiedad de 
-    consistencia proposicional y sea cerrada bajo subconjuntos.
+    Toda colección de conjuntos con la propiedad de consistencia proposicional se puede extender a
+    una colección que también verifique la propiedad de consistencia proposicional y sea cerrada 
+    bajo subconjuntos.
   \end{lema}
-
-  \comentario{Cambiar forma de expresarlo por extender.}
 
   En Isabelle se formaliza el resultado de la siguiente manera.\<close>
 
@@ -1703,14 +1701,14 @@ lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and
 \comentario{Cambiar notación s y S en la demostración.}
 
 \begin{demostracion}
-  Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la colección formada por los 
-  conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta clase por 
-  \<open>C' = {s. \<exists>S\<in>C. s \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
+  Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos su extensión formada por los 
+  conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta colección por 
+  \<open>C' = {S'. \<exists>S\<in>C. S' \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
 
   En primer lugar, veamos que \<open>C\<close> está contenida en \<open>C'\<close>. Para ello, consideremos un conjunto
-  cualquiera perteneciente a la colección inicial \<open>C\<close>. Puesto que la propiedad de contención es 
-  reflexiva, dicho conjunto es subconjunto de sí mismo. De este modo, por definición de la 
-  colección \<open>C'\<close>, se verifica que el conjunto pertenece a \<open>C'\<close>.
+  cualquiera perteneciente a \<open>C\<close>. Puesto que la propiedad de contención es reflexiva, dicho conjunto 
+  es subconjunto de sí mismo. De este modo, por definición de \<open>C'\<close>, se verifica que el conjunto 
+  pertenece a \<open>C'\<close>.
 
   Por otro lado, comprobemos que \<open>C'\<close> tiene la propiedad de consistencia proposicional.
   Por el lema de caracterización de la propiedad de consistencia proposicional mediante la
@@ -1781,10 +1779,10 @@ lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and
   bajo subconjuntos, basta probar que dado un conjunto perteneciente a \<open>C'\<close> verifica que todo 
   subconjunto suyo pertenece a \<open>C'\<close>. Consideremos \<open>S\<close> un conjunto cualquiera de \<open>C'\<close>. Por
   definición de \<open>C'\<close>, existe un conjunto \<open>S'\<close> perteneciente a la colección \<open>C\<close> tal que \<open>S\<close> es
-  subconjunto de \<open>S'\<close>. Sea \<open>s\<close> un subconjunto cualquiera de \<open>S\<close>. Como \<open>S\<close> es subconjunto de \<open>S'\<close>,
-  se tiene que \<open>s\<close> es, a su vez, subconjunto de \<open>S'\<close>. De este modo, existe un conjunto perteneciente
-  a la colección \<open>C\<close> del cual \<open>s\<close> es subconjunto. Por tanto, por definición de \<open>C'\<close>, \<open>s\<close> pertenece
-  a la colección \<open>C'\<close>, como quería demostrar.
+  subconjunto de \<open>S'\<close>. Sea \<open>S''\<close> un subconjunto cualquiera de \<open>S\<close>. Como \<open>S\<close> es subconjunto de \<open>S'\<close>,
+  se tiene que \<open>S''\<close> es, a su vez, subconjunto de \<open>S'\<close>. De este modo, existe un conjunto 
+  perteneciente a la colección \<open>C\<close> del cual \<open>S''\<close> es subconjunto. Por tanto, por definición de \<open>C'\<close>, 
+  \<open>S''\<close> pertenece a la colección \<open>C'\<close>, como quería demostrar.
 \end{demostracion}
 
   Procedamos con las demostraciones del lema en Isabelle/HOL.
@@ -1827,13 +1825,14 @@ lemma sspec: "\<forall>S \<subseteq> A. P S \<Longrightarrow> S \<subseteq> A \<
 text \<open>Veamos la prueba detallada del lema en Isabelle/HOL. Esta se fundamenta en tres lemas
   auxiliares: el primero prueba que la colección \<open>C\<close> está contenida en \<open>C'\<close>, el segundo que
   \<open>C'\<close> tiene la propiedad de consistencia proposicional y, finalmente, el tercer lema demuestra que
-  \<open>C'\<close> es cerrada bajo subconjuntos. En primer lugar, mostremos la demostración detallada de 
-  la relación de contención de las colecciones.
-
-  \comentario{Explicar la formalización de la extensionSC.}\<close>
+  \<open>C'\<close> es cerrada bajo subconjuntos. En primer lugar, dada una colección cualquiera \<open>C\<close>, definiremos 
+  en Isabelle su extensión \<open>C'\<close> como sigue.\<close>
 
 definition extensionSC :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extensionSC: "extensionSC C = {s. \<exists>S\<in>C. s \<subseteq> S}"
+
+text \<open>Una vez formalizada la extensión en Isabelle, comencemos probando de manera detallada que toda
+  colección está contenida en su extensión así definida.\<close>
 
 lemma ex1_subset: "C \<subseteq> (extensionSC C)"
 proof (rule subsetI)
@@ -2244,11 +2243,13 @@ proof (intro ballI sallI)
   with fc show \<open>S' \<in> C\<close> unfolding finite_character_def by blast
 qed
 
-text \<open>\comentario{Voy redactando por aquí.}\<close>
+text\<open>Introduzcamos el último resultado de la sección.
 
-text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y es 
-cerrado bajo subconjunto, entonces tiene un subconjunto con la propiedad
-de consistencia proposicional y de carácter finito.\<close>
+ \begin{lema}
+    Toda colección de conjuntos con la propiedad de consistencia proposicional y cerrada bajo 
+    subconjuntos se puede extender a una colección que también verifique la propiedad de 
+    consistencia proposicional y sea de carácter finito.
+ \end{lema}\<close>
 
 definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
