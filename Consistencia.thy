@@ -2249,7 +2249,46 @@ text\<open>Introduzcamos el último resultado de la sección.
     Toda colección de conjuntos con la propiedad de consistencia proposicional y cerrada bajo 
     subconjuntos se puede extender a una colección que también verifique la propiedad de 
     consistencia proposicional y sea de carácter finito.
- \end{lema}\<close>
+ \end{lema}
+
+ \begin{demostracion}
+   Dada una colección de conjuntos \<open>C\<close> en las condiciones del enunciado, vamos a considerar su 
+   extensión \<open>C'\<close> definida como la unión de \<open>C\<close> y la colección formada por aquellos conjuntos
+   cuyos subconjuntos finitos pertenecen a \<open>C\<close>. Es decir, \<open>C' = C \<union> E\<close> donde 
+   \<open>E = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}\<close>. Es evidente que la extensión está bien definida
+   pues contiene a la colección \<open>C\<close>. Vamos a probar que, además es de carácter finito y verifica la 
+   propiedad de consistencia proposicional.
+
+   En primer lugar, demostremos que \<open>C'\<close> es de carácter finito. Por definición de dicha propiedad, 
+   basta probar que, para cualquier conjunto, son equivalentes:
+   \begin{enumerate}
+    \item El conjunto pertenece \<open>C'\<close>.
+    \item Todo subconjunto finito suyo pertenece a \<open>C'\<close>.
+   \end{enumerate}
+
+   Comencemos probando \<open>1) \<Longrightarrow> 2)\<close>. Para ello, sea un conjunto \<open>S\<close> de \<open>C'\<close> de modo que \<open>S'\<close> es un
+   subconjunto finito suyo. Como \<open>S\<close> pertenece a la extensión, por definición de la misma tenemos
+   que o bien \<open>S\<close> está en \<open>C\<close> o bien \<open>S\<close> está en \<open>E\<close>. Vamos a probar que \<open>S'\<close> está en \<open>C'\<close> por
+   eliminación de la disyunción anterior. En primer lugar, si suponemos que \<open>S\<close> está en \<open>C\<close>, como
+   se trata de una colección cerrada bajo subconjuntos, tenemos que todo subconjunto de \<open>S\<close> está en 
+   \<open>C\<close>. En particular, \<open>S'\<close> está en \<open>C\<close> y, por definición de la extensión, se prueba
+   que \<open>S'\<close> está en \<open>C'\<close>. Por otro lado, suponiendo que \<open>S\<close> esté en \<open>E\<close>, por definición de dicha 
+   colección tenemos que todo subconjunto finito de \<open>S\<close> está en \<open>C\<close>. De este modo, por las hipótesis 
+   se prueba que \<open>S'\<close> está en \<open>C\<close> y, por tanto, pertenece a la extensión. 
+
+   Por último, probemos la implicación \<open>2) \<Longrightarrow> 1)\<close>. Sea un conjunto cualquiera \<open>S\<close> tal que todo
+   subconjunto finito suyo pertenece a \<open>C'\<close>. Vamos a probar que \<open>S\<close> también pertenece a \<open>C'\<close>. En
+   particular, probaremos que pertenece a \<open>E\<close>. Luego basta probar que todo subconjunto finito de 
+   \<open>S\<close> pertenece a \<open>C\<close>. Para ello, consideremos \<open>S'\<close> un subconjunto finito cualquiera de \<open>S\<close>. Por
+   hipótesis, tenemos que \<open>S'\<close> pertenece a \<open>C'\<close>. Por definición de la extensión, tenemos entonces
+   que o bien \<open>S'\<close> está en \<open>C\<close> (lo que daría por concluida la prueba) o bien \<open>S'\<close> está en \<open>E\<close>. 
+   De este modo, si suponemos que \<open>S'\<close> está en \<open>E\<close>, por definición de dicha colección tenemos que
+   todo subconjunto finito suyo está en \<open>C\<close>. En particular, como todo conjunto es subconjunto de si
+   mismo y como hemos supuesto que \<open>S'\<close> es finito, tenemos que \<open>S'\<close> está en \<open>C\<close>, lo que prueba la
+   implicación.
+ \end{demostracion}
+
+  \comentario{Terminar la demostración a mano.}\<close>
 
 definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
@@ -2269,38 +2308,35 @@ proof -
    proof (rule iffI)
      assume "S \<in> (extensionFin C)"
      show "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> (extensionFin C)"
-     proof (intro sallI)
+     proof (intro sallI impI)
        fix S'
        assume "S' \<subseteq> S"
-       show "finite S' \<longrightarrow> S' \<in> (extensionFin C)"
-       proof (rule impI)
-         assume "finite S'"
-         have "S \<in> C \<or> S \<in> (extF C)"
-           using \<open>S \<in> (extensionFin C)\<close> by (simp only: extensionFin Un_iff)
+       assume "finite S'"
+       have "S \<in> C \<or> S \<in> (extF C)"
+         using \<open>S \<in> (extensionFin C)\<close> by (simp only: extensionFin Un_iff)
+       thus "S' \<in> (extensionFin C)"
+       proof (rule disjE)
+         assume "S \<in> C"
+         have "\<forall>S \<in> C. \<forall>S' \<subseteq> S. S' \<in> C"
+           using assms by (simp only: subset_closed_def)
+         then have "\<forall>S' \<subseteq> S. S' \<in> C"
+           using \<open>S \<in> C\<close> by (rule bspec)
+         then have "S' \<in> C"
+           using \<open>S' \<subseteq> S\<close> by (rule sspec)
+         thus "S' \<in> (extensionFin C)" 
+           by (simp only: extensionFin UnI1)
+       next
+         assume "S \<in> (extF C)"
+         then have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
+           unfolding extF by (rule CollectD)
+         then have "finite S' \<longrightarrow> S' \<in> C"
+           using \<open>S' \<subseteq> S\<close> by (rule sspec)
+         then have "S' \<in> C"
+           using \<open>finite S'\<close> by (rule mp)
          thus "S' \<in> (extensionFin C)"
-         proof (rule disjE)
-           assume "S \<in> C"
-           have "\<forall>S \<in> C. \<forall>S' \<subseteq> S. S' \<in> C"
-             using assms by (simp only: subset_closed_def)
-           then have "\<forall>S' \<subseteq> S. S' \<in> C"
-             using \<open>S \<in> C\<close> by (rule bspec)
-           then have "S' \<in> C"
-             using \<open>S' \<subseteq> S\<close> by (rule sspec)
-           thus "S' \<in> (extensionFin C)" 
-             by (simp only: extensionFin UnI1)
-         next
-           assume "S \<in> (extF C)"
-           then have "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
-             unfolding extF by (rule CollectD)
-           then have "finite S' \<longrightarrow> S' \<in> C"
-             using \<open>S' \<subseteq> S\<close> by (rule sspec)
-           then have "S' \<in> C"
-             using \<open>finite S'\<close> by (rule mp)
-           thus "S' \<in> (extensionFin C)"
-             by (simp only: extensionFin UnI1)
-        qed
+           by (simp only: extensionFin UnI1)
        qed
-      qed
+     qed
    next
      assume "\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> (extensionFin C)"
      then have F:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C \<or> S' \<in> (extF C)"
@@ -2312,7 +2348,7 @@ proof -
        show "finite S' \<longrightarrow> S' \<in> C"
        proof (rule impI)
          assume "finite S'"
-         have "finite S' \<longrightarrow> S' \<in> C \<or> S' \<in> (extF C)"
+         have "finite S' \<longrightarrow> S' \<in> C \<or> S' \<in> (extF C)" 
            using F \<open>S' \<subseteq> S\<close> by (rule sspec)
          then have "S' \<in> C \<or> S' \<in> (extF C)"
            using \<open>finite S'\<close> by (rule mp)
