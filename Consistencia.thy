@@ -2572,8 +2572,8 @@ proof -
     using assms(4) by (rule mp)
   then have "{G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     using \<open>F \<in> ?S\<close> by (rule mp)
-  then have 1:"\<exists>I\<in>{G,H}. insert I ?S \<in> C"
-    by simp (*Pendiente*)
+  then have 1:"\<exists>I\<in>{G,H}. insert I ?S \<in> C" using [[simp_trace]]
+    by (simp add: bex_simps(5)) (*Pendiente*)
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
   then have "\<forall>S' \<subseteq> ?S. S' \<in> C"
