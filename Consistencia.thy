@@ -109,25 +109,75 @@ text \<open>En esta subsección introduciremos la notación uniforme inicialment
   De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
   de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
   Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, tiene asociada sus  
-  dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente.
+  dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. Para justificar dicha clasificación,
+  introduzcamos inicialmente la definición de fórmulas semánticamente equivalentes.
 
-\comentario{Explicar semánticamente equivalentes.}\<close>
+  \begin{definicion}
+    Dos fórmulas son \<open>semánticamente equivalentes\<close> si tienen el mismo valor para toda 
+    interpretación.
+  \end{definicion}
 
-definition "equivalentes F G \<equiv> \<forall>\<A>. (\<A> \<Turnstile> F) \<longleftrightarrow> (\<A> \<Turnstile> G)"
+  En Isabelle podemos formalizar la definición de la siguiente manera.\<close>
 
-lemma "equivalentes (Atom p) (Or (Atom p) (Atom p))" 
-  by (simp add: equivalentes_def)
+definition "semanticEq F G \<equiv> \<forall>\<A>. (\<A> \<Turnstile> F) \<longleftrightarrow> (\<A> \<Turnstile> G)"
 
-lemma "equivalentes (Atom p) (And (Atom p) (Atom p))" 
-  by (simp add: equivalentes_def)
+text \<open>De este modo, según la definición del valor de verdad de una fórmula proposicional en una 
+  interpretación dada, podemos ver los siguientes ejemplos de fórmulas semánticamente equivalentes.\<close>
 
-lemma "equivalentes Bot (And Bot Bot)" 
-  by (simp add: equivalentes_def)
+lemma "semanticEq (Atom p) ((Atom p) \<^bold>\<or> (Atom p))" 
+  by (simp add: semanticEq_def)
 
-lemma "equivalentes Bot (Or Bot Bot)" 
-  by (simp add: equivalentes_def)
+lemma "semanticEq (Atom p) ((Atom p) \<^bold>\<and> (Atom p))" 
+  by (simp add: semanticEq_def)
 
-text \<open>
+lemma "semanticEq \<bottom> (\<bottom> \<^bold>\<and> \<bottom>)" 
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq \<bottom> (\<bottom> \<^bold>\<or> \<bottom>)" 
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq \<bottom> (\<^bold>\<not> \<top>)"
+  by (simp add: semanticEq_def top_semantics)
+
+lemma "semanticEq F (\<^bold>\<not>(\<^bold>\<not> F))"
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq (\<^bold>\<not>(\<^bold>\<not> F)) (F \<^bold>\<or> F)"
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq (\<^bold>\<not>(\<^bold>\<not> F)) (F \<^bold>\<and> F)"
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq (\<^bold>\<not> F \<^bold>\<and> \<^bold>\<not> G) (\<^bold>\<not>(F \<^bold>\<or> G))"
+  by (simp add: semanticEq_def)
+
+lemma "semanticEq (F \<^bold>\<rightarrow> G) (\<^bold>\<not> F \<^bold>\<or> G)"
+  by (simp add: semanticEq_def)
+
+text \<open>En contraposición, también podemos dar ejemplos de fórmulas que no son semánticamente 
+  equivalentes.\<close>
+
+lemma "\<not> semanticEq (Atom p) (\<^bold>\<not>(Atom p))"
+  by (simp add: semanticEq_def)
+
+lemma "\<not> semanticEq \<bottom> \<top>"
+  by (simp add: semanticEq_def top_semantics)
+
+
+lemma 
+  assumes "\<forall>H. semanticEq \<bottom> H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
+          "\<forall>H. semanticEq (\<^bold>\<not> \<bottom>) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
+          "\<forall>H p. semanticEq (Atom p) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
+          "\<forall>H p. semanticEq (\<^bold>\<not>(Atom p)) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
+        shows "\<not> semanticEq (F \<^bold>\<and> G) (F \<^bold>\<or> G)"
+proof (rule ccontr)
+  assume "semanticEq (F \<^bold>\<and> G) (F \<^bold>\<or> G)" 
+  oops
+
+text \<open>Por tanto, diremos intuitivamente que una fórmula es de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>
+  si es semánticamente equivalente a la fórmula \<open>\<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>. Del mismo modo, una fórmula será de tipo
+  \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> si es semánticamente equivalente a la fórmula \<open>\<beta>\<^sub>1 \<or> \<beta>\<^sub>2\<close>.
+
   \begin{definicion}
     Las fórmulas de tipo \<open>\<alpha>\<close> (\<open>fórmulas conjuntivas\<close>) y sus correspondientes componentes
     \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se definen como sigue: dadas \<open>F\<close> y \<open>G\<close> fórmulas cualesquiera,
@@ -135,24 +185,27 @@ text \<open>
       \item \<open>F \<and> G\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
       \item \<open>\<not>(F \<or> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>\<not> G\<close>.
       \item \<open>\<not>(F \<longrightarrow> G)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>\<not> G\<close>.
-      \item \<open>\<not>(\<not> F)\<close> es una fórmula de tipo \<open>\<alpha>\<close> cuyas componentes son \<open>F\<close> y \<open>F\<close>.
     \end{enumerate} 
   \end{definicion}
 
-  Para su formalización emplearemos el tipo \<open>inductive\<close> para definiciones inductivas. De este modo,
-  las cuatro reglas anteriores que construyen el conjunto de fórmulas de tipo \<open>\<alpha>\<close> se formalizan en
-  Isabelle como reglas de introducción.
+  De este modo, de los ejemplos anteriores podemos deducir que las fórmulas atómicas son de tipo \<open>\<alpha>\<close>
+  y sus componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> son la propia fórmula. Del mismo modo, la constante \<open>\<bottom>\<close> también es 
+  una fórmula conjuntiva cuyas componentes son ella misma. Por último, podemos observar que dada
+  una fórmula cualquiera \<open>F\<close>, su doble negación \<open>\<not>(\<not> F)\<close> es una fórmula de tipo \<open>\<alpha>\<close> y componentes
+  \<open>F\<close> y \<open>F\<close>.
 
-\comentario{Formalizamos el conjunto de fŕomulas \<open>\<alpha>\<close> como un predicado 
-inductivo. De este modo, ...}
-\<close>
+  Formalizaremos en Isabelle el conjunto de fórmulas \<open>\<alpha>\<close> como un predicato inductivo. De este modo,
+  las reglas anteriores que construyen el conjunto de fórmulas de tipo \<open>\<alpha>\<close> se formalizan en Isabelle 
+  como reglas de introducción. Además, añadiremos explícitamente una cuarta regla que introduce la 
+  doble negación de una fórmula como fórmula de tipo \<open>\<alpha>\<close>. De este modo, facilitaremos la prueba de 
+  resultados posteriores relacionados con la definición de conjunto de Hintikka, que constituyen una
+  base para la demostración del \<open>teorema de existencia de modelo\<close>.\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |
 "Con (Not (Or F G)) (Not F) (Not G)" |
 "Con (Not (Imp F G)) F (Not G)" |
 "Con (Not (Not F)) F F"
-
 
 text \<open>Las reglas de introducción que proporciona la definición anterior son
   las siguientes.
@@ -161,8 +214,8 @@ text \<open>Las reglas de introducción que proporciona la definición anterior 
     \item[] @{thm[mode=Rule] Con.intros[no_vars]} 
       \hfill (@{text Con.intros})
   \end{itemize}
-
-  A continuación, definamos las fórmulas disyuntivas.
+  
+  Por otro lado, definamos las fórmulas disyuntivas.
 
   \begin{definicion}
     Las fórmulas de tipo \<open>\<beta>\<close> (\<open>fórmulas disyuntivas\<close>) y sus correspondientes componentes
@@ -171,31 +224,23 @@ text \<open>Las reglas de introducción que proporciona la definición anterior 
       \item \<open>F \<or> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>F\<close> y \<open>G\<close>.
       \item \<open>F \<longrightarrow> G\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>G\<close>.
       \item \<open>\<not>(F \<and> G)\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>\<not> F\<close> y \<open>\<not> G\<close>.
-      \item \<open>\<not>(\<not> F)\<close> es una fórmula de tipo \<open>\<beta>\<close> cuyas componentes son \<open>F\<close> y \<open>F\<close>.
     \end{enumerate} 
   \end{definicion}
 
-  Análogamente, su formalización se realiza mediante el tipo \<open>inductive\<close> de manera que las reglas 
-  que definen el conjunto de fórmulas de tipo \<open>\<beta>\<close> se formalizan en Isabelle como reglas de 
-  introducción.
+  De los ejemplos dados anteriormente, podemos deducir análogamente que las fórmulas atómicas, la
+  constante \<open>\<bottom>\<close> y la doble negación sob también fórmulas disyuntivas con las mismas componentes que
+  las dadas para el tipo conjuntivo.
 
-\comentario{El mismo comentario que para las fórmula \<open>\<alpha>\<close>}
-\<close>
+  Del mismo modo, su formalización se realiza como un predicado inductivo, de manera que las reglas 
+  que definen el conjunto de fórmulas de tipo \<open>\<beta>\<close> se formalizan en Isabelle como reglas de 
+  introducción. Análogamente, introduciremos de manera explícita una regla que señala que la doble 
+  negación de una fórmula es una fórmula de tipo disyuntivo.\<close>
 
 inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Or F G) F G" |
 "Dis (Imp F G) (Not F) G" |
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
-
-
-
-text \<open>\comentario{Es necesario añadir que la doble negación es una fórmula de 
-  de los tipos para que en el lema Hintikka alt se verifique la sexta condición de la
-  definición de conjunto de Hintikka. Para ser más precisos, se incluye la doble
-  negación en ambos tipos de fórmula ya que, efectivamente, es de ambos tipos. Sin
-  embargo, bastaría añadirlo en uno de ellos para poder cumplir la sexta condición 
-  de la definición de Hintikka.}\<close>
 
 text \<open>Del mismo modo, las reglas de introducción que proporciona esta formalización se muestran a 
   continuación.
@@ -205,20 +250,19 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
       \hfill (@{text Dis.intros})
   \end{itemize}
 
-  Cabe observar que no todas las fórmulas proposicionales son de alguno de estos dos tipos. Esto
-  se debe a que tanto el conjunto de fórmulas conjuntivas como el conjunto de fórmulas disyuntivas 
-  están contruidos a partir de una serie de reglas sintácticas que no incluyen a todos los casos de 
-  fórmulas. En concreto, las fórmulas atómicas y \<open>\<bottom>\<close> no son fórmulas ni de tipo \<open>\<alpha>\<close> ni de tipo \<open>\<beta>\<close>.
+  Cabe observar que las formalizaciones de la definiciones de fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close> son 
+  definiciones sintácticas, pues construyen los correspondientes conjuntos de fórmulas a partir de 
+  una reglas sintácticas concretas. Se trata de una simplificación de la intuición original de la 
+  clasificación de las fórmulas mediante notación uniforme, ya que se prescinde de la noción de 
+  equivalencia semántica que permite clasificar la totalidad de las fórmulas proposicionales. En 
+  particular, la formalización no clasifica las fórmulas atómicas ni \<open>\<bottom>\<close>. Sin embargo, en Isabelle 
+  consideraremos estas fórmulas como casos aislados de la clasificación ofrecida por la notación 
+  uniforme.
 
-\comentario{No es correcto: las fórmulas atómicas se pueden considerar de ambos tipos.
-\<questiondown>De qué tipo es la fórmula p <--> q?}
+  \comentario{Creo que puedo mejorar esa explicación.}
 
-\comentario{La intuición semántica nos dice que las fórmulas atómicas y bot son ambas conjuntivas y 
-  disyuntivas. Sin embargo, sintácticamente no forman parte del tipo de fórmulas alpha y beta, pues
-  estos conjuntos conforman una definición basada en la sintaxis (más o menos la explicación).}
-
-  En contraposición, según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una 
-  fórmula disyuntiva.\<close>
+  Sin embargo, la formalización sí proporciona clasificación para el resto de fórmulas. Por ejemplo,
+  según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una fórmula disyuntiva.\<close>
 
 lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>" 
   unfolding Top_def by (simp only: Dis.intros(2))
