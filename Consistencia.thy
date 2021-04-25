@@ -2618,6 +2618,8 @@ lemma ex3_pcp_DIS:
           "F \<in> S"
   shows "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
 proof -
+  have "(extF C) \<subseteq> (extensionFin C)"
+    unfolding extensionFin by blast (*Pendiente*)
   have PCP:"\<forall>S \<in> C.
             \<bottom> \<notin> S
             \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -2645,9 +2647,11 @@ proof -
   qed
   then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)"
     unfolding mem_Collect_eq Un_iff extF
-      by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
-  thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)" 
-    unfolding extensionFin by (smt Un_iff insert_is_Un) (*Pendiente*)
+    by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
+  then have "insert G S \<in> (extensionFin C) \<or> insert H S \<in> (extensionFin C)"
+    using \<open>(extF C) \<subseteq> (extensionFin C)\<close> by blast (*Pendiente*)
+  thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+    by (smt Un_iff insert_is_Un) (*Pendiente*)
 qed
 
 lemma ex3_pcp_SinC:
