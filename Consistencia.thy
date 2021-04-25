@@ -2542,6 +2542,10 @@ lemma ex3_pcp_DIS_aux:
   shows "\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C" 
 proof -
   let ?S = "S1 \<union> S2"
+  have "S1 \<subseteq> ?S"
+    by (simp only: Un_upper1)
+  have "S2 \<subseteq> ?S"
+    by (simp only: Un_upper2)
   have "finite ?S"
     using assms(6) assms(9) by (rule finite_UnI)
   have "?S \<subseteq> S" 
@@ -2570,16 +2574,40 @@ proof -
     by (iprover elim: allE)
   then have "F \<in> ?S \<longrightarrow> {G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     using assms(4) by (rule mp)
-  then have "{G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
+  then have insIsUn:"{G} \<union> ?S \<in> C \<or> {H} \<union> ?S \<in> C"
     using \<open>F \<in> ?S\<close> by (rule mp)
-  then have 1:"\<exists>I\<in>{G,H}. insert I ?S \<in> C" using [[simp_trace]]
-    by (simp add: bex_simps(5)) (*Pendiente*)
+  have insG:"insert G ?S = {G} \<union> ?S" 
+    by (rule insert_is_Un)
+  have insH:"insert H ?S = {H} \<union> ?S"
+    by (rule insert_is_Un)
+  have "insert G ?S \<in> C \<or> insert H ?S \<in> C"
+    using insG insH by (simp only: insIsUn)
+  then have "(insert G ?S \<in> C \<or> insert H ?S \<in> C) \<or> (\<exists>I \<in> {}. insert I ?S \<in> C)"
+    by (simp only: disjI1)
+  then have "insert G ?S \<in> C \<or> (insert H ?S \<in> C \<or> (\<exists>I \<in> {}. insert I ?S \<in> C))"
+    by (simp only: disj_assoc)
+  then have "insert G ?S \<in> C \<or> (\<exists>I \<in> {H}. insert I ?S \<in> C)"
+    by (simp only: bex_simps(5))
+  then have 1:"\<exists>I \<in> {G,H}. insert I ?S \<in> C" 
+    by (simp only: bex_simps(5))
+  obtain I where "I \<in> {G,H}" and "insert I ?S \<in> C"
+    using 1 by (rule bexE)
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  then have "\<forall>S' \<subseteq> ?S. S' \<in> C"
-    using \<open>?S \<in> C\<close> by (rule bspec)
-  show "\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C"
-    using 1 by (meson assms(2)[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1) (*Pendiente*)
+  then have 2:"\<forall>S' \<subseteq> (insert I ?S). S' \<in> C"
+    using \<open>insert I ?S \<in> C\<close> by (rule bspec)
+  have "insert I S1 \<subseteq> insert I ?S" 
+    using \<open>S1 \<subseteq> ?S\<close> by (rule insert_mono)
+  have "insert I S1 \<in> C"
+    using 2 \<open>insert I S1 \<subseteq> insert I ?S\<close> by (rule sspec)
+  have "insert I S2 \<subseteq> insert I ?S"
+    using \<open>S2 \<subseteq> ?S\<close> by (rule insert_mono)
+  have "insert I S2 \<in> C"
+    using 2 \<open>insert I S2 \<subseteq> insert I ?S\<close> by (rule sspec)
+  have "insert I S1 \<in> C \<and> insert I S2 \<in> C"
+    using \<open>insert I S1 \<in> C\<close> \<open>insert I S2 \<in> C\<close> by (rule conjI)
+  thus "\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C"
+    using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
 lemma ex3_pcp_DIS:
