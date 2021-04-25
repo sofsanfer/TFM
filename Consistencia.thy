@@ -2631,6 +2631,46 @@ proof -
     using Ex by (rule notE)
 qed
 
+lemma ex3_pcp_DIS_auxFalseDisj:
+  assumes "pcp C" 
+          "subset_closed C"
+          "S \<in> (extF C)"
+          "Dis F G H"
+          "F \<in> S"
+          "S1 \<subseteq> S" 
+          "finite S1" 
+          "insert G S1 \<notin> C" 
+          "S2 \<subseteq> S" 
+          "finite S2" 
+          "insert H S2 \<notin> C"
+        shows "False"
+proof -
+  let ?S1="insert F S1"
+  let ?S2="insert F S2"
+  have 1:"?S1 \<subseteq> S"
+    using \<open>F \<in> S\<close> \<open>S1 \<subseteq> S\<close> by blast (*Pendiente*)
+  have 2:"finite ?S1"
+    using \<open>finite S1\<close> by blast (*Pendiente*)
+  have 3:"F \<in> ?S1"
+    by blast (*Pendiente*)
+  have 4:"insert G ?S1 \<notin> C"
+    by (metis assms(2) assms(8) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
+  have 5:"?S2 \<subseteq> S"
+    using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by blast (*Pendiente*)
+  have 6:"?S2 \<subseteq> S"
+    using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by blast (*Pendiente*)
+  have 7:"finite ?S2"
+    using \<open>finite S2\<close> by blast (*Pendiente*)
+  have 8:"F \<in> ?S2"
+    by blast (*Pendiente*)
+  have 9:"insert H ?S2 \<notin> C" 
+    by (metis assms(2) assms(11) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
+  have H:"\<lbrakk>?S1 \<subseteq> S; finite ?S1; F \<in> ?S1; insert G ?S1 \<notin> C; ?S2 \<subseteq> S; finite ?S2; F \<in> ?S2; insert H ?S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
+    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
+  thus "False" using [[simp_trace]]
+    using 1 2 3 4 5 6 7 8 9 by blast (*Pendiente*)
+qed
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -2657,18 +2697,8 @@ proof -
     using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_auxEx)
   have H:"\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False" for S1 S2
     using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
-  have "False" if "S1 \<subseteq> S" "finite S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "insert H S2 \<notin> C" for S1 S2
-  proof -
-    have *: "insert F S1 \<subseteq> S" "finite (insert F S1)" "F \<in> insert F S1" if  "S1 \<subseteq> S" "finite S1" for S1
-      using that assms(5) by simp_all (*Pendiente*)
-    have  "insert G (insert F S1) \<notin> C" "insert H (insert F S2) \<notin> C" 
-      by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
-    from H[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
-    show False . (*Pendiente*)
-  qed
-  have "False" 
-    if B:"S1 \<subseteq> S" "finite S1" "F \<in> S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "F \<in> S2" "insert H S2 \<notin> C" for S1 S2
-    using assms(1) assms(2) assms(3) assms(4) B by (rule ex3_pcp_DIS_auxFalse)
+  have "False" if B:"S1 \<subseteq> S" "finite S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "insert H S2 \<notin> C" for S1 S2
+    using assms(1) assms(2) assms(3) assms(4) assms(5) B by (rule ex3_pcp_DIS_auxFalseDisj)
   then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
     unfolding mem_Collect_eq Un_iff extF by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
   thus ?thesis
