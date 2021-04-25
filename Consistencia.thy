@@ -2528,7 +2528,7 @@ proof -
     unfolding extensionFin by (rule UnI2)
 qed
 
-lemma ex3_pcp_DIS_aux:
+lemma ex3_pcp_DIS_auxEx:
   assumes "pcp C"
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2610,6 +2610,27 @@ proof -
     using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
+lemma ex3_pcp_DIS_auxFalse:
+  assumes "pcp C" 
+          "subset_closed C"
+          "S \<in> (extF C)"
+          "Dis F G H"
+        shows "\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
+proof -
+  assume 1:"S1 \<subseteq> S" and 2:"finite S1" and 3:"F \<in> S1" and 4:"insert G S1 \<notin> C" and 5:"S2 \<subseteq> S" and 6:"finite S2" 
+          and 7:"F \<in> S2" and 8:"insert H S2 \<notin> C"
+  have Ex:"\<exists>I \<in> {G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C"
+    using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
+  have "\<forall>I \<in> {G,H}. insert I S1 \<notin> C \<or> insert I S2 \<notin> C"
+    using 4 8 by blast (*Pendiente*)
+  then have "\<forall>I \<in> {G,H}. \<not>(insert I S1 \<in> C \<and> insert I S2 \<in> C)"
+    by blast (*Pendiente*)
+  then have "\<not>(\<exists>I \<in> {G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C)"
+    by blast (*Pendiente*)
+  thus "False"
+    using Ex by (rule notE)
+qed
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -2618,8 +2639,8 @@ lemma ex3_pcp_DIS:
           "F \<in> S"
   shows "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
 proof -
-  have "(extF C) \<subseteq> (extensionFin C)"
-    unfolding extensionFin by blast (*Pendiente*)
+  have "(extF C) \<subseteq> (extensionFin C)" 
+    unfolding extensionFin by (rule Un_upper2) 
   have PCP:"\<forall>S \<in> C.
             \<bottom> \<notin> S
             \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
@@ -2633,25 +2654,45 @@ proof -
   have aux:"\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C" 
       if A:"S1 \<subseteq> S" "finite S1" "F \<in> S1" 
          "S2 \<subseteq> S" "finite S2" "F \<in> S2" for S1 S2
-    using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_aux)
+    using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_auxEx)
   have H:"\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False" for S1 S2
-    using aux by blast (*Pendiente*)
+    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
   have "False" if "S1 \<subseteq> S" "finite S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "insert H S2 \<notin> C" for S1 S2
   proof -
-    have *: "insert F  S1 \<subseteq> S" "finite (insert F S1)" "F \<in> insert F S1" if  "S1 \<subseteq> S" "finite S1" for S1
+    have *: "insert F S1 \<subseteq> S" "finite (insert F S1)" "F \<in> insert F S1" if  "S1 \<subseteq> S" "finite S1" for S1
       using that assms(5) by simp_all (*Pendiente*)
     have  "insert G (insert F S1) \<notin> C" "insert H (insert F S2) \<notin> C" 
       by (meson assms(2) insert_mono subset_closed_def subset_insertI that(3,6))+ (*Pendiente*)
     from H[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
     show False . (*Pendiente*)
   qed
-  then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)"
-    unfolding mem_Collect_eq Un_iff extF
-    by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
-  then have "insert G S \<in> (extensionFin C) \<or> insert H S \<in> (extensionFin C)"
-    using \<open>(extF C) \<subseteq> (extensionFin C)\<close> by blast (*Pendiente*)
-  thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-    by (smt Un_iff insert_is_Un) (*Pendiente*)
+  have "False" 
+    if B:"S1 \<subseteq> S" "finite S1" "F \<in> S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "F \<in> S2" "insert H S2 \<notin> C" for S1 S2
+    using assms(1) assms(2) assms(3) assms(4) B by (rule ex3_pcp_DIS_auxFalse)
+  then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
+    unfolding mem_Collect_eq Un_iff extF by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
+  thus ?thesis
+  proof (rule disjE)
+    assume "insert G S \<in> (extF C)"
+    have insG:"insert G S \<in> (extensionFin C)"
+      using \<open>(extF C) \<subseteq> (extensionFin C)\<close> \<open>insert G S \<in> (extF C)\<close> by (simp only: in_mono)
+    have "insert G S = {G} \<union> S"
+      by (rule insert_is_Un)
+    then have "{G} \<union> S \<in> (extensionFin C)"
+      using insG \<open>insert G S = {G} \<union> S\<close> by (simp only: insG)
+    thus ?thesis
+      by (rule disjI1)
+  next
+    assume "insert H S \<in> (extF C)"
+    have insH:"insert H S \<in> (extensionFin C)"
+      using \<open>(extF C) \<subseteq> (extensionFin C)\<close> \<open>insert H S \<in> (extF C)\<close> by (simp only: in_mono)
+    have "insert H S = {H} \<union> S"
+      by (rule insert_is_Un)
+    then have "{H} \<union> S \<in> (extensionFin C)"
+      using insH \<open>insert H S = {H} \<union> S\<close> by (simp only: insH)
+    thus ?thesis
+      by (rule disjI2)
+  qed
 qed
 
 lemma ex3_pcp_SinC:
