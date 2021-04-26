@@ -2833,27 +2833,37 @@ proof -
     using assms(1) by (rule pcp_alt1)
   have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
     using assms(3) unfolding extF by (rule CollectD)
-  then have E':"\<forall>S'. S' \<subseteq> S \<longrightarrow> finite S' \<longrightarrow> S' \<in> C"
-    by blast (*Pendiente*)
   have "{} \<subseteq> S"
     by (rule empty_subsetI)
-  have "finite {}"
-    by (rule finite.emptyI) 
-  have "finite {} \<longrightarrow> {} \<in> C" using [[simp_trace]]
-    using E \<open>{} \<subseteq> S\<close> by simp (*Pendiente*)
-  then have "{} \<in> C"
-    using \<open>finite {}\<close> by (rule mp)
-  have 3:"\<bottom> \<notin> {}
-  \<and> (\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False)
-  \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G,H} \<union> {} \<in> C)
-  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G} \<union> {} \<in> C \<or> {H} \<union> {} \<in> C)" using [[simp_trace]]
-    using PCP \<open>{} \<in> C\<close> by simp (*Pendiente*)
-  then have "\<bottom> \<notin> {}"
-    by (rule conjunct1)
   have C1:"\<bottom> \<notin> S"
-    using E assms(1) insert_absorb2 insert_is_Un pcp_alt1 by force (*Pendiente*)
-  have B2:"\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False"
-    using 3 by (iprover elim: conjunct2 conjunct1)
+  proof (rule ccontr)
+    assume "\<not>(\<bottom> \<notin> S)"
+    then have "\<bottom> \<in> S"
+      by (rule notnotD)
+    then have "\<bottom> \<in> S \<and> {} \<subseteq> S"
+      using \<open>{} \<subseteq> S\<close> by (rule conjI)
+    then have "insert \<bottom> {} \<subseteq> S" 
+      by (simp only: insert_subset)
+    have "finite {}"
+      by (rule finite.emptyI)
+    then have "finite (insert \<bottom> {})"
+      by (rule finite.insertI)
+    have "finite (insert \<bottom> {}) \<longrightarrow> (insert \<bottom> {}) \<in> C"
+      using E \<open>(insert \<bottom> {}) \<subseteq> S\<close> by simp (*Pendiente*)
+    then have "(insert \<bottom> {}) \<in> C"
+      using \<open>finite (insert \<bottom> {})\<close> by (rule mp)
+    have "\<bottom> \<notin> (insert \<bottom> {}) \<and>
+         (\<forall>k. Atom k \<in> (insert \<bottom> {}) \<longrightarrow> \<^bold>\<not> (Atom k) \<in> (insert \<bottom> {}) \<longrightarrow> False) \<and>
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> (insert \<bottom> {}) \<longrightarrow> {G, H} \<union> (insert \<bottom> {}) \<in> C) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> (insert \<bottom> {}) \<longrightarrow> {G} \<union> (insert \<bottom> {}) \<in> C \<or> {H} \<union> (insert \<bottom> {}) \<in> C)"
+      using PCP \<open>(insert \<bottom> {}) \<in> C\<close> by blast (*Pendiente*)
+    then have "\<bottom> \<notin> (insert \<bottom> {})"
+      by (rule conjunct1)
+    have "\<bottom> \<in> (insert \<bottom> {})"
+      by (rule insertI1)
+    show "False"
+      using \<open>\<bottom> \<notin> (insert \<bottom> {})\<close> \<open>\<bottom> \<in> (insert \<bottom> {})\<close> by (rule notE)
+  qed
   have C2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
   proof (rule allI)
     fix k
