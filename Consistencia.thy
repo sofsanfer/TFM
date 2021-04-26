@@ -2833,19 +2833,21 @@ proof -
     using assms(1) by (rule pcp_alt1)
   have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
     using assms(3) unfolding extF by (rule CollectD)
+  then have E':"\<forall>S'. S' \<subseteq> S \<longrightarrow> finite S' \<longrightarrow> S' \<in> C"
+    by blast (*Pendiente*)
   have "{} \<subseteq> S"
     by (rule empty_subsetI)
   have "finite {}"
-    by (rule finite.emptyI)
-  have "finite {} \<longrightarrow> {} \<in> C"
-    using E \<open>{} \<subseteq> S\<close> by blast (*Pendiente*)
+    by (rule finite.emptyI) 
+  have "finite {} \<longrightarrow> {} \<in> C" using [[simp_trace]]
+    using E \<open>{} \<subseteq> S\<close> by simp (*Pendiente*)
   then have "{} \<in> C"
     using \<open>finite {}\<close> by (rule mp)
   have 3:"\<bottom> \<notin> {}
   \<and> (\<forall>k. Atom k \<in> {} \<longrightarrow> \<^bold>\<not> (Atom k) \<in> {} \<longrightarrow> False)
   \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G,H} \<union> {} \<in> C)
-  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G} \<union> {} \<in> C \<or> {H} \<union> {} \<in> C)"
-    using PCP \<open>{} \<in> C\<close> by auto (*Pendiente*)
+  \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> {} \<longrightarrow> {G} \<union> {} \<in> C \<or> {H} \<union> {} \<in> C)" using [[simp_trace]]
+    using PCP \<open>{} \<in> C\<close> by simp (*Pendiente*)
   then have "\<bottom> \<notin> {}"
     by (rule conjunct1)
   have C1:"\<bottom> \<notin> S"
@@ -2859,27 +2861,21 @@ proof -
     proof (rule impI)+
       assume "Atom k \<in> S"
       assume "\<^bold>\<not>(Atom k) \<in> S"
-      let ?A="{Atom k, \<^bold>\<not>(Atom k)}"
+      let ?A="insert (Atom k) (insert (\<^bold>\<not>(Atom k)) {})"
       have "Atom k \<in> ?A"
         by (simp only: insert_iff simp_thms) 
       have "\<^bold>\<not>(Atom k) \<in> ?A"
         by (simp only: insert_iff simp_thms) 
+      have inSubset:"insert (\<^bold>\<not>(Atom k)) {} \<subseteq> S"
+        using \<open>\<^bold>\<not>(Atom k) \<in> S\<close> \<open>{} \<subseteq> S\<close> by (simp only: insert_subset)
       have "?A \<subseteq> S"
-        using \<open>Atom k \<in> S\<close> \<open>\<^bold>\<not>(Atom k) \<in> S\<close> by simp (*Pendiente*)
-      have "?A = {\<^bold>\<not>(Atom k)} \<union> {Atom k}"
-        by (simp only: elemSet)
+        using inSubset \<open>Atom k \<in> S\<close> by (simp only: insert_subset)
       have "finite {}"
         by (simp only: finite.emptyI)
       then have "finite (insert (\<^bold>\<not>(Atom k)) {})"
         by (rule finite.insertI)
-      then have F1:"finite {\<^bold>\<not>(Atom k)}"
-        by this
-      have "finite (insert (Atom k) {})"
-        using \<open>finite {}\<close> by (rule finite.insertI)
-      then have F2:"finite {Atom k}"
-        by this
-      have "finite ?A"
-        using \<open>?A = {\<^bold>\<not>(Atom k)} \<union> {Atom k}\<close> F1 F2 by (simp only: finite_UnI)
+      then have "finite ?A"
+        by (rule finite.insertI)
       have "finite ?A \<longrightarrow> ?A \<in> C"
         using E \<open>?A \<subseteq> S\<close> by (rule sspec)
       then have "?A \<in> C"
