@@ -2646,29 +2646,39 @@ lemma ex3_pcp_DIS_auxFalseDisj:
         shows "False"
 proof -
   let ?S1="insert F S1"
+  let ?S1'="insert G S1"
   let ?S2="insert F S2"
-  have 1:"?S1 \<subseteq> S"
-    using \<open>F \<in> S\<close> \<open>S1 \<subseteq> S\<close> by blast (*Pendiente*)
-  have 2:"finite ?S1"
-    using \<open>finite S1\<close> by blast (*Pendiente*)
-  have 3:"F \<in> ?S1"
+  let ?S2'="insert G S2"
+  have "\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
+    using assms(2) by (simp only: subset_closed_def)
+  then have notSC:"\<forall>S S'. (S \<in> C \<longrightarrow> S'\<subseteq> S \<longrightarrow> S' \<in> C)"
     by blast (*Pendiente*)
-  have 4:"insert G ?S1 \<notin> C"
+  have 1:"?S1 \<subseteq> S"
+    using \<open>F \<in> S\<close> \<open>S1 \<subseteq> S\<close> by (simp only: insert_subset) 
+  have 2:"finite ?S1"
+    using \<open>finite S1\<close> by (simp only: finite_insert) 
+  have 3:"F \<in> ?S1"
+    by (simp only: insertI1) 
+  have "insert G ?S1 \<in> C \<longrightarrow> ?S1' \<subseteq> insert G ?S1 \<longrightarrow> ?S1' \<in> C"
+    using notSC by (iprover elim: allE)
+  then have "?S1' \<notin> C \<longrightarrow> \<not>(insert G ?S1 \<subseteq> ?S1') \<longrightarrow> insert G ?S1 \<notin> C"
+    by blast (*Pendiente*)
+  then have "\<not>(insert G ?S1 \<subseteq> ?S1') \<longrightarrow> insert G ?S1 \<notin> C"
+    using assms(8) by (rule mp) (*Continuar...*)
+  have 4:"insert G ?S1 \<notin> C" 
     by (metis assms(2) assms(8) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
   have 5:"?S2 \<subseteq> S"
-    using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by blast (*Pendiente*)
-  have 6:"?S2 \<subseteq> S"
-    using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by blast (*Pendiente*)
-  have 7:"finite ?S2"
-    using \<open>finite S2\<close> by blast (*Pendiente*)
-  have 8:"F \<in> ?S2"
-    by blast (*Pendiente*)
-  have 9:"insert H ?S2 \<notin> C" 
+    using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by (simp only: insert_subset)
+  have 6:"finite ?S2"
+    using \<open>finite S2\<close> by (simp only: finite_insert)
+  have 7:"F \<in> ?S2"
+    by (simp only: insertI1)
+  have 8:"insert H ?S2 \<notin> C" 
     by (metis assms(2) assms(11) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
   have H:"\<lbrakk>?S1 \<subseteq> S; finite ?S1; F \<in> ?S1; insert G ?S1 \<notin> C; ?S2 \<subseteq> S; finite ?S2; F \<in> ?S2; insert H ?S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
     using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
-  thus "False" using [[simp_trace]]
-    using 1 2 3 4 5 6 7 8 9 by blast (*Pendiente*)
+  thus "False"
+    using 1 2 3 4 5 6 7 8 by blast (*Pendiente*)
 qed
 
 lemma ex3_pcp_DIS:
