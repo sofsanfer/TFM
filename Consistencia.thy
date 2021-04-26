@@ -2610,7 +2610,7 @@ proof -
     using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
-lemma ex3_pcp_DIS_auxFalse:
+lemma ex3_pcp_DIS_auxAuxFalse:
   assumes "pcp C" 
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2631,7 +2631,7 @@ proof -
     using Ex by (rule notE)
 qed
 
-lemma ex3_pcp_DIS_auxFalseDisj:
+lemma ex3_pcp_DIS_auxFalse:
   assumes "pcp C" 
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2676,9 +2676,9 @@ proof -
   have 8:"insert H ?S2 \<notin> C" 
     by (metis assms(2) assms(11) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
   have H:"\<lbrakk>?S1 \<subseteq> S; finite ?S1; F \<in> ?S1; insert G ?S1 \<notin> C; ?S2 \<subseteq> S; finite ?S2; F \<in> ?S2; insert H ?S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
-    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
-  thus "False"
-    using 1 2 3 4 5 6 7 8 by blast (*Pendiente*)
+    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxAuxFalse)
+  show "False"
+    using 1 2 3 4 5 6 7 8 by (rule H)
 qed
 
 lemma ex3_pcp_DIS:
@@ -2701,16 +2701,75 @@ proof -
     using assms(3) unfolding extF by (rule CollectD)
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  have aux:"\<exists>I\<in>{G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C" 
-      if A:"S1 \<subseteq> S" "finite S1" "F \<in> S1" 
-         "S2 \<subseteq> S" "finite S2" "F \<in> S2" for S1 S2
-    using assms(1) assms(2) assms(3) assms(4) A by (simp only: ex3_pcp_DIS_auxEx)
-  have H:"\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False" for S1 S2
-    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxFalse)
-  have "False" if B:"S1 \<subseteq> S" "finite S1" "insert G S1 \<notin> C" "S2 \<subseteq> S" "finite S2" "insert H S2 \<notin> C" for S1 S2
-    using assms(1) assms(2) assms(3) assms(4) assms(5) B by (rule ex3_pcp_DIS_auxFalseDisj)
-  then have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
-    unfolding mem_Collect_eq Un_iff extF by (smt E finite_Diff insert_Diff subset_insert_iff) (*Pendiente*)
+  have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
+    (*unfolding mem_Collect_eq Un_iff extF *)(*by (smt E finite_Diff insert_Diff subset_insert_iff) Pendiente*)
+  proof (rule ccontr)
+    assume "\<not>(insert G S \<in> (extF C) \<or> insert H S \<in> (extF C))"  
+    then have Conj:"insert G S \<notin> (extF C) \<and> insert H S \<notin> (extF C)"
+      by blast (*Pendiente*)
+    then have "insert G S \<notin> (extF C)"
+      by (rule conjunct1)
+    then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)"
+      unfolding extF by blast (*Pendiente*)
+    then have Ex1:"\<exists>S'\<subseteq> (insert G S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
+      by blast (*Pendiente*)
+    obtain S1 where "S1 \<subseteq> insert G S" and "\<not>(finite S1 \<longrightarrow> S1 \<in> C)"
+      using Ex1 by blast (*Pendiente*)
+    have "finite S1 \<and> S1 \<notin> C"
+      using \<open>\<not>(finite S1 \<longrightarrow> S1 \<in> C)\<close> by auto (*Pendiente*)
+    then have "finite S1"
+      by (rule conjunct1)
+    have "S1 \<notin> C"
+      using \<open>finite S1 \<and> S1 \<notin> C\<close> by (rule conjunct2)
+    then have "insert G S1 \<notin> C"
+    proof - (*Pendiente*)
+      have "\<not> S1 \<subseteq> S"
+        using E \<open>\<not> (finite S1 \<longrightarrow> S1 \<in> C)\<close> by force
+      then have "(S1 \<subseteq> insert G S) \<noteq> (S1 \<subseteq> S)"
+        by (metis \<open>S1 \<subseteq> insert G S\<close>)
+      then show ?thesis
+        by (metis \<open>S1 \<notin> C\<close> insert_absorb subset_insert)
+    qed 
+    let ?S1="S1 - {G}"
+    have 1:"?S1 \<subseteq> S"
+      using \<open>S1 \<subseteq> insert G S\<close> by blast (*Pendiente*)
+    have 2:"finite ?S1"
+      using \<open>finite S1\<close> by blast (*Pendiente*)
+    have 3:"insert G ?S1 \<notin> C"
+      by (smt \<open>insert G S1 \<notin> C\<close> insert_Diff_single) (*Pendiente*)
+    have "insert H S \<notin> (extF C)"
+      using Conj by (rule conjunct2)
+    then have "\<not>(\<forall>S' \<subseteq> (insert H S). finite S' \<longrightarrow> S' \<in> C)"
+      unfolding extF by blast (*Pendiente*)
+    then have Ex2:"\<exists>S'\<subseteq> (insert H S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
+      by blast (*Pendiente*)
+    obtain S2 where "S2 \<subseteq> insert H S" and "\<not>(finite S2 \<longrightarrow> S2 \<in> C)"
+      using Ex2 by blast (*Pendiente*)
+    have "finite S2 \<and> S2 \<notin> C"
+      using \<open>\<not>(finite S2 \<longrightarrow> S2 \<in> C)\<close> by auto (*Pendiente*)
+    then have "finite S2"
+      by (rule conjunct1)
+    have "S2 \<notin> C"
+      using \<open>finite S2 \<and> S2 \<notin> C\<close> by (rule conjunct2)
+    then have "insert H S2 \<notin> C"
+    proof - (*Pendiente*)
+      have "\<not> S2 \<subseteq> S"
+        using E \<open>\<not> (finite S2 \<longrightarrow> S2 \<in> C)\<close> by force
+      then have "(S2 \<subseteq> insert H S) \<noteq> (S2 \<subseteq> S)"
+        by (metis \<open>S2 \<subseteq> insert H S\<close>)
+      then show ?thesis
+        by (metis \<open>S2 \<notin> C\<close> insert_absorb subset_insert)
+    qed 
+    let ?S2="S2 - {H}"
+    have 4:"?S2 \<subseteq> S"
+      using \<open>S2 \<subseteq> insert H S\<close> by blast (*Pendiente*)
+    have 5:"finite ?S2"
+      using \<open>finite S2\<close> by blast (*Pendiente*)
+    have 6:"insert H ?S2 \<notin> C"
+      by (smt \<open>insert H S2 \<notin> C\<close> insert_Diff_single) (*Pendiente*)
+    show "False"
+      using assms(1) assms(2) assms(3) assms(4) assms(5) 1 2 3 4 5 6 by (rule ex3_pcp_DIS_auxFalse)
+  qed
   thus ?thesis
   proof (rule disjE)
     assume "insert G S \<in> (extF C)"
