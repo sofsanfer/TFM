@@ -2624,9 +2624,9 @@ proof -
   have "\<forall>I \<in> {G,H}. insert I S1 \<notin> C \<or> insert I S2 \<notin> C"
     using 4 8 by blast (*Pendiente*)
   then have "\<forall>I \<in> {G,H}. \<not>(insert I S1 \<in> C \<and> insert I S2 \<in> C)"
-    by blast (*Pendiente*)
+    by (simp only: de_Morgan_conj)
   then have "\<not>(\<exists>I \<in> {G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C)"
-    by blast (*Pendiente*)
+    by blast (*Pendiente*) find_theorems name: bexE
   thus "False"
     using Ex by (rule notE)
 qed
