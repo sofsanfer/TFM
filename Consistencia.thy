@@ -2699,17 +2699,19 @@ proof -
     using assms(1) by (rule pcp_alt1)
   have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
     using assms(3) unfolding extF by (rule CollectD)
+  then have E':"\<forall>S'. S' \<subseteq> S \<longrightarrow> finite S' \<longrightarrow> S' \<in> C"
+    by blast (*Pendiente*)
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
   have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
     (*unfolding mem_Collect_eq Un_iff extF *)(*by (smt E finite_Diff insert_Diff subset_insert_iff) Pendiente*)
   proof (rule ccontr)
     assume "\<not>(insert G S \<in> (extF C) \<or> insert H S \<in> (extF C))"  
-    then have Conj:"insert G S \<notin> (extF C) \<and> insert H S \<notin> (extF C)"
+    then have Conj:"\<not>(insert G S \<in> (extF C)) \<and> \<not>(insert H S \<in> (extF C))"
       by blast (*Pendiente*)
     then have "insert G S \<notin> (extF C)"
       by (rule conjunct1)
-    then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)"
+    then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)" using [[simp_trace]]
       unfolding extF by blast (*Pendiente*)
     then have Ex1:"\<exists>S'\<subseteq> (insert G S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
       by blast (*Pendiente*)
@@ -2722,13 +2724,15 @@ proof -
     have "S1 \<notin> C"
       using \<open>finite S1 \<and> S1 \<notin> C\<close> by (rule conjunct2)
     then have "insert G S1 \<notin> C"
-    proof - (*Pendiente*)
-      have "\<not> S1 \<subseteq> S"
-        using E \<open>\<not> (finite S1 \<longrightarrow> S1 \<in> C)\<close> by force
+    proof - 
+      have "S1 \<subseteq> S \<longrightarrow> finite S1 \<longrightarrow> S1 \<in> C"
+        using E' by (rule allE)
+      then have "\<not> S1 \<subseteq> S"
+        using \<open>\<not> (finite S1 \<longrightarrow> S1 \<in> C)\<close> by (rule mt)
       then have "(S1 \<subseteq> insert G S) \<noteq> (S1 \<subseteq> S)"
-        by (metis \<open>S1 \<subseteq> insert G S\<close>)
+        by (metis \<open>S1 \<subseteq> insert G S\<close>) (*Pendiente*)
       then show ?thesis
-        by (metis \<open>S1 \<notin> C\<close> insert_absorb subset_insert)
+        by (metis \<open>S1 \<notin> C\<close> insert_absorb subset_insert) (*Pendiente*)
     qed 
     let ?S1="S1 - {G}"
     have 1:"?S1 \<subseteq> S"
@@ -2752,13 +2756,15 @@ proof -
     have "S2 \<notin> C"
       using \<open>finite S2 \<and> S2 \<notin> C\<close> by (rule conjunct2)
     then have "insert H S2 \<notin> C"
-    proof - (*Pendiente*)
-      have "\<not> S2 \<subseteq> S"
-        using E \<open>\<not> (finite S2 \<longrightarrow> S2 \<in> C)\<close> by force
+    proof - 
+      have "S2 \<subseteq> S \<longrightarrow> finite S2 \<longrightarrow> S2 \<in> C"
+        using E' by (rule allE)
+      then have "\<not> S2 \<subseteq> S"
+        using \<open>\<not> (finite S2 \<longrightarrow> S2 \<in> C)\<close> by (rule mt)
       then have "(S2 \<subseteq> insert H S) \<noteq> (S2 \<subseteq> S)"
-        by (metis \<open>S2 \<subseteq> insert H S\<close>)
+        by (metis \<open>S2 \<subseteq> insert H S\<close>) (*Pendiente*)
       then show ?thesis
-        by (metis \<open>S2 \<notin> C\<close> insert_absorb subset_insert)
+        by (metis \<open>S2 \<notin> C\<close> insert_absorb subset_insert) (*Pendiente*)
     qed 
     let ?S2="S2 - {H}"
     have 4:"?S2 \<subseteq> S"
