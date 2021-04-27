@@ -2330,6 +2330,32 @@ text\<open>Introduzcamos el último resultado de la sección.
    todo subconjunto finito suyo está en \<open>C\<close>. En particular, como todo conjunto es subconjunto de si
    mismo y como hemos supuesto que \<open>S'\<close> es finito, tenemos que \<open>S'\<close> está en \<open>C\<close>, lo que prueba la
    implicación.
+
+   Probemos, finalmente, que \<open>C'\<close> verifica la propiedad de consistencia proposicional. Para ello,
+   vamos a considerar un conjunto cualquiera \<open>S\<close> perteneciente a \<open>C'\<close> y probaremos que se verifican 
+   las cuatro condiciones del lema de caracterización de la propiedad de consistencia proposicional
+   mediante la notación uniforme. Como el conjunto \<open>S\<close> pertenece a \<open>C'\<close>, se observa fácilmente por
+   definición de la extensión que, o bien \<open>S\<close> está en \<open>C\<close> o bien \<open>S\<close> está en \<open>E\<close>. Veamos que, para 
+   ambos casos, se verifican las condiciones del lema de caracterización.
+
+   En primer lugar, supongamos que \<open>S\<close> está en \<open>C\<close>. Como \<open>C\<close> verifica la propiedad de consistencia 
+   proposicional por hipótesis, verifica el lema de caracterización en particular para \<open>S\<close>. De este
+   modo, se cumple:
+   \begin{itemize}
+     \item \<open>\<bottom>\<close> no pertenece a \<open>S\<close>.
+     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+      pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
+     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+      pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C\<close> o 
+      bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>.
+   \end{itemize} 
+  
+  Por lo tanto, puesto que \<open>C\<close> está contenida en la extensión \<open>C'\<close>, se verifican las cuatro
+  condiciones del lema para \<open>C'\<close>.
+
+  Supongamos ahora que \<open>S\<close> está en \<open>E\<close>. 
  \end{demostracion}
 
   \comentario{Terminar la demostración a mano.}\<close>
