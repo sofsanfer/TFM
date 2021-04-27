@@ -2430,13 +2430,13 @@ lemma ex3_pcp_CON:
           "F \<in> S"
   shows "{G,H} \<union> S \<in> (extensionFin C)" 
 proof -
-  have 1:"\<forall>S \<in> C.
+  have PCP:"\<forall>S \<in> C.
   \<bottom> \<notin> S
 \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
 \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
 \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
     using assms(1) by (rule pcp_alt1)
-  have 2:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
+  have 1:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C"
   proof (rule sallI)
     fix S'
     assume "S' \<subseteq> S"
@@ -2454,7 +2454,7 @@ proof -
             \<and> (\<forall>k. Atom k \<in> S' \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S' \<longrightarrow> False)
             \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G,H} \<union> S' \<in> C)
             \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G} \<union> S' \<in> C \<or> {H} \<union> S' \<in> C)"
-        using 1 \<open>S' \<in> C\<close> by (rule bspec)
+        using PCP \<open>S' \<in> C\<close> by (rule bspec)
       then have "\<forall>F G H. Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G, H} \<union> S' \<in> C"
         by (iprover elim: conjunct2 conjunct1)
       then have "Con F G H \<longrightarrow> F \<in> S' \<longrightarrow> {G, H} \<union> S' \<in> C"
@@ -2480,7 +2480,7 @@ proof -
       then have "insert F  (S' - {G,H}) \<subseteq> S" 
         by (simp only: insert_subset)
       have F1:"finite (insert F  (S' - {G,H})) \<longrightarrow> F \<in> (insert F  (S' - {G,H})) \<longrightarrow> {G,H} \<union> (insert F  (S' - {G,H})) \<in> C"
-        using 2 \<open>insert F  (S' - {G,H}) \<subseteq> S\<close> by (rule sspec)
+        using 1 \<open>insert F  (S' - {G,H}) \<subseteq> S\<close> by (rule sspec)
       have "finite (S' - {G,H})"
         using \<open>finite S'\<close> by (rule finite_Diff)
       then have "finite (insert F (S' - {G,H}))" 
@@ -2610,27 +2610,6 @@ proof -
     using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
-lemma ex3_pcp_DIS_auxAuxFalse:
-  assumes "pcp C" 
-          "subset_closed C"
-          "S \<in> (extF C)"
-          "Dis F G H"
-        shows "\<lbrakk>S1 \<subseteq> S; finite S1; F \<in> S1; insert G S1 \<notin> C; S2 \<subseteq> S; finite S2; F \<in> S2; insert H S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
-proof -
-  assume 1:"S1 \<subseteq> S" and 2:"finite S1" and 3:"F \<in> S1" and 4:"insert G S1 \<notin> C" and 5:"S2 \<subseteq> S" and 6:"finite S2" 
-          and 7:"F \<in> S2" and 8:"insert H S2 \<notin> C"
-  have Ex:"\<exists>I \<in> {G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C"
-    using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
-  have "\<forall>I \<in> {G,H}. insert I S1 \<notin> C \<or> insert I S2 \<notin> C"
-    using 4 8 by blast (*Pendiente*)
-  then have "\<forall>I \<in> {G,H}. \<not>(insert I S1 \<in> C \<and> insert I S2 \<in> C)"
-    by (simp only: de_Morgan_conj)
-  then have "\<not>(\<exists>I \<in> {G,H}. insert I S1 \<in> C \<and> insert I S2 \<in> C)"
-    by blast (*Pendiente*) find_theorems name: bexE
-  thus "False"
-    using Ex by (rule notE)
-qed
-
 lemma ex3_pcp_DIS_auxFalse:
   assumes "pcp C" 
           "subset_closed C"
@@ -2675,10 +2654,16 @@ proof -
     by (simp only: insertI1)
   have 8:"insert H ?S2 \<notin> C" 
     by (metis assms(2) assms(11) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
-  have H:"\<lbrakk>?S1 \<subseteq> S; finite ?S1; F \<in> ?S1; insert G ?S1 \<notin> C; ?S2 \<subseteq> S; finite ?S2; F \<in> ?S2; insert H ?S2 \<notin> C\<rbrakk> \<Longrightarrow> False"
-    using assms(1) assms(2) assms(3) assms(4) by (rule ex3_pcp_DIS_auxAuxFalse)
-  show "False"
-    using 1 2 3 4 5 6 7 8 by (rule H)
+  have Ex:"\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C"
+    using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
+  have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C"
+    using 4 8 by blast (*Pendiente*)
+  then have "\<forall>I \<in> {G,H}. \<not>(insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
+    by (simp only: de_Morgan_conj)
+  then have "\<not>(\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
+    by blast (*Pendiente*) find_theorems name: bexE
+  thus "False"
+    using Ex by (rule notE)
 qed
 
 lemma ex3_pcp_DIS:
