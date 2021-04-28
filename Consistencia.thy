@@ -2452,13 +2452,18 @@ text\<open>Introduzcamos el último resultado de la sección.
   lo tanto, obtenemos por definición de \<open>C'\<close> que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close>.
  \end{demostracion}
 
-  \comentario{Corregir cortes de línea si los hubiese.}\<close>
+ Finalmente, veamos la demostración detallada del lema en Isabelle. Para facilitar la notación,
+ dada una colección cualquiera \<open>C\<close>, formalizamos las colecciones \<open>E\<close> y \<open>C'\<close> como \<open>extF C\<close> y 
+ \<open>extensionFin C\<close> respectivamente, como se muestra a continuación.\<close>
 
 definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
 
 definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extensionFin: "extensionFin C = C \<union> (extF C)"
+
+text \<open>En primer lugar, probemos detalladamente mediante el siguiente lema que la extensión \<open>C'\<close> 
+  tiene la propiedad de carácter finito.\<close>
 
 lemma ex3_finite_character:
   assumes "subset_closed C"
@@ -2541,6 +2546,96 @@ proof -
    qed
  qed
 qed
+
+text \<open>Por otro lado, para probar que verifica la propiedad de consistencia proposicional
+  utilizaremos fundamentalmente dos lemas auxiliares: uno para el caso en que \<open>S \<in> C\<close> y otro para
+  el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada del lema que prueba el resultado 
+  para el primer caso.\<close>
+
+lemma ex3_pcp_SinC:
+  assumes "pcp C"
+          "subset_closed C"
+          "S \<in> C" 
+  shows "\<bottom> \<notin> S \<and>
+         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
+         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in>(extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
+proof -
+  have PCP:"\<forall>S \<in> C.
+    \<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+    using assms(1) by (rule pcp_alt1)
+  have H:"\<bottom> \<notin> S
+    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
+    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
+    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
+     using PCP \<open>S \<in> C\<close> by (rule bspec)
+  then have A1:"\<bottom> \<notin> S"
+    by (rule conjunct1)
+  have A2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
+    using H by (iprover elim: conjunct2 conjunct1)
+  have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+    using H by (iprover elim: conjunct2 conjunct1)
+  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
+  proof (rule allI)+
+    fix F G H
+    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
+    proof (rule impI)+
+      assume "Con F G H"
+      assume "F \<in> S" 
+      have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using S3 by (iprover elim: allE)
+      then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
+        using \<open>Con F G H\<close> by (rule mp)
+      then have "{G,H} \<union> S \<in> C"
+        using \<open>F \<in> S\<close> by (rule mp)
+      thus "{G,H} \<union> S \<in> (extensionFin C)"
+        unfolding extensionFin by (rule UnI1)
+    qed
+  qed
+  have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+    using H by (iprover elim: conjunct2)
+  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+  proof (rule allI)+
+    fix F G H
+    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+    proof (rule impI)+
+      assume "Dis F G H"
+      assume "F \<in> S" 
+      have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using S4 by (iprover elim: allE)
+      then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>Dis F G H\<close> by (rule mp)
+      then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
+        using \<open>F \<in> S\<close> by (rule mp)
+      thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+      proof (rule disjE)
+        assume "{G} \<union> S \<in> C"
+        then have "{G} \<union> S \<in> (extensionFin C)"
+          unfolding extensionFin by (rule UnI1)
+        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+          by (rule disjI1)
+      next
+        assume "{H} \<union> S \<in> C"
+        then have "{H} \<union> S \<in> (extensionFin C)"
+          unfolding extensionFin by (rule UnI1)
+        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
+          by (rule disjI2)
+      qed
+    qed
+  qed
+  show "\<bottom> \<notin> S \<and>
+        (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
+        (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
+        (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
+    using A1 A2 A3 A4 by (iprover intro: conjI)
+qed
+
+text \<open>Por otro lado, para probar el caso en que \<open>S \<in> E\<close>, utilizaremos distintos lemas auxiliares.
+  El primero de ellos demuestra detalladamente la condición para fórmulas de tipo \<open>\<alpha>\<close> del lema de
+  caracterización de la propiedad de consistencia proposicional mediante notación uniforme.\<close>
 
 lemma ex3_pcp_CON:
   assumes "pcp C"
@@ -2647,6 +2742,11 @@ proof -
   thus "{G,H} \<union> S \<in> (extensionFin C)"
     unfolding extensionFin by (rule UnI2)
 qed
+
+text \<open>Seguidamente, veamos la prueba de la condición para fórmulas de tipo \<open>\<beta>\<close> del lema de
+  caracterización de la propiedad de consistencia proposicional mediante notación uniforme. 
+  Paralelamente a la demostración vista con anterioridad, veamos la prueba detallada de los dos 
+  resultados previos a la demostración de dicha condición.\<close>
 
 lemma ex3_pcp_DIS_auxEx:
   assumes "pcp C"
@@ -2804,6 +2904,9 @@ proof -
     using Ex by (rule notE)
 qed
 
+text \<open>Además, para la prueba de la condición necesitaremos los siguientes lemas auxiliares en
+  Isabelle.\<close>
+
 lemma sall_simps_not_all:
   assumes "\<not>(\<forall>x \<subseteq> A. P x)"
   shows "\<exists>x \<subseteq> A. (\<not> P x)"
@@ -2811,6 +2914,9 @@ lemma sall_simps_not_all:
 
 lemma subexE: "\<exists>x\<subseteq>A. P x \<Longrightarrow> (\<And>x. x\<subseteq>A \<Longrightarrow> P x \<Longrightarrow> Q) \<Longrightarrow> Q"
   by blast (*Pendiente*)
+
+text \<open>De este modo, podemos demostrar detalladamente en Isabelle la condición para fórmulas de tipo
+  \<open>\<beta>\<close>.\<close>
 
 lemma ex3_pcp_DIS:
   assumes "pcp C"
@@ -2962,86 +3068,8 @@ proof -
   qed
 qed
 
-lemma ex3_pcp_SinC:
-  assumes "pcp C"
-          "subset_closed C"
-          "S \<in> C" 
-  shows "\<bottom> \<notin> S \<and>
-         (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-         (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
-         (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in>(extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
-proof -
-  have PCP:"\<forall>S \<in> C.
-    \<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
-    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
-    using assms(1) by (rule pcp_alt1)
-  have H:"\<bottom> \<notin> S
-    \<and> (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False)
-    \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)
-    \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C)"
-     using PCP \<open>S \<in> C\<close> by (rule bspec)
-  then have A1:"\<bottom> \<notin> S"
-    by (rule conjunct1)
-  have A2:"\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False"
-    using H by (iprover elim: conjunct2 conjunct1)
-  have S3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-    using H by (iprover elim: conjunct2 conjunct1)
-  have A3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
-  proof (rule allI)+
-    fix F G H
-    show "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)"
-    proof (rule impI)+
-      assume "Con F G H"
-      assume "F \<in> S" 
-      have "Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using S3 by (iprover elim: allE)
-      then have "F \<in> S \<longrightarrow> {G,H} \<union> S \<in> C"
-        using \<open>Con F G H\<close> by (rule mp)
-      then have "{G,H} \<union> S \<in> C"
-        using \<open>F \<in> S\<close> by (rule mp)
-      thus "{G,H} \<union> S \<in> (extensionFin C)"
-        unfolding extensionFin by (rule UnI1)
-    qed
-  qed
-  have S4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-    using H by (iprover elim: conjunct2)
-  have A4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-  proof (rule allI)+
-    fix F G H
-    show "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-    proof (rule impI)+
-      assume "Dis F G H"
-      assume "F \<in> S" 
-      have "Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using S4 by (iprover elim: allE)
-      then have "F \<in> S \<longrightarrow> {G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>Dis F G H\<close> by (rule mp)
-      then have "{G} \<union> S \<in> C \<or> {H} \<union> S \<in> C"
-        using \<open>F \<in> S\<close> by (rule mp)
-      thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-      proof (rule disjE)
-        assume "{G} \<union> S \<in> C"
-        then have "{G} \<union> S \<in> (extensionFin C)"
-          unfolding extensionFin by (rule UnI1)
-        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-          by (rule disjI1)
-      next
-        assume "{H} \<union> S \<in> C"
-        then have "{H} \<union> S \<in> (extensionFin C)"
-          unfolding extensionFin by (rule UnI1)
-        thus "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-          by (rule disjI2)
-      qed
-    qed
-  qed
-  show "\<bottom> \<notin> S \<and>
-        (\<forall>k. Atom k \<in> S \<longrightarrow> \<^bold>\<not> (Atom k) \<in> S \<longrightarrow> False) \<and>
-        (\<forall>F G H. Con F G H \<longrightarrow> F \<in> S \<longrightarrow> {G, H} \<union> S \<in> (extensionFin C)) \<and>
-        (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C))"
-    using A1 A2 A3 A4 by (iprover intro: conjI)
-qed
+text \<open>Probadas las condiciones para fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos dar la demostración
+  detallada completa para el caso en que \<open>S \<in> E\<close>.\<close>
 
 lemma ex3_pcp_SinE:
   assumes "pcp C"
@@ -3158,6 +3186,9 @@ proof -
     using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
 
+text \<open>En conclusión, la prueba detallada total en Isabelle de que la extensión \<open>C'\<close> verifica la 
+  propiedad de consistencia proposicional se muestra a continuación.\<close>
+
 lemma ex3_pcp:
   assumes "pcp C"
           "subset_closed C"
@@ -3189,6 +3220,8 @@ proof (rule ballI)
   qed
 qed
 
+text \<open>Por último, podemos dar la prueba completa del lema en Isabelle.\<close>
+
 lemma
   assumes "pcp C"
           "subset_closed C"
@@ -3206,6 +3239,8 @@ proof -
   thus ?thesis
     by (rule exI)
 qed
+
+text \<open>Para concluir, veamos la demostración automática en Isabelle/HOL.\<close>
 
 lemma ex3:
   assumes C: "pcp C"
