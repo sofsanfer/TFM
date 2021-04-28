@@ -1740,9 +1740,7 @@ text \<open>Una vez introducidas las definiciones anteriores, veamos los resulta
 lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
   oops
 
-  text \<open>Procedamos con su demostración.
-
-\comentario{Cambiar notación s y S en la demostración.}
+text \<open>Procedamos con su demostración.
 
 \begin{demostracion}
   Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos su extensión formada por los 
@@ -2298,7 +2296,7 @@ text\<open>Introduzcamos el último resultado de la sección.
  \begin{demostracion}
    Dada una colección de conjuntos \<open>C\<close> en las condiciones del enunciado, vamos a considerar su 
    extensión \<open>C'\<close> definida como la unión de \<open>C\<close> y la colección formada por aquellos conjuntos
-   cuyos subconjuntos finitos pertenecen a \<open>C\<close>. Es decir, \<open>C' = C \<union> E\<close> donde 
+   cuyos subconjuntos finitos pertenecen a \<open>C\<close>. Es decir,\\ \<open>C' = C \<union> E\<close> donde 
    \<open>E = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}\<close>. Es evidente que la extensión está bien definida
    pues contiene a la colección \<open>C\<close>. Vamos a probar que, además es de carácter finito y verifica la 
    propiedad de consistencia proposicional.
@@ -2360,25 +2358,25 @@ text\<open>Introduzcamos el último resultado de la sección.
 
   En primer lugar vamos a demostrar que \<open>\<bottom> \<notin> S\<close> por reducción al absurdo. Si suponemos que \<open>\<bottom> \<in> S\<close>,
   se deduce que el conjunto \<open>{\<bottom>}\<close> es un subconjunto finito de \<open>S\<close>. Como \<open>S\<close> está en \<open>E\<close>, por
-  definición tenemos que \<open>{\<bottom>} \<in> C\<close>. De este modo, aplicando el lema de caracterización de la
+  definición tenemos que \<open>{\<bottom>} \<in> C\<close>. De este modo, aplicando el lema de\\ caracterización de la
   propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto \<open>{\<bottom>}\<close>, por la primera
   condición obtenemos que \<open>\<bottom> \<notin> {\<bottom>}\<close>, llegando a una contradicción.
 
   Demostremos que se verifica la segunda condición del lema para las fórmulas atómicas. De este
   modo, vamos a probar que dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene simultáneamente que
   \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>. La prueba se realizará por reducción al absurdo, luego supongamos que para
-  cierta fórmula atómica se verifica \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>. Análogamente, se observa que el conjunto
+  cierta fórmula atómica se verifica \<open>p \<in> S\<close> y\\ \<open>\<not> p \<in> S\<close>. Análogamente, se observa que el conjunto
   \<open>{p, \<not> p}\<close> es un subconjunto finito de \<open>S\<close>, luego pertenece a \<open>C\<close>. Aplicando el lema de
   caracterización de la propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto
   \<open>{p, \<not> p}\<close>, por la segunda condición obtenemos que no se tiene simultáneamente \<open>q \<in> {p, \<not> p}\<close> y
   \<open>\<not> q \<in> {p, \<not> p}\<close> para ninguna fórmula atómica \<open>q\<close>, llegando así a una contradicción para la
   fórmula atómica \<open>p\<close>.
 
-  Por otro lado, vamos a probar que se verifica la tercera condición del lema de caracterización
+  Por otro lado, vamos a probar que se verifica la tercera condición del lema de\\ caracterización
   sobre las fórmulas de tipo \<open>\<alpha>\<close>. Consideremos una fórmula cualquiera \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes 
-  \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, y supongamos que \<open>F \<in> S\<close>. Demostraremos que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. 
+  \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, y supongamos que \<open>F \<in> S\<close>. Demostraremos que\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. 
 
-  Para ello, probaremos inicialmente que todo subconjunto finito \<open>S'\<close> de \<open>S\<close> tal que \<open>F \<in> S'\<close> 
+  Para ello, probaremos inicialmente que todo subconjunto finito \<open>S'\<close> de \<open>S\<close> tal que\\ \<open>F \<in> S'\<close> 
   verifica \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S' \<in> C\<close>. Consideremos \<open>S'\<close> subconjunto finito cualquiera de \<open>S\<close> en las
   condiciones anteriores. Como \<open>S \<in> E\<close>, por definición tenemos que \<open>S' \<in> C\<close>. Aplicando el lema de 
   caracterización de la propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto
@@ -2390,7 +2388,7 @@ text\<open>Introduzcamos el último resultado de la sección.
   subconjunto finito de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>. Consideremos \<open>S'\<close> un subconjunto finito 
   cualquiera de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close>. Como \<open>F \<in> S\<close>, es sencillo comprobar que el conjunto 
   \<open>{F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})\<close> es un subconjunto finito de \<open>S\<close>. Por el resultado probado anteriormente, 
-  tenemos que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> ({F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})) = {F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>. 
+  tenemos que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> ({F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})) = \<close> \\ \<open>{F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>. 
   Además, como \<open>C\<close> es cerrada bajo subconjuntos, todo conjunto de \<open>C\<close> verifica que cualquier 
   subconjunto suyo pertenece a la colección. Luego, como \<open>S'\<close> es un subconjunto de 
   \<open>{F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close>, queda probado que \<open>S' \<in> C\<close>.
@@ -2408,7 +2406,7 @@ text\<open>Introduzcamos el último resultado de la sección.
   probarlo, consideremos el conjunto finito \<open>S\<^sub>1 \<union> S\<^sub>2\<close> que es subconjunto de \<open>S\<close> por las hipótesis. 
   De este modo, como \<open>S \<in> E\<close>, tenemos que \<open>S\<^sub>1 \<union> S\<^sub>2 \<in> C\<close>. Aplicando el lema de caracterización de la
   propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto \<open>S\<^sub>1 \<union> S\<^sub>2\<close>, por la 
-  última condición sobre las fórmulas de tipo \<open>\<beta>\<close>, como \<open>F \<in> S\<^sub>1 \<union> S\<^sub>2\<close> por las hipótesis, se tiene
+  última condición sobre las fórmulas de tipo \<open>\<beta>\<close>, como\\ \<open>F \<in> S\<^sub>1 \<union> S\<^sub>2\<close> por las hipótesis, se tiene
   que o bien \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 \<union> S\<^sub>2 \<in> C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S\<^sub>1 \<union> S\<^sub>2 \<in> C\<close>. Por tanto, existe una fórmula 
   \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> S\<^sub>1 \<union> S\<^sub>2 \<in> C\<close>. Sea \<open>I\<close> la fórmula que cumple lo anterior. Como \<open>C\<close> es
   cerrada bajo subconjuntos, los subconjuntos \<open>{I} \<union> S\<^sub>1\<close> y \<open>{I} \<union> S\<^sub>2\<close> de \<open>{I} \<union> S\<^sub>1 \<union> S\<^sub>2\<close> pertenecen 
@@ -2419,19 +2417,19 @@ text\<open>Introduzcamos el último resultado de la sección.
   y \<open>S\<^sub>1\<close>, si además suponemos que \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 \<notin> C\<close>, llegamos a una contradicción. 
   Para probarlo, utilizaremos el resultado anterior para los conjuntos \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close>.
   Como es evidente, puesto que \<open>F \<in> S\<close>, se verifica que ambos conjuntos son subconjuntos de \<open>S\<close>.
-  Además, como \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> son finitos, se tiene que \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close> también lo son. Por
+  Además, como \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> son finitos, se tiene que\\ \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close> también lo son. Por
   último, es claro que \<open>F\<close> pertenece a ambos conjuntos. Por lo tanto, por el resultado probado
   anteriormente, tenemos que existe una fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S\<^sub>1 \<in> C\<close> y 
   \<open>{I} \<union> {F} \<union> S\<^sub>2 \<in> C\<close>. Por otro lado, podemos probar que \<open>{\<beta>\<^sub>1} \<union> {F} \<union> S\<^sub>1 \<notin> C\<close>. Esto se debe a 
   que, en caso contrario, como \<open>C\<close> es cerrado bajo subconjuntos, tendríamos que el subconjunto
   \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1\<close> pertenecería a \<open>C\<close>, lo que contradice las hipótesis. Análogamente, obtenemos que
   \<open>{\<beta>\<^sub>2} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. De este modo, obtenemos que para toda fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> se cumple que
-  o bien \<open>{I} \<union> {F} \<union> S\<^sub>1 \<notin> C\<close> o bien \<open>{I} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. Esto es equivalente a que no existe
+  o bien\\ \<open>{I} \<union> {F} \<union> S\<^sub>1 \<notin> C\<close> o bien \<open>{I} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. Esto es equivalente a que no existe
   ninguna fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S\<^sub>1 \<in> C\<close> y \<open>{I} \<union> {F} \<union> S\<^sub>2 \<in> C\<close>, lo que
   contradice lo obtenido para los conjuntos \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close> por el resultado probado 
   anteriormente. 
 
-  Finalmente, con los resultados anteriores, podemos probar que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien 
+  Finalmente, con los resultados anteriores, podemos probar que o bien\\ \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien 
   \<open>{\<beta>\<^sub>2} \<union> S \<in> E\<close> por reducción al absurdo. Supongamos que \<open>{\<beta>\<^sub>1} \<union> S \<notin> E\<close> y \<open>{\<beta>\<^sub>2} \<union> S \<notin> E\<close>. Por
   definición de \<open>E\<close>, se verifica que existe algún subconjunto finito de \<open>{\<beta>\<^sub>1} \<union> S\<close> y existe algún 
   subconjunto finito de \<open>{\<beta>\<^sub>2} \<union> S\<close> tales que no pertenecen a \<open>C\<close>. Notemos por \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> 
@@ -2445,8 +2443,8 @@ text\<open>Introduzcamos el último resultado de la sección.
   \<open>{\<beta>\<^sub>1} \<union> (S\<^sub>1 - {\<beta>\<^sub>1}) = {\<beta>\<^sub>1} \<union> S\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> (S\<^sub>2 - {\<beta>\<^sub>2}) = {\<beta>\<^sub>2} \<union> S\<^sub>2\<close> no pertenecen a \<open>C\<close>. Como ni 
   \<open>S\<^sub>1\<close> ni \<open>S\<^sub>2\<close> están en la colección \<open>C\<close> cerrada bajo subconjuntos, se cumple que ninguno de ellos 
   son subconjuntos de \<open>S\<close>. Sin embargo, se verifica que \<open>S\<^sub>1\<close> es subconjunto de \<open>{\<beta>\<^sub>1} \<union> S\<close> y \<open>S\<^sub>2\<close> es 
-  subconjunto de \<open>{\<beta>\<^sub>2} \<union> S\<close>. Por tanto, se cumple que \<open>\<beta>\<^sub>1 \<in> S\<^sub>1\<close> y \<open>\<beta>\<^sub>2 \<in> S\<^sub>2\<close>. Por lo tanto,
-  tenemos finalmente que los conjuntos \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 = S\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 = S\<^sub>2\<close> no pertenecen a \<open>C\<close>.
+  subconjunto de \<open>{\<beta>\<^sub>2} \<union> S\<close>. Por tanto, se cumple que\\ \<open>\<beta>\<^sub>1 \<in> S\<^sub>1\<close> y \<open>\<beta>\<^sub>2 \<in> S\<^sub>2\<close>. Por lo tanto,
+  tenemos finalmente que los conjuntos \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 = S\<^sub>1\<close> y\\ \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 = S\<^sub>2\<close> no pertenecen a \<open>C\<close>.
   Finalmente, como se cumplen las condiciones del resultado, llegamos a una contradicción para los 
   conjuntos \<open>S\<^sub>1 - {\<beta>\<^sub>1}\<close> y \<open>S\<^sub>2 - {\<beta>\<^sub>2}\<close>, probando que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close>. Por
   lo tanto, obtenemos por definición de \<open>C'\<close> que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close>.
