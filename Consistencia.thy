@@ -2743,9 +2743,7 @@ lemma ex3_pcp_DIS_auxFalse:
         shows "False"
 proof -
   let ?S1="insert F S1"
-  let ?S1'="insert G S1"
   let ?S2="insert F S2"
-  let ?S2'="insert G S2"
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
   have 1:"?S1 \<subseteq> S"
@@ -2758,13 +2756,15 @@ proof -
   proof (rule ccontr)
     assume "\<not>(insert G ?S1 \<notin> C)"
     then have "insert G ?S1 \<in> C"
-      by blast (*Pendiente*)
+      by (rule notnotD)
     have SC1:"\<forall>S' \<subseteq> (insert G ?S1). S' \<in> C"
-      using SC \<open>insert G ?S1 \<in> C\<close> by blast (*Pendiente*)
-    have "insert G S1 \<subseteq> insert G ?S1"
-      by blast (*Pendiente*)
+      using SC \<open>insert G ?S1 \<in> C\<close> by (rule bspec)
+    have "insert G S1 \<subseteq> insert F (insert G S1)"
+      by (rule subset_insertI)
+    then have "insert G S1 \<subseteq> insert G ?S1"
+      by (simp only: insert_commute)
     have "insert G S1 \<in> C"
-      using SC1 \<open>insert G S1 \<subseteq> insert G ?S1\<close> by blast (*Pendiente*)
+      using SC1 \<open>insert G S1 \<subseteq> insert G ?S1\<close> by (rule sspec)
     show "False"
       using assms(8) \<open>insert G S1 \<in> C\<close> by (rule notE)
   qed
@@ -2778,24 +2778,26 @@ proof -
   proof (rule ccontr)
     assume "\<not>(insert H ?S2 \<notin> C)"
     then have "insert H ?S2 \<in> C"
-      by blast (*Pendiente*)
+      by (rule notnotD)
     have SC2:"\<forall>S' \<subseteq> (insert H ?S2). S' \<in> C"
-      using SC \<open>insert H ?S2 \<in> C\<close> by blast (*Pendiente*)
-    have "insert H S2 \<subseteq> insert H ?S2"
-      by blast (*Pendiente*)
+      using SC \<open>insert H ?S2 \<in> C\<close> by (rule bspec)
+    have "insert H S2 \<subseteq> insert F (insert H S2)"
+      by (rule subset_insertI)
+    then have "insert H S2 \<subseteq> insert H ?S2"
+      by (simp only: insert_commute)
     have "insert H S2 \<in> C"
-      using SC2 \<open>insert H S2 \<subseteq> insert H ?S2\<close> by blast (*Pendiente*)
+      using SC2 \<open>insert H S2 \<subseteq> insert H ?S2\<close> by (rule sspec)
     show "False"
       using assms(11) \<open>insert H S2 \<in> C\<close> by (rule notE)
   qed
   have Ex:"\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C"
     using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
-  have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C"
-    using 4 8 by blast (*Pendiente*)
+  have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C" using [[simp_trace]]
+    using 4 8 by simp (*Pendiente*)
   then have "\<forall>I \<in> {G,H}. \<not>(insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
     by (simp only: de_Morgan_conj)
   then have "\<not>(\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
-    by blast (*Pendiente*) find_theorems name: bexE
+    by (simp only: bex_simps(8)) 
   thus "False"
     using Ex by (rule notE)
 qed
