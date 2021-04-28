@@ -2392,9 +2392,65 @@ text\<open>Introduzcamos el último resultado de la sección.
   \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> ({F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})) = {F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>. Además, como \<open>C\<close> es cerrada
   bajo subconjuntos, todo conjunto de \<open>C\<close> verifica que cualquier subconjunto suyo pertenece a la
   colección. Luego, como \<open>S'\<close> es un subconjunto de \<open>{F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close>, queda probado que \<open>S' \<in> C\<close>.
+
+  Finalmente, veamos que se verifica la última condición del lema de caracterización de la propiedad
+  de consistencia proposicional referente a las fórmulas de tipo \<open>\<beta>\<close>. Consideremos una fórmula 
+  cualquiera \<open>F\<close> de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> S\<close>. Vamos a probar que se
+  tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close>. En tal caso, por definición de \<open>C'\<close> se
+  cumple que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close>. La prueba se realizará por reducción al
+  absurdo. Para ello, probemos inicialmente dos resultados previos.
+
+  El primer resultado que probaremos es que, en las condiciones anteriores, si consideramos \<open>S1\<close> y 
+  \<open>S2\<close> subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S1\<close> y \<open>F \<in> S2\<close>, entonces existe una 
+  fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que se verifica que tanto \<open>{I} \<union> S1\<close> como \<open>{I} \<union> S2\<close> están en \<open>C\<close>. Para
+  probarlo, consideremos el conjunto finito \<open>S1 \<union> S2\<close> que es subconjunto de \<open>S\<close> por las hipótesis. 
+  De este modo, como \<open>S \<in> E\<close>, tenemos que \<open>S1 \<union> S2 \<in> C\<close>. Aplicando el lema de caracterización de la
+  propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto \<open>S1 \<union> S2\<close>, por la 
+  última condición sobre las fórmulas de tipo \<open>\<beta>\<close>, como \<open>F \<in> S1 \<union> S2\<close> por las hipótesis, se tiene
+  que o bien \<open>{\<beta>\<^sub>1} \<union> S1 \<union> S2 \<in> C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S1 \<union> S2 \<in> C\<close>. Por tanto, existe una fórmula 
+  \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> S1 \<union> S2 \<in> C\<close>. Sea \<open>I\<close> la fórmula que cumple lo anterior. Como \<open>C\<close> es
+  cerrada bajo subconjuntos, los subconjuntos \<open>{I} \<union> S1\<close> y \<open>{I} \<union> S2\<close> de \<open>{I} \<union> S1 \<union> S2 \<in> C\<close>
+  pertenecen también a \<open>C\<close>. Por tanto, hemos probado que existe una fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que
+  \<open>{I} \<union> S1 \<in> C\<close> y \<open>{I} \<union> S2 \<in> C\<close>.
+
+  Por otra parte, vamos a probar que, en las condiciones anteriores para conjuntos cualesquiera \<open>S1\<close>
+  y \<open>S2\<close>, si además suponemos que \<open>{\<beta>\<^sub>1} \<union> S1 \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> S2 \<notin> C\<close>, llegamos a una contradicción. 
+  Para probarlo, utilizaremos el resultado anterior para los conjuntos \<open>{F} \<union> S1\<close> y \<open>{F} \<union> S2\<close>.
+  Como es evidente, puesto que \<open>F \<in> S\<close>, se verifica que ambos conjuntos son subconjuntos de \<open>S\<close>.
+  Además, como \<open>S1\<close> y \<open>S2\<close> son finitos, se tiene que \<open>{F} \<union> S1\<close> y \<open>{F} \<union> S2\<close> también lo son. Por
+  último, es claro que \<open>F\<close> pertenece a ambos conjuntos. Por lo tanto, por el resultado probado
+  anteriormente, tenemos que existe una fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S1 \<in> C\<close> y 
+  \<open>{I} \<union> {F} \<union> S2 \<in> C\<close>. Por otro lado, podemos probar que \<open>{\<beta>\<^sub>1} \<union> {F} \<union> S1 \<notin> C\<close>. Esto se debe a 
+  que, en caso contrario, como \<open>C\<close> es cerrado bajo subconjuntos, tendríamos que el subconjunto
+  \<open>{\<beta>\<^sub>1} \<union> S1\<close> pertenecería a \<open>C\<close>, lo que contradice las hipótesis. Análogamente, obtenemos que
+  \<open>{\<beta>\<^sub>2} \<union> {F} \<union> S1 \<notin> C\<close>. De este modo, obtenemos que para toda fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> se cumple que
+  o bien \<open>{I} \<union> {F} \<union> S1 \<notin> C\<close> o bien \<open>{I} \<union> {F} \<union> S2 \<notin> C\<close>. Esto es equivalente a que no existe
+  ninguna fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S1 \<in> C\<close> y \<open>{I} \<union> {F} \<union> S2 \<in> C\<close>, lo que
+  contradice lo obtenido para los conjuntos \<open>{F} \<union> S1\<close> y \<open>{F} \<union> S2\<close> por el resultado probado 
+  anteriormente. 
+
+  Finalmente, con los resultados anteriores, podemos probar que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien 
+  \<open>{\<beta>\<^sub>2} \<union> S \<in> E\<close> por reducción al absurdo. Supongamos que \<open>{\<beta>\<^sub>1} \<union> S \<notin> E\<close> y \<open>{\<beta>\<^sub>2} \<union> S \<notin> E\<close>. Por
+  definición de \<open>E\<close>, se verifica que existe algún subconjunto finito de \<open>{\<beta>\<^sub>1} \<union> S\<close> y existe algún 
+  subconjunto finito de \<open>{\<beta>\<^sub>2} \<union> S\<close> tales que no pertenecen a \<open>C\<close>. Notemos por \<open>S1\<close> y \<open>S2\<close> 
+  respectivamente a los subconjuntos anteriores. Vamos a aplicar el resultado anterior para los
+  conjuntos \<open>S1 - {\<beta>\<^sub>1}\<close> y \<open>S2 - {\<beta>\<^sub>2}\<close> para llegar a la contradicción.
+
+  Para ello, debemos probar que se verifican las hipótesis del resultado para los conjuntos
+  señalados. Es claro que tanto \<open>S1 - {\<beta>\<^sub>1}\<close> como \<open>S2 - {\<beta>\<^sub>2}\<close> son subconjuntos de \<open>S\<close>, ya que \<open>S1\<close> y
+  \<open>S2\<close> son subconjuntos de \<open>{\<beta>\<^sub>1} \<union> S\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<close> respectivamente. Además, como \<open>S1\<close> y \<open>S2\<close> son
+  finitos, es evidente que \<open>S1 - {\<beta>\<^sub>1}\<close> y \<open>S2 - {\<beta>\<^sub>2}\<close> también lo son. Queda probar que los conjuntos 
+  \<open>{\<beta>\<^sub>1} \<union> (S1 - {\<beta>\<^sub>1}) = {\<beta>\<^sub>1} \<union> S1\<close> y \<open>{\<beta>\<^sub>2} \<union> (S2 - {\<beta>\<^sub>2}) = {\<beta>\<^sub>2} \<union> S2\<close> no pertenecen a \<open>C\<close>. Como ni 
+  \<open>S1\<close> ni \<open>S2\<close> está en la colección \<open>C\<close> cerrada bajo subconjuntsos, se cumple que ninguno de dichos
+  conjuntos son subconjuntos de \<open>S\<close>. Sin embargo, se verifica que \<open>S1\<close> es subconjunto de \<open>{\<beta>\<^sub>1} \<union> S\<close>
+  y \<open>S2\<close> es subconjunto de \<open>{\<beta>\<^sub>2} \<union> S\<close>. Por tanto, se cumple que \<open>\<beta>\<^sub>1 \<in> S1\<close> y \<open>\<beta>\<^sub>2 \<in> S2\<close>. Por lo tanto,
+  tenemos finalmente que los conjuntos \<open>{\<beta>\<^sub>1} \<union> S1 = S1\<close> y \<open>{\<beta>\<^sub>2} \<union> S2 = S2\<close> no pertenecen a \<open>C\<close>.
+  Finalmente, como se cumplen las condiciones del resultado, llegamos a una contradicción para los 
+  conjuntos \<open>S1 - {\<beta>\<^sub>1}\<close> y \<open>S2 - {\<beta>\<^sub>2}\<close>, probando que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> y,
+  por tanto, obtenemos por definición que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close>.
  \end{demostracion}
 
-  \comentario{Terminar la demostración a mano.}\<close>
+  \comentario{Revisar redacción y corregir cortes de línea si los hubiese.}\<close>
 
 definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
