@@ -2355,7 +2355,43 @@ text\<open>Introduzcamos el último resultado de la sección.
   Por lo tanto, puesto que \<open>C\<close> está contenida en la extensión \<open>C'\<close>, se verifican las cuatro
   condiciones del lema para \<open>C'\<close>.
 
-  Supongamos ahora que \<open>S\<close> está en \<open>E\<close>. 
+  Supongamos ahora que \<open>S\<close> está en \<open>E\<close>. Probemos que, en efecto, verifica las condiciones del lema 
+  de caracterización.
+
+  En primer lugar vamos a demostrar que \<open>\<bottom> \<notin> S\<close> por reducción al absurdo. Si suponemos que \<open>\<bottom> \<in> S\<close>,
+  en particular el conjunto \<open>{\<bottom>}\<close> es un subconjunto finito de \<open>S\<close>. Como \<open>S\<close> está en \<open>E\<close>, por
+  definición tenemos que \<open>{\<bottom>} \<in> C\<close>. De este modo, aplicando el lema de caracterización de la
+  propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto \<open>{\<bottom>}\<close>, por la primera
+  condición obtenemos que \<open>\<bottom> \<notin> {\<bottom>}\<close>, llegando a una contradicción.
+
+  Demostremos que se verifica la segunda condición del lema para las fórmulas atómicas. De este
+  modo, vamos a probar que, dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene simultáneamente que
+  \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>. La prueba se realizará por reducción al absurdo, luego supongamos que para
+  cierta fórmula atómica se verifica \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>. Análogamente, se observa que el conjunto
+  \<open>{p, \<not> p}\<close> es un subconjunto finito de \<open>S\<close>, luego pertenece a \<open>C\<close>. Aplicando el lema de
+  caracterización de la propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto
+  \<open>{p, \<not> p}\<close>, por la segunda condición obtenemos que no se tiene simultáneamente \<open>q \<in> {p, \<not> p}\<close> y
+  \<open>\<not> q \<in> {p, \<not> p}\<close> para ninguna fórmula atómica \<open>q\<close>, llegando así a una contradicción.
+
+  Por otro lado, vamos a probar que se verifica la tercera condición del lema de caracterización
+  sobre las fórmulas de tipo \<open>\<alpha>\<close>. Consideremos una fórmula cualquiera \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes 
+  \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, y supongamos que \<open>F \<in> S\<close>. Demostraremos que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. 
+
+  Para ello, probaremos inicialmente que todo subconjunto finito \<open>S'\<close> de \<open>S\<close> tal que \<open>F \<in> S'\<close> 
+  verifica \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S' \<in> C\<close>. Consideremos \<open>S'\<close> subconjunto finito cualquiera de \<open>S\<close> en las
+  condiciones anteriores. Como \<open>S \<in> E\<close>, por definición tenemos que \<open>S' \<in> C\<close>. Aplicando el lema de 
+  caracterización de la propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto
+  \<open>S'\<close>, por la tercera condición obtenemos que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S' \<in> C\<close> ya que hemos supuesto que 
+  \<open>F \<in> S'\<close>.
+
+  Una vez probado el resultado anterior, demostremos que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> E\<close> y, por definición de 
+  \<open>C'\<close>, obtendremos \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. Por definición de \<open>E\<close>, basta probar que todo subconjunto
+  finito de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C\<close>. Consideremos \<open>S'\<close> un subconjunto finito cualquiera de
+  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close>. Como, además, \<open>F \<in> S\<close>, es sencillo comprobar que el conjunto \<open>{F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})\<close>
+  es un subconjunto finito de \<open>S\<close>. Por el resultado probado anteriormente, tenemos que el conjunto
+  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> ({F} \<union> (S' - {\<alpha>\<^sub>1,\<alpha>\<^sub>2})) = {F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close> pertenece a \<open>C\<close>. Además, como \<open>C\<close> es cerrada
+  bajo subconjuntos, todo conjunto de \<open>C\<close> verifica que cualquier subconjunto suyo pertenece a la
+  colección. Luego, como \<open>S'\<close> es un subconjunto de \<open>{F,\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S'\<close>, queda probado que \<open>S' \<in> C\<close>.
  \end{demostracion}
 
   \comentario{Terminar la demostración a mano.}\<close>
