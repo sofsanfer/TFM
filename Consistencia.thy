@@ -2690,24 +2690,28 @@ proof -
   let ?S1'="insert G S1"
   let ?S2="insert F S2"
   let ?S2'="insert G S2"
-  have "\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
+  have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
-  then have notSC:"\<forall>S S'. (S \<in> C \<longrightarrow> S'\<subseteq> S \<longrightarrow> S' \<in> C)"
-    by blast (*Pendiente*)
   have 1:"?S1 \<subseteq> S"
     using \<open>F \<in> S\<close> \<open>S1 \<subseteq> S\<close> by (simp only: insert_subset) 
   have 2:"finite ?S1"
     using \<open>finite S1\<close> by (simp only: finite_insert) 
   have 3:"F \<in> ?S1"
     by (simp only: insertI1) 
-  have "insert G ?S1 \<in> C \<longrightarrow> ?S1' \<subseteq> insert G ?S1 \<longrightarrow> ?S1' \<in> C"
-    using notSC by (iprover elim: allE)
-  then have "?S1' \<notin> C \<longrightarrow> \<not>(insert G ?S1 \<subseteq> ?S1') \<longrightarrow> insert G ?S1 \<notin> C"
-    by blast (*Pendiente*)
-  then have "\<not>(insert G ?S1 \<subseteq> ?S1') \<longrightarrow> insert G ?S1 \<notin> C"
-    using assms(8) by (rule mp) (*Continuar...*)
   have 4:"insert G ?S1 \<notin> C" 
-    by (metis assms(2) assms(8) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
+  proof (rule ccontr)
+    assume "\<not>(insert G ?S1 \<notin> C)"
+    then have "insert G ?S1 \<in> C"
+      by blast (*Pendiente*)
+    have SC1:"\<forall>S' \<subseteq> (insert G ?S1). S' \<in> C"
+      using SC \<open>insert G ?S1 \<in> C\<close> by blast (*Pendiente*)
+    have "insert G S1 \<subseteq> insert G ?S1"
+      by blast (*Pendiente*)
+    have "insert G S1 \<in> C"
+      using SC1 \<open>insert G S1 \<subseteq> insert G ?S1\<close> by blast (*Pendiente*)
+    show "False"
+      using assms(8) \<open>insert G S1 \<in> C\<close> by (rule notE)
+  qed
   have 5:"?S2 \<subseteq> S"
     using \<open>F \<in> S\<close> \<open>S2 \<subseteq> S\<close> by (simp only: insert_subset)
   have 6:"finite ?S2"
@@ -2715,7 +2719,19 @@ proof -
   have 7:"F \<in> ?S2"
     by (simp only: insertI1)
   have 8:"insert H ?S2 \<notin> C" 
-    by (metis assms(2) assms(11) insert_commute subset_closed_def subset_insertI) (*Pendiente*)
+  proof (rule ccontr)
+    assume "\<not>(insert H ?S2 \<notin> C)"
+    then have "insert H ?S2 \<in> C"
+      by blast (*Pendiente*)
+    have SC2:"\<forall>S' \<subseteq> (insert H ?S2). S' \<in> C"
+      using SC \<open>insert H ?S2 \<in> C\<close> by blast (*Pendiente*)
+    have "insert H S2 \<subseteq> insert H ?S2"
+      by blast (*Pendiente*)
+    have "insert H S2 \<in> C"
+      using SC2 \<open>insert H S2 \<subseteq> insert H ?S2\<close> by blast (*Pendiente*)
+    show "False"
+      using assms(11) \<open>insert H S2 \<in> C\<close> by (rule notE)
+  qed
   have Ex:"\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C"
     using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
   have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C"
