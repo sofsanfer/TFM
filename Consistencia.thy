@@ -2802,6 +2802,14 @@ proof -
     using Ex by (rule notE)
 qed
 
+lemma sall_simps_not_all:
+  assumes "\<not>(\<forall>x \<subseteq> A. P x)"
+  shows "\<exists>x \<subseteq> A. (\<not> P x)"
+  using assms by blast (*Pendiente*)
+
+lemma subexE: "\<exists>x\<subseteq>A. P x \<Longrightarrow> (\<And>x. x\<subseteq>A \<Longrightarrow> P x \<Longrightarrow> Q) \<Longrightarrow> Q"
+  by blast (*Pendiente*)
+
 lemma ex3_pcp_DIS:
   assumes "pcp C"
           "subset_closed C"
@@ -2830,16 +2838,16 @@ proof -
     assume "\<not>(insert G S \<in> (extF C) \<or> insert H S \<in> (extF C))"  
     then have Conj:"\<not>(insert G S \<in> (extF C)) \<and> \<not>(insert H S \<in> (extF C))"
       by blast (*Pendiente*)
-    then have "insert G S \<notin> (extF C)"
+    then have "\<not>(insert G S \<in> (extF C))"
       by (rule conjunct1)
     then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)" using [[simp_trace]]
-      unfolding extF by blast (*Pendiente*)
+      unfolding extF by simp (*Pendiente*)
     then have Ex1:"\<exists>S'\<subseteq> (insert G S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
-      by blast (*Pendiente*)
+      by (rule sall_simps_not_all)
     obtain S1 where "S1 \<subseteq> insert G S" and "\<not>(finite S1 \<longrightarrow> S1 \<in> C)"
-      using Ex1 by blast (*Pendiente*)
-    have "finite S1 \<and> S1 \<notin> C"
-      using \<open>\<not>(finite S1 \<longrightarrow> S1 \<in> C)\<close> by auto (*Pendiente*)
+      using Ex1 by (rule subexE)
+    have "finite S1 \<and> S1 \<notin> C" 
+      using \<open>\<not>(finite S1 \<longrightarrow> S1 \<in> C)\<close> by (simp only: simp_thms(8) not_imp)
     then have "finite S1"
       by (rule conjunct1)
     have "S1 \<notin> C"
@@ -2851,9 +2859,19 @@ proof -
       then have "\<not> S1 \<subseteq> S"
         using \<open>\<not> (finite S1 \<longrightarrow> S1 \<in> C)\<close> by (rule mt)
       then have "(S1 \<subseteq> insert G S) \<noteq> (S1 \<subseteq> S)"
-        by (metis \<open>S1 \<subseteq> insert G S\<close>) (*Pendiente*)
-      then show ?thesis
-        by (metis \<open>S1 \<notin> C\<close> insert_absorb subset_insert) (*Pendiente*)
+        using \<open>S1 \<subseteq> insert G S\<close> by simp (*Pendiente*)
+      then have notSI:"\<not>(S1 \<subseteq> insert G S \<longleftrightarrow> S1 \<subseteq> S)"
+        by blast (*Pendiente*)
+      have subsetInsert:"G \<notin> S1 \<Longrightarrow> S1 \<subseteq> insert G S \<longleftrightarrow> S1 \<subseteq> S"
+        by (rule subset_insert)
+      have "\<not>(G \<notin> S1)"
+        using notSI subsetInsert by (rule contrapos_nn)
+      then have "G \<in> S1"
+        by (rule notnotD)
+      then have "insert G S1 = S1"
+        by (rule insert_absorb)
+      show ?thesis
+        using \<open>S1 \<notin> C\<close> by (simp only: simp_thms(8) \<open>insert G S1 = S1\<close>)
     qed 
     let ?S1="S1 - {G}"
     have 1:"?S1 \<subseteq> S"
