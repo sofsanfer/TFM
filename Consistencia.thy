@@ -2833,11 +2833,10 @@ proof -
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
   have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
-    (*unfolding mem_Collect_eq Un_iff extF *)(*by (smt E finite_Diff insert_Diff subset_insert_iff) Pendiente*)
   proof (rule ccontr)
     assume "\<not>(insert G S \<in> (extF C) \<or> insert H S \<in> (extF C))"  
-    then have Conj:"\<not>(insert G S \<in> (extF C)) \<and> \<not>(insert H S \<in> (extF C))"
-      by blast (*Pendiente*)
+    then have Conj:"\<not>(insert G S \<in> (extF C)) \<and> \<not>(insert H S \<in> (extF C))" 
+      by (simp only: simp_thms(8,25) de_Morgan_disj)
     then have "\<not>(insert G S \<in> (extF C))"
       by (rule conjunct1)
     then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)" using [[simp_trace]]
@@ -2874,44 +2873,66 @@ proof -
         using \<open>S1 \<notin> C\<close> by (simp only: simp_thms(8) \<open>insert G S1 = S1\<close>)
     qed 
     let ?S1="S1 - {G}"
-    have 1:"?S1 \<subseteq> S"
-      using \<open>S1 \<subseteq> insert G S\<close> by blast (*Pendiente*)
+    have "insert G S = {G} \<union> S"
+      by (rule insert_is_Un)
+    have "S1 \<subseteq> {G} \<union> S"
+      using \<open>S1 \<subseteq> insert G S\<close> by (simp only: \<open>insert G S = {G} \<union> S\<close>)
+    have 1:"?S1 \<subseteq> S" 
+      using \<open>S1 \<subseteq> {G} \<union> S\<close> by (simp only: Diff_subset_conv)
     have 2:"finite ?S1"
-      using \<open>finite S1\<close> by blast (*Pendiente*)
-    have 3:"insert G ?S1 \<notin> C"
-      by (smt \<open>insert G S1 \<notin> C\<close> insert_Diff_single) (*Pendiente*)
+      using \<open>finite S1\<close> by (simp only: finite_Diff)
+    have "insert G ?S1 = insert G S1"
+      by (simp only: insert_Diff_single)
+    then have 3:"insert G ?S1 \<notin> C"
+      using \<open>insert G S1 \<notin> C\<close> by (simp only: simp_thms(6,8) \<open>insert G ?S1 = insert G S1\<close>)
     have "insert H S \<notin> (extF C)"
       using Conj by (rule conjunct2)
     then have "\<not>(\<forall>S' \<subseteq> (insert H S). finite S' \<longrightarrow> S' \<in> C)"
       unfolding extF by blast (*Pendiente*)
     then have Ex2:"\<exists>S'\<subseteq> (insert H S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
-      by blast (*Pendiente*)
+      by (rule sall_simps_not_all)
     obtain S2 where "S2 \<subseteq> insert H S" and "\<not>(finite S2 \<longrightarrow> S2 \<in> C)"
-      using Ex2 by blast (*Pendiente*)
+      using Ex2 by (rule subexE)
     have "finite S2 \<and> S2 \<notin> C"
-      using \<open>\<not>(finite S2 \<longrightarrow> S2 \<in> C)\<close> by auto (*Pendiente*)
+      using \<open>\<not>(finite S2 \<longrightarrow> S2 \<in> C)\<close> by (simp only: simp_thms(8,25) not_imp)
     then have "finite S2"
       by (rule conjunct1)
     have "S2 \<notin> C"
       using \<open>finite S2 \<and> S2 \<notin> C\<close> by (rule conjunct2)
     then have "insert H S2 \<notin> C"
-    proof - 
+    proof -
       have "S2 \<subseteq> S \<longrightarrow> finite S2 \<longrightarrow> S2 \<in> C"
         using E' by (rule allE)
       then have "\<not> S2 \<subseteq> S"
         using \<open>\<not> (finite S2 \<longrightarrow> S2 \<in> C)\<close> by (rule mt)
       then have "(S2 \<subseteq> insert H S) \<noteq> (S2 \<subseteq> S)"
-        by (metis \<open>S2 \<subseteq> insert H S\<close>) (*Pendiente*)
-      then show ?thesis
-        by (metis \<open>S2 \<notin> C\<close> insert_absorb subset_insert) (*Pendiente*)
+        using \<open>S2 \<subseteq> insert H S\<close> by simp (*Pendiente*)
+      then have notSI:"\<not>(S2 \<subseteq> insert H S \<longleftrightarrow> S2 \<subseteq> S)"
+        by blast (*Pendiente*)
+      have subsetInsert:"H \<notin> S2 \<Longrightarrow> S2 \<subseteq> insert H S \<longleftrightarrow> S2 \<subseteq> S"
+        by (rule subset_insert)
+      have "\<not>(H \<notin> S2)"
+        using notSI subsetInsert by (rule contrapos_nn)
+      then have "H \<in> S2"
+        by (rule notnotD)
+      then have "insert H S2 = S2"
+        by (rule insert_absorb)
+      show ?thesis
+        using \<open>S2 \<notin> C\<close> by (simp only: simp_thms(8) \<open>insert H S2 = S2\<close>)
     qed 
     let ?S2="S2 - {H}"
-    have 4:"?S2 \<subseteq> S"
-      using \<open>S2 \<subseteq> insert H S\<close> by blast (*Pendiente*)
-    have 5:"finite ?S2"
-      using \<open>finite S2\<close> by blast (*Pendiente*)
-    have 6:"insert H ?S2 \<notin> C"
-      by (smt \<open>insert H S2 \<notin> C\<close> insert_Diff_single) (*Pendiente*)
+    have "insert H S = {H} \<union> S"
+      by (rule insert_is_Un)
+    have "S2 \<subseteq> {H} \<union> S"
+      using \<open>S2 \<subseteq> insert H S\<close> by (simp only: \<open>insert H S = {H} \<union> S\<close>)
+    have 4:"?S2 \<subseteq> S" 
+      using \<open>S2 \<subseteq> {H} \<union> S\<close> by (simp only: Diff_subset_conv)
+    have 5:"finite ?S2" 
+      using \<open>finite S2\<close> by (simp only: finite_Diff)
+    have "insert H ?S2 = insert H S2"
+      by (simp only: insert_Diff_single)
+    then have 6:"insert H ?S2 \<notin> C"
+      using \<open>insert H S2 \<notin> C\<close> by (simp only: simp_thms(6,8) \<open>insert H ?S2 = insert H S2\<close>)
     show "False"
       using assms(1) assms(2) assms(3) assms(4) assms(5) 1 2 3 4 5 6 by (rule ex3_pcp_DIS_auxFalse)
   qed
