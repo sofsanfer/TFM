@@ -2052,7 +2052,7 @@ qed
 
 text \<open>En conclusión, la prueba detallada del lema completo se muestra a continuación.\<close>
 
-lemma 
+lemma ex1: 
   assumes "pcp C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof -
@@ -3111,91 +3111,9 @@ proof -
     by (rule exI)
 qed
 
-text \<open>Para concluir, veamos la demostración automática en Isabelle/HOL.
-\comentario{Creo que no es necesario probarlo otra vez, más aún sin los lemas 
-previos.}
-
-\comentario{Sería conveniente incluir un pequeño grafo o esquema de 
+text \<open>\comentario{Sería conveniente incluir un pequeño grafo o esquema de 
 los lemas.}
 \<close>
-
-lemma ex3:
-  assumes C: "pcp C"
-  assumes S: "subset_closed C"
-  shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
-proof(intro exI[of _ "C \<union> {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"] conjI)
-  let ?E = " {S. \<forall>s \<subseteq> S. finite s \<longrightarrow> s \<in> C}"
-  show "C \<subseteq> C \<union> ?E" by blast
-  from S show "finite_character (C \<union> ?E)" 
-    unfolding finite_character_def subset_closed_def by blast
-  note C'' = C[unfolded pcp_alt, THEN bspec]
-  have CON: "{G,H} \<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-             if si: "\<And>s. \<lbrakk>s\<subseteq>S; finite s\<rbrakk> \<Longrightarrow> s \<in> C" and
-    un: "Con F G H" and el: "F \<in> S" for F G H S 
-  proof -
-    have k: "\<forall>s \<subseteq> S. finite s \<longrightarrow> F \<in> s \<longrightarrow> {G,H} \<union> s \<in> C"
-      using si un C'' by simp
-    have "{G,H} \<union> S \<in> ?E"
-      unfolding mem_Collect_eq Un_iff 
-    proof safe
-      fix s
-      assume "s \<subseteq> {G,H} \<union> S" and f: "finite s"
-      hence "insert F  (s - {G,H}) \<subseteq> S" using el by blast
-      with k f have "insert G  (insert H (insert F (s - {G,H}))) \<in> C" by simp
-      hence "insert F (insert G (insert H  s)) \<in> C" using insert_absorb by fastforce
-      thus "s \<in> C" using S unfolding subset_closed_def by fast  
-    qed
-    thus "{G, H} \<union> S \<in> C \<union> ?E" by simp
-  qed
-  have DIS: "{G}\<union> S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> insert H S \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-    if si: "\<And>s. s\<subseteq>S \<Longrightarrow> finite s \<Longrightarrow> s \<in> C" and un: "Dis F G H" and el: "F \<in> S"
-    for F G H S 
-  proof -
-    have l: "\<exists>I\<in>{G, H}. insert I s1 \<in> C \<and> insert I s2 \<in> C" 
-      if "s1 \<subseteq> S" "finite s1" "F \<in> s1" 
-         "s2 \<subseteq> S" "finite s2" "F \<in> s2" for s1 s2
-    proof -
-      let ?s = "s1 \<union> s2"
-      have "?s \<subseteq> S" "finite ?s" using that by simp_all 
-      with si have "?s \<in> C" by simp
-      moreover have "F \<in> ?s" using that by simp
-      ultimately have "\<exists>I\<in>{G,H}. insert I ?s \<in> C"
-        using C'' un by simp
-      thus "\<exists>I\<in>{G,H}. insert I s1 \<in> C \<and> insert I s2 \<in> C"
-        by (meson S[unfolded subset_closed_def, THEN bspec] insert_mono sup.cobounded2 sup_ge1)
-    qed
-    have m: "\<lbrakk>s1 \<subseteq> S; finite s1; F \<in> s1; insert G s1 \<notin> C; s2 \<subseteq> S; finite s2; F \<in> s2; insert H s2 \<notin> C\<rbrakk> \<Longrightarrow> False" for s1 s2
-      using l by blast
-    have "False" if "s1 \<subseteq> S" "finite s1" "insert G s1 \<notin> C" "s2 \<subseteq> S" "finite s2" "insert H s2 \<notin> C" for s1 s2
-    proof -
-      have *: "insert F  s1 \<subseteq> S" "finite (insert F  s1)" "F \<in> insert F s1" if  "s1 \<subseteq> S" "finite s1" for s1
-        using that el by simp_all
-      have  "insert G (insert F s1) \<notin> C" "insert H (insert F s2) \<notin> C" 
-        by (meson S insert_mono subset_closed_def subset_insertI that(3,6))+
-      from m[OF *[OF that(1-2)] this(1) *[OF that(4-5)] this(2)]
-      show False .
-    qed
-    hence "insert G S \<in> ?E \<or> insert H S \<in> ?E"
-      unfolding mem_Collect_eq Un_iff
-      by (metis (no_types, lifting) finite_Diff insert_Diff si subset_insert_iff)
-    thus "{G}\<union> S \<in> C \<union> ?E \<or> insert H S \<in> C \<union> ?E" by blast
-  qed 
-  have CON': "\<And>f2 g2 h2 F2 G2 S2. \<lbrakk>\<And>s. \<lbrakk>s \<in> C; h2 F2 G2 \<in> s\<rbrakk> \<Longrightarrow> f2 insert F2 s \<in> C \<or> g2 insert G2 s \<in> C; 
-                                   \<forall>s\<subseteq>S2. finite s \<longrightarrow> s \<in> C; h2 F2 G2 \<in> S2; False\<rbrakk>
-      \<Longrightarrow> f2 insert F2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C} \<or> g2 insert G2 S2 \<in> C \<union> {S. \<forall>s\<subseteq>S. finite s \<longrightarrow> s \<in> C}" 
-    by fast
-  show "pcp (C \<union> ?E)" unfolding pcp_alt
-    apply(intro ballI conjI; elim UnE; (unfold mem_Collect_eq)?)
-           subgoal using C'' by blast
-          subgoal using C'' by blast
-         subgoal using C'' by (simp;fail)
-        subgoal by (meson C'' empty_subsetI finite.emptyI finite_insert insert_subset subset_insertI)
-       subgoal using C'' by simp
-      subgoal using CON by simp
-     subgoal using C'' by blast
-    subgoal using DIS by simp
-  done
-qed
 
 section \<open>Sucesiones de conjuntos de una colección\<close>
 
@@ -3283,16 +3201,7 @@ proof(induction m)
 qed simp
 
 lemma imageUnElem: "f ` {x} = {f x}"
-proof -
-  have "f`{x} = f`(insert x {})" 
-    by (simp only: insert_def)
-  then have "f`{x} = insert (f x) (f`{})"
-    by (simp only: image_insert)
-  then have "f`{x} = insert (f x) {}"
-    by (simp only: image_empty)
-  thus "f`{x} = {f x}"
-    by (simp only: insert_def)
-qed
+  by simp
 
 lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
@@ -3905,7 +3814,7 @@ proof -
     using \<open>sat (pcp_lim Ce S)\<close> by (rule sat_mono)
 qed
 
-theorem pcp_sat: \<comment> \<open>model existence theorem\<close>
+theorem pcp_sat:
   fixes S :: "'a :: countable formula set"
   assumes c: "pcp C"
   assumes el: "S \<in> C"
@@ -3924,10 +3833,6 @@ proof -
     using pcp_seq.simps(1) pcp_seq_sub by fast
   ultimately show ?thesis unfolding sat_def by fast
 qed
-
-(* This and Hintikka's lemma are the only two where we need semantics. 
-   Still, I don't think it's meaningful to separate those two into 
-   an extra theory. *)
 
 (*<*)
 end
