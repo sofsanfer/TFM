@@ -162,21 +162,6 @@ lemma "\<not> semanticEq (Atom p) (\<^bold>\<not>(Atom p))"
 
 lemma "\<not> semanticEq \<bottom> \<top>"
   by (simp add: semanticEq_def top_semantics)
-
-
-lemma 
-  assumes "\<forall>H. semanticEq \<bottom> H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
-          "\<forall>H. semanticEq (\<^bold>\<not> \<bottom>) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
-          "\<forall>H p. semanticEq (Atom p) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
-          "\<forall>H p. semanticEq (\<^bold>\<not>(Atom p)) H \<Longrightarrow> F \<noteq> H \<and> G \<noteq> H"
-        shows "\<not> semanticEq (F \<^bold>\<and> G) (F \<^bold>\<or> G)"
-proof (rule ccontr)
-  assume "semanticEq (F \<^bold>\<and> G) (F \<^bold>\<or> G)" 
-  oops
-
-text \<open>
-\comentario{No entiendo el lema previo.}
-\<close>
   
 text \<open>Por tanto, diremos intuitivamente que una fórmula es de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>
   si es semánticamente equivalente a la fórmula \<open>\<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>. Del mismo modo, una fórmula será de tipo
@@ -258,23 +243,13 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
   definiciones sintácticas, pues construyen los correspondientes conjuntos de fórmulas a partir de 
   una reglas sintácticas concretas. Se trata de una simplificación de la intuición original de la 
   clasificación de las fórmulas mediante notación uniforme, ya que se prescinde de la noción de 
-  equivalencia semántica que permite clasificar la totalidad de las fórmulas proposicionales. En 
-  particular, la formalización no clasifica las fórmulas atómicas ni \<open>\<bottom>\<close>. Sin embargo, en Isabelle 
-  consideraremos estas fórmulas como casos aislados de la clasificación ofrecida por la notación 
-  uniforme.
+  equivalencia semántica que permite clasificar la totalidad de las fórmulas proposicionales. 
 
-  \comentario{Creo que puedo mejorar esa explicación.}
-  \comentario{Se puede eliminar el párrafo: En 
-  particular, la formalización no clasifica las fórmulas atómicas ni \<open>\<bottom>\<close>. Sin embargo, en Isabelle 
-  consideraremos estas fórmulas como casos aislados de la clasificación ofrecida por la notación 
-  uniforme.}
-
-  Sin embargo, la formalización sí proporciona clasificación para el resto de fórmulas. Por ejemplo,
-  según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una fórmula disyuntiva.\<close>
+  Veamos la clasificación de casos concretos de fórmulas. Por ejemplo, según hemos definido la 
+  fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una fórmula disyuntiva.\<close>
 
 lemma "Dis \<top> (\<^bold>\<not> \<bottom>) \<bottom>" 
   unfolding Top_def by (simp only: Dis.intros(2))
-
 
 text \<open>Por otro lado, se observa a partir de las correspondientes definiciones que la conjunción
   generalizada de una lista de fórmulas es una fórmula de tipo \<open>\<alpha>\<close> y la disyunción generalizada de
