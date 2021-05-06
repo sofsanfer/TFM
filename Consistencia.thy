@@ -174,6 +174,10 @@ proof (rule ccontr)
   assume "semanticEq (F \<^bold>\<and> G) (F \<^bold>\<or> G)" 
   oops
 
+text \<open>
+\comentario{No entiendo el lema previo.}
+\<close>
+  
 text \<open>Por tanto, diremos intuitivamente que una fórmula es de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>
   si es semánticamente equivalente a la fórmula \<open>\<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>. Del mismo modo, una fórmula será de tipo
   \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> si es semánticamente equivalente a la fórmula \<open>\<beta>\<^sub>1 \<or> \<beta>\<^sub>2\<close>.
@@ -260,6 +264,10 @@ text \<open>Del mismo modo, las reglas de introducción que proporciona esta for
   uniforme.
 
   \comentario{Creo que puedo mejorar esa explicación.}
+  \comentario{Se puede eliminar el párrafo: En 
+  particular, la formalización no clasifica las fórmulas atómicas ni \<open>\<bottom>\<close>. Sin embargo, en Isabelle 
+  consideraremos estas fórmulas como casos aislados de la clasificación ofrecida por la notación 
+  uniforme.}
 
   Sin embargo, la formalización sí proporciona clasificación para el resto de fórmulas. Por ejemplo,
   según hemos definido la fórmula \<open>\<top>\<close>, es sencillo comprobar que se trata de una fórmula disyuntiva.\<close>
@@ -1655,6 +1663,10 @@ text \<open>En este apartado definiremos las propiedades sobre colecciones de co
   relacionan con la propiedad de consistencia proposicional y emplearemos en la prueba del 
   \<open>teorema de existencia de modelo\<close>.
 
+\comentario{Volver a revisar el párrafo anterior al final de la
+redacción de la sección.}
+
+
   \begin{definicion}
     Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 
     de la colección pertenece a la colección.
@@ -1729,6 +1741,9 @@ text \<open>Una vez introducidas las definiciones anteriores, veamos los resulta
   de consistencia proposicional, podemos extenderla a una colección \<open>C'\<close> que también la verifique y 
   además sea cerrada bajo subconjuntos y de carácter finito.
 
+\comentario{Volver a revisar el párrafo anterior al final de la
+redacción de la sección.}
+
   \begin{lema}
     Toda colección de conjuntos con la propiedad de consistencia proposicional se puede extender a
     una colección que también verifique la propiedad de consistencia proposicional y sea cerrada 
@@ -1743,9 +1758,11 @@ lemma "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and
 text \<open>Procedamos con su demostración.
 
 \begin{demostracion}
-  Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos su extensión formada por los 
+  Dada una colección de conjuntos cualquiera \<open>C\<close>, consideremos la colección formada por los 
   conjuntos tales que son subconjuntos de algún conjunto de \<open>C\<close>. Notemos esta colección por 
   \<open>C' = {S'. \<exists>S\<in>C. S' \<subseteq> S}\<close>. Vamos a probar que, en efecto, \<open>C'\<close> verifica  las condiciones del lema.
+
+\comentario{He modificado algo el párrafo anterior.}
 
   En primer lugar, veamos que \<open>C\<close> está contenida en \<open>C'\<close>. Para ello, consideremos un conjunto
   cualquiera perteneciente a \<open>C\<close>. Puesto que la propiedad de contención es reflexiva, dicho conjunto 
@@ -2186,7 +2203,11 @@ proof -
     by (rule exI)
 qed
 
-text \<open>Por último, su demostración automática es la siguiente.\<close>
+text \<open>Por último, su demostración automática es la siguiente.
+
+\comentario{En la demostración de ex1 no se utilizan los tres lemas
+previos en los que se ha desglosado.}
+\<close>
 
 lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
 proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
@@ -2297,9 +2318,12 @@ text\<open>Introduzcamos el último resultado de la sección.
    Dada una colección de conjuntos \<open>C\<close> en las condiciones del enunciado, vamos a considerar su 
    extensión \<open>C'\<close> definida como la unión de \<open>C\<close> y la colección formada por aquellos conjuntos
    cuyos subconjuntos finitos pertenecen a \<open>C\<close>. Es decir,\\ \<open>C' = C \<union> E\<close> donde 
-   \<open>E = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}\<close>. Es evidente que la extensión está bien definida
-   pues contiene a la colección \<open>C\<close>. Vamos a probar que, además es de carácter finito y verifica la 
+   \<open>E = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}\<close>. Es evidente que es extensión pues contiene 
+   a la colección \<open>C\<close>. Vamos a probar que, además es de carácter finito y verifica la 
    propiedad de consistencia proposicional.
+
+\comentario{Cambio leve en el párrafo anterior.}
+
 
    En primer lugar, demostremos que \<open>C'\<close> es de carácter finito. Por definición de dicha propiedad, 
    basta probar que, para cualquier conjunto, son equivalentes:
@@ -3238,7 +3262,13 @@ proof -
     by (rule exI)
 qed
 
-text \<open>Para concluir, veamos la demostración automática en Isabelle/HOL.\<close>
+text \<open>Para concluir, veamos la demostración automática en Isabelle/HOL.
+\comentario{Creo que no es necesario probarlo otra vez, más aún sin los lemas 
+previos.}
+
+\comentario{Sería conveniente incluir un pequeño grafo o esquema de 
+los lemas.}
+\<close>
 
 lemma ex3:
   assumes C: "pcp C"
