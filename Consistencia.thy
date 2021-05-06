@@ -2335,6 +2335,31 @@ definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
 definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extensionFin: "extensionFin C = C \<union> (extF C)"
 
+text \<open>
+ \begin{tikzpicture}
+  [
+    grow                    = down,
+    level 1/.style          = {sibling distance=5cm},
+    level 2/.style          = {sibling distance=5cm},
+    level 3/.style          = {sibling distance=5cm},
+    level distance          = 2cm,
+    edge from parent/.style = {draw, -latex},
+    every node/.style       = {font=\footnotesize},
+    sloped
+  ]
+  \node [root] {\<open>ex3\<close>}
+    child { node [env] {\<open>ex3_finite_character\<close>}}
+    child { node [env] {\<open>ex3_pcp\<close>}
+      		child { node [env] {\<open>ex3_pcp_SinC\<close>}}
+      		child { node [env] {\<open>ex3_pcp_SinE\<close>}
+        				child { node [env] {\<open>ex3_pcp_SinE_CON\<close>}}
+        				child { node [env] {\<open>ex3_pcp_SinE_DIS\<close>}
+                      child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>}
+                            child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>}}}}}};
+\end{tikzpicture}
+
+\comentario{Querría cambiar el sentido de las flechas. También me gustaría centrar más el gráfico.}\<close>
+
 text \<open>En primer lugar, probemos detalladamente mediante el siguiente lema que la extensión \<open>C'\<close> 
   tiene la propiedad de carácter finito.\<close>
 
