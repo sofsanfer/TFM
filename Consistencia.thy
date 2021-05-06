@@ -2508,7 +2508,7 @@ text \<open>Por otro lado, para probar el caso en que \<open>S \<in> E\<close>, 
   El primero de ellos demuestra detalladamente la condición para fórmulas de tipo \<open>\<alpha>\<close> del lema de
   caracterización de la propiedad de consistencia proposicional mediante notación uniforme.\<close>
 
-lemma ex3_pcp_CON:
+lemma ex3_pcp_SinE_CON:
   assumes "pcp C"
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2619,7 +2619,7 @@ text \<open>Seguidamente, veamos la prueba de la condición para fórmulas de ti
   Paralelamente a la demostración vista con anterioridad, veamos la prueba detallada de los dos 
   resultados previos a la demostración de dicha condición.\<close>
 
-lemma ex3_pcp_DIS_auxEx:
+lemma ex3_pcp_SinE_DIS_auxEx:
   assumes "pcp C"
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2701,7 +2701,7 @@ proof -
     using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
-lemma ex3_pcp_DIS_auxFalse:
+lemma ex3_pcp_SinE_DIS_auxFalse:
   assumes "pcp C" 
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2764,7 +2764,7 @@ proof -
       using assms(11) \<open>insert H S2 \<in> C\<close> by (rule notE)
   qed
   have Ex:"\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C"
-    using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_DIS_auxEx)
+    using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_SinE_DIS_auxEx)
   have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C" using [[simp_trace]]
     using 4 8 by simp (*Pendiente*)
   then have "\<forall>I \<in> {G,H}. \<not>(insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
@@ -2789,7 +2789,7 @@ lemma subexE: "\<exists>x\<subseteq>A. P x \<Longrightarrow> (\<And>x. x\<subset
 text \<open>De este modo, podemos demostrar detalladamente en Isabelle la condición para fórmulas de tipo
   \<open>\<beta>\<close>.\<close>
 
-lemma ex3_pcp_DIS:
+lemma ex3_pcp_SinE_DIS:
   assumes "pcp C"
           "subset_closed C"
           "S \<in> (extF C)"
@@ -2913,7 +2913,7 @@ proof -
     then have 6:"insert H ?S2 \<notin> C"
       using \<open>insert H S2 \<notin> C\<close> by (simp only: simp_thms(6,8) \<open>insert H ?S2 = insert H S2\<close>)
     show "False"
-      using assms(1) assms(2) assms(3) assms(4) assms(5) 1 2 3 4 5 6 by (rule ex3_pcp_DIS_auxFalse)
+      using assms(1) assms(2) assms(3) assms(4) assms(5) 1 2 3 4 5 6 by (rule ex3_pcp_SinE_DIS_auxFalse)
   qed
   thus ?thesis
   proof (rule disjE)
@@ -3039,7 +3039,7 @@ proof -
       assume "Con F G H"
       assume "F \<in> S" 
       show "{G,H} \<union> S \<in> (extensionFin C)" 
-        using assms(1) assms(2) assms(3) \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_CON)
+        using assms(1) assms(2) assms(3) \<open>Con F G H\<close> \<open>F \<in> S\<close> by (simp only: ex3_pcp_SinE_CON)
     qed
   qed
   have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> S \<longrightarrow> {G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
@@ -3050,7 +3050,7 @@ proof -
       assume "Dis F G H"
       assume "F \<in> S" 
       show "{G} \<union> S \<in> (extensionFin C) \<or> {H} \<union> S \<in> (extensionFin C)"
-        using assms(1) assms(2) assms(3) \<open>Dis F G H\<close> \<open>F \<in> S\<close> by (rule ex3_pcp_DIS)
+        using assms(1) assms(2) assms(3) \<open>Dis F G H\<close> \<open>F \<in> S\<close> by (rule ex3_pcp_SinE_DIS)
     qed
   qed
   show ?thesis
@@ -3093,7 +3093,7 @@ qed
 
 text \<open>Por último, podemos dar la prueba completa del lema en Isabelle.\<close>
 
-lemma
+lemma ex3:
   assumes "pcp C"
           "subset_closed C"
   shows "\<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> finite_character C'"
