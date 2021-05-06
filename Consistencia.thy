@@ -1825,35 +1825,13 @@ text \<open>Procedamos con su demostración.
   esta sección. El primero se trata de un lema similar al lema \<open>ballI\<close> definido en Isabelle pero 
   considerando la relación de contención en lugar de la de pertenencia.\<close>
 
-lemma 
-  assumes "(\<And>S. S \<subseteq> A \<Longrightarrow> P S)"
-  shows "\<forall>S \<subseteq> A. P S" 
-proof (rule allI)
-  fix S
-  show "S \<subseteq> A \<longrightarrow> P S"
-  proof (rule impI)
-    assume "S \<subseteq> A"
-    thus "P S" 
-      by (rule assms)
-  qed
-qed
-
 lemma sallI: "(\<And>S. S \<subseteq> A \<Longrightarrow> P S) \<Longrightarrow> \<forall>S \<subseteq> A. P S"
   by simp
 
 text \<open>Por último definimos el siguiente lema auxiliar similar al lema \<open>bspec\<close> de Isabelle/HOL
   considerando, análogamente, la relación de contención en lugar de la de pertenencia.\<close>
 
-lemma 
-  assumes "\<forall>S \<subseteq> A. P S"
-          "S \<subseteq> A"
-  shows "P S"
-proof -
-  show "P S" using [[simp_trace]] find_theorems "\<forall>x \<subseteq> ?A. ?P x"
-    using assms(1) assms(2) by simp (*Pendiente*)
-qed
-
-lemma sspec: "\<forall>S \<subseteq> A. P S \<Longrightarrow> S \<subseteq> A \<Longrightarrow> P S" using [[simp_trace]]
+lemma sspec: "\<forall>S \<subseteq> A. P S \<Longrightarrow> S \<subseteq> A \<Longrightarrow> P S"
   by simp
 
 text \<open>Veamos la prueba detallada del lema en Isabelle/HOL. Esta se fundamenta en tres lemas
@@ -1885,99 +1863,11 @@ text \<open>Prosigamos con la prueba del lema auxiliar que demuestra que \<open>
   Isabelle \<open>insert_is_Un\<close> para la unión de dos elementos y un conjunto, como se muestra a 
   continuación.\<close>
 
-lemma "insert a (insert b C) = {a,b} \<union> C"
-  oops
-
-text \<open>Emplearemos para demostrarlo, a su vez, el siguiente lema auxiliar que prueba una propiedad 
-  trivial sobre conjuntos de dos elementos.\<close>
-
-lemma elemSet: "{b} \<union> {a} = {a,b}"
-proof -
-  have C1:"{b} \<union> {a} \<subseteq> {a,b}" 
-  proof -
-    have "\<forall>x \<in> ({b} \<union> {a}). x \<in> {a,b}"
-    proof (rule ballI)
-      fix x
-      assume "x \<in> {b} \<union> {a}"
-      then have "x \<in> {b} \<or> x \<in> {a}"
-        by (simp only: Un_iff)
-      thus "x \<in> {a,b}"
-      proof (rule disjE)
-        assume "x \<in> {b}"
-        then have "x = b" 
-          by (simp only: singleton_iff) 
-        then have "x \<in> {b}"
-          by (simp only: singletonI)
-        then have "x = a \<or> x \<in> {b}"
-          by (simp only: disjI2)
-        thus "x \<in> {a,b}"
-          by (simp only: insert_iff)
-      next
-        assume "x \<in> {a}"
-        then have "x = a"
-          by (simp only: singleton_iff) 
-        then have "x = a \<or> x \<in> {b}"
-          by (simp only: disjI1)
-        thus "x \<in> {a,b}"
-          by (simp only: insert_iff)
-      qed
-    qed
-    thus "{b} \<union> {a} \<subseteq> {a,b}"
-      by (simp only: subset_eq)
-  qed
-  have C2:"{a,b} \<subseteq> {b} \<union> {a}"
-  proof -
-    have "\<forall>x \<in> {a,b}. x \<in> {b} \<union> {a}"
-    proof (rule ballI)
-      fix x
-      assume "x \<in> {a,b}"
-      then have "x = a \<or> x \<in> {b}"
-        by (simp only: insert_iff)
-      thus "x \<in> {b} \<union> {a}"
-      proof (rule disjE)
-        assume "x \<in> {b}"
-        thus "x \<in> {b} \<union> {a}"
-          by (simp only: UnI1)
-      next
-        assume "x = a"
-        then have "x \<in> {a}"
-          by (simp only: singletonI)
-        thus "x \<in> {b} \<union> {a}"
-          by (simp only: UnI2)
-      qed
-    qed
-    thus "{a,b} \<subseteq> {b} \<union> {a}"
-      by (simp only: subset_eq)
-  qed
-  show "{b} \<union> {a} = {a,b}"
-    using C1 C2 by (simp only: set_eq_subset) 
-qed
-
-text \<open>De este modo, podemos demostrar el lema auxiliar \<open>insertSetElem\<close> de manera detallada como
-  sigue.\<close>
-
 lemma insertSetElem: "insert a (insert b C) = {a,b} \<union> C"
-proof -
-  have "insert a C = {a} \<union> C"
-    by (rule insert_is_Un)
-  have "{b} \<union> {a} = {a,b}"
-    by (rule elemSet)
-  have "insert a (insert b C) = insert b (insert a C)"
-    by (rule insert_commute)
-  also have "\<dots> = {b} \<union> (insert a C)"
-    by (rule insert_is_Un)
-  also have "\<dots> = {b} \<union> ({a} \<union> C)"
-    by (simp only: \<open>insert a C = {a} \<union> C\<close>)
-  also have "\<dots> = {b} \<union> {a} \<union> C"
-    by (simp only: Un_assoc)
-  also have "\<dots> = {a,b} \<union> C"
-    by (simp only: \<open>{b} \<union> {a} = {a,b}\<close>) 
-  finally show ?thesis
-    by this
-qed
+  by simp
 
-text \<open>Una vez introducidos los lemas auxiliares anteriores, podemos dar la prueba detallada del
-  lema que demuestra que \<open>C'\<close> tiene la propiedad de consistencia proposicional.\<close>
+text \<open>Una vez introducido dicho lema auxiliar, podemos dar la prueba detallada del lema que 
+  demuestra que \<open>C'\<close> tiene la propiedad de consistencia proposicional.\<close>
 
 lemma ex1_pcp: 
   assumes "pcp C"
@@ -2176,22 +2066,6 @@ proof -
     using C1 C2 C3 by (iprover intro: conjI)
   thus ?thesis
     by (rule exI)
-qed
-
-text \<open>Por último, su demostración automática es la siguiente.
-
-\comentario{En la demostración de ex1 no se utilizan los tres lemas
-previos en los que se ha desglosado.}
-\<close>
-
-lemma ex1: "pcp C \<Longrightarrow> \<exists>C'. C \<subseteq> C' \<and> pcp C' \<and> subset_closed C'"
-proof(intro exI[of _ "{s . \<exists>S \<in> C. s \<subseteq> S}"] conjI)
-  let ?E = "{s. \<exists>S\<in>C. s \<subseteq> S}"
-  show "C \<subseteq> ?E" by blast
-  show "subset_closed ?E" unfolding subset_closed_def by blast
-  assume C: \<open>pcp C\<close>
-  show "pcp ?E" using C unfolding pcp_alt
-    by (intro ballI conjI; simp; meson insertI1 rev_subsetD subset_insertI subset_insertI2)
 qed
 
 text\<open>Continuemos con el segundo resultado de este apartado.
@@ -2907,10 +2781,10 @@ text \<open>Además, para la prueba de la condición necesitaremos los siguiente
 lemma sall_simps_not_all:
   assumes "\<not>(\<forall>x \<subseteq> A. P x)"
   shows "\<exists>x \<subseteq> A. (\<not> P x)"
-  using assms by blast (*Pendiente*)
+  using assms by blast
 
 lemma subexE: "\<exists>x\<subseteq>A. P x \<Longrightarrow> (\<And>x. x\<subseteq>A \<Longrightarrow> P x \<Longrightarrow> Q) \<Longrightarrow> Q"
-  by blast (*Pendiente*)
+  by blast
 
 text \<open>De este modo, podemos demostrar detalladamente en Isabelle la condición para fórmulas de tipo
   \<open>\<beta>\<close>.\<close>
