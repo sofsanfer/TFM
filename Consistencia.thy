@@ -3174,7 +3174,21 @@ text\<open>
     a ella.
   \end{lema}
 
-  \comentario{Añadir explicación.}\<close>
+  \comentario{Añadir explicación.}
+
+  \begin{demostracion}
+    El resultado se prueba por inducción en los números naturales que conforman los subíndices de la 
+    sucesión.
+
+    En primer lugar, tenemos que \<open>S\<^sub>0 = S\<close> pertenece a \<open>C\<close> por hipótesis.
+
+    Por otro lado, supongamos que \<open>S\<^sub>n \<in> C\<close>. Probemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 \<in> C\<close>. Si suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>,
+    por definición tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego pertenece a \<open>C\<close>. En caso contrario, si
+    suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, que pertenece igualmente
+    a \<open>C\<close> por hipótesis de inducción. Por tanto, queda probado el resultado.
+  \end{demostracion}
+
+  Veamos la demostración detallada del lema en Isabelle.\<close>
 
 lemma 
   assumes "pcp C" 
@@ -3201,6 +3215,8 @@ next
       by (simp only: HI)
   qed
 qed
+
+text \<open>Del mismo modo, podemos probar el lema de manera automática en Isabelle como sigue.\<close>
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
 proof(induction n)
