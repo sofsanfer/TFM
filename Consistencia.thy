@@ -3210,7 +3210,7 @@ next
   next
     assume 2:"insert (from_nat n) (pcp_seq C S n) \<notin> C"
     then have "pcp_seq C S (Suc n) = pcp_seq C S n"
-      by (simp add: pcp_seq.simps(2))
+      by (simp add: pcp_seq.simps(2)) (*Pendiente*)
     thus "pcp_seq C S (Suc n) \<in> C"
       by (simp only: HI)
   qed
@@ -3225,7 +3225,23 @@ proof(induction n)
   thus ?case by (simp add: Let_def)
 qed simp
 
-text\<open>Lema: la sucesión es monónota.\<close>
+text\<open>
+  \comentario{Añadir explicación.}
+
+  \begin{lema}
+    Toda sucesión de conjuntos de una colección a partir de un conjunto dado es monótona.
+  \end{lema}
+
+  \comentario{Añadir explicación.}
+
+  \begin{demostracion}
+    Para probar que una sucesión es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n, m \<in> \<nat>\<close>
+    tales que \<open>n \<le> m\<close>. La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
+
+    En primer lugar, 
+  \end{demostracion}
+
+  \comentario{Terminar.}\<close>
 
 lemma pcp_seq_mono_detallada: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
 proof(induction m)
@@ -3243,16 +3259,26 @@ next
   thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
   proof (rule disjE)
     assume "n \<le> m"
-    have "pcp_seq C S n \<subseteq> pcp_seq C S m"
+    have H:"pcp_seq C S n \<subseteq> pcp_seq C S m"
       using \<open>n \<le> m\<close> by (simp only: HI)
-    then have "pcp_seq C S n \<subseteq> (if (insert (from_nat m) (pcp_seq C S m) \<in> C) 
-          then (insert (from_nat m) (pcp_seq C S m)) else (pcp_seq C S m))"
-      by auto (*Pendiente*)
-    then have "pcp_seq C S n \<subseteq> (let Sn = pcp_seq C S m; Sn1 = insert (from_nat m) Sn in
-                        if Sn1 \<in> C then Sn1 else Sn)"
-      by (simp only: Let_def)
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-      by (simp only: pcp_seq.simps(2))
+    proof (cases)
+      assume "insert (from_nat m) (pcp_seq C S m) \<in> C"
+      then have 1:"pcp_seq C S (Suc m) = insert (from_nat m) (pcp_seq C S m)"
+        by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+      have "pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)"
+        by blast (*Pendiente*)
+      have "pcp_seq C S n \<subseteq> insert (from_nat m) (pcp_seq C S m)"
+        using H \<open>pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)\<close> by (rule subset_trans)
+      thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
+        by (simp only: 1)
+    next
+      assume "insert (from_nat m) (pcp_seq C S m) \<notin> C"
+      then have 2:"pcp_seq C S (Suc m) = pcp_seq C S m"
+        by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+      thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
+        by (simp only: H)
+    qed
   next
     assume "n = Suc m"
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
