@@ -3144,22 +3144,39 @@ los lemas.}
 
 section \<open>Sucesiones de conjuntos de una colección\<close>
 
-text\<open> Definición: definición de una sucesión de conjuntos a partir de 
-C y S: \<open>S_0, S_1,...,S_n,...\<close>\<close>
+text\<open> 
+\comentario{Añadir introducción previa. Explicar aquí que las fórmulas proposicionales conforman un
+  conjunto contable. Fitting pg.53}
+
+\begin{definicion}
+  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración
+  cualquiera de las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de 
+  S\<close> como sigue:
+
+  $S_{0} = S$
+
+  $S_{n+1} = \left\{ \begin{array}{lcc} S_{n} \cup \{F_{n}\} &  si  & S_{n} \cup \{F_{n}\} \in C \\ \\ S_{n} & c.c \end{array} \right.$ 
+\end{definicion}
+
+  \comentario{Añadir explicación.}\<close>
 
 primrec pcp_seq where
 "pcp_seq C S 0 = S" |
 "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
 
-text\<open>Lema: Si C tiene la propiedad de consistencia proposicional y S 
-pertenece a C, todos los conjuntos de la sucesión están en C.\<close>
+text\<open>
+  \comentario{Añadir explicación.}
 
-text \<open>He introducido una instancia en Sintaxis que señala que las fórmulas
-  son contables si sus átomos lo son. En caso contrario hay interferencias
-  entre los tipos.\<close>
+  \begin{lema}
+    Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces todos 
+    los conjuntos de la sucesión formada a partir de un conjunto de la colección pertenecen también
+    a ella.
+  \end{lema}
 
-lemma pcp_seq_in_detallada: 
+  \comentario{Añadir explicación.}\<close>
+
+lemma 
   assumes "pcp C" 
           "S \<in> C"
         shows "pcp_seq C S n \<in> C"
@@ -3169,14 +3186,20 @@ proof (induction n)
 next
   fix n
   assume HI:"pcp_seq C S n \<in> C"
-  then have "(if (insert (from_nat n) (pcp_seq C S n) \<in> C) then (insert (from_nat n) (pcp_seq C S n))
-        else (pcp_seq C S n)) \<in> C" using [[simp_trace]]
-    by simp (*Pendiente*) find_theorems "?P ?b" "(if (?Q ?a) then ?a else ?b)" -name: division -name: Division
-  then have "(let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
-                        if Sn1 \<in> C then Sn1 else Sn) \<in> C"
-    by (simp only: Let_def)
-  thus "pcp_seq C S (Suc n) \<in> C"
-    by (simp only: pcp_seq.simps(2))
+  show "pcp_seq C S (Suc n) \<in> C"
+  proof (cases)
+    assume 1:"insert (from_nat n) (pcp_seq C S n) \<in> C"
+    then have "pcp_seq C S (Suc n) = insert (from_nat n) (pcp_seq C S n)"
+      by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+    thus "pcp_seq C S (Suc n) \<in> C"
+      by (simp only: 1)
+  next
+    assume 2:"insert (from_nat n) (pcp_seq C S n) \<notin> C"
+    then have "pcp_seq C S (Suc n) = pcp_seq C S n"
+      by (simp add: pcp_seq.simps(2))
+    thus "pcp_seq C S (Suc n) \<in> C"
+      by (simp only: HI)
+  qed
 qed
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
