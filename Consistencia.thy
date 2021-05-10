@@ -3502,7 +3502,10 @@ text \<open>\comentario{Añadir enlace}
   Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
   cualquiera. Si \<open>S'\<close> pertenece al límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>,
   entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
-\end{lema}\<close>
+\end{lema}
+
+  Análogamente, el resultado es inmediato por la definición del límite. Por otro lado, la prueba 
+  detallada en Isabelle/HOL es la siguiente. \<close>
 
 lemma 
   assumes "S' \<in> pcp_lim C S"
@@ -3523,6 +3526,8 @@ proof -
   thus "\<exists>k. S' \<in> pcp_seq C S k" 
     by (simp only: bex_UNIV)
 qed
+
+text \<open>Por último, daremos la demostración automática del resultado.\<close>
 
 lemma pcp_lim_inserted_at_ex: 
     "S' \<in> pcp_lim C S \<Longrightarrow> \<exists>k. S' \<in> pcp_seq C S k"
