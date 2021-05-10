@@ -3311,13 +3311,37 @@ text \<open>\comentario{Añadir explicación enlace.}
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n, m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
-\end{lema}\<close>
+\end{lema}
+
+\comentario{Añadir explicación enlace.}
+
+\begin{demostracion}
+  En las condiciones del enunciado, la prueba se realiza por inducción en \<open>m \<in> \<nat>\<close>.
+
+  En primer lugar, consideremos el caso base \<open>m = 0\<close>. El resultado se obtiene directamente:
+
+  $\bigcup_{n \leq 0} S_{n} = \bigcup_{n = 0} S_{n} = S_{0} = S_{m}$
+
+  Por otro lado, supongamos por hipótesis de inducción que $\bigcup_{n \leq m} S_{n} = S_{m}$.
+  Veamos que se verifica $\bigcup_{n \leq m + 1} S_{n} = S_{m + 1}$. Observemos que si \<open>n \<le> m + 1\<close>,
+  entonces se tiene que o bien \<open>n \<le> m\<close> o bien \<open>n = m + 1\<close>. De este modo, aplicando la 
+  hipótesis de inducción, deducimos lo siguiente.
+
+  $\bigcup_{n \leq m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup \bigcup_{n = m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup S_{m + 1} = S_{m} \cup S_{m + 1}$
+
+  Por la monotonía de la sucesión de conjuntos definida dada una colección y un conjunto 
+  perteneciente a ella, como \<open>m \<le> m + 1\<close>, se tiene que \<open>S\<^sub>m \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Luego, se verifica:
+
+  $\bigcup_{n \leq m + 1} S_{n} = S_{m} \cup S_{m + 1} = S_{m + 1}$
+
+  Lo que prueba el resultado.
+\end{demostracion}\<close>
 
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
-proof(induct m)
+proof (induct m)
   have n0:"{n. n = 0} = {0}"
     by (simp only: singleton_conv)
   have "(pcp_seq C S)`{n. n = 0} = (pcp_seq C S)`{0}"
@@ -3339,13 +3363,7 @@ proof(induct m)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
-  have "0 \<le> Suc 0"
-    by (simp only: canonically_ordered_monoid_add_class.zero_le)
-  then have "0 + m \<le> Suc 0 + m"
-    by (simp only: ordered_ab_semigroup_add_imp_le_class.add_le_cancel_right)
-  then have "0 + m \<le> Suc (0 + m)"
-    by (simp only: plus_nat.add_Suc)
-  then have "m \<le> Suc m" 
+  have "m \<le> Suc m" 
     by (simp only: monoid_add_class.add_0_right)
   have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
