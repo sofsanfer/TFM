@@ -3174,7 +3174,7 @@ text\<open>
     a ella.
   \end{lema}
 
-  \comentario{Añadir explicación.}
+  Procedamos con su demostración.
 
   \begin{demostracion}
     El resultado se prueba por inducción en los números naturales que conforman los subíndices de la 
@@ -3200,17 +3200,23 @@ proof (induction n)
 next
   fix n
   assume HI:"pcp_seq C S n \<in> C"
+  have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
+                        if Sn1 \<in> C then Sn1 else Sn)" 
+    by (simp only: pcp_seq.simps(2))
+  then have SucDef:"pcp_seq C S (Suc n) = (if insert (from_nat n) (pcp_seq C S n) \<in> C then insert (from_nat n) (pcp_seq C S n)
+                                    else pcp_seq C S n)" 
+    by (simp only: Let_def)
   show "pcp_seq C S (Suc n) \<in> C"
   proof (cases)
     assume 1:"insert (from_nat n) (pcp_seq C S n) \<in> C"
-    then have "pcp_seq C S (Suc n) = insert (from_nat n) (pcp_seq C S n)"
-      by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+    have "pcp_seq C S (Suc n) = insert (from_nat n) (pcp_seq C S n)"
+      using SucDef 1 by (simp only: if_True)
     thus "pcp_seq C S (Suc n) \<in> C"
       by (simp only: 1)
   next
     assume 2:"insert (from_nat n) (pcp_seq C S n) \<notin> C"
-    then have "pcp_seq C S (Suc n) = pcp_seq C S n"
-      by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+    have "pcp_seq C S (Suc n) = pcp_seq C S n"
+      using SucDef 2 by (simp only: if_False)
     thus "pcp_seq C S (Suc n) \<in> C"
       by (simp only: HI)
   qed
