@@ -3188,7 +3188,7 @@ text\<open>
     a \<open>C\<close> por hipótesis de inducción. Por tanto, queda probado el resultado.
   \end{demostracion}
 
-  La demostración detallada del lema en Isabelle es la siguiente.\<close>
+  La formalización y demostración detallada del lema en Isabelle son las siguientes.\<close>
 
 lemma 
   assumes "pcp C" 
@@ -3236,6 +3236,13 @@ text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
   \begin{lema}
     Toda sucesión de conjuntos de una colección a partir de un conjunto dado es monótona.
   \end{lema}
+
+  En Isabelle, se formaliza de la siguiente forma.\<close>
+
+lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+  oops
+
+text \<open>Procedamos con la demostración del lema.
 
   \begin{demostracion}
     Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
@@ -3315,14 +3322,13 @@ proof(induction m)
   thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
 qed simp
 
-text \<open>\comentario{Añadir explicación enlace.}
+text \<open>A continuación daremos un lema que permite caracterizar un elemento de la sucesión en función 
+  de los anteriores.
 
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n, m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
-
-\comentario{Añadir explicación enlace.}
 
 \begin{demostracion}
   En las condiciones del enunciado, la prueba se realiza por inducción en \<open>m \<in> \<nat>\<close>.
@@ -3346,8 +3352,8 @@ text \<open>\comentario{Añadir explicación enlace.}
   Lo que prueba el resultado.
 \end{demostracion}
 
-  Procedamos con la demostración detallada en Isabelle. Para ello, hemos empleado el siguiente lema
-  auxiliar que define la imagen de un conjunto de un único elemento.\<close>
+  Procedamos con su formalización y demostración detallada en Isabelle. Para ello, hemos empleado el 
+  siguiente lema auxiliar que define la imagen de un conjunto de un único elemento.\<close>
 
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
@@ -3420,7 +3426,7 @@ next
     by this
 qed
 
-text \<open>Finalmente, veamos la demostración automática del resultado.\<close>
+text \<open>Análogamente, podemos dar una prueba automática del resultado en Isabelle/HOL.\<close>
 
 lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induction m)
@@ -3434,17 +3440,19 @@ proof(induction m)
   thus ?case using Suc pcp_seq_mono by blast
 qed simp
 
-text \<open>Finalmente, definamos el límite de las sucesiones anteriores y distintos resultados
-  sobre el mismo.
+text \<open>Finalmente, definamos el límite de las sucesiones anteriores. A continuación, mostraremos dos
+  resultados que se deducen de manera inmediata de dicha definición.
 
-  \begin{definicion}
+ \begin{definicion}
   Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
   de conjuntos de C a partir de S\<close> como $\lim_{n \to \infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$
-  \end{definicion}\<close>
+ \end{definicion}
+
+  En Isabelle, la definición del límite se formaliza como sigue.\<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
-text \<open>\comentario{Añadir explicación de enlace.}
+text \<open>Veamos el primer resultado que se deduce trivialmente a partir de la definición.
 
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos cualquiera y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todo
@@ -3453,8 +3461,7 @@ text \<open>\comentario{Añadir explicación de enlace.}
   $S_{n} \subseteq \lim_{n \to \infty} S_{n}$
 \end{lema}
 
-  Por la definición del límite dada anteriormente, la prueba es trivial. Veamos la demostración 
-  detallada en Isabelle.\<close>
+  Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
 
 lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
@@ -3505,16 +3512,15 @@ text \<open>Finalmente, podemos probar el resultado de manera automática de la 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
 
-text \<open>\comentario{Añadir enlace}
+text \<open>Por último, de la definición de límite podemos deducir el siguiente lema.
 
-\begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
-  cualquiera. Si \<open>S'\<close> pertenece al límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>,
-  entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
-\end{lema}
+  \begin{lema}
+    Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
+    cualquiera. Si \<open>S'\<close> pertenece al límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>,
+    entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
+  \end{lema}
 
-  Análogamente, el resultado es inmediato por la definición del límite. Por otro lado, la prueba 
-  detallada en Isabelle/HOL es la siguiente. \<close>
+  Su prueba detallada en Isabelle/HOL es la siguiente. \<close>
 
 lemma 
   assumes "S' \<in> pcp_lim C S"
@@ -3536,7 +3542,7 @@ proof -
     by (simp only: bex_UNIV)
 qed
 
-text \<open>Por último, daremos la demostración automática del resultado.\<close>
+text \<open>Finalmente, daremos la demostración automática del resultado.\<close>
 
 lemma pcp_lim_inserted_at_ex: 
     "S' \<in> pcp_lim C S \<Longrightarrow> \<exists>k. S' \<in> pcp_seq C S k"
