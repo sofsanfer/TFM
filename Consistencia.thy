@@ -3335,10 +3335,15 @@ text \<open>\comentario{Añadir explicación enlace.}
   $\bigcup_{n \leq m + 1} S_{n} = S_{m} \cup S_{m + 1} = S_{m + 1}$
 
   Lo que prueba el resultado.
-\end{demostracion}\<close>
+\end{demostracion}
+
+  Procedamos con la demostración detallada en Isabelle. Para ello, hemos empleado el siguiente lema
+  auxiliar que define la imagen de un conjunto de un único elemento.\<close>
 
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
+
+text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
@@ -3406,6 +3411,8 @@ next
     by this
 qed
 
+text \<open>Finalmente, veamos la demostración automática del resultado.\<close>
+
 lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induction m)
   case (Suc m)
@@ -3418,12 +3425,13 @@ proof(induction m)
   thus ?case using Suc pcp_seq_mono by blast
 qed simp
 
-text\<open>
-lemma \<open>wont_get_added:\<close>
-\<open>"(F :: ('a :: countable) formula) \<notin> pcp_seq C S (Suc (to_nat F)) \<Longrightarrow> 
-F \<notin> pcp_seq C S (Suc (to_nat F) + n)"\<close>
-text\<open>We don't necessarily have @{term "n = to_nat (from_nat n)"}, so this doesn't hold.\<close>
-\<close>
+text \<open>Finalmente, definamos el límite de las sucesiones anteriores y distintos resultados
+  sobre el mismo.
+
+  \begin{definicion}
+  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
+  de conjuntos de C a partir de S\<close> como $\lim_{n \to \infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$
+  \end{definicion}\<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
