@@ -3238,12 +3238,23 @@ text\<open>
     Para probar que una sucesión es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n, m \<in> \<nat>\<close>
     tales que \<open>n \<le> m\<close>. La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
 
-    En primer lugar, 
+    En primer lugar, supongamos \<open>m = 0\<close>. En este caso, si \<open>n \<le> 0\<close>, entonces \<open>n = 0\<close>. Por tanto, el
+    resultado se tiene por la propiedad reflexiva de la contención de conjuntos.
+
+    Finalmente, supongamos por hipótesis de inducción que dados \<open>n, m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>, 
+    entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Vamos a probar que, si \<open>n \<le> m + 1\<close>, entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Observemos que si
+    \<open>n \<le> m + 1\<close>, entonces se verifica que o bien \<open>n \<le> m\<close> o bien \<open>n = m + 1\<close>. Si \<open>n = m + 1\<close>, el 
+    resultado es inmediato por la propiedad reflexiva de la contención de conjuntos. Del mismo modo
+    probemos que, considerando \<open>n \<le> m\<close>, obtenemos \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Por hipótesis de inducción, si 
+    \<open>n \<le> m\<close>, se tiene \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Además, si suponemos que \<open>S\<^sub>m \<union> {F\<^sub>m} \<in> C\<close>, por definición de \<open>S\<^sub>m\<^sub>+\<^sub>1\<close> 
+    y la propiedad transitiva de la contención de conjuntos, obtenemos \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. En otro caso, si
+    \<open>S\<^sub>m \<union> {F\<^sub>m} \<notin> C\<close>, por definición tenemos \<open>S\<^sub>m\<^sub>+\<^sub>1 = S\<^sub>m\<close> y, por hipótesis de inducción, se prueba
+    igualmente el resultado. 
   \end{demostracion}
 
-  \comentario{Terminar.}\<close>
+  La prueba detallada en Isabelle se muestra a continuación.\<close>
 
-lemma pcp_seq_mono_detallada: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
 proof(induction m)
   assume "n \<le> 0" 
   then have "n = 0"
@@ -3286,11 +3297,19 @@ next
   qed
 qed
 
+text \<open>Del mismo modo, se puede probar automáticamente en Isabelle/HOL.\<close>
+
 lemma pcp_seq_mono: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
 proof(induction m)
   case (Suc m)
   thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
 qed simp
+
+text \<open>\comentario{Añadir explicación enlace.}
+
+\begin{lema}
+  Para todos \<open>n, m \<in> \<nat>\<close>, se verifica.
+\end{lema}\<close>
 
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
