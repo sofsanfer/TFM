@@ -3235,8 +3235,9 @@ text\<open>
   \comentario{Añadir explicación.}
 
   \begin{demostracion}
-    Para probar que una sucesión es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n, m \<in> \<nat>\<close>
-    tales que \<open>n \<le> m\<close>. La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
+    Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
+    y \<open>S\<close> un conjunto de \<open>C\<close>, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n, m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>. 
+    La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
 
     En primer lugar, supongamos \<open>m = 0\<close>. En este caso, si \<open>n \<le> 0\<close>, entonces \<open>n = 0\<close>. Por tanto, el
     resultado se tiene por la propiedad reflexiva de la contención de conjuntos.
@@ -3308,13 +3309,14 @@ qed simp
 text \<open>\comentario{Añadir explicación enlace.}
 
 \begin{lema}
-  Para todos \<open>n, m \<in> \<nat>\<close>, se verifica.
+  Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n, m \<in> \<nat>\<close> 
+  se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}\<close>
 
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
 
-lemma pcp_seq_UN_detallada: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
+lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induct m)
   have n0:"{n. n = 0} = {0}"
     by (simp only: singleton_conv)
