@@ -3435,7 +3435,20 @@ text \<open>Finalmente, definamos el límite de las sucesiones anteriores y dist
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
-lemma pcp_seq_sub_detallada: "pcp_seq C S n \<subseteq> pcp_lim C S"
+text \<open>\comentario{Añadir explicación de enlace.}
+
+\begin{lema}
+  Sea \<open>C\<close> una colección de conjuntos cualquiera y \<open>S\<close> un conjunto de \<open>C\<close>. Se verifica:
+
+  $S_{n} \subseteq \lim_{n \to \infty} S_{n}$
+\end{lema}
+
+\comentario{Añadir enlace.}
+
+\begin{demostracion}
+\end{demostracion}\<close>
+
+lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
 proof (induction n)
   have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
@@ -3482,7 +3495,7 @@ qed
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
 
-lemma pcp_lim_inserted_at_ex_detallada: 
+lemma 
   assumes "S' \<in> pcp_lim C S"
   shows "\<exists>k. S' \<in> pcp_seq C S k"
 proof -
