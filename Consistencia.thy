@@ -3188,7 +3188,7 @@ text\<open>
     a \<open>C\<close> por hipótesis de inducción. Por tanto, queda probado el resultado.
   \end{demostracion}
 
-  Veamos la demostración detallada del lema en Isabelle.\<close>
+  La demostración detallada del lema en Isabelle es la siguiente.\<close>
 
 lemma 
   assumes "pcp C" 
@@ -3203,8 +3203,8 @@ next
   have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
     by (simp only: pcp_seq.simps(2))
-  then have SucDef:"pcp_seq C S (Suc n) = (if insert (from_nat n) (pcp_seq C S n) \<in> C then insert (from_nat n) (pcp_seq C S n)
-                                    else pcp_seq C S n)" 
+  then have SucDef:"pcp_seq C S (Suc n) = (if insert (from_nat n) (pcp_seq C S n) \<in> C then 
+                    insert (from_nat n) (pcp_seq C S n) else pcp_seq C S n)" 
     by (simp only: Let_def)
   show "pcp_seq C S (Suc n) \<in> C"
   proof (cases)
@@ -3222,7 +3222,7 @@ next
   qed
 qed
 
-text \<open>Del mismo modo, podemos probar el lema de manera automática en Isabelle como sigue.\<close>
+text \<open>Del mismo modo, podemos probar el lema de manera automática en Isabelle.\<close>
 
 lemma pcp_seq_in: "pcp C \<Longrightarrow> S \<in> C \<Longrightarrow> pcp_seq C S n \<in> C"
 proof(induction n)
@@ -3231,14 +3231,11 @@ proof(induction n)
   thus ?case by (simp add: Let_def)
 qed simp
 
-text\<open>
-  \comentario{Añadir explicación.}
+text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
 
   \begin{lema}
     Toda sucesión de conjuntos de una colección a partir de un conjunto dado es monótona.
   \end{lema}
-
-  \comentario{Añadir explicación.}
 
   \begin{demostracion}
     Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
@@ -3271,6 +3268,12 @@ proof(induction m)
 next
   fix m
   assume HI:"n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
+  have "pcp_seq C S (Suc m) = (let Sm = pcp_seq C S m; Sm1 = insert (from_nat m) Sm in
+                      if Sm1 \<in> C then Sm1 else Sm)" 
+    by (simp only: pcp_seq.simps(2))
+  then have SucDef:"pcp_seq C S (Suc m) = (if insert (from_nat m) (pcp_seq C S m) \<in> C then 
+                    insert (from_nat m) (pcp_seq C S m) else pcp_seq C S m)" 
+    by (simp only: Let_def)
   assume "n \<le> Suc m"
   then have "n \<le> m \<or> n = Suc m"
     by (simp only: le_Suc_eq)
@@ -3281,19 +3284,19 @@ next
       using \<open>n \<le> m\<close> by (simp only: HI)
     thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
     proof (cases)
-      assume "insert (from_nat m) (pcp_seq C S m) \<in> C"
-      then have 1:"pcp_seq C S (Suc m) = insert (from_nat m) (pcp_seq C S m)"
-        by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+      assume C1:"insert (from_nat m) (pcp_seq C S m) \<in> C"
+      have 1:"pcp_seq C S (Suc m) = insert (from_nat m) (pcp_seq C S m)"
+        using SucDef C1 by (simp only: if_True)
       have "pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)"
-        by blast (*Pendiente*)
+        by (rule subset_insertI)
       have "pcp_seq C S n \<subseteq> insert (from_nat m) (pcp_seq C S m)"
         using H \<open>pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)\<close> by (rule subset_trans)
       thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
         by (simp only: 1)
     next
-      assume "insert (from_nat m) (pcp_seq C S m) \<notin> C"
+      assume C2:"insert (from_nat m) (pcp_seq C S m) \<notin> C"
       then have 2:"pcp_seq C S (Suc m) = pcp_seq C S m"
-        by (simp add: pcp_seq.simps(2)) (*Pendiente*)
+        using SucDef C2 by (simp only: if_False)
       thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
         by (simp only: H)
     qed
