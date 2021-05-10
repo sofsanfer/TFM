@@ -3438,15 +3438,14 @@ definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 text \<open>\comentario{Añadir explicación de enlace.}
 
 \begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos cualquiera y \<open>S\<close> un conjunto de \<open>C\<close>. Se verifica:
+  Sea \<open>C\<close> una colección de conjuntos cualquiera y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todo
+  \<open>n \<in> \<nat>\<close>, se verifica:
 
   $S_{n} \subseteq \lim_{n \to \infty} S_{n}$
 \end{lema}
 
-\comentario{Añadir enlace.}
-
-\begin{demostracion}
-\end{demostracion}\<close>
+  Por la definición del límite dada anteriormente, la prueba es trivial. Veamos la demostración 
+  detallada en Isabelle.\<close>
 
 lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
@@ -3492,8 +3491,18 @@ next
     by (simp only: conditionally_complete_lattice_class.cSup_singleton)
 qed
 
+text \<open>Finalmente, podemos probar el resultado de manera automática de la siguiente forma.\<close>
+
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
+
+text \<open>\comentario{Añadir enlace}
+
+\begin{lema}
+  Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
+  cualquiera. Si \<open>S'\<close> pertenece al límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>,
+  entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
+\end{lema}\<close>
 
 lemma 
   assumes "S' \<in> pcp_lim C S"
