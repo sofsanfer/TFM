@@ -2325,9 +2325,50 @@ text\<open>Introduzcamos el último resultado de la sección.
   Por lo tanto, obtenemos por definición de \<open>C'\<close> que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close>.
  \end{demostracion}
 
- Finalmente, veamos la demostración detallada del lema en Isabelle. Para facilitar la notación,
- dada una colección cualquiera \<open>C\<close>, formalizamos las colecciones \<open>E\<close> y \<open>C'\<close> como \<open>extF C\<close> y 
- \<open>extensionFin C\<close> respectivamente, como se muestra a continuación.\<close>
+  Finalmente, veamos la demostración detallada del lema en Isabelle. Debido a la cantidad de lemas
+  auxiliares empleados en la prueba detallada, para facilitar la comprensión mostraremos a
+  continuación un grafo que estructura las relaciones de necesidad de los lemas introducidos.
+  
+ \begin{tikzpicture}
+  [
+    grow                    = down,
+    level 1/.style          = {sibling distance=7cm},
+    level 2/.style          = {sibling distance=3cm},
+    level 3/.style          = {sibling distance=5.5cm},
+    level distance          = 2cm,
+    edge from parent/.style = {draw, -latex},
+    every node/.style       = {font=\tiny},
+    sloped
+  ]
+  \node [root] {\<open>ex3\<close>\\ \<open>(Lema 1.3.5)\<close>}
+    child { node [env] {\<open>ex3_finite_character\<close>\\ \<open>(C' tiene la propiedad de carácter finito)\<close>}}
+    child { node [env] {\<open>ex3_pcp\<close>\\ \<open>(C' tiene la propiedad de consistencia proposicional)\<close>}
+      		child { node [env] {\<open>ex3_pcp_SinC\<close>\\ \<open>(Caso del conjunto en C)\<close>}}
+      		child { node [env] {\<open>ex3_pcp_SinE\<close>\\ \<open>(Caso del conjunto en E)\<close>}
+        				child { node [env] {\<open>ex3_pcp_SinE_CON\<close>\\ \<open>(Condición de las fórmulas de tipo \<alpha>)\<close>}}
+        				child { node [env] {\<open>ex3_pcp_SinE_DIS\<close>\\ \<open>(Condición de las fórmulas de tipo \<beta>)\<close>}
+                      child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>\\ \<open>(Resultado 1)\<close>}
+                            child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>\\ \<open>(Resultado 2)\<close>}}}}}};
+\end{tikzpicture}
+
+\comentario{Querría cambiar el sentido de las flechas.}
+
+  De este modo, el \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. El primero,
+  formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la propiedad
+  de carácter proposicional. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la extensión
+  verifica la propiedad de consistencia proposicional. Este último, a su vez, precisa de dos lemas
+  auxiliares: uno para el caso en que el conjunto \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y otro para el caso en 
+  que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para probar el último caso en que \<open>S \<in> E\<close>, 
+  utilizaremos dos lemas auxiliares que permiten probar detalladamente las condiciones para fórmulas 
+  de tipo \<open>\<alpha>\<close> (\<open>ex3_pcp_SinE_CON\<close>) y fórmulas de tipo \<open>\<beta>\<close> (\<open>ex3_pcp_SinE_DIS\<close>) del lema de 
+  caracterización de la propiedad de consistencia proposicional mediante notación uniforme. Por
+  último, la condición de fórmulas de tipo \<open>\<beta>\<close> precisa, a su vez, del resultado \<open>2)\<close> (formalizado 
+  como \<open>ex3_pcp_SinE_DIS_auxEx\<close>), que utiliza para su prueba el resultado \<open>1)\<close> 
+  (\<open>ex3_pcp_SinE_DIS_auxFalse\<close>).
+
+  Por otro lado, para facilitar la notación, dada una colección cualquiera \<open>C\<close>, formalizamos las 
+  colecciones \<open>E\<close> y \<open>C'\<close> como \<open>extF C\<close> y \<open>extensionFin C\<close> respectivamente como se muestra a 
+  continuación.\<close>
 
 definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extF: "extF C = {S. \<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C}"
@@ -2335,33 +2376,10 @@ definition extF :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
 definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) set) set"
   where extensionFin: "extensionFin C = C \<union> (extF C)"
 
-text \<open>
- \begin{tikzpicture}
-  [
-    grow                    = down,
-    level 1/.style          = {sibling distance=5cm},
-    level 2/.style          = {sibling distance=5cm},
-    level 3/.style          = {sibling distance=5cm},
-    level distance          = 2cm,
-    edge from parent/.style = {draw, -latex},
-    every node/.style       = {font=\footnotesize},
-    sloped
-  ]
-  \node [root] {\<open>ex3\<close>}
-    child { node [env] {\<open>ex3_finite_character\<close>}}
-    child { node [env] {\<open>ex3_pcp\<close>}
-      		child { node [env] {\<open>ex3_pcp_SinC\<close>}}
-      		child { node [env] {\<open>ex3_pcp_SinE\<close>}
-        				child { node [env] {\<open>ex3_pcp_SinE_CON\<close>}}
-        				child { node [env] {\<open>ex3_pcp_SinE_DIS\<close>}
-                      child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>}
-                            child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>}}}}}};
-\end{tikzpicture}
-
-\comentario{Querría cambiar el sentido de las flechas. También me gustaría centrar más el gráfico.}\<close>
-
-text \<open>En primer lugar, probemos detalladamente mediante el siguiente lema que la extensión \<open>C'\<close> 
-  tiene la propiedad de carácter finito.\<close>
+text \<open>Una vez hechas las aclaraciones anteriores, procedamos ordenadamente con la demostración 
+  detallada de cada lema auxiliar que conforma la prueba del resultado. En primer lugar, probemos 
+  detalladamente mediante el siguiente lema que la extensión \<open>C'\<close> tiene la propiedad de carácter 
+  finito.\<close>
 
 lemma ex3_finite_character:
   assumes "subset_closed C"
@@ -2446,9 +2464,9 @@ proof -
 qed
 
 text \<open>Por otro lado, para probar que verifica la propiedad de consistencia proposicional
-  utilizaremos fundamentalmente dos lemas auxiliares: uno para el caso en que \<open>S \<in> C\<close> y otro para
-  el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada del lema que prueba el resultado 
-  para el primer caso.\<close>
+  utilizaremos fundamentalmente dos lemas auxiliares como se podía observar en el grafo: uno para el 
+  caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada 
+  del lema que prueba el resultado para el primer caso.\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
@@ -2531,9 +2549,10 @@ proof -
     using A1 A2 A3 A4 by (iprover intro: conjI)
 qed
 
-text \<open>Por otro lado, para probar el caso en que \<open>S \<in> E\<close>, utilizaremos distintos lemas auxiliares.
-  El primero de ellos demuestra detalladamente la condición para fórmulas de tipo \<open>\<alpha>\<close> del lema de
-  caracterización de la propiedad de consistencia proposicional mediante notación uniforme.\<close>
+text \<open>Por otro lado, para probar el caso en que \<open>S \<in> E\<close>, utilizaremos distintos lemas auxiliares
+  como observábamos en el grafo. El primero de ellos demuestra detalladamente la condición para 
+  fórmulas de tipo \<open>\<alpha>\<close> del lema de caracterización de la propiedad de consistencia proposicional 
+  mediante notación uniforme.\<close>
 
 lemma ex3_pcp_SinE_CON:
   assumes "pcp C"
@@ -2792,8 +2811,8 @@ proof -
   qed
   have Ex:"\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C"
     using assms(1) assms(2) assms(3) assms(4) 1 2 3 5 6 7 by (rule ex3_pcp_SinE_DIS_auxEx)
-  have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C" using [[simp_trace]]
-    using 4 8 by simp (*Pendiente*)
+  have "\<forall>I \<in> {G,H}. insert I ?S1 \<notin> C \<or> insert I ?S2 \<notin> C"
+    using 4 8 by simp
   then have "\<forall>I \<in> {G,H}. \<not>(insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
     by (simp only: de_Morgan_conj)
   then have "\<not>(\<exists>I \<in> {G,H}. insert I ?S1 \<in> C \<and> insert I ?S2 \<in> C)"
@@ -2835,7 +2854,7 @@ proof -
   have E:"\<forall>S' \<subseteq> S. finite S' \<longrightarrow> S' \<in> C"
     using assms(3) unfolding extF by (rule CollectD)
   then have E':"\<forall>S'. S' \<subseteq> S \<longrightarrow> finite S' \<longrightarrow> S' \<in> C"
-    by blast (*Pendiente*)
+    by blast
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(2) by (simp only: subset_closed_def)
   have "insert G S \<in> (extF C) \<or> insert H S \<in> (extF C)" 
@@ -2845,8 +2864,8 @@ proof -
       by (simp only: simp_thms(8,25) de_Morgan_disj)
     then have "\<not>(insert G S \<in> (extF C))"
       by (rule conjunct1)
-    then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)" using [[simp_trace]]
-      unfolding extF by simp (*Pendiente*)
+    then have "\<not>(\<forall>S' \<subseteq> (insert G S). finite S' \<longrightarrow> S' \<in> C)"
+      unfolding extF by (simp add: mem_Collect_eq)
     then have Ex1:"\<exists>S'\<subseteq> (insert G S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
       by (rule sall_simps_not_all)
     obtain S1 where "S1 \<subseteq> insert G S" and "\<not>(finite S1 \<longrightarrow> S1 \<in> C)"
@@ -2894,7 +2913,7 @@ proof -
     have "insert H S \<notin> (extF C)"
       using Conj by (rule conjunct2)
     then have "\<not>(\<forall>S' \<subseteq> (insert H S). finite S' \<longrightarrow> S' \<in> C)"
-      unfolding extF by blast (*Pendiente*)
+      unfolding extF by (simp add: mem_Collect_eq)
     then have Ex2:"\<exists>S'\<subseteq> (insert H S). \<not>(finite S' \<longrightarrow> S' \<in> C)"
       by (rule sall_simps_not_all)
     obtain S2 where "S2 \<subseteq> insert H S" and "\<not>(finite S2 \<longrightarrow> S2 \<in> C)"
@@ -3002,14 +3021,14 @@ proof -
     then have "finite (insert \<bottom> {})"
       by (rule finite.insertI)
     have "finite (insert \<bottom> {}) \<longrightarrow> (insert \<bottom> {}) \<in> C"
-      using E \<open>(insert \<bottom> {}) \<subseteq> S\<close> by simp (*Pendiente*)
+      using E \<open>(insert \<bottom> {}) \<subseteq> S\<close> by simp 
     then have "(insert \<bottom> {}) \<in> C"
       using \<open>finite (insert \<bottom> {})\<close> by (rule mp)
     have "\<bottom> \<notin> (insert \<bottom> {}) \<and>
          (\<forall>k. Atom k \<in> (insert \<bottom> {}) \<longrightarrow> \<^bold>\<not> (Atom k) \<in> (insert \<bottom> {}) \<longrightarrow> False) \<and>
          (\<forall>F G H. Con F G H \<longrightarrow> F \<in> (insert \<bottom> {}) \<longrightarrow> {G, H} \<union> (insert \<bottom> {}) \<in> C) \<and>
          (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> (insert \<bottom> {}) \<longrightarrow> {G} \<union> (insert \<bottom> {}) \<in> C \<or> {H} \<union> (insert \<bottom> {}) \<in> C)"
-      using PCP \<open>(insert \<bottom> {}) \<in> C\<close> by blast (*Pendiente*)
+      using PCP \<open>(insert \<bottom> {}) \<in> C\<close> by blast 
     then have "\<bottom> \<notin> (insert \<bottom> {})"
       by (rule conjunct1)
     have "\<bottom> \<in> (insert \<bottom> {})"
