@@ -3157,9 +3157,10 @@ qed
 
 section \<open>Sucesiones de conjuntos de una colección\<close>
 
-text\<open> 
-\comentario{Añadir introducción previa. Explicar aquí que las fórmulas proposicionales conforman un
-  conjunto contable. Fitting pg.53}
+text\<open>En este apartado daremos una introducción sobre sucesiones de conjuntos de fórmulas a 
+  partir de una colección y un conjunto de la misma. De este modo, se mostrarán distintas 
+  características sobre las sucesiones y se definirá su límite. En la siguiente sección 
+  probaremos que dicho límite constituye un conjunto satisfacible por el lema de Hintikka.
 
 \begin{definicion}
   Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración
@@ -3171,15 +3172,36 @@ text\<open>
   $S_{n+1} = \left\{ \begin{array}{lcc} S_{n} \cup \{F_{n}\} &  si  & S_{n} \cup \{F_{n}\} \in C \\ \\ S_{n} & c.c \end{array} \right.$ 
 \end{definicion}
 
-  \comentario{Añadir explicación.}\<close>
+  Observemos que en la definición anterior es posible considerar una enumeración de las fórmulas 
+  proposicionales puesto que se trata de un conjunto contable. Esto se deduce de un resultado 
+  básico de teoría de conjuntos que indica que, como el conjunto de variables proposicionales es 
+  contable, entonces el conjunto de fórmulas también lo es.
+
+  Mostremos, a continuación, su formalización en Isabelle.\<close>
 
 primrec pcp_seq where
 "pcp_seq C S 0 = S" |
 "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
 
-text\<open>
-  \comentario{Añadir explicación.}
+text\<open>Puesto que la definición se estructura en dos casos según la definición recursiva de 
+  los números naturales, su formalización en Isabelle sigue el tipo de funciones primitivas 
+  recursivas. Como es habitual, Isabelle genera automáticamente un esquema inductivo
+  que emplearemos más adelante. 
+
+  Por otro lado, para que la definición fuese consistente, se ha introducido una instancia en la
+  definición del conjunto de fórmulas proposicionales correspondiente a la teoría de \<open>Sintaxis\<close> que 
+  indica explícitamente que dicho conjunto es contable.
+
+  \<open>instance formula :: (countable) countable by countable_datatype\<close>
+
+  De esta manera, se genera paralelamente el método de prueba \<open>countable_datatype\<close> sobre dicho 
+  conjunto, que proporciona una enumeración predeterminada de sus elementos junto con herramientas 
+  para probar propiedades referentes a la contabilidad. En particular, en la definición de las 
+  sucesiones se utiliza la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, nos 
+  devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
+
+  Una vez introducida la definición de las sucesiones, veamos el primer resultado sobre las mismas.
 
   \begin{lema}
     Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces todos 
@@ -3259,15 +3281,15 @@ text \<open>Procedamos con la demostración del lema.
 
   \begin{demostracion}
     Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
-    y \<open>S\<close> un conjunto de \<open>C\<close>, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n, m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>. 
+    y \<open>S\<close> un conjunto, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n\<close>,\\ \<open>m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>. 
     La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
 
-    En primer lugar, supongamos \<open>m = 0\<close>. En este caso, si \<open>n \<le> 0\<close>, entonces \<open>n = 0\<close>. Por tanto, el
+    En primer lugar, supongamos \<open>m = 0\<close>. En este caso, si \<open>n \<le> m\<close>, entonces \<open>n = 0\<close>. Por tanto, el
     resultado se tiene por la propiedad reflexiva de la contención de conjuntos.
 
     Finalmente, supongamos por hipótesis de inducción que dados \<open>n, m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>, 
     entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Vamos a probar que, si \<open>n \<le> m + 1\<close>, entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Observemos que si
-    \<open>n \<le> m + 1\<close>, entonces se verifica que o bien \<open>n \<le> m\<close> o bien \<open>n = m + 1\<close>. Si \<open>n = m + 1\<close>, el 
+    \<open>n \<le> m + 1\<close>, entonces se verifica que o bien \<open>n \<le> m\<close> o bien\\ \<open>n = m + 1\<close>. Si \<open>n = m + 1\<close>, el 
     resultado es inmediato por la propiedad reflexiva de la contención de conjuntos. Del mismo modo
     probemos que, considerando \<open>n \<le> m\<close>, obtenemos \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Por hipótesis de inducción, si 
     \<open>n \<le> m\<close>, se tiene \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Además, si suponemos que \<open>S\<^sub>m \<union> {F\<^sub>m} \<in> C\<close>, por definición de \<open>S\<^sub>m\<^sub>+\<^sub>1\<close> 
@@ -3339,7 +3361,7 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   de los anteriores.
 
 \begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n, m \<in> \<nat>\<close> 
+  Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n\<close>,\\\<open>m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
 
@@ -3352,7 +3374,7 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 
   Por otro lado, supongamos por hipótesis de inducción que $\bigcup_{n \leq m} S_{n} = S_{m}$.
   Veamos que se verifica $\bigcup_{n \leq m + 1} S_{n} = S_{m + 1}$. Observemos que si \<open>n \<le> m + 1\<close>,
-  entonces se tiene que o bien \<open>n \<le> m\<close> o bien \<open>n = m + 1\<close>. De este modo, aplicando la 
+  entonces se tiene que, o bien \<open>n \<le> m\<close>, o bien \<open>n = m + 1\<close>. De este modo, aplicando la 
   hipótesis de inducción, deducimos lo siguiente.
 
   $\bigcup_{n \leq m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup \bigcup_{n = m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup S_{m + 1} = S_{m} \cup S_{m + 1}$
@@ -3457,7 +3479,7 @@ text \<open>Finalmente, definamos el límite de las sucesiones anteriores. A con
   resultados que se deducen de manera inmediata de dicha definición.
 
  \begin{definicion}
-  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
+  Sea \<open>C\<close> una colección y \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
   de conjuntos de C a partir de S\<close> como $\lim_{n \to \infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$
  \end{definicion}
 
