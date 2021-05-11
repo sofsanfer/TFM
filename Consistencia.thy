@@ -2269,12 +2269,12 @@ text\<open>Introduzcamos el último resultado de la sección.
   absurdo. Para ello, probemos inicialmente dos resultados previos.
 
   \begin{description}
-    \item[\<open>1)\<close>] En las condiciones anteriores, si consideramos \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> subconjuntos finitos 
+    \item[\<open>\<one>)\<close>] En las condiciones anteriores, si consideramos \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> subconjuntos finitos 
     cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y \<open>F \<in> S\<^sub>2\<close>, entonces existe una fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal 
     que se verifica que tanto \<open>{I} \<union> S\<^sub>1\<close> como \<open>{I} \<union> S\<^sub>2\<close> están en \<open>C\<close>.
   \end{description}
   
-  Para probar \<open>1)\<close>, consideremos el conjunto finito \<open>S\<^sub>1 \<union> S\<^sub>2\<close> que es subconjunto de \<open>S\<close> por las 
+  Para probar \<open>\<one>)\<close>, consideremos el conjunto finito \<open>S\<^sub>1 \<union> S\<^sub>2\<close> que es subconjunto de \<open>S\<close> por las 
   hipótesis. De este modo, como \<open>S \<in> E\<close>, tenemos que \<open>S\<^sub>1 \<union> S\<^sub>2 \<in> C\<close>. Aplicando el lema de 
   caracterización de la propiedad de consistencia proposicional para la colección \<open>C\<close> y el conjunto 
   \<open>S\<^sub>1 \<union> S\<^sub>2\<close>, por la última condición sobre las fórmulas de tipo \<open>\<beta>\<close>, como\\ \<open>F \<in> S\<^sub>1 \<union> S\<^sub>2\<close> por las 
@@ -2287,28 +2287,28 @@ text\<open>Introduzcamos el último resultado de la sección.
   Por otra parte, veamos el segundo resultado. 
 
   \begin{description}
-    \item[\<open>2)\<close>] En las condiciones de \<open>1)\<close> para conjuntos cualesquiera \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close>, si además 
+    \item[\<open>\<two>)\<close>] En las condiciones de \<open>\<one>)\<close> para conjuntos cualesquiera \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close>, si además 
     suponemos que \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 \<notin> C\<close>, llegamos a una contradicción. 
   \end{description}
 
-  Para probarlo, utilizaremos \<open>1)\<close> para los conjuntos \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close>. Como es evidente, 
+  Para probarlo, utilizaremos \<open>\<one>)\<close> para los conjuntos \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close>. Como es evidente, 
   puesto que \<open>F \<in> S\<close>, se verifica que ambos conjuntos son subconjuntos de \<open>S\<close>. Además, como \<open>S\<^sub>1\<close> y 
-  \<open>S\<^sub>2\<close> son finitos, se tiene que\\ \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close> también lo son. Por último, es claro que 
-  \<open>F\<close> pertenece a ambos conjuntos. Por lo tanto, por \<open>1)\<close> tenemos que existe una fórmula 
+  \<open>S\<^sub>2\<close> son finitos, se tiene que \<open>{F} \<union> S\<^sub>1\<close> y \<open>{F} \<union> S\<^sub>2\<close> también lo son. Por último, es claro que 
+  \<open>F\<close> pertenece a ambos conjuntos. Por lo tanto, por \<open>\<one>)\<close> tenemos que existe una fórmula 
   \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S\<^sub>1 \<in> C\<close> y \<open>{I} \<union> {F} \<union> S\<^sub>2 \<in> C\<close>. Por otro lado, podemos probar 
   que \<open>{\<beta>\<^sub>1} \<union> {F} \<union> S\<^sub>1 \<notin> C\<close>. Esto se debe a que, en caso contrario, como \<open>C\<close> es cerrado bajo 
-  subconjuntos, tendríamos que el subconjunto \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1\<close> pertenecería a \<open>C\<close>, lo que contradice las 
-  hipótesis. Análogamente, obtenemos que\\ \<open>{\<beta>\<^sub>2} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. De este modo, obtenemos que para 
+  subconjuntos, tendríamos que el subconjunto\\ \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1\<close> pertenecería a \<open>C\<close>, lo que contradice las 
+  hipótesis. Análogamente, obtenemos que \<open>{\<beta>\<^sub>2} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. De este modo, obtenemos que para 
   toda fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> se cumple que o bien \<open>{I} \<union> {F} \<union> S\<^sub>1 \<notin> C\<close> o bien \<open>{I} \<union> {F} \<union> S\<^sub>2 \<notin> C\<close>. 
   Esto es equivalente a que no existe ninguna fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que \<open>{I} \<union> {F} \<union> S\<^sub>1 \<in> C\<close> y\\ 
   \<open>{I} \<union> {F} \<union> S\<^sub>2 \<in> C\<close>, lo que contradice lo obtenido para los conjuntos \<open>{F} \<union> S\<^sub>1\<close> y\\ \<open>{F} \<union> S\<^sub>2\<close> 
-  por \<open>1)\<close>.
+  por \<open>\<one>)\<close>.
 
   Finalmente, con los resultados anteriores, podemos probar que o bien\\ \<open>{\<beta>\<^sub>1} \<union> S \<in> E\<close> o bien 
   \<open>{\<beta>\<^sub>2} \<union> S \<in> E\<close> por reducción al absurdo. Supongamos que\\ \<open>{\<beta>\<^sub>1} \<union> S \<notin> E\<close> y \<open>{\<beta>\<^sub>2} \<union> S \<notin> E\<close>. Por
   definición de \<open>E\<close>, se verifica que existe algún subconjunto finito de \<open>{\<beta>\<^sub>1} \<union> S\<close> y existe algún 
   subconjunto finito de \<open>{\<beta>\<^sub>2} \<union> S\<close> tales que no pertenecen a \<open>C\<close>. Notemos por \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> 
-  respectivamente a los subconjuntos anteriores. Vamos a aplicar \<open>2)\<close> para los conjuntos \<open>S\<^sub>1 - {\<beta>\<^sub>1}\<close> 
+  respectivamente a los subconjuntos anteriores. Vamos a aplicar \<open>\<two>)\<close> para los conjuntos \<open>S\<^sub>1 - {\<beta>\<^sub>1}\<close> 
   y \<open>S\<^sub>2 - {\<beta>\<^sub>2}\<close> para llegar a la contradicción.
 
   Para ello, debemos probar que se verifican las hipótesis del resultado para los conjuntos
@@ -2333,9 +2333,9 @@ text\<open>Introduzcamos el último resultado de la sección.
   [
     grow                    = down,
     level 1/.style          = {sibling distance=7cm},
-    level 2/.style          = {sibling distance=3cm},
-    level 3/.style          = {sibling distance=5.5cm},
-    level distance          = 2cm,
+    level 2/.style          = {sibling distance=4cm},
+    level 3/.style          = {sibling distance=5.7cm},
+    level distance          = 1.5cm,
     edge from parent/.style = {draw, -latex},
     every node/.style       = {font=\tiny},
     sloped
@@ -2345,25 +2345,25 @@ text\<open>Introduzcamos el último resultado de la sección.
     child { node [env] {\<open>ex3_pcp\<close>\\ \<open>(C' tiene la propiedad de consistencia proposicional)\<close>}
       		child { node [env] {\<open>ex3_pcp_SinC\<close>\\ \<open>(Caso del conjunto en C)\<close>}}
       		child { node [env] {\<open>ex3_pcp_SinE\<close>\\ \<open>(Caso del conjunto en E)\<close>}
-        				child { node [env] {\<open>ex3_pcp_SinE_CON\<close>\\ \<open>(Condición de las fórmulas de tipo \<alpha>)\<close>}}
-        				child { node [env] {\<open>ex3_pcp_SinE_DIS\<close>\\ \<open>(Condición de las fórmulas de tipo \<beta>)\<close>}
-                      child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>\\ \<open>(Resultado 1)\<close>}
-                            child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>\\ \<open>(Resultado 2)\<close>}}}}}};
+        				child { node [env] {\<open>ex3_pcp_SinE_CON\<close>\\ \<open>(Condición fórmulas de tipo \<alpha>)\<close>}}
+        				child { node [env] {\<open>ex3_pcp_SinE_DIS\<close>\\ \<open>(Condición fórmulas de tipo \<beta>)\<close>}
+                      child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>\\ \<open>(Resultado \<one>)\<close>}
+                            child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>\\ \<open>(Resultado \<two>)\<close>}}}}}};
 \end{tikzpicture}
 
 \comentario{Querría cambiar el sentido de las flechas.}
 
-  De este modo, el \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. El primero,
-  formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la propiedad
-  de carácter proposicional. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la extensión
-  verifica la propiedad de consistencia proposicional. Este último, a su vez, precisa de dos lemas
-  auxiliares: uno para el caso en que el conjunto \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y otro para el caso en 
-  que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para probar el último caso en que \<open>S \<in> E\<close>, 
-  utilizaremos dos lemas auxiliares que permiten probar detalladamente las condiciones para fórmulas 
-  de tipo \<open>\<alpha>\<close> (\<open>ex3_pcp_SinE_CON\<close>) y fórmulas de tipo \<open>\<beta>\<close> (\<open>ex3_pcp_SinE_DIS\<close>) del lema de 
+  De este modo, la prueba del \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. 
+  El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la 
+  propiedad de carácter proposicional. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la 
+  extensión verifica la propiedad de consistencia proposicional. Este último, a su vez, precisa de 
+  dos lemas auxiliares: uno para el caso en que el conjunto \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y otro para el 
+  caso en que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para probar el último caso en que \<open>S \<in> E\<close>, 
+  utilizaremos dos lemas auxiliares que permiten probar respectivamente las condiciones para 
+  fórmulas de tipo \<open>\<alpha>\<close> (\<open>ex3_pcp_SinE_CON\<close>) y fórmulas de tipo \<open>\<beta>\<close> (\<open>ex3_pcp_SinE_DIS\<close>) del lema de 
   caracterización de la propiedad de consistencia proposicional mediante notación uniforme. Por
-  último, la condición de fórmulas de tipo \<open>\<beta>\<close> precisa, a su vez, del resultado \<open>2)\<close> (formalizado 
-  como \<open>ex3_pcp_SinE_DIS_auxEx\<close>), que utiliza para su prueba el resultado \<open>1)\<close> 
+  último, la condición de fórmulas de tipo \<open>\<beta>\<close> precisa, a su vez, del resultado \<open>\<two>)\<close> (formalizado 
+  como \<open>ex3_pcp_SinE_DIS_auxEx\<close>), que utiliza para su prueba el resultado \<open>\<one>)\<close> 
   (\<open>ex3_pcp_SinE_DIS_auxFalse\<close>).
 
   Por otro lado, para facilitar la notación, dada una colección cualquiera \<open>C\<close>, formalizamos las 
@@ -2377,9 +2377,8 @@ definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) s
   where extensionFin: "extensionFin C = C \<union> (extF C)"
 
 text \<open>Una vez hechas las aclaraciones anteriores, procedamos ordenadamente con la demostración 
-  detallada de cada lema auxiliar que conforma la prueba del resultado. En primer lugar, probemos 
-  detalladamente mediante el siguiente lema que la extensión \<open>C'\<close> tiene la propiedad de carácter 
-  finito.\<close>
+  detallada de cada lema auxiliar que conforma la prueba del lema \<open>1.3.5\<close>. En primer lugar, probemos 
+  detalladamente que la extensión tiene la propiedad de carácter finito.\<close>
 
 lemma ex3_finite_character:
   assumes "subset_closed C"
@@ -2464,9 +2463,9 @@ proof -
 qed
 
 text \<open>Por otro lado, para probar que verifica la propiedad de consistencia proposicional
-  utilizaremos fundamentalmente dos lemas auxiliares como se podía observar en el grafo: uno para el 
+  utilizaremos fundamentalmente dos lemas auxiliares como se observa en el grafo: uno para el 
   caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada 
-  del lema que prueba el resultado para el primer caso.\<close>
+  del primer caso.\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
@@ -2549,8 +2548,8 @@ proof -
     using A1 A2 A3 A4 by (iprover intro: conjI)
 qed
 
-text \<open>Por otro lado, para probar el caso en que \<open>S \<in> E\<close>, utilizaremos distintos lemas auxiliares
-  como observábamos en el grafo. El primero de ellos demuestra detalladamente la condición para 
+text \<open>Como hemos señalado con anterioridad, para probar el caso en que \<open>S \<in> E\<close> utilizaremos 
+  distintos lemas auxiliares. El primero de ellos demuestra detalladamente la condición para 
   fórmulas de tipo \<open>\<alpha>\<close> del lema de caracterización de la propiedad de consistencia proposicional 
   mediante notación uniforme.\<close>
 
@@ -2662,8 +2661,7 @@ qed
 
 text \<open>Seguidamente, veamos la prueba de la condición para fórmulas de tipo \<open>\<beta>\<close> del lema de
   caracterización de la propiedad de consistencia proposicional mediante notación uniforme. 
-  Paralelamente a la demostración vista con anterioridad, veamos la prueba detallada de los dos 
-  resultados previos a la demostración de dicha condición.\<close>
+  Para ello, veamos la prueba detallada de los dos resultados previos \<open>\<one>)\<close> y \<open>\<two>)\<close>.\<close>
 
 lemma ex3_pcp_SinE_DIS_auxEx:
   assumes "pcp C"
@@ -2883,9 +2881,9 @@ proof -
       then have "\<not> S1 \<subseteq> S"
         using \<open>\<not> (finite S1 \<longrightarrow> S1 \<in> C)\<close> by (rule mt)
       then have "(S1 \<subseteq> insert G S) \<noteq> (S1 \<subseteq> S)"
-        using \<open>S1 \<subseteq> insert G S\<close> by simp (*Pendiente*)
+        using \<open>S1 \<subseteq> insert G S\<close> by simp
       then have notSI:"\<not>(S1 \<subseteq> insert G S \<longleftrightarrow> S1 \<subseteq> S)"
-        by blast (*Pendiente*)
+        by blast
       have subsetInsert:"G \<notin> S1 \<Longrightarrow> S1 \<subseteq> insert G S \<longleftrightarrow> S1 \<subseteq> S"
         by (rule subset_insert)
       have "\<not>(G \<notin> S1)"
@@ -2931,9 +2929,9 @@ proof -
       then have "\<not> S2 \<subseteq> S"
         using \<open>\<not> (finite S2 \<longrightarrow> S2 \<in> C)\<close> by (rule mt)
       then have "(S2 \<subseteq> insert H S) \<noteq> (S2 \<subseteq> S)"
-        using \<open>S2 \<subseteq> insert H S\<close> by simp (*Pendiente*)
+        using \<open>S2 \<subseteq> insert H S\<close> by simp 
       then have notSI:"\<not>(S2 \<subseteq> insert H S \<longleftrightarrow> S2 \<subseteq> S)"
-        by blast (*Pendiente*)
+        by blast 
       have subsetInsert:"H \<notin> S2 \<Longrightarrow> S2 \<subseteq> insert H S \<longleftrightarrow> S2 \<subseteq> S"
         by (rule subset_insert)
       have "\<not>(H \<notin> S2)"
@@ -3103,8 +3101,8 @@ proof -
     using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
 
-text \<open>En conclusión, la prueba detallada total en Isabelle de que la extensión \<open>C'\<close> verifica la 
-  propiedad de consistencia proposicional se muestra a continuación.\<close>
+text \<open>En conclusión, la prueba detallada total en Isabelle que demuestra que la extensión \<open>C'\<close> 
+  verifica la propiedad de consistencia proposicional es la siguiente.\<close>
 
 lemma ex3_pcp:
   assumes "pcp C"
@@ -3137,7 +3135,7 @@ proof (rule ballI)
   qed
 qed
 
-text \<open>Por último, podemos dar la prueba completa del lema en Isabelle.\<close>
+text \<open>Por último, podemos dar la prueba completa del lema \<open>1.3.5\<close> en Isabelle.\<close>
 
 lemma ex3:
   assumes "pcp C"
@@ -3156,10 +3154,6 @@ proof -
   thus ?thesis
     by (rule exI)
 qed
-
-text \<open>\comentario{Sería conveniente incluir un pequeño grafo o esquema de 
-los lemas.}
-\<close>
 
 section \<open>Sucesiones de conjuntos de una colección\<close>
 
