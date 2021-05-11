@@ -3476,7 +3476,8 @@ proof(induction m)
 qed simp
 
 text \<open>Finalmente, definamos el límite de las sucesiones anteriores. A continuación, mostraremos dos
-  resultados que se deducen de manera inmediata de dicha definición.
+  resultados que se deducen de manera inmediata de dicha definición y un tercer resultado
+  más complejo.
 
  \begin{definicion}
   Sea \<open>C\<close> una colección y \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
@@ -3547,7 +3548,7 @@ text \<open>Finalmente, podemos probar el resultado de manera automática de la 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def by(induction n; blast)
 
-text \<open>Por último, de la definición de límite podemos deducir el siguiente lema.
+text \<open>Por otra parte, de la definición de límite podemos deducir el siguiente lema.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
@@ -3583,9 +3584,18 @@ lemma pcp_lim_inserted_at_ex:
     "S' \<in> pcp_lim C S \<Longrightarrow> \<exists>k. S' \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
-section \<open>El teorema de existencia de modelo\<close>
+text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos contenidos en el límite de 
+  las sucesiones.
 
-lemma finite_pcp_lim_EX:
+\begin{lema}
+  Todo conjunto finito contenido en el límite de la sucesión de conjuntos de una colección a partir
+  de un conjunto dado está contenido en algún conjunto de dicha sucesión.
+\end{lema}
+
+\begin{demostracion}
+\end{demostracion}\<close>
+
+lemma 
   assumes "finite S'"
           "S' \<subseteq> pcp_lim C S"
         shows "\<exists>k. S' \<subseteq> pcp_seq C S k"
@@ -3635,6 +3645,28 @@ next
   thus ?case
     by (rule exI)
 qed
+
+text \<open>Finalmente, mostremos su demostración automática en Isabelle/HOL.\<close>
+
+lemma finite_pcp_lim_EX:
+  assumes "finite S'"
+          "S' \<subseteq> pcp_lim C S"
+        shows "\<exists>k. S' \<subseteq> pcp_seq C S k"
+  using assms
+proof(induction S' rule: finite_induct) 
+  case (insert x S')
+  hence "\<exists>k. S' \<subseteq> pcp_seq C S k" by fast
+  then guess k1 ..
+  moreover obtain k2 where "x \<in> pcp_seq C S k2"
+    by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
+  ultimately have "insert x S' \<subseteq> pcp_seq C S (max k1 k2)"
+    by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
+  thus ?case by blast
+qed simp
+
+section \<open>El teorema de existencia de modelo\<close>
+
+text \<open>\comentario{Añadir explicación}\<close>
           
 lemma pcp_lim_in_detallada:
   assumes "pcp C"
