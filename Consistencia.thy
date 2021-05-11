@@ -3593,6 +3593,27 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
 \end{lema}
 
 \begin{demostracion}
+  Consideremos una colección cualquiera \<open>C\<close> y \<open>S\<close> un conjunto de la misma. La prueba se realiza por 
+  inducción sobre la estructura recursiva de los conjuntos finitos.
+
+  En primer lugar, consideremos que el conjunto vacío está contenido en el límite de la sucesión de
+  conjuntos de \<open>C\<close> a partir de \<open>S\<close>. Como \<open>{}\<close> es subconjunto de todo conjunto, en particular lo es 
+  de \<open>S = S\<^sub>0\<close>, probando así el primer caso.
+
+  Por otra parte, sea \<open>S'\<close> un conjunto finito contenido en el límite de la sucesión de conjuntos de 
+  \<open>C\<close> a partir de \<open>S\<close>. Sea \<open>x\<close> un elemento cualquiera no perteneciente a \<open>S'\<close>. Supongamos que 
+  \<open>{x} \<union> S'\<close> está también contenido en el límite. Probemos que \<open>{x} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para
+  algún \<open>k \<in> \<nat>\<close>. 
+
+  Como hemos supuesto que \<open>{x} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>x\<close>
+  pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>x\<close> pertenece al 
+  límite, deducimos que existe un \<open>k \<in> \<nat>\<close> tal que \<open>x \<in> S\<^sub>k\<close>. Por otro lado, como \<open>S'\<close> está contenido
+  en el límite, por hipótesis de inducción existe algún \<open>k' \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>. El resultado 
+  se obtiene considerando el máximo entre \<open>k\<close> y \<open>k'\<close>, que notaremos por \<open>k''\<close>. En efecto, por la 
+  monotonía de la sucesión, se verifica que tanto \<open>S\<^sub>k\<close> como \<open>S\<^sub>k\<^sub>'\<close> están contenidos en \<open>S\<^sub>k\<^sub>'\<^sub>'\<close>. De este 
+  modo, como \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>, por la transitividad de la contención de conjuntos se tiene que 
+  \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>. Además, como \<open>x \<in> S\<^sub>k\<close>, se tiene que \<open>x \<in> S\<^sub>k\<^sub>'\<^sub>'\<close>. Por lo tanto, \<open>{x} \<union> S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>, como 
+  queríamos demostrar. 
 \end{demostracion}\<close>
 
 lemma 
@@ -3646,7 +3667,7 @@ next
     by (rule exI)
 qed
 
-text \<open>Finalmente, mostremos su demostración automática en Isabelle/HOL.\<close>
+text \<open>Mostremos su demostración automática en Isabelle/HOL.\<close>
 
 lemma finite_pcp_lim_EX:
   assumes "finite S'"
