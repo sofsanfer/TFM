@@ -3614,7 +3614,9 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   modo, como \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>, por la transitividad de la contención de conjuntos se tiene que 
   \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>. Además, como \<open>x \<in> S\<^sub>k\<close>, se tiene que \<open>x \<in> S\<^sub>k\<^sub>'\<^sub>'\<close>. Por lo tanto, \<open>{x} \<union> S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>, como 
   queríamos demostrar. 
-\end{demostracion}\<close>
+\end{demostracion}
+
+  Procedamos con la demostración detallada en Isabelle.\<close>
 
 lemma 
   assumes "finite S'"
