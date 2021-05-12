@@ -3601,9 +3601,9 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   de \<open>S = S\<^sub>0\<close>, probando así el primer caso.
 
   Por otra parte, sea \<open>S'\<close> un conjunto finito contenido en el límite de la sucesión de conjuntos de 
-  \<open>C\<close> a partir de \<open>S\<close>. Sea \<open>x\<close> un elemento cualquiera no perteneciente a \<open>S'\<close>. Supongamos que 
-  \<open>{x} \<union> S'\<close> está también contenido en el límite. Probemos que \<open>{x} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para
-  algún \<open>k \<in> \<nat>\<close>. 
+  \<open>C\<close> a partir de \<open>S\<close>, de modo que también está contenido en algún \<open>S\<^sub>k\<^sub>'\<close> para cierto \<open>k' \<in> \<nat>\<close>. Sea 
+  \<open>x\<close> un elemento cualquiera no perteneciente a \<open>S'\<close>. Supongamos que\\ \<open>{x} \<union> S'\<close> está también 
+  contenido en el límite. Probemos que \<open>{x} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
 
   Como hemos supuesto que \<open>{x} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>x\<close>
   pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>x\<close> pertenece al 
@@ -3669,7 +3669,7 @@ next
     by (rule exI)
 qed
 
-text \<open>Mostremos su demostración automática en Isabelle/HOL.\<close>
+text \<open>Mostremos, finalmente, su demostración automática en Isabelle/HOL.\<close>
 
 lemma finite_pcp_lim_EX:
   assumes "finite S'"
