@@ -2355,7 +2355,7 @@ text\<open>Introduzcamos el último resultado de la sección.
 
   De este modo, la prueba del \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. 
   El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la 
-  propiedad de carácter proposicional. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la 
+  propiedad de carácter finito. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la 
   extensión verifica la propiedad de consistencia proposicional. Este último, a su vez, precisa de 
   dos lemas auxiliares: uno para el caso en que el conjunto \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y otro para el 
   caso en que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para probar el último caso en que \<open>S \<in> E\<close>, 
@@ -2365,6 +2365,9 @@ text\<open>Introduzcamos el último resultado de la sección.
   último, la condición de fórmulas de tipo \<open>\<beta>\<close> precisa, a su vez, del resultado \<open>\<two>)\<close> (formalizado 
   como \<open>ex3_pcp_SinE_DIS_auxEx\<close>), que utiliza para su prueba el resultado \<open>\<one>)\<close> 
   (\<open>ex3_pcp_SinE_DIS_auxFalse\<close>).
+
+\comentario{Redacción del párrafo anterior.}
+\comentario{Expresar lo que llamas resultado 1 y 2 en lenguaje natural.}
 
   Por otro lado, para facilitar la notación, dada una colección cualquiera \<open>C\<close>, formalizamos las 
   colecciones \<open>E\<close> y \<open>C'\<close> como \<open>extF C\<close> y \<open>extensionFin C\<close> respectivamente como se muestra a 
@@ -2462,10 +2465,13 @@ proof -
  qed
 qed
 
-text \<open>Por otro lado, para probar que verifica la propiedad de consistencia proposicional
+text \<open>Por otro lado, para probar que  \<open>C' = C \union E \<close>  verifica la propiedad de consistencia proposicional
   utilizaremos fundamentalmente dos lemas auxiliares como se observa en el grafo: uno para el 
   caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada 
-  del primer caso.\<close>
+  del primer caso.
+
+\comentario{Expresar el lema en lenguaje natural. \<questiondown>Qué dicen los lemas auxiliares?}
+\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
@@ -2551,7 +2557,11 @@ qed
 text \<open>Como hemos señalado con anterioridad, para probar el caso en que \<open>S \<in> E\<close> utilizaremos 
   distintos lemas auxiliares. El primero de ellos demuestra detalladamente la condición para 
   fórmulas de tipo \<open>\<alpha>\<close> del lema de caracterización de la propiedad de consistencia proposicional 
-  mediante notación uniforme.\<close>
+  mediante notación uniforme.
+
+\comentario{\<questiondown>Qué condición? Expresar en lenguaje natural.}
+
+\<close>
 
 lemma ex3_pcp_SinE_CON:
   assumes "pcp C"
@@ -2661,7 +2671,12 @@ qed
 
 text \<open>Seguidamente, veamos la prueba de la condición para fórmulas de tipo \<open>\<beta>\<close> del lema de
   caracterización de la propiedad de consistencia proposicional mediante notación uniforme. 
-  Para ello, veamos la prueba detallada de los dos resultados previos \<open>\<one>)\<close> y \<open>\<two>)\<close>.\<close>
+  Para ello, veamos la prueba detallada de los dos resultados previos \<open>\<one>)\<close> y \<open>\<two>)\<close>.
+
+\comentario{\<questiondown>Qué condición? Expresar en lenguaje natural. Los resultados previos también hay
+que expresarlos en lenguaje natural.}
+
+\<close>
 
 lemma ex3_pcp_SinE_DIS_auxEx:
   assumes "pcp C"
@@ -2820,7 +2835,11 @@ proof -
 qed
 
 text \<open>Además, para la prueba de la condición necesitaremos los siguientes lemas auxiliares en
-  Isabelle.\<close>
+  Isabelle.
+
+\comentario{\<questiondown>La condición?}
+
+\<close>
 
 lemma sall_simps_not_all:
   assumes "\<not>(\<forall>x \<subseteq> A. P x)"
@@ -2984,7 +3003,9 @@ proof -
 qed
 
 text \<open>Probadas las condiciones para fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos dar la demostración
-  detallada completa para el caso en que \<open>S \<in> E\<close>.\<close>
+  detallada completa para el caso en que \<open>S \<in> E\<close>.
+\comentario{Lo mismo que en los comentarios previos}
+\<close>
 
 lemma ex3_pcp_SinE:
   assumes "pcp C"
@@ -3162,9 +3183,13 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
   características sobre las sucesiones y se definirá su límite. En la siguiente sección 
   probaremos que dicho límite constituye un conjunto satisfacible por el lema de Hintikka.
 
+\comentario{Revisar el párrafo anterior al final}
+
+\comentario{Comentar que el conjunto de fórmulas proposicionales es
+ numerable y por qué. Y cómo se tiene en Isabelle}
+
 \begin{definicion}
-  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración
-  cualquiera de las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de 
+  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de 
   S\<close> como sigue:
 
   $S_{0} = S$
@@ -3173,11 +3198,16 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
 \end{definicion}
 
   Observemos que en la definición anterior es posible considerar una enumeración de las fórmulas 
-  proposicionales puesto que se trata de un conjunto contable. Esto se deduce de un resultado 
+  proposicionales puesto que se trata de un conjunto numerable. Esto se deduce de un resultado 
   básico de teoría de conjuntos que indica que, como el conjunto de variables proposicionales es 
   contable, entonces el conjunto de fórmulas también lo es.
 
-  Mostremos, a continuación, su formalización en Isabelle.\<close>
+  Mostremos, a continuación, su formalización en Isabelle.
+
+\comentario{\<questiondown>Quén es from_nat?}
+\comentario{Numerable}
+
+\<close>
 
 primrec pcp_seq where
 "pcp_seq C S 0 = S" |
@@ -3208,6 +3238,8 @@ text\<open>Puesto que la definición se estructura en dos casos según la defini
     los conjuntos de la sucesión formada a partir de un conjunto de la colección pertenecen también
     a ella.
   \end{lema}
+
+\comentario{Redacción del lema previo.}
 
   Procedamos con su demostración.
 
@@ -3272,12 +3304,43 @@ text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
     Toda sucesión de conjuntos de una colección a partir de un conjunto dado es monótona.
   \end{lema}
 
+\comentario{Redacción del lema previo.}
+
   En Isabelle, se formaliza de la siguiente forma.\<close>
 
 lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
   oops
 
+lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+proof (cases n)
+  case 0
+  then show ?thesis 
+    by (smt eq_iff pcp_seq.simps(2) subset_insertI)
+next
+  case (Suc nat)
+  then show ?thesis 
+    by (smt eq_refl pcp_seq.simps(2) subset_insertI)
+qed
+
+
+lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)" 
+proof (induct n)
+  case 0
+  then show ?case
+    by (smt eq_iff pcp_seq.simps(2) subset_insertI)
+next
+  case (Suc n)
+  then show ?case 
+    by (smt equalityD2 pcp_seq.simps(2) subset_insertI)
+qed
+
+
 text \<open>Procedamos con la demostración del lema.
+
+\comentario{\<questiondown>Por qué no está descrito como S_n \subseteq S_{n+1}?
+La demostración sería más simple. \<questiondown>Es necesario hacerlo por inducción?}
+
+\comentario{Ver los lemas que he añadido}
 
   \begin{demostracion}
     Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
@@ -3365,6 +3428,8 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
 
+\comentario{Lema previo: \<questiondown>C no tiene ninguna propiedad?}
+
 \begin{demostracion}
   En las condiciones del enunciado, la prueba se realiza por inducción en \<open>m \<in> \<nat>\<close>.
 
@@ -3393,7 +3458,11 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 lemma imageUnElem: "f ` {x} = {f x}"
   by simp
 
-text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
+text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.
+
+\comentario{Creo que la demostración detallada se puede simplificar.}
+\comentario {Comentar la unión en Isabelle.}
+\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
@@ -3479,12 +3548,19 @@ text \<open>Finalmente, definamos el límite de las sucesiones anteriores. A con
   resultados que se deducen de manera inmediata de dicha definición y un tercer resultado
   más complejo.
 
+\comentario{El párrafo previo es demasiado ambiguo.
+Expresar que se va a definir el límite para las 
+sucesiones definidas en 1.4.1}
+
  \begin{definicion}
   Sea \<open>C\<close> una colección y \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
   de conjuntos de C a partir de S\<close> como $\lim_{n \to \infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$
  \end{definicion}
 
-  En Isabelle, la definición del límite se formaliza como sigue.\<close>
+  En Isabelle, la definición del límite se formaliza como sigue.
+
+\comentario{Explicar la unión que se está usando en Isabelle.}
+\<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
@@ -3497,7 +3573,21 @@ text \<open>Veamos el primer resultado que se deduce trivialmente a partir de la
   $S_{n} \subseteq \lim_{n \to \infty} S_{n}$
 \end{lema}
 
+\comentario{Enunciado del lema}
+
+\comentario{Demostración en lenguaje natural. \<questiondown>Es 
+necesario hacerlo por inducción? Ver la demostración que he añadido.}
+
+\comentario{Creo que tampoco hace falta incucción para probar
+la monotonía de la sucesión.}
+
   Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
+
+lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
+  unfolding pcp_lim_def
+  by blast
+
+find_theorems " _ \<subseteq> \<Union> _"
 
 lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
@@ -3545,7 +3635,7 @@ qed
 
 text \<open>Finalmente, podemos probar el resultado de manera automática de la siguiente forma.\<close>
 
-lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S"
+lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S" 
   unfolding pcp_lim_def by(induction n; blast)
 
 text \<open>Por otra parte, de la definición de límite podemos deducir el siguiente lema.
@@ -3556,11 +3646,16 @@ text \<open>Por otra parte, de la definición de límite podemos deducir el sigu
     entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
   \end{lema}
 
+\comentario{Redacción del lema.}
+\comentario{Demostración en lenguaje natural.}
+
   Su prueba detallada en Isabelle/HOL es la siguiente. \<close>
+
+declare [[show_types]]
 
 lemma 
   assumes "S' \<in> pcp_lim C S"
-  shows "\<exists>k. S' \<in> pcp_seq C S k"
+  shows "\<exists>k. S' \<in> pcp_seq C S k" 
 proof -
   have H:"S' \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
@@ -3592,6 +3687,9 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   de un conjunto dado está contenido en algún conjunto de dicha sucesión.
 \end{lema}
 
+\comentario{\<questiondown>El lema se refiere a la sucesión S_n o a una cualquiera?}
+\comentario{Redactar el lema de forma más clara.}
+
 \begin{demostracion}
   Consideremos una colección cualquiera \<open>C\<close> y \<open>S\<close> un conjunto de la misma. La prueba se realiza por 
   inducción sobre la estructura recursiva de los conjuntos finitos.
@@ -3615,6 +3713,9 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>. Además, como \<open>x \<in> S\<^sub>k\<close>, se tiene que \<open>x \<in> S\<^sub>k\<^sub>'\<^sub>'\<close>. Por lo tanto, \<open>{x} \<union> S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>, como 
   queríamos demostrar. 
 \end{demostracion}
+
+\comentario{Hay confusión entre pertenece al límite y 
+contenido en el límite.}
 
   Procedamos con la demostración detallada en Isabelle.\<close>
 
