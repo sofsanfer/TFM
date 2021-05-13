@@ -3310,28 +3310,14 @@ lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
 
 text \<open>Procedamos con la demostración del lema.
 
-\comentario{\<questiondown>Por qué no está descrito como S_n \subseteq S_{n+1}?
-La demostración sería más simple. \<questiondown>Es necesario hacerlo por inducción?}
-
-\comentario{Ver los lemas que he añadido}
-
   \begin{demostracion}
-    Para probar que una sucesión es monótona, considerando una colección de conjuntos cualquiera \<open>C\<close> 
-    y \<open>S\<close> un conjunto, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close> para todos \<open>n\<close>,\\ \<open>m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>. 
-    La demostración será por inducción en \<open>m \<in> \<nat>\<close>.
-
-    En primer lugar, supongamos \<open>m = 0\<close>. En este caso, si \<open>n \<le> m\<close>, entonces \<open>n = 0\<close>. Por tanto, el
-    resultado se tiene por la propiedad reflexiva de la contención de conjuntos.
-
-    Finalmente, supongamos por hipótesis de inducción que dados \<open>n, m \<in> \<nat>\<close> tales que \<open>n \<le> m\<close>, 
-    entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Vamos a probar que, si \<open>n \<le> m + 1\<close>, entonces \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Observemos que si
-    \<open>n \<le> m + 1\<close>, entonces se verifica que o bien \<open>n \<le> m\<close> o bien\\ \<open>n = m + 1\<close>. Si \<open>n = m + 1\<close>, el 
-    resultado es inmediato por la propiedad reflexiva de la contención de conjuntos. Del mismo modo
-    probemos que, considerando \<open>n \<le> m\<close>, obtenemos \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Por hipótesis de inducción, si 
-    \<open>n \<le> m\<close>, se tiene \<open>S\<^sub>n \<subseteq> S\<^sub>m\<close>. Además, si suponemos que \<open>S\<^sub>m \<union> {F\<^sub>m} \<in> C\<close>, por definición de \<open>S\<^sub>m\<^sub>+\<^sub>1\<close> 
-    y la propiedad transitiva de la contención de conjuntos, obtenemos \<open>S\<^sub>n \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. En otro caso, si
-    \<open>S\<^sub>m \<union> {F\<^sub>m} \<notin> C\<close>, por definición tenemos \<open>S\<^sub>m\<^sub>+\<^sub>1 = S\<^sub>m\<close> y, por hipótesis de inducción, se prueba
-    igualmente el resultado. 
+    Para probar que una sucesión es monótona, considerando una colección de conjuntos \<open>C\<close>, \<open>S \<in> C\<close>
+    y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>, basta 
+    probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar
+    dos casos para todo \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>,
+    por definición tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario,
+    si \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
+    por la propiedad reflexiva de la contención de conjuntos. 
   \end{demostracion}
 
   La prueba detallada en Isabelle se muestra a continuación.\<close>
@@ -3360,62 +3346,15 @@ proof -
   qed
 qed
 
-lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
-proof(induction m)
-  assume "n \<le> 0" 
-  then have "n = 0"
-    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
-  thus "pcp_seq C S n \<subseteq> pcp_seq C S 0"
-    by (simp only: subset_refl)
-next
-  fix m
-  assume HI:"n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
-  have "pcp_seq C S (Suc m) = (let Sm = pcp_seq C S m; Sm1 = insert (from_nat m) Sm in
-                      if Sm1 \<in> C then Sm1 else Sm)" 
-    by (simp only: pcp_seq.simps(2))
-  then have SucDef:"pcp_seq C S (Suc m) = (if insert (from_nat m) (pcp_seq C S m) \<in> C then 
-                    insert (from_nat m) (pcp_seq C S m) else pcp_seq C S m)" 
-    by (simp only: Let_def)
-  assume "n \<le> Suc m"
-  then have "n \<le> m \<or> n = Suc m"
-    by (simp only: le_Suc_eq)
-  thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-  proof (rule disjE)
-    assume "n \<le> m"
-    have H:"pcp_seq C S n \<subseteq> pcp_seq C S m"
-      using \<open>n \<le> m\<close> by (simp only: HI)
-    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-    proof (cases)
-      assume C1:"insert (from_nat m) (pcp_seq C S m) \<in> C"
-      have 1:"pcp_seq C S (Suc m) = insert (from_nat m) (pcp_seq C S m)"
-        using SucDef C1 by (simp only: if_True)
-      have "pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)"
-        by (rule subset_insertI)
-      have "pcp_seq C S n \<subseteq> insert (from_nat m) (pcp_seq C S m)"
-        using H \<open>pcp_seq C S m \<subseteq> insert (from_nat m) (pcp_seq C S m)\<close> by (rule subset_trans)
-      thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-        by (simp only: 1)
-    next
-      assume C2:"insert (from_nat m) (pcp_seq C S m) \<notin> C"
-      then have 2:"pcp_seq C S (Suc m) = pcp_seq C S m"
-        using SucDef C2 by (simp only: if_False)
-      thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-        by (simp only: H)
-    qed
-  next
-    assume "n = Suc m"
-    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc m)"
-      by (simp only: subset_refl)
-  qed
-qed
-
 text \<open>Del mismo modo, se puede probar automáticamente en Isabelle/HOL.\<close>
 
+lemma pcp_seq_monotonicity:"pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+  by (smt eq_iff pcp_seq.simps(2) subset_insertI2)
+
+text \<open>\comentario{Añadir explicación: monotonía general.}\<close>
+
 lemma pcp_seq_mono: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
-proof(induction m)
-  case (Suc m)
-  thus ?case by(cases "n = Suc m"; simp add: Let_def; blast)
-qed simp
+  using lift_Suc_mono_le pcp_seq_monotonicity by blast
 
 text \<open>A continuación daremos un lema que permite caracterizar un elemento de la sucesión en función 
   de los anteriores.
@@ -3540,17 +3479,13 @@ proof(induction m)
   thus ?case using Suc pcp_seq_mono by blast
 qed simp
 
-text \<open>Finalmente, definamos el límite de las sucesiones anteriores. A continuación, mostraremos dos
-  resultados que se deducen de manera inmediata de dicha definición y un tercer resultado
-  más complejo.
-
-\comentario{El párrafo previo es demasiado ambiguo.
-Expresar que se va a definir el límite para las 
-sucesiones definidas en 1.4.1}
+text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la definición \<open>1.4.1\<close>, junto
+  con tres resultados sobre el mismo.
 
  \begin{definicion}
-  Sea \<open>C\<close> una colección y \<open>S\<close> un conjunto perteneciente a ella. Se define el \<open>límite de la sucesión 
-  de conjuntos de C a partir de S\<close> como $\lim_{n \to \infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$
+  Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
+  definición \<open>1.4.1\<close>. Se define el \<open>límite de la sucesión de conjuntos de C a partir de S\<close> como 
+  $\bigcup_{n = 0}^{\infty} S_{n}$
  \end{definicion}
 
   En Isabelle, la definición del límite se formaliza como sigue.
@@ -3560,16 +3495,14 @@ sucesiones definidas en 1.4.1}
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
-text \<open>Veamos el primer resultado que se deduce trivialmente a partir de la definición.
+text \<open>Veamos el primer resultado sobre el límite.
 
 \begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos cualquiera y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todo
-  \<open>n \<in> \<nat>\<close>, se verifica:
+  Sea \<open>C\<close> una colección de conjuntos, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de
+  \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, para todo \<open>n \<in> \<nat>\<close>, se verifica:
 
-  $S_{n} \subseteq \lim_{n \to \infty} S_{n}$
+  $S_{n} \subseteq \bigcup_{n = 0}^{\infty} S_{n}$
 \end{lema}
-
-\comentario{Enunciado del lema}
 
 \comentario{Demostración en lenguaje natural. \<questiondown>Es 
 necesario hacerlo por inducción? Ver la demostración que he añadido.}
