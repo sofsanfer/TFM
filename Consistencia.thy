@@ -3234,12 +3234,10 @@ text\<open>Puesto que la definición se estructura en dos casos según la defini
   Una vez introducida la definición de las sucesiones, veamos el primer resultado sobre las mismas.
 
   \begin{lema}
-    Si una colección de conjuntos tiene la propiedad de consistencia proposicional, entonces todos 
-    los conjuntos de la sucesión formada a partir de un conjunto de la colección pertenecen también
-    a ella.
+    Sea \<open>C\<close> una colección de conjuntos con la propiedad de consistencia proposicional, \<open>S \<in> C\<close> y 
+    \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> construida según la definición \<open>1.4.1\<close>. 
+    Entonces, para todo \<open>n \<in> \<nat>\<close> se verifica que \<open>S\<^sub>n \<in> C\<close>.
   \end{lema}
-
-\comentario{Redacción del lema previo.}
 
   Procedamos con su demostración.
 
@@ -3424,11 +3422,10 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   de los anteriores.
 
 \begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos y \<open>S\<close> un conjunto de \<open>C\<close>. Entonces, para todos \<open>n\<close>,\\\<open>m \<in> \<nat>\<close> 
+  Sea \<open>C\<close> una colección de conjuntos, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
+  \<open>S\<close> construida según la definición \<open>1.4.1\<close>. Entonces, para todos \<open>n\<close>,\\\<open>m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
-
-\comentario{Lema previo: \<questiondown>C no tiene ninguna propiedad?}
 
 \begin{demostracion}
   En las condiciones del enunciado, la prueba se realiza por inducción en \<open>m \<in> \<nat>\<close>.
@@ -3578,8 +3575,6 @@ text \<open>Veamos el primer resultado que se deduce trivialmente a partir de la
 \comentario{Demostración en lenguaje natural. \<questiondown>Es 
 necesario hacerlo por inducción? Ver la demostración que he añadido.}
 
-\comentario{Creo que tampoco hace falta incucción para probar
-la monotonía de la sucesión.}
 
   Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
 
