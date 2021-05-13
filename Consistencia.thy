@@ -2351,7 +2351,7 @@ text\<open>Introduzcamos el último resultado de la sección.
                             child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>\\ \<open>(Resultado \<two>)\<close>}}}}}};
 \end{tikzpicture}
 
-\comentario{Querría cambiar el sentido de las flechas.}
+\comentario{Eliminar las flechas.}
 
   De este modo, la prueba del \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. 
   El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la 
@@ -2465,13 +2465,25 @@ proof -
  qed
 qed
 
-text \<open>Por otro lado, para probar que  \<open>C' = C \union E \<close>  verifica la propiedad de consistencia proposicional
-  utilizaremos fundamentalmente dos lemas auxiliares como se observa en el grafo: uno para el 
-  caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. Veamos inicialmente la prueba detallada 
-  del primer caso.
+text \<open>Por otro lado, para probar que  \<open>C' = C \<union> E \<close>  verifica la propiedad de consistencia 
+  proposicional, consideraremos un conjunto \<open>S \<in> C'\<close> y utilizaremos fundamentalmente dos lemas 
+  auxiliares: uno para el caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. 
 
-\comentario{Expresar el lema en lenguaje natural. \<questiondown>Qué dicen los lemas auxiliares?}
-\<close>
+  En primer lugar, vamos a probar el primer lema auxiliar para el caso en que \<open>S \<in> C\<close>, formalizado
+  como \<open>ex3_pcp_SinC\<close>. Dicho lema prueba que, si \<open>C\<close> es una colección con la propiedad de 
+  consistencia proposicional y cerrada bajo subconjuntos, y sea \<open>S \<in> C\<close> un conjunto, se verifican
+  las condiciones del lema de caracterización de la propiedad de consistencia proposicional para
+  la extensión \<open>C'\<close>:
+  \begin{itemize}
+    \item \<open>\<bottom> \<notin> S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
+    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
+  \end{itemize}\<close>
 
 lemma ex3_pcp_SinC:
   assumes "pcp C"
