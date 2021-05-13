@@ -3299,10 +3299,9 @@ qed simp
 text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
 
   \begin{lema}
-    Toda sucesión de conjuntos de una colección a partir de un conjunto dado es monótona.
+    Toda sucesión de conjuntos construida a partir de una colección y un conjunto según la
+    definición \<open>1.4.1\<close> es monótona.
   \end{lema}
-
-\comentario{Redacción del lema previo.}
 
   En Isabelle, se formaliza de la siguiente forma.\<close>
 
