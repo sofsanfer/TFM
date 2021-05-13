@@ -3185,53 +3185,42 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
 
 \comentario{Revisar el párrafo anterior al final}
 
-\comentario{Comentar que el conjunto de fórmulas proposicionales es
- numerable y por qué. Y cómo se tiene en Isabelle}
+  Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
+  de un alfabeto numerable de variables proposicionales. Por lo tanto, el conjunto de fórmulas 
+  proposicionales es igualmente numerable, de modo que es posible enumerar sus elementos. Una vez 
+  realizada esta observación, veamos la definición de sucesión de conjuntos de fórmulas 
+  proposicionales a partir de una colección y un conjunto de la misma.
 
 \begin{definicion}
-  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de 
-  S\<close> como sigue:
+  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de 
+  las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de S\<close> como sigue:
 
   $S_{0} = S$
 
   $S_{n+1} = \left\{ \begin{array}{lcc} S_{n} \cup \{F_{n}\} &  si  & S_{n} \cup \{F_{n}\} \in C \\ \\ S_{n} & c.c \end{array} \right.$ 
 \end{definicion}
 
-  Observemos que en la definición anterior es posible considerar una enumeración de las fórmulas 
-  proposicionales puesto que se trata de un conjunto numerable. Esto se deduce de un resultado 
-  básico de teoría de conjuntos que indica que, como el conjunto de variables proposicionales es 
-  contable, entonces el conjunto de fórmulas también lo es.
+  Para su formalización en Isabelle se ha introducido una instancia en la teoría de \<open>Sintaxis\<close> que 
+  indica explícitamente que el conjunto de las fórmulas proposicionales es numerable.
 
-  Mostremos, a continuación, su formalización en Isabelle.
+  \<open>instance formula :: (countable) countable by countable_datatype\<close>
 
-\comentario{\<questiondown>Quén es from_nat?}
-\comentario{Numerable}
+  De esta manera, se genera paralelamente el método de prueba \<open>countable_datatype\<close> sobre dicho 
+  conjunto, que proporciona una enumeración predeterminada de sus elementos junto con herramientas 
+  para probar propiedades referentes a la numerabilidad. En particular, en la formalización de la
+  definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, 
+  nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
 
-\<close>
+  Por otro lado, puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
+  recursiva sobre la estructura recursiva de los números naturales, se formalizará en Isabelle
+  mediante el tipo de funciones primitivas recursivas de la siguiente manera.\<close>
 
 primrec pcp_seq where
 "pcp_seq C S 0 = S" |
 "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
                         if Sn1 \<in> C then Sn1 else Sn)" 
 
-text\<open>Puesto que la definición se estructura en dos casos según la definición recursiva de 
-  los números naturales, su formalización en Isabelle sigue el tipo de funciones primitivas 
-  recursivas. Como es habitual, Isabelle genera automáticamente un esquema inductivo
-  que emplearemos más adelante. 
-
-  Por otro lado, para que la definición fuese consistente, se ha introducido una instancia en la
-  definición del conjunto de fórmulas proposicionales correspondiente a la teoría de \<open>Sintaxis\<close> que 
-  indica explícitamente que dicho conjunto es contable.
-
-  \<open>instance formula :: (countable) countable by countable_datatype\<close>
-
-  De esta manera, se genera paralelamente el método de prueba \<open>countable_datatype\<close> sobre dicho 
-  conjunto, que proporciona una enumeración predeterminada de sus elementos junto con herramientas 
-  para probar propiedades referentes a la contabilidad. En particular, en la definición de las 
-  sucesiones se utiliza la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, nos 
-  devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
-
-  Una vez introducida la definición de las sucesiones, veamos el primer resultado sobre las mismas.
+text\<open>Veamos el primer resultado sobre dichas sucesiones.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos con la propiedad de consistencia proposicional, \<open>S \<in> C\<close> y 
@@ -3311,12 +3300,12 @@ lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
 text \<open>Procedamos con la demostración del lema.
 
   \begin{demostracion}
-    Para probar que una sucesión es monótona, considerando una colección de conjuntos \<open>C\<close>, \<open>S \<in> C\<close>
-    y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>, basta 
-    probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar
-    dos casos para todo \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>,
-    por definición tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario,
-    si \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
+    Sea una colección de conjuntos \<open>C\<close>, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
+    \<open>S\<close> según la definición \<open>1.4.1\<close>. Para probar que \<open>{S\<^sub>n}\<close> es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> 
+    para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar dos casos para todo 
+    \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>, por definición 
+    tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario, si 
+    \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
     por la propiedad reflexiva de la contención de conjuntos. 
   \end{demostracion}
 
@@ -3349,12 +3338,15 @@ qed
 text \<open>Del mismo modo, se puede probar automáticamente en Isabelle/HOL.\<close>
 
 lemma pcp_seq_monotonicity:"pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
-  by (smt eq_iff pcp_seq.simps(2) subset_insertI2)
+  by (smt eq_iff pcp_seq.simps(2) subset_insertI)
 
-text \<open>\comentario{Añadir explicación: monotonía general.}\<close>
+text \<open>Por otra lado, para facilitar posteriores demostraciones en Isabelle/HOL, vamos a formalizar 
+  el lema anterior empleando la siguiente definición generalizada de monotonía.\<close>
 
-lemma pcp_seq_mono: "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
-  using lift_Suc_mono_le pcp_seq_monotonicity by blast
+lemma pcp_seq_mono:
+  assumes "n \<le> m" 
+  shows "pcp_seq C S n \<subseteq> pcp_seq C S m"
+  using pcp_seq_monotonicity assms by (rule lift_Suc_mono_le)
 
 text \<open>A continuación daremos un lema que permite caracterizar un elemento de la sucesión en función 
   de los anteriores.
@@ -3379,90 +3371,49 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 
   $\bigcup_{n \leq m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup \bigcup_{n = m + 1} S_{n} = \bigcup_{n \leq m} S_{n} \cup S_{m + 1} = S_{m} \cup S_{m + 1}$
 
-  Por la monotonía de la sucesión de conjuntos definida dada una colección y un conjunto 
-  perteneciente a ella, como \<open>m \<le> m + 1\<close>, se tiene que \<open>S\<^sub>m \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Luego, se verifica:
+  Por la monotonía de la sucesión, se tiene que \<open>S\<^sub>m \<subseteq> S\<^sub>m\<^sub>+\<^sub>1\<close>. Luego, se verifica:
 
   $\bigcup_{n \leq m + 1} S_{n} = S_{m} \cup S_{m + 1} = S_{m + 1}$
 
   Lo que prueba el resultado.
 \end{demostracion}
 
-  Procedamos con su formalización y demostración detallada en Isabelle. Para ello, hemos empleado el 
-  siguiente lema auxiliar que define la imagen de un conjunto de un único elemento.\<close>
+  Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
+  generalizada en Isabelle/HOL perteneciente a la teoría 
+  \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}. Además, la prueba ha precisado del 
+  siguiente lema auxiliar que define la imagen de un conjunto con un único elemento.\<close>
 
-lemma imageUnElem: "f ` {x} = {f x}"
+lemma imageElem: "f ` {x} = {f x}"
   by simp
 
-text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.
-
-\comentario{Creo que la demostración detallada se puede simplificar.}
-\comentario {Comentar la unión en Isabelle.}
-\<close>
+text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
-  have n0:"{n. n = 0} = {0}"
-    by (simp only: singleton_conv)
-  have "(pcp_seq C S)`{n. n = 0} = (pcp_seq C S)`{0}"
-    by (simp only: n0)
-  then have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}"
-    by (simp only: imageUnElem)
-  then have 1:"{pcp_seq C S n | n. n = 0} = {pcp_seq C S 0}"
+  have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}"
+    by (simp only: singleton_conv imageElem)
+  then have 1:"\<Union>{pcp_seq C S n | n. n = 0} = \<Union>{pcp_seq C S 0}"
     by (simp only: image_Collect)
-  have 0:"\<Union>{pcp_seq C S n|n. n = 0} = \<Union>{pcp_seq C S 0}" 
-    by (simp only: 1)
-  have "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
-    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq)
-  also have "\<dots> = \<Union>{pcp_seq C S 0}"
-    by (simp only: 0)
-  also have "\<dots> = pcp_seq C S 0"
-    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
-  finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
-    by this
+  show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0"
+    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 conditionally_complete_lattice_class.cSup_singleton)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
   have "m \<le> Suc m" 
     by (simp only: monoid_add_class.add_0_right)
-  have 1:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
-    using \<open>m \<le> Suc m\<close> by (rule pcp_seq_mono)
-  have "{n. n \<le> Suc m}  = {n. (n \<le> m \<or> n = Suc m)}"
-    by (simp only: le_Suc_eq)
-  also have "\<dots> = {n. n \<le> m} \<union> {n. n = Suc m}"
-    by (rule Collect_disj_eq) 
-  also have "\<dots> = {n. n = Suc m} \<union> {n. n \<le> m}" 
-    by (rule Un_commute)
-  also have "\<dots> = {Suc m} \<union> {n. n \<le> m}"
-    by (simp only: singleton_conv)
-  finally have S:"{n. n \<le> Suc m} = {Suc m} \<union> {n. n \<le> m}"
-    by this
+  then have Mon:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
+    by (rule pcp_seq_mono)
+  have S:"{n. n \<le> Suc m}  = {Suc m} \<union> {n. n \<le> m}"
+    by (simp only: le_Suc_eq Collect_disj_eq Un_commute singleton_conv)
   have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
     by (simp only: image_Collect)
-  also have "\<dots> = (pcp_seq C S) ` ({Suc m} \<union> {n. n \<le> m})"
-    by (simp only: S)
-  also have "\<dots> = (pcp_seq C S) ` {Suc m} \<union> (pcp_seq C S) ` {n. n \<le> m}"
-    by (simp only: image_Un)
-  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> (pcp_seq C S) ` {n. n \<le> m}" 
-    by (simp only: imageUnElem)
-  also have "\<dots> = {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m}"
-    by (simp only: image_Collect)
-  finally have 3:"{pcp_seq C S n |n. n \<le> Suc m} = 
-          {pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m}"
-    by this
-  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
-    by (simp only: 3)
-  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)}) \<union> (\<Union>{pcp_seq C S n |n. n \<le> m})"
-    by (simp only: complete_lattice_class.Sup_union_distrib)
-  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>{pcp_seq C S n |n. n \<le> m}"
-    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
-  also have "\<dots> = pcp_seq C S (Suc m) \<union> (pcp_seq C S m)"
-    by (simp only: HI)
-  also have "\<dots> = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
-    by (simp only: Un_commute)
-  also have "\<dots> = pcp_seq C S (Suc m)"
-    using 1 by (simp only: subset_Un_eq)
-  finally show "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
-    by this
+  then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = 
+          \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
+    by (simp only: S image_Un imageElem image_Collect)
+  then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
+    by (simp only: complete_lattice_class.Sup_union_distrib conditionally_complete_lattice_class.cSup_singleton HI Un_commute)
+  thus "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
+    using Mon by (simp only: subset_Un_eq)
 qed
 
 text \<open>Análogamente, podemos dar una prueba automática del resultado en Isabelle/HOL.\<close>
@@ -3479,8 +3430,7 @@ proof(induction m)
   thus ?case using Suc pcp_seq_mono by blast
 qed simp
 
-text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la definición \<open>1.4.1\<close>, junto
-  con tres resultados sobre el mismo.
+text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la definición \<open>1.4.1\<close>.
 
  \begin{definicion}
   Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
@@ -3488,10 +3438,7 @@ text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la
   $\bigcup_{n = 0}^{\infty} S_{n}$
  \end{definicion}
 
-  En Isabelle, la definición del límite se formaliza como sigue.
-
-\comentario{Explicar la unión que se está usando en Isabelle.}
-\<close>
+  La definición del límite se formaliza utilizando la unión generalizada de Isabelle como sigue.\<close>
 
 definition "pcp_lim C S \<equiv> \<Union>{pcp_seq C S n|n. True}"
 
@@ -3525,13 +3472,13 @@ proof -
     by (simp only: Union_upper)
 qed
 
-text \<open>Finalmente, podemos probarlo de manera automática.\<close>
+text \<open>Podemos probarlo de manera automática como sigue.\<close>
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S" 
   unfolding pcp_lim_def by blast
 
 text \<open>Por otra parte, mostremos el siguiente lema que relaciona la pertenencia de una fórmula 
-  proposicional al límite definido en \<open>1.4.5\<close> y la pertenencia a un elemento de la sucesión definida
+  proposicional al límite definido en \<open>1.4.5\<close> y su pertenencia a un elemento de la sucesión definida
   en \<open>1.4.1\<close>. 
 
   \begin{lema}
@@ -3542,26 +3489,20 @@ text \<open>Por otra parte, mostremos el siguiente lema que relaciona la pertene
   \end{lema}
 
   \begin{demostracion}
+    La prueba es inmediata de la definición del límite de la sucesión de conjuntos \<open>{S\<^sub>n}\<close>: si
+    \<open>F\<close> pertenece a la unión generalizada $\bigcup_{n = 0}^{\infty} S_{n}$, entonces existe algún
+    conjunto \<open>S\<^sub>k\<close> tal que \<open>F \<in> S\<^sub>k\<close>. Es decir, existe \<open>k \<in> \<nat>\<close> tal que \<open>F \<in> S\<^sub>k\<close>, como queríamos
+    demostrar.
   \end{demostracion} 
 
-\comentario{Demostración en lenguaje natural.}
-
   Su prueba detallada en Isabelle/HOL es la siguiente. \<close>
-
-declare [[show_types]]
 
 lemma 
   assumes "F \<in> pcp_lim C S"
   shows "\<exists>k. F \<in> pcp_seq C S k" 
 proof -
-  have H:"F \<in> \<Union>{pcp_seq C S n|n. True}"
-    using assms by (simp only: pcp_lim_def)
-  have 1:"(pcp_seq C S) ` {n | n. True} = {pcp_seq C S n | n. True}"
-    by (simp only: image_Collect simp_thms(40))
-  have 2:"\<Union>((pcp_seq C S) ` {n | n. True}) = \<Union>{pcp_seq C S n | n. True}"
-    by (simp only: 1)
   have "F \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
-    using H by (simp only: 2)
+    using assms by (simp only: pcp_lim_def image_Collect simp_thms(40))
   then have "\<exists>k \<in> {n. True}. F \<in> pcp_seq C S k"
     by (simp only: UN_iff simp_thms(40))
   then have "\<exists>k \<in> UNIV. F \<in> pcp_seq C S k" 
@@ -3570,26 +3511,24 @@ proof -
     by (simp only: bex_UNIV)
 qed
 
-text \<open>Finalmente, daremos la demostración automática del resultado.\<close>
+text \<open>Mostremos, a continuación, la demostración automática del resultado.\<close>
 
 lemma pcp_lim_inserted_at_ex: 
     "S' \<in> pcp_lim C S \<Longrightarrow> \<exists>k. S' \<in> pcp_seq C S k"
   unfolding pcp_lim_def by blast
 
 text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos contenidos en el límite de 
-  las sucesiones.
+  las sucesiones definido en \<open>1.4.5\<close>.
 
 \begin{lema}
-  Todo conjunto finito contenido en el límite de la sucesión de conjuntos de una colección a partir
-  de un conjunto dado está contenido en algún conjunto de dicha sucesión.
+  Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
+  definición \<open>1.4.1\<close>. Si \<open>S'\<close> es un conjunto finito tal que \<open>S' \<subseteq>\<close> $\bigcup_{n = 0}^{\infty} S_{n}$, 
+  entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
 \end{lema}
 
-\comentario{\<questiondown>El lema se refiere a la sucesión S_n o a una cualquiera?}
-\comentario{Redactar el lema de forma más clara.}
-
 \begin{demostracion}
-  Consideremos una colección cualquiera \<open>C\<close> y \<open>S\<close> un conjunto de la misma. La prueba se realiza por 
-  inducción sobre la estructura recursiva de los conjuntos finitos.
+  La prueba del resultado se realiza por inducción sobre la estructura recursiva de los conjuntos 
+  finitos.
 
   En primer lugar, consideremos que el conjunto vacío está contenido en el límite de la sucesión de
   conjuntos de \<open>C\<close> a partir de \<open>S\<close>. Como \<open>{}\<close> es subconjunto de todo conjunto, en particular lo es 
@@ -3597,22 +3536,19 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
 
   Por otra parte, sea \<open>S'\<close> un conjunto finito contenido en el límite de la sucesión de conjuntos de 
   \<open>C\<close> a partir de \<open>S\<close>, de modo que también está contenido en algún \<open>S\<^sub>k\<^sub>'\<close> para cierto \<open>k' \<in> \<nat>\<close>. Sea 
-  \<open>x\<close> un elemento cualquiera no perteneciente a \<open>S'\<close>. Supongamos que\\ \<open>{x} \<union> S'\<close> está también 
-  contenido en el límite. Probemos que \<open>{x} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
+  \<open>F\<close> una fórmula cualquiera no perteneciente a \<open>S'\<close>. Supongamos que\\ \<open>{F} \<union> S'\<close> está también 
+  contenido en el límite. Probemos que \<open>{F} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
 
-  Como hemos supuesto que \<open>{x} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>x\<close>
-  pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>x\<close> pertenece al 
+  Como hemos supuesto que \<open>{F} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>F\<close>
+  pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>F\<close> pertenece al 
   límite, deducimos que existe un \<open>k \<in> \<nat>\<close> tal que \<open>x \<in> S\<^sub>k\<close>. Por otro lado, como \<open>S'\<close> está contenido
   en el límite, por hipótesis de inducción existe algún \<open>k' \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>. El resultado 
   se obtiene considerando el máximo entre \<open>k\<close> y \<open>k'\<close>, que notaremos por \<open>k''\<close>. En efecto, por la 
   monotonía de la sucesión, se verifica que tanto \<open>S\<^sub>k\<close> como \<open>S\<^sub>k\<^sub>'\<close> están contenidos en \<open>S\<^sub>k\<^sub>'\<^sub>'\<close>. De este 
   modo, como \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>, por la transitividad de la contención de conjuntos se tiene que 
-  \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>. Además, como \<open>x \<in> S\<^sub>k\<close>, se tiene que \<open>x \<in> S\<^sub>k\<^sub>'\<^sub>'\<close>. Por lo tanto, \<open>{x} \<union> S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>, como 
+  \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>. Además, como \<open>F \<in> S\<^sub>k\<close>, se tiene que \<open>F \<in> S\<^sub>k\<^sub>'\<^sub>'\<close>. Por lo tanto, \<open>{F} \<union> S' \<subseteq> S\<^sub>k\<^sub>'\<^sub>'\<close>, como 
   queríamos demostrar. 
 \end{demostracion}
-
-\comentario{Hay confusión entre pertenece al límite y 
-contenido en el límite.}
 
   Procedamos con la demostración detallada en Isabelle.\<close>
 
@@ -3632,10 +3568,10 @@ proof (induction S' rule: finite_induct)
   then show ?case 
     by (rule exI)
 next
-  case (insert x S')
-  then have "insert x S' \<subseteq> pcp_lim C S"
+  case (insert F S')
+  then have "insert F S' \<subseteq> pcp_lim C S"
     by (simp only: insert.prems)
-  then have C:"x \<in> (pcp_lim C S) \<and> S' \<subseteq> pcp_lim C S"
+  then have C:"F \<in> (pcp_lim C S) \<and> S' \<subseteq> pcp_lim C S"
     by (simp only: insert_subset) 
   then have "S' \<subseteq> pcp_lim C S"
     by (rule conjunct2)
@@ -3643,11 +3579,11 @@ next
     by (simp only: insert.IH)
   obtain k1 where "S' \<subseteq> pcp_seq C S k1"
     using EX1 by (rule exE)
-  have "x \<in> pcp_lim C S"
+  have "F \<in> pcp_lim C S"
     using C by (rule conjunct1)
-  then have EX2:"\<exists>k. x \<in> pcp_seq C S k"
+  then have EX2:"\<exists>k. F \<in> pcp_seq C S k"
     by (rule pcp_lim_inserted_at_ex)
-  obtain k2 where "x \<in> pcp_seq C S k2" 
+  obtain k2 where "F \<in> pcp_seq C S k2" 
     using EX2 by (rule exE)
   have "k1 \<le> max k1 k2"
     by (simp only: linorder_class.max.cobounded1)
@@ -3659,15 +3595,15 @@ next
     by (rule pcp_seq_mono)
   have "S' \<subseteq> pcp_seq C S (max k1 k2)"
     using \<open>S' \<subseteq> pcp_seq C S k1\<close> \<open>pcp_seq C S k1 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule subset_trans)
-  have "x \<in> pcp_seq C S (max k1 k2)"
-    using \<open>x \<in> pcp_seq C S k2\<close> \<open>pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule rev_subsetD)
-  then have 1:"insert x S' \<subseteq> pcp_seq C S (max k1 k2)"
+  have "F \<in> pcp_seq C S (max k1 k2)"
+    using \<open>F \<in> pcp_seq C S k2\<close> \<open>pcp_seq C S k2 \<subseteq> pcp_seq C S (max k1 k2)\<close> by (rule rev_subsetD)
+  then have 1:"insert F S' \<subseteq> pcp_seq C S (max k1 k2)"
     using \<open>S' \<subseteq> pcp_seq C S (max k1 k2)\<close> by (simp only: insert_subset)
   thus ?case
     by (rule exI)
 qed
 
-text \<open>Mostremos, finalmente, su demostración automática en Isabelle/HOL.\<close>
+text \<open>Finalmente, su demostración automática en Isabelle/HOL es la siguiente.\<close>
 
 lemma finite_pcp_lim_EX:
   assumes "finite S'"
@@ -3675,12 +3611,12 @@ lemma finite_pcp_lim_EX:
         shows "\<exists>k. S' \<subseteq> pcp_seq C S k"
   using assms
 proof(induction S' rule: finite_induct) 
-  case (insert x S')
+  case (insert F S')
   hence "\<exists>k. S' \<subseteq> pcp_seq C S k" by fast
   then guess k1 ..
-  moreover obtain k2 where "x \<in> pcp_seq C S k2"
+  moreover obtain k2 where "F \<in> pcp_seq C S k2"
     by (meson pcp_lim_inserted_at_ex insert.prems insert_subset)
-  ultimately have "insert x S' \<subseteq> pcp_seq C S (max k1 k2)"
+  ultimately have "insert F S' \<subseteq> pcp_seq C S (max k1 k2)"
     by (meson pcp_seq_mono dual_order.trans insert_subset max.bounded_iff order_refl subsetCE)
   thus ?case by blast
 qed simp
