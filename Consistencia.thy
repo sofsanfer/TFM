@@ -3305,32 +3305,8 @@ text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
 
   En Isabelle, se formaliza de la siguiente forma.\<close>
 
-lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
-  oops
-
 lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
-proof (cases n)
-  case 0
-  then show ?thesis 
-    by (smt eq_iff pcp_seq.simps(2) subset_insertI)
-next
-  case (Suc nat)
-  then show ?thesis 
-    by (smt eq_refl pcp_seq.simps(2) subset_insertI)
-qed
-
-
-lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)" 
-proof (induct n)
-  case 0
-  then show ?case
-    by (smt eq_iff pcp_seq.simps(2) subset_insertI)
-next
-  case (Suc n)
-  then show ?case 
-    by (smt equalityD2 pcp_seq.simps(2) subset_insertI)
-qed
-
+  oops
 
 text \<open>Procedamos con la demostración del lema.
 
@@ -3359,6 +3335,30 @@ La demostración sería más simple. \<questiondown>Es necesario hacerlo por ind
   \end{demostracion}
 
   La prueba detallada en Isabelle se muestra a continuación.\<close>
+
+lemma "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+proof -
+  have "pcp_seq C S (Suc n) = (let Sn = pcp_seq C S n; Sn1 = insert (from_nat n) Sn in
+                        if Sn1 \<in> C then Sn1 else Sn)" 
+    by (simp only: pcp_seq.simps(2))
+  then have SucDef:"pcp_seq C S (Suc n) = (if insert (from_nat n) (pcp_seq C S n) \<in> C then 
+                    insert (from_nat n) (pcp_seq C S n) else pcp_seq C S n)" 
+    by (simp only: Let_def)
+  thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+  proof (cases)
+    assume 1:"insert (from_nat n) (pcp_seq C S n) \<in> C"
+    have "pcp_seq C S (Suc n) = insert (from_nat n) (pcp_seq C S n)"
+      using SucDef 1 by (simp only: if_True)
+    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+      by (simp only: subset_insertI)
+  next
+    assume 2:"insert (from_nat n) (pcp_seq C S n) \<notin> C"
+    have "pcp_seq C S (Suc n) = pcp_seq C S n"
+      using SucDef 2 by (simp only: if_False)
+    thus "pcp_seq C S n \<subseteq> pcp_seq C S (Suc n)"
+      by (simp only: subset_refl)
+  qed
+qed
 
 lemma "n \<le> m \<Longrightarrow> pcp_seq C S n \<subseteq> pcp_seq C S m"
 proof(induction m)
