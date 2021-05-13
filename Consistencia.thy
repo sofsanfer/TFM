@@ -3585,58 +3585,21 @@ la monotonía de la sucesión.}
 
 lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
   unfolding pcp_lim_def
-  by blast
-
-find_theorems " _ \<subseteq> \<Union> _"
-
-lemma "pcp_seq C S n \<subseteq> pcp_lim C S"
-  unfolding pcp_lim_def
-proof (induction n)
-  have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
+proof -
+  have "n \<in> {n | n. True}" 
+    by (simp only: simp_thms(21,38) Collect_const if_True UNIV_I) 
+  then have "pcp_seq C S n \<in> (pcp_seq C S)`{n | n. True}"
+    by (simp only: imageI)
+  then have "pcp_seq C S n \<in> {pcp_seq C S n | n. True}"
     by (simp only: image_Collect simp_thms(40))
-  have 0:"{0} \<union> {n | n. True} = {n | n. True}"
-    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right simp_thms(40))
-  have "(pcp_seq C S)`({0} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
-    by (simp only: 0) 
-  then have "(pcp_seq C S)`{0} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
-    by (simp only: image_Un)
-  then have 1:"(pcp_seq C S)`{0} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    by (simp only: subset_Un_eq)
-  then have "{pcp_seq C S 0} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    by (simp only: imageUnElem) 
-  then have "{pcp_seq C S 0} \<subseteq> {pcp_seq C S n | n. True}"
-    by (simp only: U)
-  then have 3:"\<Union>{pcp_seq C S 0} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
-    by (simp only: Union_mono)
-  thus "pcp_seq C S 0 \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    using 3 by (simp only: conditionally_complete_lattice_class.cSup_singleton)
-next
-  fix n
-  assume "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n|n. True}"
-  have U:"(pcp_seq C S)`({n | n. True}) = {pcp_seq C S n | n. True}"
-    by (simp only: image_Collect simp_thms(40)) 
-  have n:"{Suc n} \<union> {n | n. True} = {n | n. True}" 
-    by (simp only: Collect_const if_True bounded_lattice_top_class.sup_top_right simp_thms(40))
-  have "(pcp_seq C S)`({Suc n} \<union> {n | n. True}) = (pcp_seq C S)`{n | n. True}" 
-    by (simp only: n) 
-  then have "(pcp_seq C S)`{Suc n} \<union> (pcp_seq C S)`{n | n. True} = (pcp_seq C S)`{n | n. True}"
-    by (simp only: image_Un)
-  then have 1:"(pcp_seq C S)`{Suc n} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    by (simp only: subset_Un_eq)
-  then have "{pcp_seq C S (Suc n)} \<subseteq> (pcp_seq C S)`{n | n. True}"
-    by (simp only: imageUnElem) 
-  then have "{pcp_seq C S (Suc n)} \<subseteq> {pcp_seq C S n | n. True}"
-    by (simp only: U)
-  then have 3:"\<Union>{pcp_seq C S (Suc n)} \<subseteq> \<Union>{pcp_seq C S n | n. True}"
-    by (simp only: Union_mono)
-  thus "pcp_seq C S (Suc n) \<subseteq> \<Union>{pcp_seq C S n | n. True}" 
-    by (simp only: conditionally_complete_lattice_class.cSup_singleton)
+  thus "pcp_seq C S n \<subseteq> \<Union>{pcp_seq C S n | n. True}"
+    by (simp only: Union_upper)
 qed
 
 text \<open>Finalmente, podemos probar el resultado de manera automática de la siguiente forma.\<close>
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S" 
-  unfolding pcp_lim_def by(induction n; blast)
+  unfolding pcp_lim_def by blast
 
 text \<open>Por otra parte, de la definición de límite podemos deducir el siguiente lema.
 
@@ -3654,22 +3617,22 @@ text \<open>Por otra parte, de la definición de límite podemos deducir el sigu
 declare [[show_types]]
 
 lemma 
-  assumes "S' \<in> pcp_lim C S"
-  shows "\<exists>k. S' \<in> pcp_seq C S k" 
+  assumes "F \<in> pcp_lim C S"
+  shows "\<exists>k. F \<in> pcp_seq C S k" 
 proof -
-  have H:"S' \<in> \<Union>{pcp_seq C S n|n. True}"
+  have H:"F \<in> \<Union>{pcp_seq C S n|n. True}"
     using assms by (simp only: pcp_lim_def)
   have 1:"(pcp_seq C S) ` {n | n. True} = {pcp_seq C S n | n. True}"
     by (simp only: image_Collect simp_thms(40))
   have 2:"\<Union>((pcp_seq C S) ` {n | n. True}) = \<Union>{pcp_seq C S n | n. True}"
     by (simp only: 1)
-  have "S' \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
+  have "F \<in> \<Union>((pcp_seq C S) ` {n | n. True})"
     using H by (simp only: 2)
-  then have "\<exists>k \<in> {n. True}. S' \<in> pcp_seq C S k"
+  then have "\<exists>k \<in> {n. True}. F \<in> pcp_seq C S k"
     by (simp only: UN_iff simp_thms(40))
-  then have "\<exists>k \<in> UNIV. S' \<in> pcp_seq C S k" 
+  then have "\<exists>k \<in> UNIV. F \<in> pcp_seq C S k" 
     by (simp only: UNIV_def)
-  thus "\<exists>k. S' \<in> pcp_seq C S k" 
+  thus "\<exists>k. F \<in> pcp_seq C S k" 
     by (simp only: bex_UNIV)
 qed
 
