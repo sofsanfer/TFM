@@ -3504,9 +3504,11 @@ text \<open>Veamos el primer resultado sobre el límite.
   $S_{n} \subseteq \bigcup_{n = 0}^{\infty} S_{n}$
 \end{lema}
 
-\comentario{Demostración en lenguaje natural. \<questiondown>Es 
-necesario hacerlo por inducción? Ver la demostración que he añadido.}
-
+\begin{demostracion}
+  El resultado se obtiene de manera inmediata ya que, para todo \<open>n \<in> \<nat>\<close>, se verifica que 
+  $S_{n} \in \{S_{n}\}_{n = 0}^{\infty}$. Por tanto, es claro que 
+  $S_{n} \subseteq \bigcup_{n = 0}^{\infty} S_{n}$.
+\end{demostracion}
 
   Su formalización y demostración detallada en Isabelle se muestran a continuación.\<close>
 
@@ -3523,20 +3525,25 @@ proof -
     by (simp only: Union_upper)
 qed
 
-text \<open>Finalmente, podemos probar el resultado de manera automática de la siguiente forma.\<close>
+text \<open>Finalmente, podemos probarlo de manera automática.\<close>
 
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S" 
   unfolding pcp_lim_def by blast
 
-text \<open>Por otra parte, de la definición de límite podemos deducir el siguiente lema.
+text \<open>Por otra parte, mostremos el siguiente lema que relaciona la pertenencia de una fórmula 
+  proposicional al límite definido en \<open>1.4.5\<close> y la pertenencia a un elemento de la sucesión definida
+  en \<open>1.4.1\<close>. 
 
   \begin{lema}
-    Sea \<open>C\<close> una colección de conjuntos, \<open>S\<close> un conjunto perteneciente a la misma y \<open>S'\<close> un conjunto
-    cualquiera. Si \<open>S'\<close> pertenece al límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>,
-    entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' = S\<^sub>k\<close>.  
+    Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de 
+    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Sea \<open>F\<close> una fórmula tal que
+    pertenece al límite $\bigcup_{n = 0}^{\infty} S_{n}$ de la sucesión. Entonces existe un \<open>k \<in> \<nat>\<close> 
+    tal que \<open>F \<in> S\<^sub>k\<close>. 
   \end{lema}
 
-\comentario{Redacción del lema.}
+  \begin{demostracion}
+  \end{demostracion} 
+
 \comentario{Demostración en lenguaje natural.}
 
   Su prueba detallada en Isabelle/HOL es la siguiente. \<close>
