@@ -2336,7 +2336,7 @@ text\<open>Introduzcamos el último resultado de la sección.
     level 2/.style          = {sibling distance=4cm},
     level 3/.style          = {sibling distance=5.7cm},
     level distance          = 1.5cm,
-    edge from parent/.style = {draw, -latex},
+    edge from parent/.style = {draw},
     every node/.style       = {font=\tiny},
     sloped
   ]
@@ -2350,8 +2350,6 @@ text\<open>Introduzcamos el último resultado de la sección.
                       child { node [env] {\<open>ex3_pcp_SinE_DIS_auxFalse\<close>\\ \<open>(Resultado \<one>)\<close>}
                             child { node [env] {\<open>ex3_pcp_SinE_DIS_auxEx\<close>\\ \<open>(Resultado \<two>)\<close>}}}}}};
 \end{tikzpicture}
-
-\comentario{Eliminar las flechas.}
 
   De este modo, la prueba del \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. 
   El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la 
