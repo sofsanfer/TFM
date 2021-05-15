@@ -2352,20 +2352,33 @@ text\<open>Introduzcamos el último resultado de la sección.
 \end{tikzpicture}
 
   De este modo, la prueba del \<open>lema 1.3.5\<close> se estructura fundamentalmente en dos lemas auxiliares. 
-  El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión tiene la 
-  propiedad de carácter finito. El segundo, formalizado como \<open>ex3_pcp\<close>, demuestra que la 
-  extensión verifica la propiedad de consistencia proposicional. Este último, a su vez, precisa de 
-  dos lemas auxiliares: uno para el caso en que el conjunto \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y otro para el 
-  caso en que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para probar el último caso en que \<open>S \<in> E\<close>, 
-  utilizaremos dos lemas auxiliares que permiten probar respectivamente las condiciones para 
-  fórmulas de tipo \<open>\<alpha>\<close> (\<open>ex3_pcp_SinE_CON\<close>) y fórmulas de tipo \<open>\<beta>\<close> (\<open>ex3_pcp_SinE_DIS\<close>) del lema de 
-  caracterización de la propiedad de consistencia proposicional mediante notación uniforme. Por
-  último, la condición de fórmulas de tipo \<open>\<beta>\<close> precisa, a su vez, del resultado \<open>\<two>)\<close> (formalizado 
-  como \<open>ex3_pcp_SinE_DIS_auxEx\<close>), que utiliza para su prueba el resultado \<open>\<one>)\<close> 
-  (\<open>ex3_pcp_SinE_DIS_auxFalse\<close>).
-
-\comentario{Redacción del párrafo anterior.}
-\comentario{Expresar lo que llamas resultado 1 y 2 en lenguaje natural.}
+  El primero, formalizado como \<open>ex3_finite_character\<close> en Isabelle, prueba que la extensión 
+  \<open>C' = C \<union> E\<close>, donde \<open>E\<close> es la colección formada por aquellos conjuntos cuyos subconjuntos finitos 
+  pertenecen a \<open>C\<close>, tiene la propiedad de carácter finito. El segundo, formalizado como \<open>ex3_pcp\<close>, 
+  demuestra que \<open>C'\<close> verifica la propiedad de consistencia proposicional demostrando que cumple las 
+  condiciones suficientes de dicha propiedad por el lema de caracterización \<open>1.2.5\<close>. De este modo, 
+  considerando un conjunto \<open>S \<in> C'\<close>, \<open>ex3_pcp\<close> precisa, a su vez, de dos lemas auxiliares que 
+  prueben las condiciones suficientes de \<open>1.2.5\<close>: uno para el caso en que \<open>S \<in> C\<close> (\<open>ex3_pcp_SinC\<close>) y 
+  otro para el caso en que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para el último caso en que 
+  \<open>S \<in> E\<close>, utilizaremos dos lemas auxiliares. El primero, formalizado como \<open>ex3_pcp_SinE_CON\<close>, 
+  prueba que para \<open>C\<close> una colección con la propiedad de consistencia proposicional y cerrada bajo 
+  subconjuntos, \<open>S \<in> E\<close> y sea \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, se tiene que 
+  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. El segundo lema, formalizado como \<open>ex3_pcp_SinE_DIS\<close>, prueba que para \<open>C\<close> una 
+  colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close> y 
+  sea \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o 
+  bien \<open>{\<beta>\<^sub>2} \<union> S \<in> C'\<close>. Por último, este segundo lema auxiliar se probará por reducción al absurdo, 
+  precisando para ello de los siguientes resultados auxiliares:
+  
+  \begin{description}
+    \item[\<open>Resultado \<one>\<close>] Formalizado como \<open>ex3_pcp_SinE_DIS_auxEx\<close>. Prueba que dada \<open>C\<close> una 
+    colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close> y 
+    sea \<open>F\<close> es una fórmula de tipo \<open>\<beta>\<close> de componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, si consideramos \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> 
+    subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y \<open>F \<in> S\<^sub>2\<close>, entonces existe una 
+    fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que se verifica que tanto \<open>{I} \<union> S\<^sub>1\<close> como \<open>{I} \<union> S\<^sub>2\<close> están en \<open>C\<close>. 
+    \item[\<open>Resultado \<two>\<close>] Formalizado como \<open>ex3_pcp_SinE_DIS_auxFalse\<close>. Utiliza 
+    \<open>ex3_pcp_SinE_DIS_auxEx\<close> como lema auxiliar. Prueba que, en las condiciones del \<open>Resultado \<one>\<close>, 
+    si además suponemos que \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 \<notin> C\<close>, llegamos a una contradicción.
+  \end{description} 
 
   Por otro lado, para facilitar la notación, dada una colección cualquiera \<open>C\<close>, formalizamos las 
   colecciones \<open>E\<close> y \<open>C'\<close> como \<open>extF C\<close> y \<open>extensionFin C\<close> respectivamente como se muestra a 
@@ -3652,7 +3665,15 @@ qed simp
 section \<open>El teorema de existencia de modelo\<close>
 
 text \<open>\comentario{Añadir explicación}\<close>
-          
+
+text \<open>
+  \begin{lema}
+    Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es 
+    cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos
+    de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión está en
+    \<open>C\<close>.
+  \end{lema}\<close>
+
 lemma pcp_lim_in_detallada:
   assumes "pcp C"
           "S \<in> C"
@@ -3729,11 +3750,20 @@ proof -
   thus "?cl \<in> C" using fc unfolding finite_character_def by blast
 qed
 
+text \<open>
+
+  \begin{lema}
+    Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
+    es cerrada bajo subconjuntos, \<open>S\<close> un conjunto y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
+    de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión es un elemento maximal 
+    de \<open>C\<close>.
+  \end{lema}\<close>
+
 lemma cl_max_detallada:
   assumes "pcp C"
-  assumes "subset_closed C"
-  assumes "K \<in> C"
-  assumes "pcp_lim C S \<subseteq> K"
+          "subset_closed C"
+          "K \<in> C"
+          "pcp_lim C S \<subseteq> K"
   shows "pcp_lim C S = K"
 proof (rule ccontr)
   assume H:"\<not>(pcp_lim C S = K)"
@@ -3795,11 +3825,14 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
+text \<open>\comentario{Es una adaptación concreta del lema anterior para el caso en
+  que K se forme añadiendo 1 elemento o 2 al límite.}\<close>
+
 lemma cl_max'_detallada:
   assumes "pcp C"
   assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-    "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+        "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 proof -
   show "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
   proof -
@@ -3844,7 +3877,15 @@ lemma cl_max':
   assumes sc: "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
-using cl_max[OF assms] by blast+
+  using cl_max[OF assms] by blast+
+
+text \<open>
+\begin{lema}
+  Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es
+  es cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de
+  conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión
+  es un conjunto de Hintikka.
+\end{lema}\<close>
 
 lemma pcp_lim_Hintikka_detallada:
   assumes "pcp C"
@@ -3968,6 +4009,11 @@ proof -
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
 qed
 
+text \<open>
+\begin{lema}
+  Todo subconjunto de un conjunto de fórmulas satisfacible es satisfacible.
+\end{lema}\<close>
+
 lemma sat_mono:
   assumes "A \<subseteq> B"
           "sat B"
@@ -3992,6 +4038,12 @@ proof -
   thus "\<exists>\<A>. \<forall>F \<in> A. \<A> \<Turnstile> F"
     by (simp only: exI)
 qed
+
+text\<open>
+  \begin{teorema}[Teorema de Existencia de Modelo]
+    Todo conjunto de fórmulas perteneciente a una colección que verifique la propiedad de
+    consistencia proposicional es satisfacible. 
+  \end{teorema}\<close>
 
 theorem pcp_sat_detallada:
   fixes S :: "'a :: countable formula set"
