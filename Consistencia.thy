@@ -2381,7 +2381,7 @@ definition extensionFin :: "(('a formula) set) set \<Rightarrow> (('a formula) s
 
 text \<open>Una vez hechas las aclaraciones anteriores, procedamos ordenadamente con la demostración 
   detallada de cada lema auxiliar que conforma la prueba del lema \<open>1.3.5\<close>. En primer lugar, probemos 
-  detalladamente que la extensión tiene la propiedad de carácter finito.\<close>
+  detalladamente que la extensión \<open>C'\<close> tiene la propiedad de carácter finito.\<close>
 
 lemma ex3_finite_character:
   assumes "subset_closed C"
@@ -2471,7 +2471,7 @@ text \<open>Por otro lado, para probar que  \<open>C' = C \<union> E \<close>  v
 
   En primer lugar, vamos a probar el primer lema auxiliar para el caso en que \<open>S \<in> C\<close>, formalizado
   como \<open>ex3_pcp_SinC\<close>. Dicho lema prueba que, si \<open>C\<close> es una colección con la propiedad de 
-  consistencia proposicional y cerrada bajo subconjuntos, y sea \<open>S \<in> C\<close> un conjunto, se verifican
+  consistencia proposicional y cerrada bajo subconjuntos, y sea \<open>S \<in> C\<close>, se verifican
   las condiciones del lema de caracterización de la propiedad de consistencia proposicional para
   la extensión \<open>C'\<close>:
   \begin{itemize}
@@ -2566,14 +2566,12 @@ proof -
     using A1 A2 A3 A4 by (iprover intro: conjI)
 qed
 
-text \<open>Como hemos señalado con anterioridad, para probar el caso en que \<open>S \<in> E\<close> utilizaremos 
-  distintos lemas auxiliares. El primero de ellos demuestra detalladamente la condición para 
-  fórmulas de tipo \<open>\<alpha>\<close> del lema de caracterización de la propiedad de consistencia proposicional 
-  mediante notación uniforme.
-
-\comentario{\<questiondown>Qué condición? Expresar en lenguaje natural.}
-
-\<close>
+text \<open>Como hemos señalado con anterioridad, para probar el caso en que \<open>S \<in> E\<close>, donde \<open>E\<close> es la 
+  colección formada por aquellos conjuntos cuyos subconjuntos finitos pertenecen a \<open>C\<close>, precisaremos 
+  de distintos lemas auxiliares. El primero de ellos demuestra detalladamente que si \<open>C\<close> es una
+  colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close>
+  y sea \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, se verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> 
+  pertenece a la extensión \<open>C' = C \<union> E\<close>.\<close>
 
 lemma ex3_pcp_SinE_CON:
   assumes "pcp C"
@@ -2681,14 +2679,18 @@ proof -
     unfolding extensionFin by (rule UnI2)
 qed
 
-text \<open>Seguidamente, veamos la prueba de la condición para fórmulas de tipo \<open>\<beta>\<close> del lema de
-  caracterización de la propiedad de consistencia proposicional mediante notación uniforme. 
-  Para ello, veamos la prueba detallada de los dos resultados previos \<open>\<one>)\<close> y \<open>\<two>)\<close>.
+text \<open>Seguidamente, vamos a probar el lema auxiliar \<open>ex3_pcp_SinE_DIS\<close>. Este demuestra que si \<open>C\<close> es 
+  una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close>
+  y sea \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, se verifica que o bien 
+  \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S \<in> C'\<close>. Dicha prueba se realizará por reducción al absurdo. Para
+  ello precisaremos de dos lemas previos que nos permitan llegar a una contradicción: 
+  \<open>ex3_pcp_SinE_DIS_auxEx\<close> y \<open>ex3_pcp_SinE_DIS_auxFalse\<close>.
 
-\comentario{\<questiondown>Qué condición? Expresar en lenguaje natural. Los resultados previos también hay
-que expresarlos en lenguaje natural.}
-
-\<close>
+  En primer lugar, veamos la demostración del lema \<open>ex3_pcp_SinE_DIS_auxEx\<close>. Este prueba que dada 
+  \<open>C\<close> una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
+  \<open>S \<in> E\<close> y sea \<open>F\<close> es una fórmula de tipo \<open>\<beta>\<close> de componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, si consideramos \<open>S\<^sub>1\<close> y 
+  \<open>S\<^sub>2\<close> subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y \<open>F \<in> S\<^sub>2\<close>, entonces existe una 
+  fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que se verifica que tanto \<open>{I} \<union> S\<^sub>1\<close> como \<open>{I} \<union> S\<^sub>2\<close> están en \<open>C\<close>.\<close>
 
 lemma ex3_pcp_SinE_DIS_auxEx:
   assumes "pcp C"
@@ -2772,6 +2774,12 @@ proof -
     using \<open>I \<in> {G,H}\<close> by (rule bexI)
 qed
 
+text \<open>Finalmente, el lema \<open>ex3_pcp_SinE_DIS_auxFalse\<close> prueba que dada una colección \<open>C\<close> con la 
+  propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close> y sea \<open>F\<close> es una 
+  fórmula de tipo \<open>\<beta>\<close> de componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, si consideramos \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> subconjuntos finitos 
+  cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close>, \<open>F \<in> S\<^sub>2\<close>, \<open>{\<beta>\<^sub>1} \<union> S\<^sub>1 \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> S\<^sub>2 \<notin> C\<close>, llegamos a 
+  una contradicción.\<close>
+
 lemma ex3_pcp_SinE_DIS_auxFalse:
   assumes "pcp C" 
           "subset_closed C"
@@ -2846,12 +2854,11 @@ proof -
     using Ex by (rule notE)
 qed
 
-text \<open>Además, para la prueba de la condición necesitaremos los siguientes lemas auxiliares en
-  Isabelle.
-
-\comentario{\<questiondown>La condición?}
-
-\<close>
+text \<open>Una vez introducidos los lemas anteriores, podemos probar el lema \<open>ex3_pcp_SinE_DIS\<close> que
+  demuestra que si \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada 
+  bajo subconjuntos, \<open>S \<in> E\<close> y sea \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, se 
+  verifica que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o bien \<open>{\<beta>\<^sub>2} \<union> S \<in> C'\<close>. Además, para dicha prueba 
+  necesitaremos los siguientes lemas auxiliares en Isabelle.\<close>
 
 lemma sall_simps_not_all:
   assumes "\<not>(\<forall>x \<subseteq> A. P x)"
@@ -2861,8 +2868,7 @@ lemma sall_simps_not_all:
 lemma subexE: "\<exists>x\<subseteq>A. P x \<Longrightarrow> (\<And>x. x\<subseteq>A \<Longrightarrow> P x \<Longrightarrow> Q) \<Longrightarrow> Q"
   by blast
 
-text \<open>De este modo, podemos demostrar detalladamente en Isabelle la condición para fórmulas de tipo
-  \<open>\<beta>\<close>.\<close>
+text \<open>De este modo, procedamos con la demostración detallada de \<open>ex3_pcp_SinE_DIS\<close>.\<close>
 
 lemma ex3_pcp_SinE_DIS:
   assumes "pcp C"
@@ -3014,10 +3020,21 @@ proof -
   qed
 qed
 
-text \<open>Probadas las condiciones para fórmulas de tipo \<open>\<alpha>\<close> y \<open>\<beta>\<close>, podemos dar la demostración
-  detallada completa para el caso en que \<open>S \<in> E\<close>.
-\comentario{Lo mismo que en los comentarios previos}
-\<close>
+text \<open>Probados los lemas \<open>ex3_pcp_SinE_CON\<close> y \<open>ex3_pcp_SinE_DIS\<close>, podemos demostrar que \<open>C' = C \<union> E\<close> 
+  verifica las condiciones del lema de caracterización de la propiedad de consistencia proposicional 
+  para el caso en que \<open>S \<in> E\<close>, formalizado como \<open>ex3_pcp_SinE\<close>. Dicho lema prueba que, si \<open>C\<close> es 
+  una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, y sea 
+  \<open>S \<in> E\<close>, se verifican las condiciones:
+  \begin{itemize}
+    \item \<open>\<bottom> \<notin> S\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \<open>p \<in> S\<close> y \<open>\<not> p \<in> S\<close>.
+    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+    pertenece a \<open>S\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
+    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+    pertenece a \<open>S\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S\<close> pertenece a \<open>C'\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> S\<close> pertenece a \<open>C'\<close>.
+  \end{itemize}\<close>
 
 lemma ex3_pcp_SinE:
   assumes "pcp C"
@@ -3134,13 +3151,14 @@ proof -
     using C1 C2 C3 C4 by (iprover intro: conjI)
 qed
 
-text \<open>En conclusión, la prueba detallada total en Isabelle que demuestra que la extensión \<open>C'\<close> 
-  verifica la propiedad de consistencia proposicional es la siguiente.\<close>
+text \<open>En conclusión, la prueba detallada completa en Isabelle que demuestra que la extensión \<open>C'\<close> 
+  verifica la propiedad de consistencia proposicional dada una colección \<open>C\<close> que también la
+  verifique y sea cerrada bajo subconjuntos es la siguiente.\<close>
 
 lemma ex3_pcp:
   assumes "pcp C"
           "subset_closed C"
-        shows "pcp ((extensionFin C))"
+        shows "pcp (extensionFin C)"
   unfolding pcp_alt
 proof (rule ballI)
   have PCP:"\<forall>S \<in> C.
