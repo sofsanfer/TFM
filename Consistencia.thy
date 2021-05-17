@@ -3672,7 +3672,23 @@ text \<open>
     cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos
     de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión está en
     \<open>C\<close>.
-  \end{lema}\<close>
+  \end{lema}
+
+  \begin{demostracion}
+    Por definición, como \<open>C\<close> es de carácter finito se verifica que para todo conjunto, son
+    equivalentes:
+    \begin{enumerate}
+      \item El conjunto pertenece a \<open>C\<close>.
+      \item Todo subconjunto finito suyo pertenece a \<open>C\<close>.
+    \end{enumerate}
+
+    De este modo, para demostrar que el límite de la sucesión \<open>{S\<^sub>n}\<close> pertenece a \<open>C\<close>, basta probar
+    que todo subconjunto finito suyo está en \<open>C\<close>.
+
+    Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por resultados anteriores, existe un 
+    \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>. Por tanto, como \<open>S\<^sub>k \<in> C\<close> para todo \<open>k \<in> \<nat>\<close> y \<open>C\<close> es cerrada bajo
+    subconjuntos, por definición se tiene que \<open>S' \<in> C\<close>, como queríamos demostrar.
+  \end{demostracion}\<close>
 
 lemma pcp_lim_in_detallada:
   assumes "pcp C"
@@ -3687,14 +3703,6 @@ proof -
     by (rule allE)
   have SC:"\<forall>S \<in> C. \<forall>S'\<subseteq>S. S' \<in> C"
     using assms(3) unfolding subset_closed_def by this
-  have "\<forall>n. pcp_seq C S n \<in> C" 
-  proof (rule allI)
-    fix n
-    show "pcp_seq C S n \<in> C" 
-      using assms(1) assms(2) by (rule pcp_seq_in)
-  qed
-  then have "\<forall>m. \<Union>{pcp_seq C S n|n. n \<le> m} \<in> C" 
-    unfolding pcp_seq_UN by this
   have FC2:"\<forall>S' \<subseteq> pcp_lim C S. finite S' \<longrightarrow> S' \<in> C"
   proof (rule sallI)
     fix S' :: "'a formula set"
@@ -3704,14 +3712,14 @@ proof -
       assume "finite S'"
       then have EX:"\<exists>k. S' \<subseteq> pcp_seq C S k" 
         using \<open>S' \<subseteq> pcp_lim C S\<close> by (rule finite_pcp_lim_EX)
-      obtain n where "S' \<subseteq> pcp_seq C S n"
+      obtain k where "S' \<subseteq> pcp_seq C S k"
         using EX by (rule exE)
-      have "pcp_seq C S n \<in> C"
+      have "pcp_seq C S k \<in> C"
         using assms(1) assms(2) by (rule pcp_seq_in)
-      have "\<forall>S' \<subseteq> (pcp_seq C S n). S' \<in> C"
-        using SC \<open>pcp_seq C S n \<in> C\<close> by (rule bspec)
+      have "\<forall>S' \<subseteq> (pcp_seq C S k). S' \<in> C"
+        using SC \<open>pcp_seq C S k \<in> C\<close> by (rule bspec)
       thus "S' \<in> C"
-        using \<open>S' \<subseteq> pcp_seq C S n\<close> by (rule sspec)
+        using \<open>S' \<subseteq> pcp_seq C S k\<close> by (rule sspec)
     qed
   qed
   show "pcp_lim C S \<in> C" 
@@ -3757,7 +3765,28 @@ text \<open>
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
     de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión es un elemento maximal 
     de \<open>C\<close>.
-  \end{lema}\<close>
+  \end{lema}
+
+  \begin{demostracion}
+    Por definición de elemento maximal, basta probar que para cualquier conjunto \<open>K \<in> C\<close> tal que el 
+    límite de la sucesión está contenido en él, verifica que \<open>K\<close> coincide con el límite.
+
+    La demostración se realizará por reducción al absurdo. Consideremos un conjunto \<open>K \<in> C\<close> tal que 
+    el límite de la sucesión \<open>{S\<^sub>n}\<close> está contenido estrictamente en \<open>K\<close>. De este modo, existe una
+    fórmula \<open>F\<close> tal que \<open>F \<in> K\<close> y \<open>F\<close> no está en el límite. Por notación, supongamos que \<open>F\<close> es la 
+    \<open>n\<close>-ésima fórmula según la enumeración de la definición \<open>1.4.1\<close> utilizada para construir la
+    sucesión. Hemos probado que todo elemento de la sucesión está contenido en el límite, luego en
+    particular obtenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1\<close> está contenido en el límite. De este modo, como \<open>F\<close> no pertenece 
+    al límite, por la contención anterior es claro que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. Además, \<open>{F} \<union> S\<^sub>n \<notin> C\<close> ya que,
+    en caso contrario, por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, 
+    lo que contradice que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. 
+
+    Por otro lado, como \<open>S\<^sub>n\<close> también está contenida en el límite que, a su vez, está contenido en 
+    \<open>K\<close>, se obtiene por transitividad que \<open>S\<^sub>n \<subseteq> K\<close>. Además, como \<open>F \<in> K\<close>, se verifica que 
+    \<open>{F} \<union> S\<^sub>n \<subseteq> K\<close>. Como \<open>C\<close> es una colección cerrada bajo subconjuntos por hipótesis y \<open>K \<in> C\<close>, 
+    por definición se tiene que \<open>{F} \<union> S\<^sub>n \<in> C\<close>, llegando así a una contradicción con lo demostrado 
+    anteriormente.
+  \end{demostracion}\<close>
 
 lemma cl_max_detallada:
   assumes "pcp C"
@@ -3790,7 +3819,27 @@ proof (rule ccontr)
   then have 1:"F \<notin> pcp_seq C S (Suc (to_nat F))"
     using \<open>F \<notin> pcp_lim C S\<close> by (rule mt)
   have 2: "insert F (pcp_seq C S (to_nat F)) \<notin> C" 
-    using 1  by (simp add: Let_def split: if_splits) (*Pendiente*)
+  proof (rule ccontr)
+    assume "\<not>(insert F (pcp_seq C S (to_nat F)) \<notin> C)"
+    then have "insert F (pcp_seq C S (to_nat F)) \<in> C"
+      by (rule notnotD)
+    then have C:"insert (from_nat (to_nat F)) (pcp_seq C S (to_nat F)) \<in> C"
+      by (simp only: from_nat_to_nat)
+    have "pcp_seq C S (Suc (to_nat F)) = (let Sn = pcp_seq C S (to_nat F); 
+          Sn1 = insert (from_nat (to_nat F)) Sn in if Sn1 \<in> C then Sn1 else Sn)" 
+      by (simp only: pcp_seq.simps(2))
+    then have SucDef:"pcp_seq C S (Suc (to_nat F)) = (if insert (from_nat (to_nat F)) (pcp_seq C S (to_nat F)) \<in> C 
+          then insert (from_nat (to_nat F)) (pcp_seq C S (to_nat F)) else pcp_seq C S (to_nat F))" 
+      by (simp only: Let_def)
+    then have "pcp_seq C S (Suc (to_nat F)) = insert (from_nat (to_nat F)) (pcp_seq C S (to_nat F))" 
+      using C by (simp only: if_True)
+    then have "pcp_seq C S (Suc (to_nat F)) = insert F (pcp_seq C S (to_nat F))"
+      by (simp only: from_nat_to_nat)
+    then have "F \<in> pcp_seq C S (Suc (to_nat F))"
+      by (simp only: insertI1)
+    show "False"
+      using \<open>F \<notin> pcp_seq C S (Suc (to_nat F))\<close> \<open>F \<in> pcp_seq C S (Suc (to_nat F))\<close> by (rule notE)
+  qed
   have "pcp_seq C S (to_nat F) \<subseteq> pcp_lim C S"
     by (rule pcp_seq_sub)
   then have "pcp_seq C S (to_nat F) \<subseteq> K"
@@ -3826,51 +3875,39 @@ proof (rule ccontr)
 qed
 
 text \<open>\comentario{Es una adaptación concreta del lema anterior para el caso en
-  que K se forme añadiendo 1 elemento o 2 al límite.}\<close>
+  que K se forme añadiendo 1 elemento o 2 al límite.}
+
+  \comentario{Añadir nexo explicando que es una consecuencia inmediata de ser 
+  elemento maximal.}
+  
+  \begin{corolario}
+    Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
+    es cerrada bajo subconjuntos, \<open>S\<close> un conjunto, \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
+    de \<open>S\<close> según la definición \<open>1.4.1\<close> y \<open>F\<close> una fórmula proposicional. Entonces, si 
+    $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
+    $F \in \bigcup_{n = 0}^{\infty} S_{n}$   
+  \end{corolario}\<close>
 
 lemma cl_max'_detallada:
   assumes "pcp C"
   assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-        "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 proof -
-  show "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-  proof -
-    assume "insert F (pcp_lim C S) \<in> C"
-    have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
-      by (rule subset_insertI) 
-    have "pcp_lim C S = insert F (pcp_lim C S)"
-      using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
-    then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
-      by (rule equalityD2)
-    then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
-      by (simp only: insert_subset)
-    thus "F \<in> pcp_lim C S"
-      by (rule conjunct1)
-  qed
-  show "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
-  proof (rule conjI)
-    assume "insert F (insert G (pcp_lim C S)) \<in> C"
-    have "pcp_lim C S \<subseteq> insert G (pcp_lim C S)"
-      by (rule subset_insertI)
-    then have "pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))"
-      by (rule subset_insertI2)
-    have "pcp_lim C S = insert F (insert G (pcp_lim C S))"
-      using assms(1) assms(2) \<open>insert F (insert G (pcp_lim C S)) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))\<close> by (rule cl_max)
-    then have "insert F (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S"
-      by (rule equalityD2)
-    then have 1:"F \<in> pcp_lim C S \<and> (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S"
-      by (simp only: insert_subset)
-    thus "F \<in> pcp_lim C S"
-      by (rule conjunct1)
-    have "insert G (pcp_lim C S) \<subseteq> pcp_lim C S"
-      using 1 by (rule conjunct2)
-    then have "G \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
-      by (simp only: insert_subset)
-    thus "G \<in> pcp_lim C S"
-      by (rule conjunct1)
-  qed
+  assume "insert F (pcp_lim C S) \<in> C"
+  have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
+    by (rule subset_insertI) 
+  have "pcp_lim C S = insert F (pcp_lim C S)"
+    using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
+  then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
+    by (rule equalityD2)
+  then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
+    by (simp only: insert_subset)
+  thus "F \<in> pcp_lim C S"
+    by (rule conjunct1)
 qed
+
+text \<open>\comentario{En Isabelle lo formalizo como si fuesen 1 y 2 elementos que
+  añadir ya que me sirve en las demostraciones.}\<close>
 
 lemma cl_max':
   assumes c: "pcp C"
