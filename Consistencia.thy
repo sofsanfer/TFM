@@ -3886,7 +3886,16 @@ text \<open>\comentario{Es una adaptación concreta del lema anterior para el ca
     de \<open>S\<close> según la definición \<open>1.4.1\<close> y \<open>F\<close> una fórmula proposicional. Entonces, si 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
     $F \in \bigcup_{n = 0}^{\infty} S_{n}$   
-  \end{corolario}\<close>
+  \end{corolario}
+
+  \begin{demostracion}
+    Como \<open>C\<close> es una colección que verifica la propiedad de consistencia proposicional y es cerrada 
+    bajo subconjuntos, se tiene que el límite $bigcup_{n = 0}^{\infty} S_{n}$ es maximal en \<open>C\<close>. Por 
+    lo tanto, si se suponemos que $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como el límite 
+    está contenido en dicho conjunto, se cumple que 
+    $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$, luego \<open>F\<close> 
+    pertenece al límite, como queríamos demostrar.
+  \end{demostracion}\<close>
 
 lemma cl_max'_detallada:
   assumes "pcp C"
