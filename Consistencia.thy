@@ -4010,9 +4010,16 @@ proof -
 qed
 
 text \<open>
-\begin{lema}
-  Todo subconjunto de un conjunto de fórmulas satisfacible es satisfacible.
-\end{lema}\<close>
+  \begin{lema}
+    Todo subconjunto de un conjunto de fórmulas satisfacible es satisfacible.
+  \end{lema}
+
+  \begin{demostracion}
+    Sea \<open>B\<close> un conjunto de fórmulas satisfacible y \<open>A \<subseteq> B\<close>. Veamos que \<open>A\<close> es satisfacible.
+    Por definición, como \<open>B\<close> es satisfacible, existe una interpretación \<open>\<A>\<close> que es modelo de cada 
+    fórmula de \<open>B\<close>. Como \<open>A \<subseteq> B\<close>, en particular \<open>\<A>\<close> es modelo de toda fórmula de \<open>A\<close>. Por tanto, 
+    \<open>A\<close> es satisfacible, ya que existe una interpretación que es modelo de todas sus fórmulas.
+  \end{demostracion}\<close>
 
 lemma sat_mono:
   assumes "A \<subseteq> B"
@@ -4105,7 +4112,6 @@ theorem pcp_sat:
   assumes el: "S \<in> C"
   shows "sat S"
 proof -
-  note [[show_types]]
   from c obtain Ce where 
       "C \<subseteq> Ce" "pcp Ce" "subset_closed Ce" "finite_character Ce" 
       using ex1[where 'a='a] ex2[where 'a='a] ex3[where 'a='a]
