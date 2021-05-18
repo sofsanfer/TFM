@@ -3664,9 +3664,20 @@ qed simp
 
 section \<open>El teorema de existencia de modelo\<close>
 
-text \<open>\comentario{Añadir explicación}\<close>
+text \<open>Con lo presentado en los apartados anteriores, en esta sección demostraremos finalmente el 
+  \<open>Teorema de Existencia de Modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
+  una colección que verifique la propiedad de consistencia proposicional es satisfacible. Para ello, 
+  considerando una colección \<open>C\<close> cualquiera y \<open>S \<in> C\<close>, probaremos inicialmente que el límite de la
+  sucesión formada a partir de \<open>C\<close> y \<open>S\<close> como se indica en la definición \<open>1.4.1\<close> pertenece a \<open>C\<close>, de
+  modo que podremos aplicar los resultados previos sobre conjuntos pertenecientes a una colección
+  que verifique la propiedad de consistencia proposicional. Por otro lado, demostraremos que dicho
+  límite se trata de un conjunto satisfacible por el \<open>lema de Hintikka\<close>. Finalmente, como \<open>S\<close> está 
+  contenido en el límite, quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla del 
+  límite por contención.\<close>
 
-text \<open>
+text \<open>Probemos inicialmente que el límite de la sucesión presentada en \<open>1.4.1\<close> pertenece a la 
+  colección que lo define.
+  
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es 
     cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos
@@ -3688,9 +3699,11 @@ text \<open>
     Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por resultados anteriores, existe un 
     \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>. Por tanto, como \<open>S\<^sub>k \<in> C\<close> para todo \<open>k \<in> \<nat>\<close> y \<open>C\<close> es cerrada bajo
     subconjuntos, por definición se tiene que \<open>S' \<in> C\<close>, como queríamos demostrar.
-  \end{demostracion}\<close>
+  \end{demostracion}
 
-lemma pcp_lim_in_detallada:
+  En Isabelle se formaliza y demuestra detalladamente como sigue.\<close>
+
+lemma
   assumes "pcp C"
           "S \<in> C"
           "subset_closed C"
@@ -3726,6 +3739,8 @@ proof -
     using FC1 FC2 by (rule forw_subst)
 qed
 
+text \<open>Por otra parte, podemos dar una prueba automática del resultado.\<close>
+
 lemma pcp_lim_in:
   assumes c: "pcp C"
   and el: "S \<in> C"
@@ -3758,7 +3773,8 @@ proof -
   thus "?cl \<in> C" using fc unfolding finite_character_def by blast
 qed
 
-text \<open>
+text \<open>Probemos que, además, el límite de las sucesión definida en \<open>1.4.1\<close> se trata de un elemento 
+  maximal de la colección que lo define.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
@@ -3786,9 +3802,11 @@ text \<open>
     \<open>{F} \<union> S\<^sub>n \<subseteq> K\<close>. Como \<open>C\<close> es una colección cerrada bajo subconjuntos por hipótesis y \<open>K \<in> C\<close>, 
     por definición se tiene que \<open>{F} \<union> S\<^sub>n \<in> C\<close>, llegando así a una contradicción con lo demostrado 
     anteriormente.
-  \end{demostracion}\<close>
+  \end{demostracion}
 
-lemma cl_max_detallada:
+  Su formalización y prueba detallada en Isabelle/HOL se muestran a continuación.\<close>
+
+lemma
   assumes "pcp C"
           "subset_closed C"
           "K \<in> C"
@@ -3856,6 +3874,8 @@ proof (rule ccontr)
     using 2 3 by (rule notE)
 qed
 
+text \<open>Análogamente a resultados anteriores, veamos su prueba automática.\<close>
+
 lemma cl_max:
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
@@ -3874,18 +3894,17 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
-text \<open>\comentario{Es una adaptación concreta del lema anterior para el caso en
-  que K se forme añadiendo 1 elemento o 2 al límite.}
-
-  \comentario{Añadir nexo explicando que es una consecuencia inmediata de ser 
-  elemento maximal.}
+text \<open>A continuación veamos un resultado sobre el límite de la sucesión de \<open>1.4.1\<close> que es 
+  consecuencia de que dicho límite sea un elemento maximal de la colección que lo define.
   
   \begin{corolario}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto, \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
-    de \<open>S\<close> según la definición \<open>1.4.1\<close> y \<open>F\<close> una fórmula proposicional. Entonces, si 
+    de \<open>S\<close> según la definición \<open>1.4.1\<close>, \<open>F\<close> y \<open>G\<close> fórmulas proposicionales. Entonces, si 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
-    $F \in \bigcup_{n = 0}^{\infty} S_{n}$   
+    $F \in \bigcup_{n = 0}^{\infty} S_{n}$. De hecho, si 
+    $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se tiene que
+    $F \in \bigcup_{n = 0}^{\infty} S_{n}$ y $G \in \bigcup_{n = 0}^{\infty} S_{n}$.
   \end{corolario}
 
   \begin{demostracion}
@@ -3895,28 +3914,61 @@ text \<open>\comentario{Es una adaptación concreta del lema anterior para el ca
     está contenido en dicho conjunto, se cumple que 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$, luego \<open>F\<close> 
     pertenece al límite, como queríamos demostrar.
-  \end{demostracion}\<close>
 
-lemma cl_max'_detallada:
+    En efecto, si suponemos que $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como
+    el límite es maximal en \<open>C\<close> y está contenido en $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n}$,
+    se tiene que coincide con dicho conjunto. Por tanto, es claro que tanto \<open>F\<close> como \<open>G\<close> pertenecen
+    al límite.
+  \end{demostracion}
+
+  Veamos su formalización y prueba detallada en Isabelle/HOL.\<close>
+
+lemma
   assumes "pcp C"
   assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+        "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 proof -
-  assume "insert F (pcp_lim C S) \<in> C"
-  have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
-    by (rule subset_insertI) 
-  have "pcp_lim C S = insert F (pcp_lim C S)"
-    using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
-  then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
-    by (rule equalityD2)
-  then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
-    by (simp only: insert_subset)
-  thus "F \<in> pcp_lim C S"
-    by (rule conjunct1)
+  show "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
+  proof -
+    assume "insert F (pcp_lim C S) \<in> C"
+    have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
+      by (rule subset_insertI) 
+    have "pcp_lim C S = insert F (pcp_lim C S)"
+      using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
+    then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
+      by (rule equalityD2)
+    then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
+      by (simp only: insert_subset)
+    thus "F \<in> pcp_lim C S"
+      by (rule conjunct1)
+  qed
+next
+  show "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
+  proof (rule conjI)
+    assume "insert F (insert G (pcp_lim C S )) \<in> C"
+    have "pcp_lim C S \<subseteq> insert G (pcp_lim C S)"
+      by (rule subset_insertI)
+    then have "pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))"
+      by (rule subset_insertI2)
+    have "pcp_lim C S = insert F (insert G (pcp_lim C S))" 
+      using assms(1) assms(2) \<open>insert F (insert G (pcp_lim C S)) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))\<close> by (rule cl_max)
+    then have "insert F (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S" 
+      by (rule equalityD2)
+    then have 1:"F \<in> pcp_lim C S \<and> (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S" 
+      by (simp only: insert_subset)
+    thus "F \<in> pcp_lim C S" 
+      by (rule conjunct1)
+    have "insert G (pcp_lim C S) \<subseteq> pcp_lim C S" 
+      using 1 by (rule conjunct2)
+    then have "G \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S" 
+      by (simp only: insert_subset)
+    thus "G \<in> pcp_lim C S" 
+      by (rule conjunct1)
+  qed
 qed
 
-text \<open>\comentario{En Isabelle lo formalizo como si fuesen 1 y 2 elementos que
-  añadir ya que me sirve en las demostraciones.}\<close>
+text \<open>Mostremos su demostración automática.\<close>
 
 lemma cl_max':
   assumes c: "pcp C"
@@ -3933,7 +3985,7 @@ text \<open>
   es un conjunto de Hintikka.
 \end{lema}\<close>
 
-lemma pcp_lim_Hintikka_detallada:
+lemma
   assumes "pcp C"
   assumes "subset_closed C"
   assumes "finite_character C"
@@ -4098,7 +4150,7 @@ text\<open>
     consistencia proposicional es satisfacible. 
   \end{teorema}\<close>
 
-theorem pcp_sat_detallada:
+theorem
   fixes S :: "'a :: countable formula set"
   assumes "pcp C"
   assumes "S \<in> C"
