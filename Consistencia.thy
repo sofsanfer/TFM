@@ -3983,7 +3983,67 @@ text \<open>
   es cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de
   conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión
   es un conjunto de Hintikka.
-\end{lema}\<close>
+\end{lema}
+
+\begin{demostracion}
+  Para facilitar la lectura, vamos a notar por \<open>L\<^sub>S\<^sub>C\<close> al límite de la sucesión \<open>{S\<^sub>n}\<close> descrita 
+  en el enunciado.
+
+  Por resultados anteriores, se tiene que \<open>L\<^sub>S\<^sub>C \<in> C\<close>. Además, por ser \<open>C\<close> una colección que
+  verifica la propiedad de consistencia proposicional, por el lema de caracterización de dicha
+  propiedad mediante notación uniforme, se cumplen las siguientes condiciones para \<open>L\<^sub>S\<^sub>C\<close>:
+
+  \begin{itemize}
+    \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
+    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+    pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
+    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+    pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close> o 
+    bien \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
+  \end{itemize}
+
+  Veamos que \<open>L\<^sub>S\<^sub>C\<close> es un conjunto de Hintikka probando que cumple las condiciones del
+  lema de caracterización de los conjuntos de Hintikka mediante notación uniforme, es decir,
+  \<open>L\<^sub>S\<^sub>C\<close> verifica:
+
+  \begin{itemize}
+    \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
+    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
+    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
+    que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
+    que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+    a \<open>L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2\<close> pertenece a \<open>L\<^sub>S\<^sub>C\<close>.
+  \end{itemize} 
+
+  Observemos que las dos primeras condiciones coinciden con las obtenidas anteriormente para \<open>L\<^sub>S\<^sub>C\<close> 
+  por el lema de caracterización de la propiedad de consistencia proposicional mediante notación
+  uniforme. Veamos que, en efecto, se cumplen el resto de condiciones.
+
+  En primer lugar, probemos que para una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
+  \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica tanto \<open>\<alpha>\<^sub>1\<close> como \<open>\<alpha>\<^sub>2\<close> pertenecen a \<open>L\<^sub>S\<^sub>C\<close>. Por la tercera condición obtenida 
+  anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
+  proposicional mediante notación uniforme, se cumple que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
+  \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
+  por el corolario \<open>añadir ref\<close> se tiene que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
+
+  Por último, demostremos que para una fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
+  \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Por la cuarta condición obtenida 
+  anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
+  proposicional mediante notación uniforme, se cumple que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
+  \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, si suponemos que \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, como \<open>C\<close> tiene la propiedad de 
+  consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>añadir ref\<close> se tiene 
+  que \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close>, luego se obtiene que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Si suponemos que 
+  \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, se observa fácilmente que llegamos a la misma conclusión. Por lo tanto, queda 
+  probado el resultado.
+\end{demostracion}
+
+\comentario{Añadir referencias corolario.}
+
+  Veamos su formalización y prueba detallada en Isabelle.\<close>
 
 lemma
   assumes "pcp C"
@@ -4085,6 +4145,8 @@ proof (rule Hintikka_alt2)
     using H1 H2 H3 H4 by (iprover intro: conjI)
 qed
 
+text \<open>Del mismo modo, podemos probar el resultado de manera automática como sigue.\<close>
+
 lemma pcp_lim_Hintikka:
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
@@ -4107,7 +4169,11 @@ proof -
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
 qed
 
-text \<open>
+text \<open>Finalmente, vamos a demostrar el \<open>Teorema de Existencia de Modelo\<close>. Probaremos que un conjunto 
+  de fórmulas proposicionales perteneciente a una colección con la propiedad de consistencia 
+  proposicional es satisfacible mediante un resultado previo que indica que la satisfacibilidad de 
+  conjuntos se hereda mediante la contención.
+
   \begin{lema}
     Todo subconjunto de un conjunto de fórmulas satisfacible es satisfacible.
   \end{lema}
@@ -4117,7 +4183,9 @@ text \<open>
     Por definición, como \<open>B\<close> es satisfacible, existe una interpretación \<open>\<A>\<close> que es modelo de cada 
     fórmula de \<open>B\<close>. Como \<open>A \<subseteq> B\<close>, en particular \<open>\<A>\<close> es modelo de toda fórmula de \<open>A\<close>. Por tanto, 
     \<open>A\<close> es satisfacible, ya que existe una interpretación que es modelo de todas sus fórmulas.
-  \end{demostracion}\<close>
+  \end{demostracion}
+
+  Su prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma sat_mono:
   assumes "A \<subseteq> B"
@@ -4144,11 +4212,39 @@ proof -
     by (simp only: exI)
 qed
 
-text\<open>
+text\<open>De este modo, procedamos finalmente con la demostración del teorema.
+
   \begin{teorema}[Teorema de Existencia de Modelo]
     Todo conjunto de fórmulas perteneciente a una colección que verifique la propiedad de
     consistencia proposicional es satisfacible. 
-  \end{teorema}\<close>
+  \end{teorema}
+
+  \begin{demostracion}
+    Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales que verifica la propiedad de 
+    consistencia proposicional y \<open>S \<in> C\<close>. Vamos a probar que \<open>S\<close> es satisfacible.
+
+    En primer lugar, como \<open>C\<close> verifica la propiedad de consistencia proposicional, por el lema 
+    \<open>(añadir ref. ex1)\<close> podemos extenderla a una colección \<open>C'\<close> que también verifique la propiedad y
+    sea cerrada bajo subconjuntos. De este modo, por el lema \<open>(añadir ref ex3)\<close>, como la extensión 
+    \<open>C'\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo 
+    subconjuntos, podemos extenderla a otra colección \<open>C''\<close> que verifique la propiedad de
+    consistencia proposicional y sea de carácter finito. De este modo, por la transitividad de la 
+    contención, se observa que \<open>C''\<close> es una extensión de \<open>C\<close>, luego \<open>S \<in> C''\<close> por hipótesis. 
+    Por otro lado, por el lema \<open>(añadir ref ex2)\<close>, como \<open>C''\<close> es de carácter finito, se tiene que es 
+    cerrada bajo subconjuntos. En suma, \<open>C''\<close> es una colección que verifica la propiedad de
+    consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito. Luego, por el 
+    lema \<open>(añadir ref pcp_lim_Hintikka)\<close>, el límite de la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a 
+    partir de \<open>S\<close> según la definición \<open>1.4.1\<close> es un conjunto de Hintikka. Por tanto, por el 
+    \<open>teorema de Hintikka\<close>, se trata de un conjunto satisfacible. Además, puesto que para todo 
+    \<open>n \<in> \<nat>\<close> se tiene que \<open>S\<^sub>n\<close> está contenido en el límite, en particular el conjunto \<open>S\<^sub>0\<close> está 
+    contenido en él. Por definición de la sucesión, dicho conjunto coincide con \<open>S\<close>. Por tanto, como 
+    \<open>S\<close> está contenido en el límite que es un conjunto satisfacible, queda demostrada la
+    satisfacibilidad de \<open>S\<close>.
+  \end{demostracion}
+
+  \comentario{Añadir referencias.}
+
+  Mostremos su formalización y demostración detallada en Isabelle.\<close>
 
 theorem
   fixes S :: "'a :: countable formula set"
@@ -4190,10 +4286,6 @@ proof -
     using Pcp SC FC \<open>S \<in> Ce\<close> by (rule pcp_lim_Hintikka)
   then have "sat (pcp_lim Ce S)"
     by (rule Hintikkaslemma)
-  then have E3:"\<exists>\<A>. \<forall>F \<in> (pcp_lim Ce S). \<A> \<Turnstile> F"
-    by (simp only: sat_def)
-  obtain \<A> where H3:"\<forall>F \<in> (pcp_lim Ce S). \<A> \<Turnstile> F" 
-    using E3 by (rule exE)
   have "pcp_seq Ce S 0 = S"
     by (simp only: pcp_seq.simps(1))
   have "pcp_seq Ce S 0 \<subseteq> pcp_lim Ce S"
@@ -4203,6 +4295,8 @@ proof -
   thus "sat S"
     using \<open>sat (pcp_lim Ce S)\<close> by (rule sat_mono)
 qed
+
+text \<open>Finalmente, demostremos el teorema de manera automática.\<close>
 
 theorem pcp_sat:
   fixes S :: "'a :: countable formula set"
