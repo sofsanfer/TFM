@@ -3233,7 +3233,7 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
   proposicionales a partir de una colección y un conjunto de la misma.
 
 \begin{definicion}
-  Sea \<open>C\<close> una colección, \<open>S\<close> un conjunto perteneciente a ella y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de 
+  Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de 
   las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de S\<close> como sigue:
 
   $S_{0} = S$
@@ -3252,7 +3252,7 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
   definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, 
   nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
 
-  Por otro lado, puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
+  Puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
   recursiva sobre la estructura recursiva de los números naturales, se formalizará en Isabelle
   mediante el tipo de funciones primitivas recursivas de la siguiente manera.\<close>
 
@@ -3264,7 +3264,7 @@ primrec pcp_seq where
 text\<open>Veamos el primer resultado sobre dichas sucesiones.
 
   \begin{lema}
-    Sea \<open>C\<close> una colección de conjuntos con la propiedad de consistencia proposicional, \<open>S \<in> C\<close> y 
+    Sea \<open>C\<close> una colección de conjuntos con la propiedad de consistencia proposicional,\\ \<open>S \<in> C\<close> y 
     \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> construida según la definición \<open>1.4.1\<close>. 
     Entonces, para todo \<open>n \<in> \<nat>\<close> se verifica que \<open>S\<^sub>n \<in> C\<close>.
   \end{lema}
@@ -3344,7 +3344,7 @@ text \<open>Procedamos con la demostración del lema.
     Sea una colección de conjuntos \<open>C\<close>, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
     \<open>S\<close> según la definición \<open>1.4.1\<close>. Para probar que \<open>{S\<^sub>n}\<close> es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> 
     para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar dos casos para todo 
-    \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>, por definición 
+    \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que\\ \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>, por definición 
     tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario, si 
     \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
     por la propiedad reflexiva de la contención de conjuntos. 
@@ -3394,7 +3394,7 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
-  \<open>S\<close> construida según la definición \<open>1.4.1\<close>. Entonces, para todos \<open>n\<close>,\\\<open>m \<in> \<nat>\<close> 
+  \<open>S\<close> construida según la definición \<open>1.4.1\<close>. Entonces, para todos \<open>n\<close>, \<open>m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
 
@@ -3436,7 +3436,8 @@ proof (induct m)
   then have 1:"\<Union>{pcp_seq C S n | n. n = 0} = \<Union>{pcp_seq C S 0}"
     by (simp only: image_Collect)
   show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0"
-    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 conditionally_complete_lattice_class.cSup_singleton)
+    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 
+        conditionally_complete_lattice_class.cSup_singleton)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
@@ -3452,7 +3453,8 @@ next
           \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
     by (simp only: S image_Un imageElem image_Collect)
   then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
-    by (simp only: complete_lattice_class.Sup_union_distrib conditionally_complete_lattice_class.cSup_singleton HI Un_commute)
+    by (simp only: complete_lattice_class.Sup_union_distrib 
+        conditionally_complete_lattice_class.cSup_singleton HI Un_commute)
   thus "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
     using Mon by (simp only: subset_Un_eq)
 qed
@@ -3564,7 +3566,7 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
 \begin{lema}
   Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
   definición \<open>1.4.1\<close>. Si \<open>S'\<close> es un conjunto finito tal que \<open>S' \<subseteq>\<close> $\bigcup_{n = 0}^{\infty} S_{n}$, 
-  entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
+  entonces existe un\\ \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
 \end{lema}
 
 \begin{demostracion}
@@ -3578,11 +3580,11 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   Por otra parte, sea \<open>S'\<close> un conjunto finito contenido en el límite de la sucesión de conjuntos de 
   \<open>C\<close> a partir de \<open>S\<close>, de modo que también está contenido en algún \<open>S\<^sub>k\<^sub>'\<close> para cierto \<open>k' \<in> \<nat>\<close>. Sea 
   \<open>F\<close> una fórmula cualquiera no perteneciente a \<open>S'\<close>. Supongamos que\\ \<open>{F} \<union> S'\<close> está también 
-  contenido en el límite. Probemos que \<open>{F} \<union> S'\<close> está contenido \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
+  contenido en el límite. Probemos que \<open>{F} \<union> S'\<close> está contenido en \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
 
   Como hemos supuesto que \<open>{F} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>F\<close>
   pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>F\<close> pertenece al 
-  límite, deducimos que existe un \<open>k \<in> \<nat>\<close> tal que \<open>x \<in> S\<^sub>k\<close>. Por otro lado, como \<open>S'\<close> está contenido
+  límite, deducimos que existe un \<open>k \<in> \<nat>\<close> tal que \<open>F \<in> S\<^sub>k\<close>. Por otro lado, como \<open>S'\<close> está contenido
   en el límite, por hipótesis de inducción existe algún \<open>k' \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>. El resultado 
   se obtiene considerando el máximo entre \<open>k\<close> y \<open>k'\<close>, que notaremos por \<open>k''\<close>. En efecto, por la 
   monotonía de la sucesión, se verifica que tanto \<open>S\<^sub>k\<close> como \<open>S\<^sub>k\<^sub>'\<close> están contenidos en \<open>S\<^sub>k\<^sub>'\<^sub>'\<close>. De este 
