@@ -2362,7 +2362,7 @@ text\<open>Introduzcamos el último resultado de la sección.
   otro para el caso en que \<open>S \<in> E\<close> (\<open>ex3_pcp_SinE\<close>). Por otro lado, para el último caso en que 
   \<open>S \<in> E\<close>, utilizaremos dos lemas auxiliares. El primero, formalizado como \<open>ex3_pcp_SinE_CON\<close>, 
   prueba que para \<open>C\<close> una colección con la propiedad de consistencia proposicional y cerrada bajo 
-  subconjuntos, \<open>S \<in> E\<close> y sea \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, se tiene que 
+  subconjuntos, \<open>S \<in> E\<close> y sea \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, se tiene que\\ 
   \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> S \<in> C'\<close>. El segundo lema, formalizado como \<open>ex3_pcp_SinE_DIS\<close>, prueba que para \<open>C\<close> una 
   colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close> y 
   sea \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> S \<in> C'\<close> o 
@@ -2371,7 +2371,7 @@ text\<open>Introduzcamos el último resultado de la sección.
   
   \begin{description}
     \item[\<open>Resultado \<one>\<close>] Formalizado como \<open>ex3_pcp_SinE_DIS_auxEx\<close>. Prueba que dada \<open>C\<close> una 
-    colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, \<open>S \<in> E\<close> y 
+    colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos,\\ \<open>S \<in> E\<close> y 
     sea \<open>F\<close> es una fórmula de tipo \<open>\<beta>\<close> de componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, si consideramos \<open>S\<^sub>1\<close> y \<open>S\<^sub>2\<close> 
     subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y \<open>F \<in> S\<^sub>2\<close>, entonces existe una 
     fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que se verifica que tanto \<open>{I} \<union> S\<^sub>1\<close> como \<open>{I} \<union> S\<^sub>2\<close> están en \<open>C\<close>. 
@@ -2480,7 +2480,7 @@ text \<open>Por otro lado, para probar que  \<open>C' = C \<union> E \<close>  v
   proposicional, consideraremos un conjunto \<open>S \<in> C'\<close> y utilizaremos fundamentalmente dos lemas 
   auxiliares: uno para el caso en que \<open>S \<in> C\<close> y otro para el caso en que \<open>S \<in> E\<close>. 
 
-  En primer lugar, vamos a probar el primer lema auxiliar para el caso en que \<open>S \<in> C\<close>, formalizado
+  En primer lugar, vamos a probar el primer lema auxiliar para el caso en que\\ \<open>S \<in> C\<close>, formalizado
   como \<open>ex3_pcp_SinC\<close>. Dicho lema prueba que, si \<open>C\<close> es una colección con la propiedad de 
   consistencia proposicional y cerrada bajo subconjuntos, y sea \<open>S \<in> C\<close>, se verifican
   las condiciones del lema de caracterización de la propiedad de consistencia proposicional para
@@ -2700,7 +2700,7 @@ text \<open>Seguidamente, vamos a probar el lema auxiliar \<open>ex3_pcp_SinE_DI
   En primer lugar, veamos la demostración del lema \<open>ex3_pcp_SinE_DIS_auxEx\<close>. Este prueba que dada 
   \<open>C\<close> una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
   \<open>S \<in> E\<close> y sea \<open>F\<close> es una fórmula de tipo \<open>\<beta>\<close> de componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close>, si consideramos \<open>S\<^sub>1\<close> y 
-  \<open>S\<^sub>2\<close> subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y \<open>F \<in> S\<^sub>2\<close>, entonces existe una 
+  \<open>S\<^sub>2\<close> subconjuntos finitos cualesquiera de \<open>S\<close> tales que \<open>F \<in> S\<^sub>1\<close> y\\ \<open>F \<in> S\<^sub>2\<close>, entonces existe una 
   fórmula \<open>I \<in> {\<beta>\<^sub>1,\<beta>\<^sub>2}\<close> tal que se verifica que tanto \<open>{I} \<union> S\<^sub>1\<close> como \<open>{I} \<union> S\<^sub>2\<close> están en \<open>C\<close>.\<close>
 
 lemma ex3_pcp_SinE_DIS_auxEx:
