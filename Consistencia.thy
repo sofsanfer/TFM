@@ -3801,7 +3801,7 @@ text \<open>Probemos que, además, el límite de las sucesión definida en \<ope
     Por un lado, hemos probado que todo elemento de la sucesión está contenido en el límite, luego 
     en particular obtenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1\<close> está contenido en el límite. De este modo, como \<open>F\<close> no 
     pertenece al límite, es claro que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. Además, \<open>{F} \<union> S\<^sub>n \<notin> C\<close> ya que, en caso contrario, 
-    por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, lo que contradice 
+    por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que\\ \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, lo que contradice 
     que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. 
 
     Por otro lado, como \<open>S\<^sub>n\<close> también está contenida en el límite que, a su vez, está contenido en 
@@ -3917,7 +3917,7 @@ text \<open>A continuación mostremos un resultado sobre el límite de la sucesi
 
   \begin{demostracion}
     Como \<open>C\<close> es una colección que verifica la propiedad de consistencia proposicional y es cerrada 
-    bajo subconjuntos, se tiene que el límite $bigcup_{n = 0}^{\infty} S_{n}$ es maximal en \<open>C\<close>. Por 
+    bajo subconjuntos, se tiene que el límite $\bigcup_{n = 0}^{\infty} S_{n}$ es maximal en \<open>C\<close>. Por 
     lo tanto, si suponemos que $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como el límite 
     está contenido en dicho conjunto, se cumple que 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$, luego \<open>F\<close> 
@@ -4003,7 +4003,7 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
 
     Por resultados anteriores, como \<open>C\<close> verifica la propiedad de consistencia proposicional, es
     es cerrada bajo subconjuntos y es de carácter finito, se tiene que \<open>L\<^sub>S\<^sub>C \<in> C\<close>. En particular, por 
-    verificar la propiedad de consistencia proposicional, por el lema de caracterización de dicha
+    verificar la propiedad de consistencia proposicional, por el lema de\\ caracterización de dicha
     propiedad mediante notación uniforme, se cumplen las siguientes condiciones para \<open>L\<^sub>S\<^sub>C\<close>:
 
     \begin{itemize}
@@ -4039,14 +4039,14 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     En primer lugar, probemos que para una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
     \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que tanto \<open>\<alpha>\<^sub>1\<close> como \<open>\<alpha>\<^sub>2\<close> pertenecen a \<open>L\<^sub>S\<^sub>C\<close>. Por la tercera condición 
     obtenida anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
-    proposicional mediante notación uniforme, se cumple que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
+    proposicional mediante notación uniforme, se cumple que\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
     \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
-    por el corolario \<open>1.5.3\<close> se tiene que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
+    por el corolario \<open>1.5.3\<close> se tiene que\\ \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
 
     Por último, demostremos que para una fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
     \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Por la cuarta condición obtenida 
     anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
-    proposicional mediante notación uniforme, se cumple que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
+    proposicional mediante notación uniforme, se cumple que o bien\\ \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
     \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, si suponemos que \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, como \<open>C\<close> tiene la propiedad de 
     consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>1.5.3\<close> se tiene 
     que \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close>. Por tanto, se cumple que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Si suponemos que 
