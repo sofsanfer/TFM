@@ -3346,7 +3346,7 @@ text \<open>Procedamos con la demostración del lema.
     para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar dos casos para todo 
     \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que\\ \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>, por definición 
     tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que\\ \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario, si 
-    \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que\\ \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
+    \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>, por definición se tiene que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n\<close>, obteniéndose igualmente el resultado
     por la propiedad reflexiva de la contención de conjuntos. 
   \end{demostracion}
 
@@ -3667,18 +3667,22 @@ qed simp
 section \<open>El teorema de existencia de modelo\<close>
 
 text \<open>Con lo presentado en los apartados anteriores, en esta sección demostraremos finalmente el 
-  \<open>Teorema de Existencia de Modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
+  \<open>teorema de existencia de modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
   una colección que verifique la propiedad de consistencia proposicional es satisfacible. Para ello, 
-  considerando una colección \<open>C\<close> cualquiera y \<open>S \<in> C\<close>, probaremos inicialmente que el límite de la
-  sucesión formada a partir de \<open>C\<close> y \<open>S\<close> como se indica en la definición \<open>1.4.1\<close> pertenece a \<open>C\<close>, de
-  modo que podremos aplicar los resultados previos sobre conjuntos pertenecientes a una colección
-  que verifique la propiedad de consistencia proposicional. Por otro lado, demostraremos que dicho
-  límite se trata de un conjunto satisfacible por el \<open>lema de Hintikka\<close>. Finalmente, como \<open>S\<close> está 
-  contenido en el límite, quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla del 
-  límite por contención.\<close>
+  considerando una colección \<open>C\<close> cualquiera y \<open>S \<in> C\<close>, empleando resultados anteriores extenderemos 
+  la colección a una colección \<open>C''\<close> que tenga la propiedad de consistencia proposicional, sea
+  cerrada bajo subconjuntos y sea de carácter finito. De este modo, en esta sección probaremos que el 
+  límite de la sucesión formada a partir de una colección que tenga dichas condiciones y un conjunto
+  cualquiera \<open>S\<close> como se indica en la definición \<open>1.4.1\<close> pertenece a la colección. Es más, 
+  demostraremos que dicho límite se trata de un conjunto de \<open>Hintikka\<close> luego, por el \<open>teorema de 
+  Hintikka\<close>, es satisfacible. Finalmente, como \<open>S\<close> está contenido en el límite, quedará demostrada 
+  la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención.
+
+  \comentario{Habrá que modificar el párrafo anterior al final.}\<close>
 
 text \<open>Probemos inicialmente que el límite de la sucesión presentada en \<open>1.4.1\<close> pertenece a la 
-  colección que lo define.
+  colección que lo define si esta verifica la propiedad de consistencia proposicional, es cerrada
+  bajo subconjuntos y es de carácter finito.
   
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es 
@@ -3688,8 +3692,7 @@ text \<open>Probemos inicialmente que el límite de la sucesión presentada en \
   \end{lema}
 
   \begin{demostracion}
-    Por definición, como \<open>C\<close> es de carácter finito se verifica que para todo conjunto, son
-    equivalentes:
+    Por definición, como \<open>C\<close> es de carácter finito, para todo conjunto son equivalentes:
     \begin{enumerate}
       \item El conjunto pertenece a \<open>C\<close>.
       \item Todo subconjunto finito suyo pertenece a \<open>C\<close>.
@@ -3776,28 +3779,30 @@ proof -
 qed
 
 text \<open>Probemos que, además, el límite de las sucesión definida en \<open>1.4.1\<close> se trata de un elemento 
-  maximal de la colección que lo define.
+  maximal de la colección que lo define si esta verifica la propiedad de consistencia proposicional
+  y es cerrada bajo subconjuntos.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
-    de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión es un elemento maximal 
-    de \<open>C\<close>.
+    de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión \<open>{S\<^sub>n}\<close> es un elemento 
+    maximal de \<open>C\<close>.
   \end{lema}
 
   \begin{demostracion}
-    Por definición de elemento maximal, basta probar que para cualquier conjunto \<open>K \<in> C\<close> tal que el 
-    límite de la sucesión está contenido en él, verifica que \<open>K\<close> coincide con el límite.
+    Por definición de elemento maximal, basta probar que para cualquier conjunto \<open>K \<in> C\<close> que
+    contenga al límite de la sucesión se tiene que \<open>K\<close> y el límite coinciden.
 
-    La demostración se realizará por reducción al absurdo. Consideremos un conjunto \<open>K \<in> C\<close> tal que 
-    el límite de la sucesión \<open>{S\<^sub>n}\<close> está contenido estrictamente en \<open>K\<close>. De este modo, existe una
-    fórmula \<open>F\<close> tal que \<open>F \<in> K\<close> y \<open>F\<close> no está en el límite. Por notación, supongamos que \<open>F\<close> es la 
-    \<open>n\<close>-ésima fórmula según la enumeración de la definición \<open>1.4.1\<close> utilizada para construir la
-    sucesión. Hemos probado que todo elemento de la sucesión está contenido en el límite, luego en
-    particular obtenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1\<close> está contenido en el límite. De este modo, como \<open>F\<close> no pertenece 
-    al límite, por la contención anterior es claro que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. Además, \<open>{F} \<union> S\<^sub>n \<notin> C\<close> ya que,
-    en caso contrario, por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, 
-    lo que contradice que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. 
+    La demostración se realizará por reducción al absurdo. Consideremos un conjunto \<open>K \<in> C\<close> que 
+    contenga estrictamente al límite de la sucesión \<open>{S\<^sub>n}\<close>. De este modo, existe una fórmula \<open>F\<close> tal 
+    que \<open>F \<in> K\<close> y \<open>F\<close> no está en el límite. Supongamos que \<open>F\<close> es la \<open>n\<close>-ésima fórmula según la 
+    enumeración de la definición \<open>1.4.1\<close> utilizada para construir la sucesión. 
+
+    Por un lado, hemos probado que todo elemento de la sucesión está contenido en el límite, luego 
+    en particular obtenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1\<close> está contenido en el límite. De este modo, como \<open>F\<close> no 
+    pertenece al límite, es claro que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. Además, \<open>{F} \<union> S\<^sub>n \<notin> C\<close> ya que, en caso contrario, 
+    por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, lo que contradice 
+    que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. 
 
     Por otro lado, como \<open>S\<^sub>n\<close> también está contenida en el límite que, a su vez, está contenido en 
     \<open>K\<close>, se obtiene por transitividad que \<open>S\<^sub>n \<subseteq> K\<close>. Además, como \<open>F \<in> K\<close>, se verifica que 
@@ -3896,13 +3901,14 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
-text \<open>A continuación veamos un resultado sobre el límite de la sucesión de \<open>1.4.1\<close> que es 
-  consecuencia de que dicho límite sea un elemento maximal de la colección que lo define.
+text \<open>A continuación mostremos un resultado sobre el límite de la sucesión de \<open>1.4.1\<close> que es 
+  consecuencia de que dicho límite sea un elemento maximal de la colección que lo define si esta
+  verifica la propiedad de consistencia proposicional y es cerrada bajo subconjuntos.
   
   \begin{corolario}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto, \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
-    de \<open>S\<close> según la definición \<open>1.4.1\<close>, \<open>F\<close> y \<open>G\<close> fórmulas proposicionales. Entonces, si 
+    de \<open>S\<close> según la definición \<open>1.4.1\<close> y las fórmulas proposicionales \<open>F\<close> y \<open>G\<close>. Entonces, si 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
     $F \in \bigcup_{n = 0}^{\infty} S_{n}$. De hecho, si 
     $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se tiene que
@@ -3912,15 +3918,15 @@ text \<open>A continuación veamos un resultado sobre el límite de la sucesión
   \begin{demostracion}
     Como \<open>C\<close> es una colección que verifica la propiedad de consistencia proposicional y es cerrada 
     bajo subconjuntos, se tiene que el límite $bigcup_{n = 0}^{\infty} S_{n}$ es maximal en \<open>C\<close>. Por 
-    lo tanto, si se suponemos que $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como el límite 
+    lo tanto, si suponemos que $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como el límite 
     está contenido en dicho conjunto, se cumple que 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$, luego \<open>F\<close> 
     pertenece al límite, como queríamos demostrar.
 
-    En efecto, si suponemos que $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como
-    el límite es maximal en \<open>C\<close> y está contenido en $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n}$,
-    se tiene que coincide con dicho conjunto. Por tanto, es claro que tanto \<open>F\<close> como \<open>G\<close> pertenecen
-    al límite.
+    En efecto, si suponemos que $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como hemos 
+    visto que el límite es maximal en \<open>C\<close> y está contenido en 
+    $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n}$, se tiene que coincide con dicho conjunto. Por 
+    tanto, es claro que tanto \<open>F\<close> como \<open>G\<close> pertenecen al límite.
   \end{demostracion}
 
   Veamos su formalización y prueba detallada en Isabelle/HOL.\<close>
@@ -3979,71 +3985,74 @@ lemma cl_max':
     "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
   using cl_max[OF assms] by blast+
 
-text \<open>
-\begin{lema}
-  Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es
-  es cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de
-  conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión
-  es un conjunto de Hintikka.
-\end{lema}
+text \<open>El siguiente resultado prueba que el límite de la sucesión definida en \<open>1.4.1\<close> es un conjunto
+  de Hintikka si la colección que lo define verifica la propiedad de consistencia proposicional, es
+  es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \<open>teorema de Hintikka\<close>,
+  se trata en particular de un conjunto satisfacible. 
 
-\begin{demostracion}
-  Para facilitar la lectura, vamos a notar por \<open>L\<^sub>S\<^sub>C\<close> al límite de la sucesión \<open>{S\<^sub>n}\<close> descrita 
-  en el enunciado.
+  \begin{lema}
+    Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es
+    es cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de
+    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión
+    \<open>{S\<^sub>n}\<close> es un conjunto de Hintikka.
+  \end{lema}
 
-  Por resultados anteriores, se tiene que \<open>L\<^sub>S\<^sub>C \<in> C\<close>. Además, por ser \<open>C\<close> una colección que
-  verifica la propiedad de consistencia proposicional, por el lema de caracterización de dicha
-  propiedad mediante notación uniforme, se cumplen las siguientes condiciones para \<open>L\<^sub>S\<^sub>C\<close>:
+  \begin{demostracion}
+    Para facilitar la lectura, vamos a notar por \<open>L\<^sub>S\<^sub>C\<close> al límite de la sucesión \<open>{S\<^sub>n}\<close> descrita 
+    en el enunciado.
 
-  \begin{itemize}
-    \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
-    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
-    simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
-    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
-    pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
-    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
-    pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close> o 
-    bien \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
-  \end{itemize}
+    Por resultados anteriores, como \<open>C\<close> verifica la propiedad de consistencia proposicional, es
+    es cerrada bajo subconjuntos y es de carácter finito, se tiene que \<open>L\<^sub>S\<^sub>C \<in> C\<close>. En particular, por 
+    verificar la propiedad de consistencia proposicional, por el lema de caracterización de dicha
+    propiedad mediante notación uniforme, se cumplen las siguientes condiciones para \<open>L\<^sub>S\<^sub>C\<close>:
 
-  Veamos que \<open>L\<^sub>S\<^sub>C\<close> es un conjunto de Hintikka probando que cumple las condiciones del
-  lema de caracterización de los conjuntos de Hintikka mediante notación uniforme, es decir,
-  \<open>L\<^sub>S\<^sub>C\<close> verifica:
+    \begin{itemize}
+      \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
+      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
+      \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+      pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
+      \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+      pertenece a \<open>L\<^sub>S\<^sub>C\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close> o 
+      bien \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> pertenece a \<open>C\<close>.
+    \end{itemize}
 
-  \begin{itemize}
-    \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
-    \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
-    simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
-    \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
-    que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
-    \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
-    que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
-    a \<open>L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2\<close> pertenece a \<open>L\<^sub>S\<^sub>C\<close>.
-  \end{itemize} 
+    Veamos que \<open>L\<^sub>S\<^sub>C\<close> es un conjunto de Hintikka probando que cumple las condiciones del
+    lema de caracterización de los conjuntos de Hintikka mediante notación uniforme, es decir,
+    probaremos que \<open>L\<^sub>S\<^sub>C\<close> verifica:
 
-  Observemos que las dos primeras condiciones coinciden con las obtenidas anteriormente para \<open>L\<^sub>S\<^sub>C\<close> 
-  por el lema de caracterización de la propiedad de consistencia proposicional mediante notación
-  uniforme. Veamos que, en efecto, se cumplen el resto de condiciones.
+    \begin{itemize}
+      \item \<open>\<bottom> \<notin> L\<^sub>S\<^sub>C\<close>.
+      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<not> p \<in> L\<^sub>S\<^sub>C\<close>.
+      \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> se verifica 
+      que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> también.
+      \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> se verifica 
+      que si la fórmula pertenece a \<open>L\<^sub>S\<^sub>C\<close>, entonces o bien \<open>\<beta>\<^sub>1\<close> pertenece
+      a \<open>L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2\<close> pertenece a \<open>L\<^sub>S\<^sub>C\<close>.
+    \end{itemize} 
 
-  En primer lugar, probemos que para una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
-  \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica tanto \<open>\<alpha>\<^sub>1\<close> como \<open>\<alpha>\<^sub>2\<close> pertenecen a \<open>L\<^sub>S\<^sub>C\<close>. Por la tercera condición obtenida 
-  anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
-  proposicional mediante notación uniforme, se cumple que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
-  \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
-  por el corolario \<open>añadir ref\<close> se tiene que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
+    Observemos que las dos primeras condiciones coinciden con las obtenidas anteriormente para \<open>L\<^sub>S\<^sub>C\<close> 
+    por el lema de caracterización de la propiedad de consistencia proposicional mediante notación
+    uniforme. Veamos que, en efecto, se cumplen el resto de condiciones.
 
-  Por último, demostremos que para una fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
-  \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Por la cuarta condición obtenida 
-  anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
-  proposicional mediante notación uniforme, se cumple que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
-  \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, si suponemos que \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, como \<open>C\<close> tiene la propiedad de 
-  consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>añadir ref\<close> se tiene 
-  que \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close>, luego se obtiene que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Si suponemos que 
-  \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, se observa fácilmente que llegamos a la misma conclusión. Por lo tanto, queda 
-  probado el resultado.
-\end{demostracion}
+    En primer lugar, probemos que para una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
+    \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que tanto \<open>\<alpha>\<^sub>1\<close> como \<open>\<alpha>\<^sub>2\<close> pertenecen a \<open>L\<^sub>S\<^sub>C\<close>. Por la tercera condición 
+    obtenida anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
+    proposicional mediante notación uniforme, se cumple que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
+    \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
+    por el corolario \<open>1.5.3\<close> se tiene que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
 
-\comentario{Añadir referencias corolario.}
+    Por último, demostremos que para una fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
+    \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Por la cuarta condición obtenida 
+    anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
+    proposicional mediante notación uniforme, se cumple que o bien \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
+    \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, si suponemos que \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, como \<open>C\<close> tiene la propiedad de 
+    consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>1.5.3\<close> se tiene 
+    que \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close>. Por tanto, se cumple que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Si suponemos que 
+    \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, se observa fácilmente que llegamos a la misma conclusión de manera análoga. 
+    Por lo tanto, queda probado el resultado.
+  \end{demostracion}
 
   Veamos su formalización y prueba detallada en Isabelle.\<close>
 
@@ -4171,10 +4180,9 @@ proof -
   with d(1,2) show ?thesis unfolding Hintikka_alt by fast
 qed
 
-text \<open>Finalmente, vamos a demostrar el \<open>Teorema de Existencia de Modelo\<close>. Probaremos que un conjunto 
-  de fórmulas proposicionales perteneciente a una colección con la propiedad de consistencia 
-  proposicional es satisfacible mediante un resultado previo que indica que la satisfacibilidad de 
-  conjuntos se hereda mediante la contención.
+text \<open>Finalmente, vamos a demostrar el \<open>teorema de existencia de modelo\<close>. Para ello precisaremos de
+  un resultado que indica que la satisfacibilidad de conjuntos de fórmulas se hereda por la 
+  contención.
 
   \begin{lema}
     Todo subconjunto de un conjunto de fórmulas satisfacible es satisfacible.
@@ -4222,29 +4230,32 @@ text\<open>De este modo, procedamos finalmente con la demostración del teorema.
   \end{teorema}
 
   \begin{demostracion}
-    Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales que verifica la propiedad de 
+    Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales que verifique la propiedad de 
     consistencia proposicional y \<open>S \<in> C\<close>. Vamos a probar que \<open>S\<close> es satisfacible.
 
     En primer lugar, como \<open>C\<close> verifica la propiedad de consistencia proposicional, por el lema 
-    \<open>(añadir ref. ex1)\<close> podemos extenderla a una colección \<open>C'\<close> que también verifique la propiedad y
-    sea cerrada bajo subconjuntos. De este modo, por el lema \<open>(añadir ref ex3)\<close>, como la extensión 
+    \<open>1.3.3\<close> podemos extenderla a una colección \<open>C'\<close> que también verifique la propiedad y
+    sea cerrada bajo subconjuntos. A su vez, por el lema \<open>1.3.5\<close>, como la extensión 
     \<open>C'\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo 
-    subconjuntos, podemos extenderla a otra colección \<open>C''\<close> que verifique la propiedad de
+    subconjuntos, podemos extenderla a otra colección \<open>C''\<close> que también verifica la propiedad de
     consistencia proposicional y sea de carácter finito. De este modo, por la transitividad de la 
-    contención, se observa que \<open>C''\<close> es una extensión de \<open>C\<close>, luego \<open>S \<in> C''\<close> por hipótesis. 
-    Por otro lado, por el lema \<open>(añadir ref ex2)\<close>, como \<open>C''\<close> es de carácter finito, se tiene que es 
-    cerrada bajo subconjuntos. En suma, \<open>C''\<close> es una colección que verifica la propiedad de
-    consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito. Luego, por el 
-    lema \<open>(añadir ref pcp_lim_Hintikka)\<close>, el límite de la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a 
-    partir de \<open>S\<close> según la definición \<open>1.4.1\<close> es un conjunto de Hintikka. Por tanto, por el 
-    \<open>teorema de Hintikka\<close>, se trata de un conjunto satisfacible. Además, puesto que para todo 
-    \<open>n \<in> \<nat>\<close> se tiene que \<open>S\<^sub>n\<close> está contenido en el límite, en particular el conjunto \<open>S\<^sub>0\<close> está 
-    contenido en él. Por definición de la sucesión, dicho conjunto coincide con \<open>S\<close>. Por tanto, como 
-    \<open>S\<close> está contenido en el límite que es un conjunto satisfacible, queda demostrada la
-    satisfacibilidad de \<open>S\<close>.
+    contención, es claro que \<open>C''\<close> es una extensión de \<open>C\<close>, luego \<open>S \<in> C''\<close> por hipótesis. 
+    Por otro lado, por el lema \<open>1.3.4\<close>, como \<open>C''\<close> es de carácter finito, se tiene que es 
+    cerrada bajo subconjuntos. 
+
+    En suma, \<open>C''\<close> es una extensión de \<open>C\<close> que verifica la propiedad de consistencia proposicional, 
+    es cerrada bajo subconjuntos y es de carácter finito. Luego, por el lema \<open>1.5.4\<close>, el límite de 
+    la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close> es un 
+    conjunto de Hintikka. Por tanto, por el \<open>teorema de Hintikka\<close>, se trata de un conjunto 
+    satisfacible. 
+
+    Finalmente, puesto que para todo \<open>n \<in> \<nat>\<close> se tiene que \<open>S\<^sub>n\<close> está contenido en el límite, en 
+    particular el conjunto \<open>S\<^sub>0\<close> está contenido en él. Por definición de la sucesión, dicho conjunto 
+    coincide con \<open>S\<close>. Por tanto, como \<open>S\<close> está contenido en el límite que es un conjunto 
+    satisfacible, queda demostrada la satisfacibilidad de \<open>S\<close>.
   \end{demostracion}
 
-  \comentario{Añadir referencias.}
+  \comentario{Tal vez sería buena idea hacer un grafo similar al de ex3.}
 
   Mostremos su formalización y demostración detallada en Isabelle.\<close>
 
