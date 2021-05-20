@@ -34,7 +34,7 @@ text \<open>En primer lugar, definamos la \<open>propiedad de consistencia propo
   de conjuntos de fórmulas proposicionales.\<close>
 
 text \<open>
-  \begin{definicion}
+  \begin{definicion
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales. Decimos que
     \<open>C\<close> verifica la \<open>propiedad de consistencia proposicional\<close> si, para todo
     conjunto \<open>S\<close> perteneciente a la colección, se verifica:
@@ -3252,6 +3252,8 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
   definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, 
   nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
 
+\comentario{\<questiondown>Método de prueba?}
+
   Puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
   recursiva sobre la estructura recursiva de los números naturales, se formalizará en Isabelle
   mediante el tipo de funciones primitivas recursivas de la siguiente manera.\<close>
@@ -3422,30 +3424,86 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
   generalizada en Isabelle/HOL perteneciente a la teoría 
   \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}. Además, la prueba ha precisado del 
-  siguiente lema auxiliar que define la imagen de un conjunto con un único elemento.\<close>
+  siguiente lema auxiliar que define la imagen de un conjunto con un único elemento.
 
-lemma imageElem: "f ` {x} = {f x}"
-  by simp
+\comentario{No está claro qué se usa de la teoría de retículos. Además,
+la unión que se usa en el enunciado del lema es la unión generaluzada de
+conjuntos y parece que no se usa nada de retículos en la prueba automática.
+Tampoco en la prueba en lenguaje natural.}
+
+\<close>
+
+text \<open>\comentario{Adaptación de singleton_conv para la imagen de un conjunto.}\<close>
+
+lemma imageElem: "{f n | n. n = a} = {f a}"
+proof -
+  have 1:"{n | n. n = a} = {a}"
+    by (simp only: singleton_conv simp_thms(6,40))
+  have "{f n | n. n = a} = f`{n | n. n = a}"
+    by (simp only: image_Collect simp_thms)
+  also have "\<dots> = f`{a}"
+    by (simp only: 1)
+  also have "\<dots> = {f a} \<union> f ` {}"
+    by (simp add: image_insert)
+  also have "\<dots> = {f a} \<union> {}"
+    by (simp only: image_empty)
+  also have "\<dots> = {f a}"
+    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
+  finally show ?thesis
+    by this
+qed
+
+text \<open>\comentario{Adaptación de Collect_disj_eq para la imagen de un conjunto.}\<close>
+
+lemma imageUnDisj:"{f n |n. P n \<or> Q n} = {f n | n. P n} \<union> {f n | n. Q n}"
+  by blast (*Pendiente*)
 
 text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
-  have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}"
+ (* have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}" 
     by (simp only: singleton_conv imageElem)
   then have 1:"\<Union>{pcp_seq C S n | n. n = 0} = \<Union>{pcp_seq C S 0}"
-    by (simp only: image_Collect)
-  show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0"
-    by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 
-        conditionally_complete_lattice_class.cSup_singleton)
+    by (simp only: image_Collect) *)
+  have  "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
+    by (simp only: le_zero_eq)
+  also have "\<dots> = \<Union> {pcp_seq C S 0}" 
+    by (simp only: imageElem)
+  also have "\<dots> = pcp_seq C S 0" 
+    by  (simp only:cSup_singleton)
+  finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
+    by this
+  (*show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" *)
+      
+  (*  by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 
+        conditionally_complete_lattice_class.cSup_singleton) *)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
   have "m \<le> Suc m" 
-    by (simp only: monoid_add_class.add_0_right)
+    by (simp only: add_0_right)
   then have Mon:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     by (rule pcp_seq_mono)
-  have S:"{n. n \<le> Suc m}  = {Suc m} \<union> {n. n \<le> m}"
+  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n = Suc m \<or> n \<le> m}"
+    using le_Suc_eq by blast (*Pendiente*)
+  also have "\<dots> = \<Union>({pcp_seq C S n | n. n = Suc m} \<union> {pcp_seq C S n |n. n \<le> m})" using [[simp_trace]]
+    by (simp only: imageUnDisj)
+  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
+    by (simp only: imageElem)
+  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)}) \<union> \<Union>({pcp_seq C S n |n. n \<le> m})"
+    by (simp only: Union_Un_distrib)
+  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>({pcp_seq C S n |n. n \<le> m})"
+    by (simp only: cSup_singleton)
+  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> (pcp_seq C S m)"
+    by (simp only: HI)
+  also have "\<dots> = pcp_seq C S (Suc m)"
+    using Mon by (simp only: Un_absorb2)
+  finally show "\<Union>{pcp_seq C S n|n. n \<le> (Suc m)} = pcp_seq C S (Suc m)"
+    by this
+qed
+    
+  (*have S:"{n. n \<le> Suc m}  = {Suc m} \<union> {n. n \<le> m}"
     by (simp only: le_Suc_eq Collect_disj_eq Un_commute singleton_conv)
   have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
     by (simp only: image_Collect)
@@ -3453,10 +3511,9 @@ next
           \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
     by (simp only: S image_Un imageElem image_Collect)
   then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
-    by (simp only: complete_lattice_class.Sup_union_distrib 
-        conditionally_complete_lattice_class.cSup_singleton HI Un_commute)
+    by (simp only: Sup_union_distrib cSup_singleton HI Un_commute)
   thus "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
-    using Mon by (simp only: subset_Un_eq)
+    using Mon by (simp only: subset_Un_eq)*)
 qed
 
 text \<open>Análogamente, podemos dar una prueba automática del resultado en Isabelle/HOL.\<close>
@@ -3524,10 +3581,13 @@ text \<open>Por otra parte, mostremos el siguiente lema que relaciona la pertene
   proposicional al límite definido en \<open>1.4.5\<close> y su pertenencia a un elemento de la sucesión definida
   en \<open>1.4.1\<close>. 
 
+\comentario{El párrafo previo no aporta información significativa. He modificado algo
+la redacción del lema.}
+
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de 
-    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Sea \<open>F\<close> una fórmula tal que
-    pertenece al límite $\bigcup_{n = 0}^{\infty} S_{n}$ de la sucesión. Entonces existe un \<open>k \<in> \<nat>\<close> 
+    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Si \<open>F\<close> es una fórmula tal que
+     $F \in \bigcup_{n = 0}^{\infty} S_{n}$. Entonces existe un \<open>k \<in> \<nat>\<close> 
     tal que \<open>F \<in> S\<^sub>k\<close>. 
   \end{lema}
 
@@ -3572,6 +3632,14 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
 \begin{demostracion}
   La prueba del resultado se realiza por inducción sobre la estructura recursiva de los conjuntos 
   finitos.
+
+\comentario{
+Dos casos: caso base ( \<open>{}\<close>) y paso de inducción (S es de la forma  \<open>{F}
+ \<union> S'\<close>, verificando S' la propiedad y hay que probarla para S).
+
+Redactar la demostración de forma más clara.
+
+}
 
   En primer lugar, consideremos que el conjunto vacío está contenido en el límite de la sucesión de
   conjuntos de \<open>C\<close> a partir de \<open>S\<close>. Como \<open>{}\<close> es subconjunto de todo conjunto, en particular lo es 
@@ -3666,7 +3734,7 @@ qed simp
 
 section \<open>El teorema de existencia de modelo\<close>
 
-text \<open>Con lo presentado en los apartados anteriores, en esta sección demostraremos finalmente el 
+text \<open>En esta sección demostraremos finalmente el 
   \<open>teorema de existencia de modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
   una colección que verifique la propiedad de consistencia proposicional es satisfacible. Para ello, 
   considerando una colección \<open>C\<close> cualquiera y \<open>S \<in> C\<close>, empleando resultados anteriores extenderemos 
@@ -3684,6 +3752,9 @@ text \<open>Probemos inicialmente que el límite de la sucesión presentada en \
   colección que lo define si esta verifica la propiedad de consistencia proposicional, es cerrada
   bajo subconjuntos y es de carácter finito.
   
+\comentario{En primer lugar, probamos que si \<open>C\<close> verifica la propiedad de consistencia proposicional, es cerrada
+  bajo subconjuntos y es de carácter finito, entonces ... }
+
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es 
     cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos
@@ -3701,7 +3772,10 @@ text \<open>Probemos inicialmente que el límite de la sucesión presentada en \
     De este modo, para demostrar que el límite de la sucesión \<open>{S\<^sub>n}\<close> pertenece a \<open>C\<close>, basta probar
     que todo subconjunto finito suyo está en \<open>C\<close>.
 
-    Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por resultados anteriores, existe un 
+    Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por resultados anteriores,
+\comentario {Especificar el índice del resultado}
+
+ existe un
     \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>. Por tanto, como \<open>S\<^sub>k \<in> C\<close> para todo \<open>k \<in> \<nat>\<close> y \<open>C\<close> es cerrada bajo
     subconjuntos, por definición se tiene que \<open>S' \<in> C\<close>, como queríamos demostrar.
   \end{demostracion}
@@ -3914,6 +3988,8 @@ text \<open>A continuación mostremos un resultado sobre el límite de la sucesi
     $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se tiene que
     $F \in \bigcup_{n = 0}^{\infty} S_{n}$ y $G \in \bigcup_{n = 0}^{\infty} S_{n}$.
   \end{corolario}
+
+\comentario{No entiendo bien el enunciado del corolario}
 
   \begin{demostracion}
     Como \<open>C\<close> es una colección que verifica la propiedad de consistencia proposicional y es cerrada 
