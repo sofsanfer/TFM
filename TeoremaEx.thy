@@ -228,30 +228,16 @@ Tampoco en la prueba en lenguaje natural.}
 
 \<close>
 
-text \<open>\comentario{Adaptación de singleton-conv para la imagen de un conjunto.}\<close>
-
-lemma imageElem: "{f n | n. n = a} = {f a}"
-proof -
-  have "{f n | n. n = a} = f`({n. n = a})"
-    by (simp only: image_Collect)
-  also have "\<dots> = f`{a}"
-    by (simp only: singleton_conv simp_thms(6,40))
-  also have "\<dots> = insert (f a) (f`{})"
-    by (simp only: image_insert)
-  also have "\<dots> = {f a}" 
-    by (simp only: image_empty)
-  finally show ?thesis
-    by this
-qed
-
 text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
   have  "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
     by (simp only: le_zero_eq)
-  also have "\<dots> = \<Union> {pcp_seq C S 0}" 
-    by (simp only: imageElem)
+  also have "\<dots> = \<Union>((pcp_seq C S)`{n. n = 0})"
+    by (simp only: image_Collect)
+  also have "\<dots> = \<Union>{pcp_seq C S 0}"
+    by (simp only: singleton_conv image_insert image_empty)
   also have "\<dots> = pcp_seq C S 0" 
     by  (simp only:cSup_singleton)
   finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
@@ -267,12 +253,8 @@ next
     by (simp only: image_Collect)
   also have "\<dots> = \<Union>((pcp_seq C S)`({Suc m} \<union> {n. n \<le> m}))"
     by (simp only: le_Suc_eq Collect_disj_eq Un_commute singleton_conv)
-  also have "\<dots> = \<Union>((pcp_seq C S)`{Suc m} \<union> (pcp_seq C S)`{n. n \<le> m})"
-    by (simp only: image_Un)
-  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> (pcp_seq C S)`{n. n \<le> m})"
-    by (simp add: imageElem)
   also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m})"
-    by (simp only: image_Collect)
+    by (simp only: image_Un image_insert image_empty image_Collect)
   also have "\<dots> = \<Union>{pcp_seq C S (Suc m)} \<union> \<Union>{pcp_seq C S n | n. n \<le> m}"
     by (simp only: Union_Un_distrib)
   also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>{pcp_seq C S n | n. n \<le> m}"
