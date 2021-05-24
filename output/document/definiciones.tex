@@ -1,0 +1,17 @@
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{corolario}[teorema]{Corolario}
+\newtheorem{proposicion}[teorema]{Proposici\'on}
+\newtheorem{definicion}[teorema]{Definici\'on}
+\newtheorem{nota}[teorema]{Nota}
+\newtheorem{notacion}[teorema]{Notaci\'on}
+
+\newenvironment{demostracion}
+  {\noindent {\bf Demostraci\'on:}}
+  {\newline\mbox{ } \hfill $\square$}
+
+\newcounter{nc}
+\newcommand{\comentario}[1]{%
+  \addtocounter{nc}{1}
+  \todo[inline]{\textbf{Comentario \arabic{nc}}: #1}}
+  

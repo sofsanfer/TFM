@@ -1,0 +1,2704 @@
+%
+\begin{isabellebody}%
+\setisabellecontext{Pcp}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isatagtheory
+%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\begin{isamarkuptext}%
+En este capítulo nos centraremos en demostrar el \isa{teorema\ de\ existencia\ de\ modelos}.
+  Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas \isa{S} si este pertenece a una 
+  colección de conjuntos \isa{C} que verifica la \isa{propiedad\ de\ consistencia\ proposicional}. Para su 
+  prueba, definiremos las propiedades de \isa{carácter\ finito} y \isa{ser\ cerrada\ bajo\ subconjuntos} para
+  colecciones de conjuntos de fórmulas. De este modo, mediante distintos resultados que relacionan
+  estas propiedades con la \isa{propiedad\ de\ consistencia\ proposicional}, dada una colección \isa{C} 
+  cualquiera en las condiciones anteriormente descritas, podemos encontrar una colección \isa{C{\isacharprime}} que la 
+  contenga que verifique la \isa{propiedad\ de\ consistencia\ proposicional}, sea \isa{cerrada\ bajo\ subconjuntos} y de \isa{carácter\ finito}. Por otro lado, definiremos una sucesión de conjuntos de
+  fórmulas a partir de la colección \isa{C{\isacharprime}} y el conjunto \isa{S}. Además, definiremos el límite de dicha
+  sucesión que, en particular, contendrá al conjunto \isa{S}. Finalmente probaremos que dicho límite es 
+  un conjunto satisfacible por el \isa{lema\ de\ Hintikka} y, por contención, quedará probada la 
+  satisfacibilidad del conjunto \isa{S}.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+En primer lugar, definamos la \isa{propiedad\ de\ consistencia\ proposicional} para una colección 
+  de conjuntos de fórmulas proposicionales.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+\begin{definicion}
+    Sea \isa{C} una colección de conjuntos de fórmulas proposicionales. Decimos que
+    \isa{C} verifica la \isa{propiedad\ de\ consistencia\ proposicional} si, para todo
+    conjunto \isa{S} perteneciente a la colección, se verifica:
+    \begin{enumerate}
+      \item \isa{{\isasymbottom}\ {\isasymnotin}\ S}.
+      \item Dada \isa{p} una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \isa{p\ {\isasymin}\ S} y \isa{{\isasymnot}\ p\ {\isasymin}\ S}.
+      \item Si \isa{F\ {\isasymand}\ G\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}F{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{F\ {\isasymor}\ G\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}F{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{F\ {\isasymrightarrow}\ G\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ F{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}{\isasymnot}\ F{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}F{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}F\ {\isasymand}\ G{\isacharparenright}\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ F{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}F\ {\isasymor}\ G{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ F{\isacharcomma}\ {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}F\ {\isasymrightarrow}\ G{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}F{\isacharcomma}\ {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \end{enumerate}
+  \end{definicion}
+
+  Veamos, a continuación, su formalización en Isabelle mediante el tipo \isa{definition}.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{definition}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ C\ {\isasymequiv}\ {\isacharparenleft}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\isanewline
+\ \ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ F\ \isactrlbold {\isasymand}\ G\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}F{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ F\ \isactrlbold {\isasymor}\ G\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}F{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ F\ \isactrlbold {\isasymrightarrow}\ G\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}F{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}F{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}F{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}F\ \isactrlbold {\isasymand}\ G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ F{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}F\ \isactrlbold {\isasymor}\ G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ F{\isacharcomma}\ \isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}F\ \isactrlbold {\isasymrightarrow}\ G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}F{\isacharcomma}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}%
+\begin{isamarkuptext}%
+Observando la definición anterior, se prueba fácilmente que la colección trivial
+  formada por el conjunto vacío de fórmulas verifica la propiedad de consistencia 
+  proposicional.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ {\isacharbraceleft}{\isacharbraceleft}{\isacharbraceright}{\isacharbraceright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ pcp{\isacharunderscore}def\ \isacommand{by}\isamarkupfalse%
+\ simp%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Del mismo modo, aplicando la definición, se demuestra que los siguientes ejemplos
+  de colecciones de conjuntos de fórmulas proposicionales verifican igualmente la 
+  propiedad.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ {\isacharbraceleft}{\isacharbraceleft}Atom\ {\isadigit{0}}{\isacharbraceright}{\isacharbraceright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ pcp{\isacharunderscore}def\ \isacommand{by}\isamarkupfalse%
+\ simp%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ {\isacharbraceleft}{\isacharbraceleft}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}\ \isactrlbold {\isasymrightarrow}\ Atom\ {\isadigit{2}}{\isacharbraceright}{\isacharcomma}\isanewline
+\ \ \ {\isacharbraceleft}{\isacharparenleft}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}\ \isactrlbold {\isasymrightarrow}\ Atom\ {\isadigit{2}}{\isacharparenright}{\isacharcomma}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}{\isacharbraceright}{\isacharcomma}\isanewline
+\ \ {\isacharbraceleft}{\isacharparenleft}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}\ \isactrlbold {\isasymrightarrow}\ Atom\ {\isadigit{2}}{\isacharparenright}{\isacharcomma}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}{\isacharcomma}\ \ Atom\ {\isadigit{1}}{\isacharbraceright}{\isacharbraceright}{\isachardoublequoteclose}\ \isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ pcp{\isacharunderscore}def\ \isacommand{by}\isamarkupfalse%
+\ auto%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Por último, en contraposición podemos ilustrar un caso de colección que no verifique la 
+  propiedad con la siguiente colección obtenida al modificar el último ejemplo. De
+  esta manera, aunque la colección verifique correctamente la quinta condición de la
+  definición, no cumplirá la sexta.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymnot}\ pcp\ {\isacharbraceleft}{\isacharbraceleft}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}\ \isactrlbold {\isasymrightarrow}\ Atom\ {\isadigit{2}}{\isacharbraceright}{\isacharcomma}\isanewline
+\ \ \ {\isacharbraceleft}{\isacharparenleft}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}\ \isactrlbold {\isasymrightarrow}\ Atom\ {\isadigit{2}}{\isacharparenright}{\isacharcomma}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ {\isadigit{1}}{\isacharparenright}{\isacharparenright}{\isacharbraceright}{\isacharbraceright}{\isachardoublequoteclose}\ \isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ pcp{\isacharunderscore}def\ \isacommand{by}\isamarkupfalse%
+\ auto%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Por otra parte, veamos un resultado que permite la caracterización de la 
+  propiedad de consistencia proposicional mediante la notación uniforme.
+
+  \begin{lema}[Caracterización de \isa{P{\isachardot}C{\isachardot}P} mediante la notación uniforme]
+    Dada una colección \isa{C} de conjuntos de fórmulas proposicionales, son equivalentes:
+    \begin{enumerate}
+      \item \isa{C} verifica la propiedad de consistencia proposicional.
+      \item Para cualquier conjunto de fórmulas \isa{S} de la colección, se verifican las 
+      condiciones:
+      \begin{itemize}
+        \item \isa{{\isasymbottom}} no pertenece a \isa{S}.
+        \item Dada \isa{p} una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \isa{p\ {\isasymin}\ S} y \isa{{\isasymnot}\ p\ {\isasymin}\ S}.
+        \item Para toda fórmula de tipo \isa{{\isasymalpha}} con componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymalpha}}
+        pertenece a \isa{S}, se tiene que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}{\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+        \item Para toda fórmula de tipo \isa{{\isasymbeta}} con componentes \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymbeta}}
+        pertenece a \isa{S}, se tiene que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o 
+        bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \end{itemize} 
+    \end{enumerate}
+  \end{lema}
+
+  En Isabelle/HOL se formaliza el resultado como sigue.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ C\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{oops}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+En primer lugar, veamos la demostración del lema.
+
+\begin{demostracion}
+  Para probar la equivalencia, veamos cada una de las implicaciones por separado.
+
+\textbf{\isa{{\isadigit{1}}{\isacharparenright}\ {\isasymLongrightarrow}\ {\isadigit{2}}{\isacharparenright}}}
+  
+  Supongamos que \isa{C} es una colección de conjuntos de fórmulas proposicionales que
+  verifica la propiedad de consistencia proposicional. Vamos a probar que, en efecto,
+  cumple las condiciones de \isa{{\isadigit{2}}{\isacharparenright}}. 
+
+  Consideremos un conjunto de fórmulas \isa{S} perteneciente a la colección \isa{C}.
+  Por hipótesis, de la definición de propiedad de consistencia proposicional obtenemos
+  que \isa{S} verifica las siguientes condiciones:
+ \begin{enumerate}
+      \item \isa{{\isasymbottom}\ {\isasymnotin}\ S}.
+      \item Dada \isa{p} una fórmula atómica cualquiera, no se tiene 
+        simultáneamente que\\ \isa{p\ {\isasymin}\ S} y \isa{{\isasymnot}\ p\ {\isasymin}\ S}.
+      \item Si \isa{G\ {\isasymand}\ H\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{G\ {\isasymor}\ H\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{G\ {\isasymrightarrow}\ H\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}{\isasymnot}\ G{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+        conjunto \isa{{\isacharbraceleft}{\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+      \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+ \end{enumerate}
+
+  Las dos primeras condiciones se corresponden con los dos primeros resultados que queríamos
+  demostrar. De este modo, falta probar:
+  \begin{itemize}
+     \item Para toda fórmula de tipo \isa{{\isasymalpha}} con componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymalpha}}
+     pertenece a \isa{S}, se tiene que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}{\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+     \item Para toda fórmula de tipo \isa{{\isasymbeta}} con componentes \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymbeta}}
+     pertenece a \isa{S}, se tiene que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o 
+     bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.   
+  \end{itemize} 
+
+  En primer lugar, vamos a deducir el primer resultado correspondiente a las fórmulas
+  de tipo \isa{{\isasymalpha}} de las condiciones tercera, sexta, octava y novena de la definición de 
+  propiedad de consistencia proposicional. En efecto, consideremos una fórmula de tipo 
+  \isa{{\isasymalpha}} cualquiera con componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymalpha}} pertenece a \isa{S}. Sabemos que 
+  la fórmula es de la forma \isa{G\ {\isasymand}\ H}, \isa{{\isasymnot}\ {\isacharparenleft}{\isasymnot}\ G{\isacharparenright}}, \isa{{\isasymnot}\ {\isacharparenleft}G\ {\isasymor}\ H{\isacharparenright}} o 
+  \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymlongrightarrow}\ H{\isacharparenright}} para ciertas fórmulas \isa{G} y \isa{H}. Vamos a probar que para cada caso se cumple que 
+  \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}\ {\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a la colección:
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ G\ {\isasymand}\ H}: En este caso, sus componentes conjuntivas \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} son \isa{G} 
+    y \isa{H} respectivamente. Luego tenemos que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}\ {\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S}  pertenece a \isa{C} por
+    la tercera condición de la definición de propiedad de consistencia
+    proposicional.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ {\isasymnot}\ {\isacharparenleft}{\isasymnot}\ G{\isacharparenright}}: En este caso, sus componentes conjuntivas \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} son 
+    ambas \isa{G}. Como el conjunto \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} es equivalente a \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}\ {\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} ya
+    que \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} son iguales, tenemos que este último pertenece a \isa{C} por la sexta 
+    condición de la definición de propiedad de consistencia proposicional.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ {\isasymnot}{\isacharparenleft}G\ {\isasymor}\ H{\isacharparenright}}: En este caso, sus componentes conjuntivas \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} son\\ 
+    \isa{{\isasymnot}\ G} y \isa{{\isasymnot}\ H} respectivamente. Luego tenemos que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}\ {\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S}  pertenece a \isa{C} por
+    la octava condición de la definición de propiedad de consistencia proposicional.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ {\isasymnot}{\isacharparenleft}G\ {\isasymlongrightarrow}\ H{\isacharparenright}}: En este caso, sus componentes conjuntivas \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} son \isa{G} y 
+    \isa{{\isasymnot}\ H} respectivamente. Luego tenemos que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}\ {\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S}  pertenece a \isa{C} por la novena 
+    condición de la definición de propiedad de consistencia proposicional.
+
+  Finalmente, el resultado correspondiente a las fórmulas de tipo \isa{{\isasymbeta}} se obtiene de las 
+  condiciones cuarta, quinta, sexta y séptima de la definición de propiedad de consistencia 
+  proposicional. Para probarlo, consideremos una fórmula cualquiera de tipo \isa{{\isasymbeta}} perteneciente
+  al conjunto \isa{S} y cuyas componentes disyuntivas son \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}}. Por simplificación, sabemos 
+  que dicha fórmula es de la forma \isa{G\ {\isasymor}\ H}, \isa{G\ {\isasymlongrightarrow}\ H}, \isa{{\isasymnot}\ {\isacharparenleft}{\isasymnot}\ G{\isacharparenright}} o \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymand}\ H{\isacharparenright}} para ciertas 
+  fórmulas \isa{G} y \isa{H}. Deduzcamos que, en efecto, tenemos que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} está en \isa{C} o bien 
+  \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} está en \isa{C}.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ G\ {\isasymor}\ H}: En este caso, sus componentes disyuntivas \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} son \isa{G} y 
+    \isa{H} respectivamente. Luego tenemos que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S}  pertenece a \isa{C} o bien\\
+    \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} por la cuarta condición de la definición de propiedad de 
+    consistencia proposicional.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ G\ {\isasymlongrightarrow}\ H}: En este caso, sus componentes disyuntivas \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} son\\ 
+    \isa{{\isasymnot}\ G} y \isa{H} respectivamente. Luego tenemos que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S}  pertenece a \isa{C} o 
+    bien\\ \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} por la quinta condición de la definición de propiedad 
+    de consistencia proposicional.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ {\isasymnot}{\isacharparenleft}{\isasymnot}\ G{\isacharparenright}}: En este caso, sus componentes disyuntivas \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} son ambas 
+    \isa{G}. Luego tenemos que, en particular, el conjunto \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} por la 
+    sexta condición de la definición de propiedad de consistencia proposicional. Por tanto, se 
+    verifica que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} está en \isa{C} o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} está en \isa{C}.
+
+  \isa{{\isasymsqdot}\ Fórmula\ de\ tipo\ {\isasymnot}{\isacharparenleft}G\ {\isasymand}\ H{\isacharparenright}}: En este caso, sus componentes disyuntivas \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} son \\ 
+    \isa{{\isasymnot}\ G} y \isa{{\isasymnot}\ H} respectivamente. Luego tenemos que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o 
+    bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} por la séptima condición de la definición de propiedad 
+    de consistencia proposicional.
+
+  De este modo, queda probada la primera implicación de la equivalencia. Veamos la prueba de la 
+  implicación contraria.
+
+\textbf{\isa{{\isadigit{2}}{\isacharparenright}\ {\isasymLongrightarrow}\ {\isadigit{1}}{\isacharparenright}}}
+
+  Supongamos que, dada una colección de conjuntos de fórmulas proposicionales \isa{C}, para cualquier
+  conjunto \isa{S} de la colección se verifica:
+  \begin{itemize}
+    \item \isa{{\isasymbottom}} no pertenece a \isa{S}.
+    \item Dada \isa{p} una fórmula atómica cualquiera, no se tiene 
+    simultáneamente que\\ \isa{p\ {\isasymin}\ S} y \isa{{\isasymnot}\ p\ {\isasymin}\ S}.
+    \item Para toda fórmula de tipo \isa{{\isasymalpha}} con componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymalpha}}
+    pertenece a \isa{S}, se tiene que \isa{{\isacharbraceleft}{\isasymalpha}\isactrlsub {\isadigit{1}}{\isacharcomma}{\isasymalpha}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Para toda fórmula de tipo \isa{{\isasymbeta}} con componentes \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} tal que \isa{{\isasymbeta}}
+    pertenece a \isa{S}, se tiene que o bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{1}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o 
+    bien \isa{{\isacharbraceleft}{\isasymbeta}\isactrlsub {\isadigit{2}}{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+  \end{itemize}
+
+  Probemos que \isa{C} verifica la propiedad de consistencia proposicional. Por la definición
+  de la propiedad basta probar que, dado un conjunto cualquiera \isa{S} perteneciente a \isa{C}, se
+  verifican las siguientes condiciones:
+  \begin{enumerate}
+    \item \isa{{\isasymbottom}\ {\isasymnotin}\ S}.
+    \item Dada \isa{p} una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \isa{p\ {\isasymin}\ S} y \isa{{\isasymnot}\ p\ {\isasymin}\ S}.
+    \item Si \isa{G\ {\isasymand}\ H\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{G\ {\isasymor}\ H\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el conjunto 
+      \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{G\ {\isasymrightarrow}\ H\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+      conjunto \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{{\isasymnot}{\isacharparenleft}{\isasymnot}\ G{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces o bien el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}, o bien el 
+      conjunto \isa{{\isacharbraceleft}{\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item Si \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S}, entonces el conjunto \isa{{\isacharbraceleft}G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+  \end{enumerate}
+
+  En primer lugar, se observa que por hipótesis se cumplen las dos primeras condiciones de
+  la definición.
+
+  Por otra parte, vamos a deducir las condiciones tercera, sexta, octava y novena de la
+  definición de la propiedad de consistencia proposicional a partir de la hipótesis sobre las 
+  fórmulas de tipo \isa{{\isasymalpha}}.
+  \begin{enumerate}
+    \item[\isa{{\isadigit{3}}{\isacharparenright}}:] Supongamos que la fórmula \isa{G\ {\isasymand}\ H} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymalpha}} de componentes conjuntivas
+    \isa{G} y \isa{H}. Luego, por hipótesis, tenemos que \isa{{\isacharbraceleft}G{\isacharcomma}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item[\isa{{\isadigit{6}}{\isacharparenright}}:] Supongamos que la fórmula \isa{{\isasymnot}{\isacharparenleft}{\isasymnot}\ G{\isacharparenright}} pertenece a \isa{S} para la fórmula \isa{G} 
+    cualquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymalpha}} cuyas componentes conjuntivas 
+    son ambas la fórmula \isa{G}. Por hipótesis, tenemos que el conjunto \isa{{\isacharbraceleft}G{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S} pertence a \isa{C}
+    y, puesto que dicho conjunto es equivalente a \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S}, tenemos el resultado.
+    \item[\isa{{\isadigit{8}}{\isacharparenright}}:] Supongamos que la fórmula \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymor}\ H{\isacharparenright}} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymalpha}} de componentes conjuntivas
+    \isa{{\isasymnot}\ G} y \isa{{\isasymnot}\ H}. Luego, por hipótesis, tenemos que \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item[\isa{{\isadigit{9}}{\isacharparenright}}:] Supongamos que la fórmula \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymlongrightarrow}\ H{\isacharparenright}} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymalpha}} de componentes conjuntivas
+    \isa{G} y \isa{{\isasymnot}\ H}. Luego, por hipótesis, tenemos que \isa{{\isacharbraceleft}G{\isacharcomma}\ {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+  \end{enumerate} 
+
+  Finalmente, deduzcamos el resto de condiciones de la definición de propiedad de consistencia
+  proposicional a partir de la hipótesis referente a las fórmulas de tipo \isa{{\isasymbeta}}.
+  \begin{enumerate}
+    \item[\isa{{\isadigit{4}}{\isacharparenright}}:] Supongamos que la fórmula \isa{G\ {\isasymor}\ H} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymbeta}} de componentes disyuntivas
+    \isa{G} y \isa{H}. Luego, por hipótesis, tenemos que o bien \isa{{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o bien\\
+    \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item[\isa{{\isadigit{5}}{\isacharparenright}}:] Supongamos que la fórmula \isa{G\ {\isasymlongrightarrow}\ H} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymbeta}} de componentes disyuntivas
+    \isa{{\isasymnot}\ G} y \isa{H}. Luego, por hipótesis, tenemos que o bien \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o
+    bien \isa{{\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C}.
+    \item[\isa{{\isadigit{7}}{\isacharparenright}}:] Supongamos que la fórmula \isa{{\isasymnot}{\isacharparenleft}G\ {\isasymand}\ H{\isacharparenright}} pertenece a \isa{S} para fórmulas \isa{G} y \isa{H}
+    cualesquiera. Observemos que se trata de una fórmula de tipo \isa{{\isasymbeta}} de componentes disyuntivas
+    \isa{{\isasymnot}\ G} y \isa{{\isasymnot}\ H}. Luego, por hipótesis, tenemos que o bien \isa{{\isacharbraceleft}{\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S} pertenece a \isa{C} o
+    bien \isa{{\isacharbraceleft}{\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S} pertenece \isa{C}.
+  \end{enumerate} 
+
+  De este modo, hemos probado a partir de la hipótesis todas las condiciones que garantizan que la
+  colección \isa{C} cumple la propiedad de consistencia proposicional. Por lo tanto, queda demostrado el
+  resultado.
+\end{demostracion}
+
+  Análogamente a la demostración del lema anterior de caracterización, para probar este resultado en 
+  Isabelle vamos a demostrar cada una de las implicaciones de la equivalencia por separado. 
+
+  La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
+  deduce la condición de \isa{{\isadigit{2}}{\isacharparenright}} sobre fórmulas de tipo \isa{{\isasymalpha}} a partir de las condiciones tercera, sexta, 
+  octava y novena de la definición de propiedad de consistencia proposicional. Su demostración 
+  detallada en Isabelle se muestra a continuación.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{1}}Con{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharminus}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{4}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\ \isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \ \ \isacommand{fix}\isamarkupfalse%
+\ F\ G\ H\isanewline
+\ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ F\ G\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isacharparenleft}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ con{\isacharunderscore}dis{\isacharunderscore}simps{\isacharparenleft}{\isadigit{1}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymand}\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{1}}\ {\isacartoucheopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymand}\ H{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ E{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{obtain}\isamarkupfalse%
+\ G{\isadigit{1}}\ H{\isadigit{1}}\ \isakeyword{where}\ A{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ E{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ exE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{3}}\ {\isacartoucheopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymor}\ H{\isadigit{1}}{\isacharparenright}{\isacartoucheclose}\ {\isacartoucheopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}{\isacartoucheclose}\ {\isacartoucheopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{1}}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymexists}H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ E{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymexists}H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{obtain}\isamarkupfalse%
+\ H{\isadigit{2}}\ \isakeyword{where}\ A{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ E{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ exE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{4}}\ {\isacartoucheopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{2}}{\isacharparenright}{\isacartoucheclose}\ {\isacartoucheopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ A{\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{3}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{2}}\ {\isacartoucheopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ insert{\isacharunderscore}absorb{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ {\isacartoucheopen}H\ {\isacharequal}\ G{\isacartoucheclose}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Finalmente, el siguiente lema auxiliar deduce la condición de \isa{{\isadigit{2}}{\isacharparenright}} sobre fórmulas de tipo \isa{{\isasymbeta}} 
+  a partir de las condiciones cuarta, quinta, sexta y séptima de la definición de propiedad de 
+  consistencia proposicional.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{1}}Dis{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharminus}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{4}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\ \isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \ \ \isacommand{fix}\isamarkupfalse%
+\ F\ G\ H\isanewline
+\ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ F\ G\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}G{\isadigit{2}}\ H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\ \isanewline
+\ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ con{\isacharunderscore}dis{\isacharunderscore}simps{\isacharparenleft}{\isadigit{2}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymor}\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{1}}\ {\isacartoucheopen}F\ {\isacharequal}\ G\ \isactrlbold {\isasymor}\ H{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ {\isacharparenleft}{\isasymexists}G{\isadigit{2}}\ H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ E{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymexists}G{\isadigit{1}}\ H{\isadigit{1}}{\isachardot}\ F\ {\isacharequal}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{obtain}\isamarkupfalse%
+\ G{\isadigit{1}}\ H{\isadigit{1}}\ \isakeyword{where}\ A{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}\ F\ {\isacharequal}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}\ {\isasymand}\ H\ {\isacharequal}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ E{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ exE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ H{\isadigit{1}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{1}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{2}}\ {\isacartoucheopen}F\ {\isacharequal}\ {\isacharparenleft}G{\isadigit{1}}\ \isactrlbold {\isasymrightarrow}\ H{\isadigit{1}}{\isacharparenright}{\isacartoucheclose}\ {\isacartoucheopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{1}}{\isacartoucheclose}\ {\isacartoucheopen}H\ {\isacharequal}\ H{\isadigit{1}}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymexists}G{\isadigit{2}}\ H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymor}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\ \isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ disjE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ E{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymexists}G{\isadigit{2}}\ H{\isadigit{2}}{\isachardot}\ F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{obtain}\isamarkupfalse%
+\ G{\isadigit{2}}\ H{\isadigit{2}}\ \isakeyword{where}\ A{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}\ {\isasymand}\ G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}\ {\isasymand}\ H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ E{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ exE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{2}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{4}}\ {\isacartoucheopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}G{\isadigit{2}}\ \isactrlbold {\isasymand}\ H{\isadigit{2}}{\isacharparenright}{\isacartoucheclose}\ {\isacartoucheopen}G\ {\isacharequal}\ \isactrlbold {\isasymnot}\ G{\isadigit{2}}{\isacartoucheclose}\ {\isacartoucheopen}H\ {\isacharequal}\ \isactrlbold {\isasymnot}\ H{\isadigit{2}}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ A{\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}\ {\isasymand}\ H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}H\ {\isacharequal}\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A{\isadigit{3}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{3}}\ {\isacartoucheopen}F\ {\isacharequal}\ \isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ disj{\isacharunderscore}absorb{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ {\isacartoucheopen}H\ {\isacharequal}\ G{\isacartoucheclose}{\isacharparenright}\isanewline
+\ \ \ \ \ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+De esta manera, mediante los anteriores lemas auxiliares podemos probar la primera
+  implicación detalladamente en Isabelle.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{1}}{\isacharcolon}\ \isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}pcp\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ ballI{\isacharparenright}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ S\isanewline
+\ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\isanewline
+\ \ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ pcp{\isacharunderscore}def{\isacharparenright}\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ pcpS{\isacharcolon}{\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}S\ {\isasymin}\ C{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ bspec{\isacharparenright}\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{4}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{5}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{6}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{7}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{8}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ C{\isadigit{9}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ pcpS\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{3}}\ C{\isadigit{6}}\ C{\isadigit{8}}\ C{\isadigit{9}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conjI{\isacharparenright}\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ Con{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{1}}Con{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{4}}\ C{\isadigit{5}}\ C{\isadigit{6}}\ C{\isadigit{7}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conjI{\isacharparenright}\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ Dis{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{1}}Dis{\isacharparenright}\isanewline
+\ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ C{\isadigit{1}}\ C{\isadigit{2}}\ Con\ Dis\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conjI{\isacharparenright}\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Por otro lado, veamos la demostración detallada de la implicación recíproca de la
+  equivalencia. Para ello, utilizaremos distintos lemas auxiliares para deducir cada una de las 
+  condiciones de la definición de propiedad de consistencia proposicional a partir de las
+  hipótesis sobre las fórmulas de tipo \isa{{\isasymalpha}} y \isa{{\isasymbeta}}. En primer lugar, veamos los lemas que se deducen
+  condiciones a partir de la hipótesis referente a las fórmulas de tipo \isa{{\isasymalpha}}.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{1}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ G\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Con{\isachardot}intros{\isacharparenleft}{\isadigit{1}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F{\isacharequal}{\isachardoublequoteopen}G\ \isactrlbold {\isasymand}\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharquery}F\ G\ H\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Con\ {\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ G\ H{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{2}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ \isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}{\isacharparenright}\ G\ G{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Con{\isachardot}intros{\isacharparenleft}{\isadigit{4}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F{\isacharequal}{\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}\ G{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ Con\ {\isacharquery}F\ G\ H\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}H{\isachardot}\ Con\ {\isacharquery}F\ G\ H\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharquery}F\ G\ G\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}{\isacharparenright}\ G\ G{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}G{\isacharcomma}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}{\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ insert{\isacharunderscore}absorb{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{3}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Con{\isachardot}intros{\isacharparenleft}{\isadigit{2}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F\ {\isacharequal}\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharquery}F\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{4}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}{\isacharparenright}\ G\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Con{\isachardot}intros{\isacharparenleft}{\isadigit{3}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F\ {\isacharequal}\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Con\ {\isacharquery}F\ G\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\ \ \isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Con\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}{\isacharparenright}\ G\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Por otro lado, los siguientes lemas auxiliares prueban el resto de condiciones de la
+  definición de propiedad de consistencia proposicional a partir de la hipótesis referente a 
+  fórmulas de tipo \isa{{\isasymbeta}}.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{1}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ G\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Dis{\isachardot}intros{\isacharparenleft}{\isadigit{1}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F{\isacharequal}{\isachardoublequoteopen}G\ \isactrlbold {\isasymor}\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharquery}F\ G\ H\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Dis\ {\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ G\ H{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{2}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ H{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Dis{\isachardot}intros{\isacharparenleft}{\isadigit{2}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F{\isacharequal}{\isachardoublequoteopen}G\ \isactrlbold {\isasymrightarrow}\ H{\isachardoublequoteclose}\ \isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharquery}F\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ H\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Dis\ {\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ H{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+\isanewline
+%
+\endisadelimproof
+\isanewline
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{3}}{\isacharcolon}\isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ allI{\isacharparenright}{\isacharplus}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ G\ H\isanewline
+\ \ \isacommand{show}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ impI{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}simp\ only{\isacharcolon}\ Dis{\isachardot}intros{\isacharparenleft}{\isadigit{3}}{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{let}\isamarkupfalse%
+\ {\isacharquery}F{\isacharequal}{\isachardoublequoteopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}Dis\ {\isacharquery}F\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}\ {\isasymlongrightarrow}\ {\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ allE{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharquery}F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}Dis\ {\isacharparenleft}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isacharparenleft}\isactrlbold {\isasymnot}H{\isacharparenright}{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isacartoucheopen}\isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ mp{\isacharparenright}\isanewline
+\ \ \isacommand{qed}\isamarkupfalse%
+\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+De este modo, procedemos a la demostración detallada de esta implicación en Isabelle.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isadigit{2}}{\isacharcolon}\ \isanewline
+\ \ \isakeyword{assumes}\ {\isachardoublequoteopen}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isakeyword{shows}\ {\isachardoublequoteopen}pcp\ C{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{unfolding}\isamarkupfalse%
+\ pcp{\isacharunderscore}def\isanewline
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ ballI{\isacharparenright}\isanewline
+\ \ \isacommand{fix}\isamarkupfalse%
+\ S\isanewline
+\ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ H{\isacharcolon}{\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ assms\ {\isacartoucheopen}S\ {\isasymin}\ C{\isacartoucheclose}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ bspec{\isacharparenright}\isanewline
+\ \ \isacommand{then}\isamarkupfalse%
+\ \isacommand{have}\isamarkupfalse%
+\ Con{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{1}}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ Dis{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ H\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{1}}\ conjunct{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{1}}{\isacharcolon}{\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ H\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ elim{\isacharcolon}\ conjunct{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{2}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Con\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{3}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Dis\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{1}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{4}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Dis\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{5}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Con\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{2}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{6}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Dis\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Dis{\isadigit{3}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{7}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Con\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{3}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isadigit{8}}{\isacharcolon}{\isachardoublequoteopen}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ Con\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}Con{\isadigit{4}}{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ A{\isacharcolon}{\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isadigit{1}}\ {\isadigit{2}}\ {\isadigit{3}}\ {\isadigit{4}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conjI{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ B{\isacharcolon}{\isachardoublequoteopen}{\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ {\isadigit{5}}\ {\isadigit{6}}\ {\isadigit{7}}\ {\isadigit{8}}\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conjI{\isacharparenright}\isanewline
+\ \ \isacommand{have}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isacharparenleft}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{using}\isamarkupfalse%
+\ A\ B\ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ conjI{\isacharparenright}\isanewline
+\ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymbottom}\ {\isasymnotin}\ S\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymand}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymor}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ G\ \isactrlbold {\isasymrightarrow}\ H\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G{\isachardot}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}\isactrlbold {\isasymnot}G{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymand}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymor}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}\isactrlbold {\isasymnot}\ G{\isacharcomma}\ \isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+\ \ \ \ {\isasymand}\ {\isacharparenleft}{\isasymforall}G\ H{\isachardot}\ \isactrlbold {\isasymnot}{\isacharparenleft}G\ \isactrlbold {\isasymrightarrow}\ H{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}\isactrlbold {\isasymnot}\ H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}iprover\ intro{\isacharcolon}\ conj{\isacharunderscore}assoc{\isacharparenright}\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+Una vez probadas detalladamente en Isabelle cada una de las implicaciones de la
+  equivalencia, podemos finalmente concluir con la demostración del lema completo.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ C\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isatagproof
+\isacommand{proof}\isamarkupfalse%
+\ {\isacharparenleft}rule\ iffI{\isacharparenright}\isanewline
+\ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ C{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{1}}{\isacharparenright}\isanewline
+\isacommand{next}\isamarkupfalse%
+\isanewline
+\ \ \isacommand{assume}\isamarkupfalse%
+\ {\isachardoublequoteopen}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isachardoublequoteclose}\isanewline
+\ \ \isacommand{thus}\isamarkupfalse%
+\ {\isachardoublequoteopen}pcp\ C{\isachardoublequoteclose}\isanewline
+\ \ \ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}rule\ pcp{\isacharunderscore}alt{\isadigit{2}}{\isacharparenright}\isanewline
+\isacommand{qed}\isamarkupfalse%
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\begin{isamarkuptext}%
+La demostración automática del resultado en Isabelle/HOL se muestra finalmente a 
+  continuación.%
+\end{isamarkuptext}\isamarkuptrue%
+\isacommand{lemma}\isamarkupfalse%
+\ pcp{\isacharunderscore}alt{\isacharcolon}\ {\isachardoublequoteopen}pcp\ C\ {\isacharequal}\ {\isacharparenleft}{\isasymforall}S\ {\isasymin}\ C{\isachardot}\isanewline
+\ \ {\isasymbottom}\ {\isasymnotin}\ S\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}k{\isachardot}\ Atom\ k\ {\isasymin}\ S\ {\isasymlongrightarrow}\ \isactrlbold {\isasymnot}\ {\isacharparenleft}Atom\ k{\isacharparenright}\ {\isasymin}\ S\ {\isasymlongrightarrow}\ False{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Con\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharcomma}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}\isanewline
+{\isasymand}\ {\isacharparenleft}{\isasymforall}F\ G\ H{\isachardot}\ Dis\ F\ G\ H\ {\isasymlongrightarrow}\ F\ {\isasymin}\ S\ {\isasymlongrightarrow}\ {\isacharbraceleft}G{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C\ {\isasymor}\ {\isacharbraceleft}H{\isacharbraceright}\ {\isasymunion}\ S\ {\isasymin}\ C{\isacharparenright}{\isacharparenright}{\isachardoublequoteclose}\isanewline
+%
+\isadelimproof
+\ \ %
+\endisadelimproof
+%
+\isatagproof
+\isacommand{apply}\isamarkupfalse%
+{\isacharparenleft}simp\ add{\isacharcolon}\ pcp{\isacharunderscore}def\ con{\isacharunderscore}dis{\isacharunderscore}simps{\isacharparenright}\isanewline
+\ \ \isacommand{apply}\isamarkupfalse%
+{\isacharparenleft}rule\ iffI{\isacharsemicolon}\ unfold\ Ball{\isacharunderscore}def{\isacharsemicolon}\ elim\ all{\isacharunderscore}forward{\isacharparenright}\isanewline
+\ \ \isacommand{by}\isamarkupfalse%
+\ {\isacharparenleft}auto\ simp\ add{\isacharcolon}\ insert{\isacharunderscore}absorb\ split{\isacharcolon}\ formula{\isachardot}splits{\isacharparenright}\isanewline
+%
+\endisatagproof
+{\isafoldproof}%
+%
+\isadelimproof
+%
+\endisadelimproof
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\isatagtheory
+%
+\endisatagtheory
+{\isafoldtheory}%
+%
+\isadelimtheory
+%
+\endisadelimtheory
+%
+\end{isabellebody}%
+\endinput
+%:%file=~/TFM/TFM/Pcp.thy%:%
+%:%19=11%:%
+%:%20=12%:%
+%:%21=13%:%
+%:%22=14%:%
+%:%23=15%:%
+%:%24=16%:%
+%:%25=17%:%
+%:%26=18%:%
+%:%26=19%:%
+%:%27=20%:%
+%:%28=21%:%
+%:%29=22%:%
+%:%30=23%:%
+%:%34=26%:%
+%:%35=27%:%
+%:%39=30%:%
+%:%40=31%:%
+%:%41=32%:%
+%:%42=33%:%
+%:%43=34%:%
+%:%44=35%:%
+%:%45=36%:%
+%:%46=37%:%
+%:%47=38%:%
+%:%48=39%:%
+%:%49=40%:%
+%:%50=41%:%
+%:%51=42%:%
+%:%52=43%:%
+%:%53=44%:%
+%:%54=45%:%
+%:%55=46%:%
+%:%56=47%:%
+%:%57=48%:%
+%:%58=49%:%
+%:%59=50%:%
+%:%60=51%:%
+%:%62=53%:%
+%:%63=53%:%
+%:%74=64%:%
+%:%75=65%:%
+%:%76=66%:%
+%:%78=68%:%
+%:%79=68%:%
+%:%82=69%:%
+%:%86=69%:%
+%:%87=69%:%
+%:%88=69%:%
+%:%97=71%:%
+%:%98=72%:%
+%:%99=73%:%
+%:%101=75%:%
+%:%102=75%:%
+%:%105=76%:%
+%:%109=76%:%
+%:%110=76%:%
+%:%111=76%:%
+%:%116=76%:%
+%:%119=77%:%
+%:%120=78%:%
+%:%121=78%:%
+%:%123=80%:%
+%:%126=81%:%
+%:%130=81%:%
+%:%131=81%:%
+%:%132=81%:%
+%:%141=83%:%
+%:%142=84%:%
+%:%143=85%:%
+%:%144=86%:%
+%:%146=88%:%
+%:%147=88%:%
+%:%148=89%:%
+%:%151=90%:%
+%:%155=90%:%
+%:%156=90%:%
+%:%157=90%:%
+%:%166=92%:%
+%:%167=93%:%
+%:%168=94%:%
+%:%169=95%:%
+%:%170=96%:%
+%:%171=97%:%
+%:%172=98%:%
+%:%173=99%:%
+%:%174=100%:%
+%:%175=101%:%
+%:%176=102%:%
+%:%177=103%:%
+%:%178=104%:%
+%:%179=105%:%
+%:%180=106%:%
+%:%181=107%:%
+%:%182=108%:%
+%:%183=109%:%
+%:%184=110%:%
+%:%185=111%:%
+%:%186=112%:%
+%:%187=113%:%
+%:%188=114%:%
+%:%190=116%:%
+%:%191=116%:%
+%:%194=119%:%
+%:%197=120%:%
+%:%201=120%:%
+%:%211=122%:%
+%:%212=123%:%
+%:%213=124%:%
+%:%214=125%:%
+%:%215=126%:%
+%:%216=127%:%
+%:%217=128%:%
+%:%218=129%:%
+%:%219=130%:%
+%:%220=131%:%
+%:%221=132%:%
+%:%222=133%:%
+%:%223=134%:%
+%:%224=135%:%
+%:%225=136%:%
+%:%226=137%:%
+%:%227=138%:%
+%:%228=139%:%
+%:%229=140%:%
+%:%230=141%:%
+%:%231=142%:%
+%:%232=143%:%
+%:%233=144%:%
+%:%234=145%:%
+%:%235=146%:%
+%:%236=147%:%
+%:%237=148%:%
+%:%238=149%:%
+%:%239=150%:%
+%:%240=151%:%
+%:%241=152%:%
+%:%242=153%:%
+%:%243=154%:%
+%:%244=155%:%
+%:%245=156%:%
+%:%246=157%:%
+%:%247=158%:%
+%:%248=159%:%
+%:%249=160%:%
+%:%250=161%:%
+%:%251=162%:%
+%:%252=163%:%
+%:%253=164%:%
+%:%254=165%:%
+%:%255=166%:%
+%:%256=167%:%
+%:%257=168%:%
+%:%258=169%:%
+%:%259=170%:%
+%:%260=171%:%
+%:%261=172%:%
+%:%262=173%:%
+%:%263=174%:%
+%:%264=175%:%
+%:%265=176%:%
+%:%266=177%:%
+%:%267=178%:%
+%:%268=179%:%
+%:%269=180%:%
+%:%270=181%:%
+%:%271=182%:%
+%:%272=183%:%
+%:%273=184%:%
+%:%274=185%:%
+%:%275=186%:%
+%:%276=187%:%
+%:%277=188%:%
+%:%278=189%:%
+%:%279=190%:%
+%:%280=191%:%
+%:%281=192%:%
+%:%282=193%:%
+%:%283=194%:%
+%:%284=195%:%
+%:%285=196%:%
+%:%286=197%:%
+%:%287=198%:%
+%:%288=199%:%
+%:%289=200%:%
+%:%290=201%:%
+%:%291=202%:%
+%:%292=203%:%
+%:%293=204%:%
+%:%294=205%:%
+%:%295=206%:%
+%:%296=207%:%
+%:%297=208%:%
+%:%298=209%:%
+%:%299=210%:%
+%:%300=211%:%
+%:%301=212%:%
+%:%302=213%:%
+%:%303=214%:%
+%:%304=215%:%
+%:%305=216%:%
+%:%306=217%:%
+%:%307=218%:%
+%:%308=219%:%
+%:%309=220%:%
+%:%310=221%:%
+%:%311=222%:%
+%:%312=223%:%
+%:%313=224%:%
+%:%314=225%:%
+%:%315=226%:%
+%:%316=227%:%
+%:%317=228%:%
+%:%318=229%:%
+%:%319=230%:%
+%:%320=231%:%
+%:%321=232%:%
+%:%322=233%:%
+%:%323=234%:%
+%:%324=235%:%
+%:%325=236%:%
+%:%326=237%:%
+%:%327=238%:%
+%:%328=239%:%
+%:%329=240%:%
+%:%330=241%:%
+%:%331=242%:%
+%:%332=243%:%
+%:%333=244%:%
+%:%334=245%:%
+%:%335=246%:%
+%:%336=247%:%
+%:%337=248%:%
+%:%338=249%:%
+%:%339=250%:%
+%:%340=251%:%
+%:%341=252%:%
+%:%342=253%:%
+%:%343=254%:%
+%:%344=255%:%
+%:%345=256%:%
+%:%346=257%:%
+%:%347=258%:%
+%:%348=259%:%
+%:%349=260%:%
+%:%350=261%:%
+%:%351=262%:%
+%:%352=263%:%
+%:%353=264%:%
+%:%354=265%:%
+%:%355=266%:%
+%:%356=267%:%
+%:%357=268%:%
+%:%358=269%:%
+%:%359=270%:%
+%:%360=271%:%
+%:%361=272%:%
+%:%362=273%:%
+%:%363=274%:%
+%:%364=275%:%
+%:%365=276%:%
+%:%366=277%:%
+%:%367=278%:%
+%:%368=279%:%
+%:%369=280%:%
+%:%370=281%:%
+%:%371=282%:%
+%:%372=283%:%
+%:%373=284%:%
+%:%374=285%:%
+%:%375=286%:%
+%:%376=287%:%
+%:%377=288%:%
+%:%378=289%:%
+%:%379=290%:%
+%:%380=291%:%
+%:%381=292%:%
+%:%382=293%:%
+%:%383=294%:%
+%:%384=295%:%
+%:%385=296%:%
+%:%386=297%:%
+%:%387=298%:%
+%:%388=299%:%
+%:%389=300%:%
+%:%390=301%:%
+%:%391=302%:%
+%:%392=303%:%
+%:%394=305%:%
+%:%395=305%:%
+%:%396=306%:%
+%:%399=309%:%
+%:%400=310%:%
+%:%407=311%:%
+%:%408=311%:%
+%:%409=312%:%
+%:%410=312%:%
+%:%411=313%:%
+%:%412=313%:%
+%:%413=313%:%
+%:%414=314%:%
+%:%415=314%:%
+%:%416=315%:%
+%:%417=315%:%
+%:%418=315%:%
+%:%419=316%:%
+%:%420=316%:%
+%:%421=317%:%
+%:%422=317%:%
+%:%423=317%:%
+%:%424=318%:%
+%:%425=318%:%
+%:%426=319%:%
+%:%427=319%:%
+%:%428=319%:%
+%:%429=320%:%
+%:%430=320%:%
+%:%431=321%:%
+%:%432=321%:%
+%:%433=322%:%
+%:%434=322%:%
+%:%435=323%:%
+%:%436=323%:%
+%:%437=324%:%
+%:%438=324%:%
+%:%439=325%:%
+%:%440=325%:%
+%:%441=326%:%
+%:%442=326%:%
+%:%443=326%:%
+%:%446=329%:%
+%:%447=330%:%
+%:%448=330%:%
+%:%449=331%:%
+%:%450=331%:%
+%:%451=332%:%
+%:%452=332%:%
+%:%453=333%:%
+%:%454=333%:%
+%:%455=334%:%
+%:%456=334%:%
+%:%457=335%:%
+%:%458=335%:%
+%:%459=335%:%
+%:%460=336%:%
+%:%461=336%:%
+%:%462=337%:%
+%:%463=337%:%
+%:%465=339%:%
+%:%466=340%:%
+%:%467=340%:%
+%:%468=341%:%
+%:%469=341%:%
+%:%470=342%:%
+%:%471=342%:%
+%:%472=343%:%
+%:%473=343%:%
+%:%474=344%:%
+%:%475=344%:%
+%:%476=344%:%
+%:%477=345%:%
+%:%478=345%:%
+%:%479=346%:%
+%:%480=346%:%
+%:%481=346%:%
+%:%482=347%:%
+%:%483=347%:%
+%:%484=348%:%
+%:%485=348%:%
+%:%486=348%:%
+%:%487=349%:%
+%:%488=349%:%
+%:%489=350%:%
+%:%490=350%:%
+%:%491=350%:%
+%:%492=351%:%
+%:%493=351%:%
+%:%494=352%:%
+%:%495=352%:%
+%:%496=352%:%
+%:%497=353%:%
+%:%498=353%:%
+%:%499=354%:%
+%:%500=354%:%
+%:%501=355%:%
+%:%502=356%:%
+%:%503=356%:%
+%:%504=357%:%
+%:%505=357%:%
+%:%506=358%:%
+%:%507=358%:%
+%:%508=359%:%
+%:%509=359%:%
+%:%510=360%:%
+%:%511=360%:%
+%:%512=360%:%
+%:%513=361%:%
+%:%514=361%:%
+%:%515=362%:%
+%:%516=362%:%
+%:%517=362%:%
+%:%518=363%:%
+%:%519=363%:%
+%:%520=364%:%
+%:%521=364%:%
+%:%522=364%:%
+%:%523=365%:%
+%:%524=365%:%
+%:%525=366%:%
+%:%526=366%:%
+%:%527=366%:%
+%:%528=367%:%
+%:%529=367%:%
+%:%530=368%:%
+%:%531=368%:%
+%:%532=369%:%
+%:%533=369%:%
+%:%534=369%:%
+%:%535=370%:%
+%:%536=370%:%
+%:%537=371%:%
+%:%538=371%:%
+%:%539=372%:%
+%:%540=372%:%
+%:%541=372%:%
+%:%542=373%:%
+%:%543=373%:%
+%:%544=374%:%
+%:%545=374%:%
+%:%546=374%:%
+%:%547=375%:%
+%:%548=375%:%
+%:%549=375%:%
+%:%550=376%:%
+%:%551=376%:%
+%:%552=377%:%
+%:%553=377%:%
+%:%554=378%:%
+%:%555=378%:%
+%:%556=379%:%
+%:%557=379%:%
+%:%558=380%:%
+%:%559=380%:%
+%:%560=381%:%
+%:%561=381%:%
+%:%562=382%:%
+%:%563=382%:%
+%:%564=383%:%
+%:%565=383%:%
+%:%566=384%:%
+%:%576=386%:%
+%:%577=387%:%
+%:%578=388%:%
+%:%580=390%:%
+%:%581=390%:%
+%:%582=391%:%
+%:%585=394%:%
+%:%586=395%:%
+%:%593=396%:%
+%:%594=396%:%
+%:%595=397%:%
+%:%596=397%:%
+%:%597=398%:%
+%:%598=398%:%
+%:%599=398%:%
+%:%600=399%:%
+%:%601=399%:%
+%:%602=400%:%
+%:%603=400%:%
+%:%604=400%:%
+%:%605=401%:%
+%:%606=401%:%
+%:%607=402%:%
+%:%608=402%:%
+%:%609=402%:%
+%:%610=403%:%
+%:%611=403%:%
+%:%612=404%:%
+%:%613=404%:%
+%:%614=404%:%
+%:%615=405%:%
+%:%616=405%:%
+%:%617=406%:%
+%:%618=406%:%
+%:%619=407%:%
+%:%620=407%:%
+%:%621=408%:%
+%:%622=408%:%
+%:%623=409%:%
+%:%624=409%:%
+%:%625=410%:%
+%:%626=410%:%
+%:%627=411%:%
+%:%628=411%:%
+%:%629=411%:%
+%:%632=414%:%
+%:%633=415%:%
+%:%634=415%:%
+%:%635=416%:%
+%:%636=416%:%
+%:%637=417%:%
+%:%638=417%:%
+%:%639=418%:%
+%:%640=418%:%
+%:%641=419%:%
+%:%642=419%:%
+%:%643=420%:%
+%:%644=420%:%
+%:%645=420%:%
+%:%646=421%:%
+%:%647=421%:%
+%:%648=422%:%
+%:%649=422%:%
+%:%651=424%:%
+%:%652=425%:%
+%:%653=425%:%
+%:%654=426%:%
+%:%655=426%:%
+%:%656=427%:%
+%:%657=427%:%
+%:%658=428%:%
+%:%659=428%:%
+%:%660=429%:%
+%:%661=429%:%
+%:%662=429%:%
+%:%663=430%:%
+%:%664=430%:%
+%:%665=431%:%
+%:%666=431%:%
+%:%667=431%:%
+%:%668=432%:%
+%:%669=432%:%
+%:%670=433%:%
+%:%671=433%:%
+%:%672=433%:%
+%:%673=434%:%
+%:%674=434%:%
+%:%675=435%:%
+%:%676=435%:%
+%:%677=435%:%
+%:%678=436%:%
+%:%679=436%:%
+%:%680=437%:%
+%:%681=437%:%
+%:%682=437%:%
+%:%683=438%:%
+%:%684=438%:%
+%:%685=439%:%
+%:%686=439%:%
+%:%687=440%:%
+%:%688=441%:%
+%:%689=441%:%
+%:%690=442%:%
+%:%691=442%:%
+%:%692=443%:%
+%:%693=443%:%
+%:%694=444%:%
+%:%695=444%:%
+%:%696=445%:%
+%:%697=445%:%
+%:%698=445%:%
+%:%699=446%:%
+%:%700=446%:%
+%:%701=447%:%
+%:%702=447%:%
+%:%703=447%:%
+%:%704=448%:%
+%:%705=448%:%
+%:%706=449%:%
+%:%707=449%:%
+%:%708=449%:%
+%:%709=450%:%
+%:%710=450%:%
+%:%711=451%:%
+%:%712=451%:%
+%:%713=451%:%
+%:%714=452%:%
+%:%715=452%:%
+%:%716=453%:%
+%:%717=453%:%
+%:%718=453%:%
+%:%719=454%:%
+%:%720=454%:%
+%:%721=455%:%
+%:%722=455%:%
+%:%723=456%:%
+%:%724=456%:%
+%:%725=456%:%
+%:%726=457%:%
+%:%727=457%:%
+%:%728=458%:%
+%:%729=458%:%
+%:%730=459%:%
+%:%731=459%:%
+%:%732=459%:%
+%:%733=460%:%
+%:%734=460%:%
+%:%735=461%:%
+%:%736=461%:%
+%:%737=461%:%
+%:%738=462%:%
+%:%739=462%:%
+%:%740=462%:%
+%:%741=463%:%
+%:%742=463%:%
+%:%743=464%:%
+%:%744=464%:%
+%:%745=465%:%
+%:%746=465%:%
+%:%747=466%:%
+%:%748=466%:%
+%:%749=467%:%
+%:%750=467%:%
+%:%751=468%:%
+%:%752=468%:%
+%:%753=469%:%
+%:%754=469%:%
+%:%755=470%:%
+%:%756=470%:%
+%:%757=471%:%
+%:%767=473%:%
+%:%768=474%:%
+%:%770=476%:%
+%:%771=476%:%
+%:%772=477%:%
+%:%773=478%:%
+%:%776=481%:%
+%:%783=482%:%
+%:%784=482%:%
+%:%785=483%:%
+%:%786=483%:%
+%:%787=484%:%
+%:%788=484%:%
+%:%789=485%:%
+%:%790=485%:%
+%:%799=494%:%
+%:%800=495%:%
+%:%801=495%:%
+%:%802=495%:%
+%:%803=496%:%
+%:%804=496%:%
+%:%805=496%:%
+%:%813=504%:%
+%:%814=505%:%
+%:%815=505%:%
+%:%816=505%:%
+%:%817=506%:%
+%:%818=506%:%
+%:%819=506%:%
+%:%820=507%:%
+%:%821=507%:%
+%:%822=508%:%
+%:%823=508%:%
+%:%824=509%:%
+%:%825=509%:%
+%:%826=509%:%
+%:%827=510%:%
+%:%828=510%:%
+%:%829=511%:%
+%:%830=511%:%
+%:%831=511%:%
+%:%832=512%:%
+%:%833=512%:%
+%:%834=513%:%
+%:%835=513%:%
+%:%836=513%:%
+%:%837=514%:%
+%:%838=514%:%
+%:%839=515%:%
+%:%840=515%:%
+%:%841=515%:%
+%:%842=516%:%
+%:%843=516%:%
+%:%844=517%:%
+%:%845=517%:%
+%:%846=517%:%
+%:%847=518%:%
+%:%848=518%:%
+%:%849=519%:%
+%:%850=519%:%
+%:%851=519%:%
+%:%852=520%:%
+%:%853=520%:%
+%:%854=521%:%
+%:%855=521%:%
+%:%856=521%:%
+%:%857=522%:%
+%:%858=522%:%
+%:%859=523%:%
+%:%860=523%:%
+%:%861=523%:%
+%:%862=524%:%
+%:%863=524%:%
+%:%866=527%:%
+%:%867=528%:%
+%:%868=528%:%
+%:%869=528%:%
+%:%870=529%:%
+%:%871=529%:%
+%:%872=529%:%
+%:%873=530%:%
+%:%874=530%:%
+%:%875=531%:%
+%:%876=531%:%
+%:%879=534%:%
+%:%880=535%:%
+%:%881=535%:%
+%:%882=535%:%
+%:%883=536%:%
+%:%884=536%:%
+%:%885=536%:%
+%:%886=537%:%
+%:%887=537%:%
+%:%888=538%:%
+%:%889=538%:%
+%:%892=541%:%
+%:%893=542%:%
+%:%894=542%:%
+%:%895=542%:%
+%:%896=543%:%
+%:%906=545%:%
+%:%907=546%:%
+%:%908=547%:%
+%:%909=548%:%
+%:%910=549%:%
+%:%912=551%:%
+%:%913=551%:%
+%:%914=552%:%
+%:%915=553%:%
+%:%922=554%:%
+%:%923=554%:%
+%:%924=555%:%
+%:%925=555%:%
+%:%926=556%:%
+%:%927=556%:%
+%:%928=557%:%
+%:%929=557%:%
+%:%930=558%:%
+%:%931=558%:%
+%:%932=559%:%
+%:%933=559%:%
+%:%934=559%:%
+%:%935=560%:%
+%:%936=560%:%
+%:%937=561%:%
+%:%938=561%:%
+%:%939=562%:%
+%:%940=562%:%
+%:%941=563%:%
+%:%942=563%:%
+%:%943=563%:%
+%:%944=564%:%
+%:%945=564%:%
+%:%946=564%:%
+%:%947=565%:%
+%:%948=565%:%
+%:%949=565%:%
+%:%950=566%:%
+%:%951=566%:%
+%:%952=567%:%
+%:%953=567%:%
+%:%954=567%:%
+%:%955=568%:%
+%:%956=568%:%
+%:%957=569%:%
+%:%963=569%:%
+%:%966=570%:%
+%:%967=571%:%
+%:%968=571%:%
+%:%969=572%:%
+%:%970=573%:%
+%:%977=574%:%
+%:%978=574%:%
+%:%979=575%:%
+%:%980=575%:%
+%:%981=576%:%
+%:%982=576%:%
+%:%983=577%:%
+%:%984=577%:%
+%:%985=578%:%
+%:%986=578%:%
+%:%987=579%:%
+%:%988=579%:%
+%:%989=579%:%
+%:%990=580%:%
+%:%991=580%:%
+%:%992=581%:%
+%:%993=581%:%
+%:%994=582%:%
+%:%995=582%:%
+%:%996=583%:%
+%:%997=583%:%
+%:%998=583%:%
+%:%999=584%:%
+%:%1000=584%:%
+%:%1001=584%:%
+%:%1002=585%:%
+%:%1003=585%:%
+%:%1004=586%:%
+%:%1005=586%:%
+%:%1006=586%:%
+%:%1007=587%:%
+%:%1008=587%:%
+%:%1009=588%:%
+%:%1010=588%:%
+%:%1011=588%:%
+%:%1012=589%:%
+%:%1013=589%:%
+%:%1014=589%:%
+%:%1015=590%:%
+%:%1016=590%:%
+%:%1017=590%:%
+%:%1018=591%:%
+%:%1019=591%:%
+%:%1020=591%:%
+%:%1021=592%:%
+%:%1022=592%:%
+%:%1023=593%:%
+%:%1024=593%:%
+%:%1025=594%:%
+%:%1026=594%:%
+%:%1027=595%:%
+%:%1033=595%:%
+%:%1036=596%:%
+%:%1037=597%:%
+%:%1038=597%:%
+%:%1039=598%:%
+%:%1040=599%:%
+%:%1047=600%:%
+%:%1048=600%:%
+%:%1049=601%:%
+%:%1050=601%:%
+%:%1051=602%:%
+%:%1052=602%:%
+%:%1053=603%:%
+%:%1054=603%:%
+%:%1055=604%:%
+%:%1056=604%:%
+%:%1057=605%:%
+%:%1058=605%:%
+%:%1059=605%:%
+%:%1060=606%:%
+%:%1061=606%:%
+%:%1062=607%:%
+%:%1063=607%:%
+%:%1064=608%:%
+%:%1065=608%:%
+%:%1066=609%:%
+%:%1067=609%:%
+%:%1068=609%:%
+%:%1069=610%:%
+%:%1070=610%:%
+%:%1071=610%:%
+%:%1072=611%:%
+%:%1073=611%:%
+%:%1074=611%:%
+%:%1075=612%:%
+%:%1076=612%:%
+%:%1077=613%:%
+%:%1078=613%:%
+%:%1079=613%:%
+%:%1080=614%:%
+%:%1081=614%:%
+%:%1082=615%:%
+%:%1088=615%:%
+%:%1091=616%:%
+%:%1092=617%:%
+%:%1093=617%:%
+%:%1094=618%:%
+%:%1095=619%:%
+%:%1102=620%:%
+%:%1103=620%:%
+%:%1104=621%:%
+%:%1105=621%:%
+%:%1106=622%:%
+%:%1107=622%:%
+%:%1108=623%:%
+%:%1109=623%:%
+%:%1110=624%:%
+%:%1111=624%:%
+%:%1112=625%:%
+%:%1113=625%:%
+%:%1114=625%:%
+%:%1115=626%:%
+%:%1116=626%:%
+%:%1117=627%:%
+%:%1118=627%:%
+%:%1119=628%:%
+%:%1120=628%:%
+%:%1121=629%:%
+%:%1122=629%:%
+%:%1123=629%:%
+%:%1124=630%:%
+%:%1125=630%:%
+%:%1126=630%:%
+%:%1127=631%:%
+%:%1128=631%:%
+%:%1129=631%:%
+%:%1130=632%:%
+%:%1131=632%:%
+%:%1132=633%:%
+%:%1133=633%:%
+%:%1134=633%:%
+%:%1135=634%:%
+%:%1136=634%:%
+%:%1137=635%:%
+%:%1147=637%:%
+%:%1148=638%:%
+%:%1149=639%:%
+%:%1151=641%:%
+%:%1152=641%:%
+%:%1153=642%:%
+%:%1154=643%:%
+%:%1161=644%:%
+%:%1162=644%:%
+%:%1163=645%:%
+%:%1164=645%:%
+%:%1165=646%:%
+%:%1166=646%:%
+%:%1167=647%:%
+%:%1168=647%:%
+%:%1169=648%:%
+%:%1170=648%:%
+%:%1171=649%:%
+%:%1172=649%:%
+%:%1173=649%:%
+%:%1174=650%:%
+%:%1175=650%:%
+%:%1176=651%:%
+%:%1177=651%:%
+%:%1178=652%:%
+%:%1179=652%:%
+%:%1180=653%:%
+%:%1181=653%:%
+%:%1182=653%:%
+%:%1183=654%:%
+%:%1184=654%:%
+%:%1185=654%:%
+%:%1186=655%:%
+%:%1187=655%:%
+%:%1188=655%:%
+%:%1189=656%:%
+%:%1190=656%:%
+%:%1191=657%:%
+%:%1192=657%:%
+%:%1193=657%:%
+%:%1194=658%:%
+%:%1195=658%:%
+%:%1196=659%:%
+%:%1202=659%:%
+%:%1205=660%:%
+%:%1206=661%:%
+%:%1207=661%:%
+%:%1208=662%:%
+%:%1209=663%:%
+%:%1216=664%:%
+%:%1217=664%:%
+%:%1218=665%:%
+%:%1219=665%:%
+%:%1220=666%:%
+%:%1221=666%:%
+%:%1222=667%:%
+%:%1223=667%:%
+%:%1224=668%:%
+%:%1225=668%:%
+%:%1226=669%:%
+%:%1227=669%:%
+%:%1228=669%:%
+%:%1229=670%:%
+%:%1230=670%:%
+%:%1231=671%:%
+%:%1232=671%:%
+%:%1233=672%:%
+%:%1234=672%:%
+%:%1235=673%:%
+%:%1236=673%:%
+%:%1237=673%:%
+%:%1238=674%:%
+%:%1239=674%:%
+%:%1240=674%:%
+%:%1241=675%:%
+%:%1242=675%:%
+%:%1243=675%:%
+%:%1244=676%:%
+%:%1245=676%:%
+%:%1246=677%:%
+%:%1247=677%:%
+%:%1248=677%:%
+%:%1249=678%:%
+%:%1250=678%:%
+%:%1251=679%:%
+%:%1257=679%:%
+%:%1260=680%:%
+%:%1261=681%:%
+%:%1262=681%:%
+%:%1263=682%:%
+%:%1264=683%:%
+%:%1271=684%:%
+%:%1272=684%:%
+%:%1273=685%:%
+%:%1274=685%:%
+%:%1275=686%:%
+%:%1276=686%:%
+%:%1277=687%:%
+%:%1278=687%:%
+%:%1279=688%:%
+%:%1280=688%:%
+%:%1281=689%:%
+%:%1282=689%:%
+%:%1283=689%:%
+%:%1284=690%:%
+%:%1285=690%:%
+%:%1286=691%:%
+%:%1287=691%:%
+%:%1288=692%:%
+%:%1289=692%:%
+%:%1290=693%:%
+%:%1291=693%:%
+%:%1292=693%:%
+%:%1293=694%:%
+%:%1294=694%:%
+%:%1295=694%:%
+%:%1296=695%:%
+%:%1297=695%:%
+%:%1298=695%:%
+%:%1299=696%:%
+%:%1300=696%:%
+%:%1301=697%:%
+%:%1302=697%:%
+%:%1303=697%:%
+%:%1304=698%:%
+%:%1305=698%:%
+%:%1306=699%:%
+%:%1316=701%:%
+%:%1318=703%:%
+%:%1319=703%:%
+%:%1320=704%:%
+%:%1323=707%:%
+%:%1324=708%:%
+%:%1327=709%:%
+%:%1331=709%:%
+%:%1332=709%:%
+%:%1333=710%:%
+%:%1334=710%:%
+%:%1335=711%:%
+%:%1336=711%:%
+%:%1337=712%:%
+%:%1338=712%:%
+%:%1339=713%:%
+%:%1340=713%:%
+%:%1343=716%:%
+%:%1344=717%:%
+%:%1345=717%:%
+%:%1346=717%:%
+%:%1347=718%:%
+%:%1348=718%:%
+%:%1349=718%:%
+%:%1350=719%:%
+%:%1351=719%:%
+%:%1352=720%:%
+%:%1353=720%:%
+%:%1354=721%:%
+%:%1355=721%:%
+%:%1356=721%:%
+%:%1357=722%:%
+%:%1358=722%:%
+%:%1359=723%:%
+%:%1360=724%:%
+%:%1361=724%:%
+%:%1362=724%:%
+%:%1363=725%:%
+%:%1364=725%:%
+%:%1365=726%:%
+%:%1366=726%:%
+%:%1367=726%:%
+%:%1368=727%:%
+%:%1369=727%:%
+%:%1370=728%:%
+%:%1371=728%:%
+%:%1372=728%:%
+%:%1373=729%:%
+%:%1374=729%:%
+%:%1375=730%:%
+%:%1376=730%:%
+%:%1377=730%:%
+%:%1378=731%:%
+%:%1379=731%:%
+%:%1380=732%:%
+%:%1381=732%:%
+%:%1382=732%:%
+%:%1383=733%:%
+%:%1384=733%:%
+%:%1385=734%:%
+%:%1386=734%:%
+%:%1387=734%:%
+%:%1388=735%:%
+%:%1389=735%:%
+%:%1390=736%:%
+%:%1391=736%:%
+%:%1392=736%:%
+%:%1393=737%:%
+%:%1394=737%:%
+%:%1395=738%:%
+%:%1396=738%:%
+%:%1397=738%:%
+%:%1398=739%:%
+%:%1399=739%:%
+%:%1403=743%:%
+%:%1404=744%:%
+%:%1405=744%:%
+%:%1406=744%:%
+%:%1407=745%:%
+%:%1408=745%:%
+%:%1411=748%:%
+%:%1412=749%:%
+%:%1413=749%:%
+%:%1414=749%:%
+%:%1415=750%:%
+%:%1416=750%:%
+%:%1424=758%:%
+%:%1425=759%:%
+%:%1426=759%:%
+%:%1427=759%:%
+%:%1428=760%:%
+%:%1429=760%:%
+%:%1437=768%:%
+%:%1438=769%:%
+%:%1439=769%:%
+%:%1440=770%:%
+%:%1450=772%:%
+%:%1451=773%:%
+%:%1453=775%:%
+%:%1454=775%:%
+%:%1457=778%:%
+%:%1464=779%:%
+%:%1465=779%:%
+%:%1466=780%:%
+%:%1467=780%:%
+%:%1468=781%:%
+%:%1469=781%:%
+%:%1472=784%:%
+%:%1473=785%:%
+%:%1474=785%:%
+%:%1475=786%:%
+%:%1476=786%:%
+%:%1477=787%:%
+%:%1478=787%:%
+%:%1481=790%:%
+%:%1482=791%:%
+%:%1483=791%:%
+%:%1484=792%:%
+%:%1485=792%:%
+%:%1486=793%:%
+%:%1496=795%:%
+%:%1497=796%:%
+%:%1499=798%:%
+%:%1500=798%:%
+%:%1504=802%:%
+%:%1507=803%:%
+%:%1511=803%:%
+%:%1512=803%:%
+%:%1513=804%:%
+%:%1514=804%:%
+%:%1515=805%:%
+%:%1516=805%:%

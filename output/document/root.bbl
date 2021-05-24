@@ -1,0 +1,108 @@
+\begin{thebibliography}{10}
+
+\bibitem{LMF}
+Jos{\'e}~A. Alonso.
+\newblock Temas de ``{L}{\'o}gica matem{\'a}tica y fundamentos (2018--19)''.
+\newblock Technical report, Univ. de Sevilla, 2019.
+\newblock En \href{https://www.cs.us.es/~jalonso/cursos/lmf-18/temas.php}
+  {\url{https://www.cs.us.es/~jalonso/cursos/lmf-18/temas.php}}.
+
+\bibitem{intro}
+Lawrence C.~Paulson Computer~Laboratory.
+\newblock Old {I}ntroduction to {I}sabelle.
+\newblock Technical report, University of Cambridge, 2019.
+\newblock En
+  \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/intro.pdf}
+  {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/intro.pdf}}.
+
+\bibitem{modal}
+Christian Doczkal and Gert Smolka.
+\newblock Constructive {F}ormalization of {C}lassical {M}odal {L}ogic.
+\newblock Technical report, 2011.
+\newblock En \href{http://www.cs.ru.nl/~spitters/coqw_files/paper_1.pdf}
+  {\url{http://www.cs.ru.nl/~spitters/coqw_files/paper_1.pdf}}.
+
+\bibitem{fitting1996first}
+M.~Fitting.
+\newblock {\em First-order Logic and Automated Theorem Proving}.
+\newblock Graduate texts in computer science. Springer, 1996.
+
+\bibitem{gamut}
+L.T.F Gamut.
+\newblock {\em Introducción a la lógica}.
+\newblock Editorial Universitaria de Buenos Aires, 2002.
+
+\bibitem{automatic}
+John Harrison.
+\newblock An overview of automated reasoning.
+\newblock Technical report, 2014.
+\newblock En
+  \href{https://www.cl.cam.ac.uk/~jrh13/slides/lyon-03feb14/slides.pdf}
+  {\url{https://www.cl.cam.ac.uk/~jrh13/slides/lyon-03feb14/slides.pdf}}.
+
+\bibitem{articulo}
+Angeliki Koutsoukou-Argyraki.
+\newblock Formalising {M}athematics -in praxis, 2019.
+\newblock En
+  \href{https://www.researchgate.net/publication/334549483_formalising_mathematis_-in_praxis_a_mathematician's_first_experiences_with_isabellehol_and_the_why_and_how_of_getting_started}
+  {\url{https://www.researchgate.net/publication/334549483_formalising_mathematis_-in_praxis_a_mathematician's_first_experiences_with_isabellehol_and_the_why_and_how_of_getting_started}}.
+
+\bibitem{escribir}
+Dr. Kevin~P. Lee.
+\newblock A {G}uide to {W}riting {M}athematics.
+\newblock En \href{http://cc.kangwon.ac.kr/~kimoon/me/me-132/math-writing.pdf}
+  {\url{http://cc.kangwon.ac.kr/~kimoon/me/me-132/math-writing.pdf}}.
+
+\bibitem{CC}
+F.~F{\'e}lix~Lara Mart{\'\i}n.
+\newblock Temas 3 de ``{C}iencias de la computaci{\'o}n (2018--19)'': Funciones
+  recursivas.
+\newblock Technical report, Univ. de Sevilla, 2019.
+\newblock En \href{http://www.cs.us.es/cursos/cc-2018/Tema-03.pdf}
+  {\url{http://www.cs.us.es/cursos/cc-2018/Tema-03.pdf}}.
+
+\bibitem{proofsystems}
+Julius Michaelis and Tobias Nipkow.
+\newblock Propositional {P}roof {S}ystems.
+\newblock Technical report, 2020.
+\newblock En
+  \href{https://www.isa-afp.org/browser_info/current/AFP/Propositional_Proof_Systems/document.pdf}
+  {\url{https://www.isa-afp.org/browser_info/current/AFP/Propositional_Proof_Systems/document.pdf}}.
+
+\bibitem{main}
+Tobias Nipkow.
+\newblock What's in {M}ain, 2019.
+\newblock En
+  \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/main.pdf}
+  {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/main.pdf}}.
+
+\bibitem{tutorial}
+Lawrence C.~Paulson Tobias~Nipkow and Markus Wenzel.
+\newblock {\em Isabelle/HOL: A proof assistant for {H}igher--{O}rder {L}ogic}.
+\newblock Lecture Notes in Computer Science, Vol. 2283, Springer--Verlag, 2019.
+\newblock En
+  \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/tutorial.pdf}
+  {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/tutorial.pdf}}.
+
+\bibitem{coq}
+Floris van Doorn.
+\newblock Propositional {C}alculus in {C}oq.
+\newblock Technical report, 2015.
+\newblock En \href{https://arxiv.org/abs/1503.08744}
+  {\url{https://arxiv.org/abs/1503.08744}}.
+
+\bibitem{implementation}
+Makarius Wenzel.
+\newblock The {I}sabelle/{I}sar {I}mplementation, 2019.
+\newblock En
+  \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/implementation.pdf}
+  {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/implementation.pdf}}.
+
+\bibitem{isar}
+Makarius Wenzel.
+\newblock The {I}sabelle/{I}sar {R}eference {M}anual, 2019.
+\newblock En
+  \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/isar-ref.pdf}
+  {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/isar-ref.pdf}}.
+
+\end{thebibliography}
