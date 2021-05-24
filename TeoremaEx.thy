@@ -371,12 +371,7 @@ text \<open>Podemos probarlo de manera automática como sigue.\<close>
 lemma pcp_seq_sub: "pcp_seq C S n \<subseteq> pcp_lim C S" 
   unfolding pcp_lim_def by blast
 
-text \<open>Por otra parte, mostremos el siguiente lema que relaciona la pertenencia de una fórmula 
-  proposicional al límite definido en \<open>1.4.5\<close> y su pertenencia a un elemento de la sucesión definida
-  en \<open>1.4.1\<close>. 
-
-\comentario{El párrafo previo no aporta información significativa. He modificado algo
-la redacción del lema.}
+text \<open>Mostremos otro resultado. 
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de 
@@ -427,22 +422,15 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   La prueba del resultado se realiza por inducción sobre la estructura recursiva de los conjuntos 
   finitos.
 
-\comentario{
-Dos casos: caso base ( \<open>{}\<close>) y paso de inducción (S es de la forma  \<open>{F}
- \<union> S'\<close>, verificando S' la propiedad y hay que probarla para S).
+  En primer lugar, probemos el caso base correspondiente al conjunto vacío. Supongamos que \<open>{}\<close> está 
+  contenido en el límite de la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close>. Como \<open>{}\<close> es 
+  subconjunto de todo conjunto, en particular lo es de \<open>S = S\<^sub>0\<close>, probando así el primer caso.
 
-Redactar la demostración de forma más clara.
-
-}
-
-  En primer lugar, consideremos que el conjunto vacío está contenido en el límite de la sucesión de
-  conjuntos de \<open>C\<close> a partir de \<open>S\<close>. Como \<open>{}\<close> es subconjunto de todo conjunto, en particular lo es 
-  de \<open>S = S\<^sub>0\<close>, probando así el primer caso.
-
-  Por otra parte, sea \<open>S'\<close> un conjunto finito contenido en el límite de la sucesión de conjuntos de 
-  \<open>C\<close> a partir de \<open>S\<close>, de modo que también está contenido en algún \<open>S\<^sub>k\<^sub>'\<close> para cierto \<open>k' \<in> \<nat>\<close>. Sea 
-  \<open>F\<close> una fórmula cualquiera no perteneciente a \<open>S'\<close>. Supongamos que\\ \<open>{F} \<union> S'\<close> está también 
-  contenido en el límite. Probemos que \<open>{F} \<union> S'\<close> está contenido en \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
+  Por otra parte, probemos el paso de inducción. Sea \<open>S'\<close> un conjunto finito verificando la 
+  hipótesis de inducción: si \<open>S'\<close> está contenido en el límite de la sucesión de conjuntos de 
+  \<open>C\<close> a partir de \<open>S\<close>, entonces también está contenido en algún \<open>S\<^sub>k\<^sub>'\<close> para cierto \<open>k' \<in> \<nat>\<close>. Sea 
+  \<open>F\<close> una fórmula tal que \<open>F \<notin> S'\<close>. Vamos a probar que si \<open>{F} \<union> S'\<close> está contenido en el límite, 
+  entonces está contenido en \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
 
   Como hemos supuesto que \<open>{F} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>F\<close>
   pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>F\<close> pertenece al 
