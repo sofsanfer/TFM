@@ -232,35 +232,22 @@ text \<open>\comentario{Adaptación de singleton-conv para la imagen de un conju
 
 lemma imageElem: "{f n | n. n = a} = {f a}"
 proof -
-  have 1:"{n | n. n = a} = {a}"
-    by (simp only: singleton_conv simp_thms(6,40))
-  have "{f n | n. n = a} = f`{n | n. n = a}"
-    by (simp only: image_Collect simp_thms)
+  have "{f n | n. n = a} = f`({n. n = a})"
+    by (simp only: image_Collect)
   also have "\<dots> = f`{a}"
-    by (simp only: 1)
-  also have "\<dots> = {f a} \<union> f ` {}"
-    by (simp add: image_insert)
-  also have "\<dots> = {f a} \<union> {}"
+    by (simp only: singleton_conv simp_thms(6,40))
+  also have "\<dots> = insert (f a) (f`{})"
+    by (simp only: image_insert)
+  also have "\<dots> = {f a}" 
     by (simp only: image_empty)
-  also have "\<dots> = {f a}"
-    by (simp only: bounded_semilattice_sup_bot_class.sup_bot.right_neutral)
   finally show ?thesis
     by this
 qed
-
-text \<open>\comentario{Adaptación de Collectdisjeq para la imagen de un conjunto.}\<close>
-
-lemma imageUnDisj:"{f n |n. P n \<or> Q n} = {f n | n. P n} \<union> {f n | n. Q n}"
-  by blast (*Pendiente*)
 
 text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
- (* have "(pcp_seq C S)`{n. n = 0} = {pcp_seq C S 0}" 
-    by (simp only: singleton_conv imageElem)
-  then have 1:"\<Union>{pcp_seq C S n | n. n = 0} = \<Union>{pcp_seq C S 0}"
-    by (simp only: image_Collect) *)
   have  "\<Union>{pcp_seq C S n|n. n \<le> 0} = \<Union>{pcp_seq C S n|n. n = 0}"
     by (simp only: le_zero_eq)
   also have "\<dots> = \<Union> {pcp_seq C S 0}" 
@@ -269,10 +256,6 @@ proof (induct m)
     by  (simp only:cSup_singleton)
   finally show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" 
     by this
-  (*show "\<Union>{pcp_seq C S n|n. n \<le> 0} = pcp_seq C S 0" *)
-      
-  (*  by (simp only: canonically_ordered_monoid_add_class.le_zero_eq 1 
-        conditionally_complete_lattice_class.cSup_singleton) *)
 next
   fix m
   assume HI:"\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
@@ -280,15 +263,19 @@ next
     by (simp only: add_0_right)
   then have Mon:"pcp_seq C S m \<subseteq> pcp_seq C S (Suc m)"
     by (rule pcp_seq_mono)
-  have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = \<Union>{pcp_seq C S n |n. n = Suc m \<or> n \<le> m}"
-    using le_Suc_eq by blast (*Pendiente*)
-  also have "\<dots> = \<Union>({pcp_seq C S n | n. n = Suc m} \<union> {pcp_seq C S n |n. n \<le> m})" using [[simp_trace]]
-    by (simp only: imageUnDisj)
-  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
-    by (simp only: imageElem)
-  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)}) \<union> \<Union>({pcp_seq C S n |n. n \<le> m})"
+  have "\<Union>{pcp_seq C S n | n. n \<le> Suc m} = \<Union>((pcp_seq C S)`({n. n \<le> Suc m}))"
+    by (simp only: image_Collect)
+  also have "\<dots> = \<Union>((pcp_seq C S)`({Suc m} \<union> {n. n \<le> m}))"
+    by (simp only: le_Suc_eq Collect_disj_eq Un_commute singleton_conv)
+  also have "\<dots> = \<Union>((pcp_seq C S)`{Suc m} \<union> (pcp_seq C S)`{n. n \<le> m})"
+    by (simp only: image_Un)
+  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> (pcp_seq C S)`{n. n \<le> m})"
+    by (simp add: imageElem)
+  also have "\<dots> = \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n | n. n \<le> m})"
+    by (simp only: image_Collect)
+  also have "\<dots> = \<Union>{pcp_seq C S (Suc m)} \<union> \<Union>{pcp_seq C S n | n. n \<le> m}"
     by (simp only: Union_Un_distrib)
-  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>({pcp_seq C S n |n. n \<le> m})"
+  also have "\<dots> = (pcp_seq C S (Suc m)) \<union> \<Union>{pcp_seq C S n | n. n \<le> m}"
     by (simp only: cSup_singleton)
   also have "\<dots> = (pcp_seq C S (Suc m)) \<union> (pcp_seq C S m)"
     by (simp only: HI)
@@ -297,18 +284,6 @@ next
   finally show "\<Union>{pcp_seq C S n|n. n \<le> (Suc m)} = pcp_seq C S (Suc m)"
     by this
 qed
-    
-  (*have S:"{n. n \<le> Suc m}  = {Suc m} \<union> {n. n \<le> m}"
-    by (simp only: le_Suc_eq Collect_disj_eq Un_commute singleton_conv)
-  have "{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S) ` {n. n \<le> Suc m}" 
-    by (simp only: image_Collect)
-  then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = 
-          \<Union>({pcp_seq C S (Suc m)} \<union> {pcp_seq C S n |n. n \<le> m})"
-    by (simp only: S image_Un imageElem image_Collect)
-  then have "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = (pcp_seq C S m) \<union> (pcp_seq C S (Suc m))"
-    by (simp only: Sup_union_distrib cSup_singleton HI Un_commute)
-  thus "\<Union>{pcp_seq C S n |n. n \<le> Suc m} = pcp_seq C S (Suc m)"
-    using Mon by (simp only: subset_Un_eq)*)
 
 text \<open>Análogamente, podemos dar una prueba automática del resultado en Isabelle/HOL.\<close>
 
