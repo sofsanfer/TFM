@@ -7,7 +7,10 @@ sessions
   theories
     Resumen
     Introduccion
-    Consistencia
+    Notunif
+    Pcp
+    ColecScfc
+    TeoremaEx
     Glosario
   document_files
     "root.tex"
