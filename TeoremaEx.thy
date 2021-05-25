@@ -1230,14 +1230,79 @@ proof (rule allI)
   qed
 qed
 
-lemma finite_subset_insert:
+lemma finite_subset_insert1:
   assumes "finite S'"
           "S' \<subseteq> {a} \<union> B"
-        shows "(\<exists>C \<subseteq> B. finite C \<and> S' = {a} \<union> C) \<or> (\<exists>D \<subseteq> B. finite D \<and> a \<notin> D \<and> S' = D)"
-  by (metis assms(1) assms(2) finite_insert insert_is_Un mk_disjoint_insert subset_insert subset_insertI subset_trans)
-  (*by (smt Diff_partition Diff_subset_conv Un_insert_left assms(1) assms(2) finite_Diff insert_Diff insert_Diff_single subset_UnE subset_singletonD sup_bot.left_neutral)*)
+        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+  by (metis Diff_empty Diff_insert0 Diff_subset_conv Un_Diff_cancel assms(1) assms(2) finite_Diff insert_Diff insert_is_Un)
 
-lemma pcp_colecComp_CON:
+lemma finite_subset_insert2:
+  assumes "finite S'"
+          "S' \<subseteq> {a,b} \<union> B"
+        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+  oops
+
+lemma pcp_colecComp_CON_GH:
+  assumes "W \<in> (colecComp S)"
+          "Con F G H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,H} \<union> Wo)"
+proof -
+  have WcolecComp:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
+    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD)
+  then have "finite Wo \<longrightarrow> sat Wo"
+    using assms(5) by blast (*Pendiente*)
+  then have "sat Wo"
+    using assms(4) by (rule mp)
+  have "sat ({F} \<union> Wo)"
+  proof -
+    have "finite ({F} \<union> Wo)"
+      using assms(4) by blast (*Pendiente*)
+    have "{F} \<union> Wo \<subseteq> W"
+      using assms(3) assms(5) by blast (*Pendiente*)
+    have "finite ({F} \<union> Wo) \<longrightarrow> sat ({F} \<union> Wo)"
+      using WcolecComp \<open>{F} \<union> Wo \<subseteq> W\<close> by (rule sspec)
+    thus "sat ({F} \<union> Wo)"
+      using \<open>finite ({F} \<union> Wo)\<close> by (rule mp)
+  qed
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  have "F = G \<^bold>\<and> H \<or> 
+    (\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1) \<or> 
+    (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+    using assms(2) by (simp only: con_dis_simps(1))
+  then have "sat ({G,H,F} \<union> Wo)"
+  proof (rule disjE)
+    assume "F = G \<^bold>\<and> H"
+    then have "\<A> \<Turnstile> (G \<^bold>\<and> H)"
+      using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+    then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
+      by (simp only: formula_semantics.simps(4))
+    then have "\<A> \<Turnstile> G"
+      by (rule conjunct1)
+    have "\<A> \<Turnstile> H"
+      using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2)
+    have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    thus "sat ({G,H,F} \<union> Wo)"
+      by (simp only: sat_def)
+  next
+    oops
+      
+
+
+(*lemma pcp_colecComp_CON:
   assumes "W \<in> (colecComp S)"
   shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
 proof (rule allI)+
@@ -1255,13 +1320,28 @@ proof (rule allI)+
       proof (rule sallI)
         fix S'
         assume "S' \<subseteq> {G,H} \<union> W"
-        then have "S' \<subseteq> {G} \<union> ({H} \<union> W)"
+        (*then have "S' \<subseteq> {G} \<union> ({H} \<union> W)"
           by blast (*Pendiente*)
         show "finite S' \<longrightarrow> sat S'"
         proof (rule impI)
           assume "finite S'" 
-          then have "(\<exists>C \<subseteq> {H} \<union> W. finite C \<and> S' = {G} \<union> C) \<or> (\<exists>D \<subseteq> {H} \<union> W. finite D \<and> G \<notin> D \<and> S' = D)"
-            using \<open>S' \<subseteq> {G} \<union> ({H} \<union> W)\<close> by (rule finite_subset_insert)
+          then have Ex1:"\<exists>Wo \<subseteq> ({H} \<union> W). finite Wo \<and> (S' = {G} \<union> Wo \<or> S' = Wo)"
+            using \<open>S' \<subseteq> {G} \<union> ({H} \<union> W)\<close> by (rule finite_subset_insert1)
+          obtain Wo where "Wo \<subseteq> ({H} \<union> W)" and 1:"finite Wo \<and> (S' = {G} \<union> Wo \<or> S' = Wo)"
+            using Ex1 by blast (*Pendiente*)
+          have "finite Wo"
+            using 1 by (rule conjunct1)
+          have "S' = {G} \<union> Wo \<or> S' = Wo"
+            using 1 by (rule conjunct2)
+          thus "sat S'"
+          proof (rule disjE)
+            assume "S' = {G} \<union> Wo"
+            have "Wo \<subseteq> {G} \<union> Wo"
+              by blast (*Pendiente*)
+            then have "\<exists>Wa \<subseteq> Wo. finite Wa \<and> (Wo = {G} \<union> Wa \<or> Wo = Wa)" try
+              using \<open>finite Wo\<close> by (rule finite_subset_insert1)*)
+
+
           thus "sat S'"
           proof (rule disjE)
             assume H1:"\<exists>C \<subseteq> {H} \<union> W. finite C \<and> S' = {G} \<union> C"
@@ -1282,7 +1362,7 @@ proof (rule allI)+
                 using C11 by (rule conjunct1)
               then have "finite C"
                 using \<open>C = {H} \<union> C'\<close> by blast (*Pendiente*)
-              oops
+              oops*)
 
 lemma pcp_colecComp: "pcp (colecComp S)"
 proof (rule pcp_alt2)
