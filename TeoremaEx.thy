@@ -12,6 +12,8 @@ begin
 
 text \<open>\comentario{Añadir introducción.}\<close>
 
+text \<open>\comentario{Cambiar referencias de los lemas tras el cambio de índice.}\<close>
+
 section \<open>Sucesiones de conjuntos de una colección\<close>
 
 text\<open>En este apartado daremos una introducción sobre sucesiones de conjuntos de fórmulas a 
@@ -37,17 +39,16 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
 \end{definicion}
 
   Para su formalización en Isabelle se ha introducido una instancia en la teoría de \<open>Sintaxis\<close> que 
-  indica explícitamente que el conjunto de las fórmulas proposicionales es numerable.
+  indica explícitamente que el conjunto de las fórmulas proposicionales es numerable, probado
+  mediante el método \<open>countable_datatype\<close> de Isabelle.
 
   \<open>instance formula :: (countable) countable by countable_datatype\<close>
 
-  De esta manera, se genera paralelamente el método de prueba \<open>countable_datatype\<close> sobre dicho 
-  conjunto, que proporciona una enumeración predeterminada de sus elementos junto con herramientas 
-  para probar propiedades referentes a la numerabilidad. En particular, en la formalización de la
-  definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un número natural \<open>n\<close>, 
-  nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración predeterminada en Isabelle. 
-
-\comentario{Método de prueba}
+  De esta manera se genera en Isabelle una enumeración predeterminada de los elementos del conjunto,
+  junto con herramientas para probar propiedades referentes a la numerabilidad. En particular, en la 
+  formalización de la definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un 
+  número natural \<open>n\<close>, nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración 
+  predeterminada en Isabelle. 
 
   Puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
   recursiva sobre la estructura recursiva de los números naturales, se formalizará en Isabelle
@@ -218,17 +219,15 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 
   Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
   generalizada en Isabelle/HOL perteneciente a la teoría 
-  \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}. Además, la prueba ha precisado del 
-  siguiente lema auxiliar que define la imagen de un conjunto con un único elemento.
+  \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}, junto con distintas propiedades sobre la misma
+  definidas en dicha teoría. En Isabelle, los conjuntos se formalizan como equivalentes a los 
+  predicados, de manera que un elemento pertenece a un conjunto si verifica el predicado que lo 
+  caracteriza. De este modo, cada conjunto conforma un retículo cuyo orden parcial establecido es la 
+  relación de contención. En consecuencia, los conjuntos de conjuntos forman un retículo completo 
+  con dicho orden parcial, de manera que la unión generalizada de conjuntos se formaliza en Isabelle 
+  como el supremo del retículo completo que conforman.
 
-\comentario{No está claro qué se usa de la teoría de retículos. Además,
-la unión que se usa en el enunciado del lema es la unión generaluzada de
-conjuntos y parece que no se usa nada de retículos en la prueba automática.
-Tampoco en la prueba en lenguaje natural.}
-
-\<close>
-
-text \<open>De este modo, la prueba detallada en Isabelle/HOL es la siguiente.\<close>
+\comentario{No sé si está bien explicado.}\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
@@ -814,9 +813,11 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     En primer lugar, probemos que para una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
     \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que tanto \<open>\<alpha>\<^sub>1\<close> como \<open>\<alpha>\<^sub>2\<close> pertenecen a \<open>L\<^sub>S\<^sub>C\<close>. Por la tercera condición 
     obtenida anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
-    proposicional mediante notación uniforme, se cumple que\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, como 
-    \<open>C\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo subconjuntos, 
-    por el corolario \<open>1.5.3\<close> se tiene que\\ \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, como queríamos demostrar.
+    proposicional mediante notación uniforme, se cumple que\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. Observemos que
+    se verifica \<open>L\<^sub>S\<^sub>C \<subseteq> {\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close>. De este modo, como \<open>C\<close> es una colección con la propiedad de 
+    consistencia proposicional y cerrada bajo subconjuntos, por el lema \<open>1.5.2\<close> se tiene que\\ 
+    los conjuntos \<open>L\<^sub>S\<^sub>C\<close> y \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> coinciden. Por tanto, es claro que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, 
+    como queríamos demostrar.
 
     Por último, demostremos que para una fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que
     \<open>F \<in> L\<^sub>S\<^sub>C\<close> se verifica que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Por la cuarta condición obtenida 
@@ -828,8 +829,6 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, se observa fácilmente que llegamos a la misma conclusión de manera análoga. 
     Por lo tanto, queda probado el resultado.
   \end{demostracion}
-
-\comentario{modificar dem a mano.}
 
   Veamos su formalización y prueba detallada en Isabelle.\<close>
 
@@ -883,17 +882,17 @@ proof (rule Hintikka_alt2)
         by (rule subset_insertI2)
       have "?cl = insert G (insert H ?cl)" 
         using assms(1) assms(2) \<open>insert G (insert H ?cl) \<in> C\<close> \<open>?cl \<subseteq> insert G (insert H ?cl)\<close> by (rule cl_max)
-      then have "insert G (insert H ?cl) \<subseteq> ?cl" 
-        by (rule equalityD2)
-      then have 1:"G \<in> ?cl \<and> (insert H ?cl) \<subseteq> pcp_lim C S" 
+      then have "insert G (insert H ?cl) \<subseteq> ?cl"
+        by (simp only: equalityD2)
+      then have "G \<in> ?cl \<and> insert H ?cl \<subseteq> ?cl"
         by (simp only: insert_subset)
-      then have "G \<in> ?cl" 
+      then have "G \<in> ?cl"
         by (rule conjunct1)
-      have "insert H ?cl \<subseteq> ?cl" 
-        using 1 by (rule conjunct2)
-      then have "H \<in> ?cl \<and> ?cl \<subseteq> ?cl" 
+      have "insert H ?cl \<subseteq> ?cl"
+        using \<open>G \<in> ?cl \<and> insert H ?cl \<subseteq> ?cl\<close> by (rule conjunct2)
+      then have "H \<in> ?cl \<and> ?cl \<subseteq> ?cl"
         by (simp only: insert_subset)
-      then have "H \<in> ?cl" 
+      then have "H \<in> ?cl"
         by (rule conjunct1)
       show "G \<in> ?cl \<and> H \<in> ?cl"
         using \<open>G \<in> ?cl\<close> \<open>H \<in> ?cl\<close> by (rule conjI)
