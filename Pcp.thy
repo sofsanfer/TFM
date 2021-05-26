@@ -20,11 +20,15 @@ text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de 
   fórmulas a partir de la colección \<open>C'\<close> y el conjunto \<open>S\<close>. Además, definiremos el límite de dicha
   sucesión que, en particular, contendrá al conjunto \<open>S\<close>. Finalmente probaremos que dicho límite es 
   un conjunto satisfacible por el \<open>lema de Hintikka\<close> y, por contención, quedará probada la 
-  satisfacibilidad del conjunto \<open>S\<close>.\<close>
+  satisfacibilidad del conjunto \<open>S\<close>.
+
+  \comentario{Modificar dicho párrafo al final y ver cómo reubicar explicación completa del
+  teorema de existencia de modelo.}\<close>
 
 
-text \<open>En primer lugar, definamos la \<open>propiedad de consistencia proposicional\<close> para una colección 
-  de conjuntos de fórmulas proposicionales.\<close>
+text \<open>En esta sección vamos a definir la \<open>propiedad de consistencia proposicional\<close> para una 
+  colección de conjuntos de fórmulas proposicionales. Finalmente mostraremos un lema
+  que caracteriza dicha propiedad mediante la notación uniforme.\<close>
 
 text \<open>
   \begin{definicion}
@@ -294,13 +298,11 @@ text \<open>En primer lugar, veamos la demostración del lema.
   resultado.
 \end{demostracion}
 
-  Análogamente a la demostración del lema anterior de caracterización, para probar este resultado en 
-  Isabelle vamos a demostrar cada una de las implicaciones de la equivalencia por separado. 
-
-  La primera implicación del lema se basa en dos lemas auxiliares. El primero de ellos 
-  deduce la condición de \<open>2)\<close> sobre fórmulas de tipo \<open>\<alpha>\<close> a partir de las condiciones tercera, sexta, 
-  octava y novena de la definición de propiedad de consistencia proposicional. Su demostración 
-  detallada en Isabelle se muestra a continuación.\<close>
+  Para probar este resultado de manera detallada en Isabelle vamos a demostrar cada una de las 
+  implicaciones de la equivalencia por separado. La primera implicación del lema se basa en dos 
+  lemas auxiliares. El primero de ellos deduce la condición de \<open>2)\<close> sobre fórmulas de tipo \<open>\<alpha>\<close> a 
+  partir de las condiciones tercera, sexta, octava y novena de la definición de propiedad de 
+  consistencia proposicional. Su demostración detallada en Isabelle se muestra a continuación.\<close>
 
 lemma pcp_alt1Con:
   assumes "(\<forall>G H. G \<^bold>\<and> H \<in> S \<longrightarrow> {G,H} \<union> S \<in> C)

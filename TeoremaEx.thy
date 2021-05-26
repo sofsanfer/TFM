@@ -46,11 +46,11 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
 
   De esta manera se genera en Isabelle una enumeración predeterminada de los elementos del conjunto,
   junto con herramientas para probar propiedades referentes a la numerabilidad. En particular, en la 
-  formalización de la definición \<open>1.4.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un 
+  formalización de la definición \<open>4.1.1\<close> se utilizará la función \<open>from_nat\<close> que, al aplicarla a un 
   número natural \<open>n\<close>, nos devuelve la \<open>n\<close>-ésima fórmula proposicional según una enumeración 
   predeterminada en Isabelle. 
 
-  Puesto que la definición de las sucesiones en \<open>1.4.1\<close> se trata de una definición 
+  Puesto que la definición de las sucesiones en \<open>4.1.1\<close> se trata de una definición 
   recursiva sobre la estructura recursiva de los números naturales, se formalizará en Isabelle
   mediante el tipo de funciones primitivas recursivas de la siguiente manera.\<close>
 
@@ -63,7 +63,7 @@ text\<open>Veamos el primer resultado sobre dichas sucesiones.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos con la propiedad de consistencia proposicional,\\ \<open>S \<in> C\<close> y 
-    \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> construida según la definición \<open>1.4.1\<close>. 
+    \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> construida según la definición \<open>4.1.1\<close>. 
     Entonces, para todo \<open>n \<in> \<nat>\<close> se verifica que \<open>S\<^sub>n \<in> C\<close>.
   \end{lema}
 
@@ -128,7 +128,7 @@ text\<open>Por otro lado, veamos la monotonía de dichas sucesiones.
 
   \begin{lema}
     Toda sucesión de conjuntos construida a partir de una colección y un conjunto según la
-    definición \<open>1.4.1\<close> es monótona.
+    definición \<open>4.1.1\<close> es monótona.
   \end{lema}
 
   En Isabelle, se formaliza de la siguiente forma.\<close>
@@ -140,7 +140,7 @@ text \<open>Procedamos con la demostración del lema.
 
   \begin{demostracion}
     Sea una colección de conjuntos \<open>C\<close>, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
-    \<open>S\<close> según la definición \<open>1.4.1\<close>. Para probar que \<open>{S\<^sub>n}\<close> es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> 
+    \<open>S\<close> según la definición \<open>4.1.1\<close>. Para probar que \<open>{S\<^sub>n}\<close> es monótona, basta probar que \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close> 
     para todo \<open>n \<in> \<nat>\<close>. En efecto, el resultado es inmediato al considerar dos casos para todo 
     \<open>n \<in> \<nat>\<close>: \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close> o \<open>S\<^sub>n \<union> {F\<^sub>n} \<notin> C\<close>. Si suponemos que\\ \<open>S\<^sub>n \<union> {F\<^sub>n} \<in> C\<close>, por definición 
     tenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1 = S\<^sub>n \<union> {F\<^sub>n}\<close>, luego es claro que\\ \<open>S\<^sub>n \<subseteq> S\<^sub>n\<^sub>+\<^sub>1\<close>. En caso contrario, si 
@@ -192,7 +192,7 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
 
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de 
-  \<open>S\<close> construida según la definición \<open>1.4.1\<close>. Entonces, para todos \<open>n\<close>, \<open>m \<in> \<nat>\<close> 
+  \<open>S\<close> construida según la definición \<open>4.1.1\<close>. Entonces, para todos \<open>n\<close>, \<open>m \<in> \<nat>\<close> 
   se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$
 \end{lema}
 
@@ -227,7 +227,9 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   con dicho orden parcial, de manera que la unión generalizada de conjuntos se formaliza en Isabelle 
   como el supremo del retículo completo que conforman.
 
-\comentario{No sé si está bien explicado.}\<close>
+\comentario{No sé si está bien explicado.}
+
+  Veamos la prueba detallada del resultado en Isabelle/HOL.\<close>
 
 lemma "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof (induct m)
@@ -266,7 +268,7 @@ next
     by this
 qed
 
-text \<open>Análogamente, podemos dar una prueba automática del resultado en Isabelle/HOL.\<close>
+text \<open>Análogamente, podemos dar una prueba automática.\<close>
 
 lemma pcp_seq_UN: "\<Union>{pcp_seq C S n|n. n \<le> m} = pcp_seq C S m"
 proof(induction m)
@@ -280,11 +282,11 @@ proof(induction m)
   thus ?case using Suc pcp_seq_mono by blast
 qed simp
 
-text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la definición \<open>1.4.1\<close>.
+text \<open>Finalmente, definamos el límite de las sucesiones presentadas en la definición \<open>4.1.1\<close>.
 
  \begin{definicion}
   Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
-  definición \<open>1.4.1\<close>. Se define el \<open>límite de la sucesión de conjuntos de C a partir de S\<close> como 
+  definición \<open>4.1.1\<close>. Se define el \<open>límite de la sucesión de conjuntos de C a partir de S\<close> como 
   $\bigcup_{n = 0}^{\infty} S_{n}$
  \end{definicion}
 
@@ -296,7 +298,7 @@ text \<open>Veamos el primer resultado sobre el límite.
 
 \begin{lema}
   Sea \<open>C\<close> una colección de conjuntos, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de
-  \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, para todo \<open>n \<in> \<nat>\<close>, se verifica:
+  \<open>S\<close> según la definición \<open>4.1.1\<close>. Entonces, para todo \<open>n \<in> \<nat>\<close>, se verifica:
 
   $S_{n} \subseteq \bigcup_{n = 0}^{\infty} S_{n}$
 \end{lema}
@@ -331,9 +333,8 @@ text \<open>Mostremos otro resultado.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de 
-    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Si \<open>F\<close> es una fórmula tal que
-     $F \in \bigcup_{n = 0}^{\infty} S_{n}$. Entonces existe un \<open>k \<in> \<nat>\<close> 
-    tal que \<open>F \<in> S\<^sub>k\<close>. 
+    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>4.1.1\<close>. Si \<open>F\<close> es una fórmula tal que
+    $F \in \bigcup_{n = 0}^{\infty} S_{n}$, entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>F \<in> S\<^sub>k\<close>. 
   \end{lema}
 
   \begin{demostracion}
@@ -366,11 +367,11 @@ lemma pcp_lim_inserted_at_ex:
   unfolding pcp_lim_def by blast
 
 text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos contenidos en el límite de 
-  las sucesiones definido en \<open>1.4.5\<close>.
+  las sucesiones definido en \<open>4.1.5\<close>.
 
 \begin{lema}
   Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la
-  definición \<open>1.4.1\<close>. Si \<open>S'\<close> es un conjunto finito tal que \<open>S' \<subseteq>\<close> $\bigcup_{n = 0}^{\infty} S_{n}$, 
+  definición \<open>4.1.1\<close>. Si \<open>S'\<close> es un conjunto finito tal que \<open>S' \<subseteq>\<close> $\bigcup_{n = 0}^{\infty} S_{n}$, 
   entonces existe un\\ \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
 \end{lema}
 
@@ -389,7 +390,7 @@ text \<open>Por último, veamos la siguiente propiedad sobre conjuntos finitos c
   entonces está contenido en \<open>S\<^sub>k\<close> para algún \<open>k \<in> \<nat>\<close>. 
 
   Como hemos supuesto que \<open>{F} \<union> S'\<close> está contenido en el límite, entonces se verifica que \<open>F\<close>
-  pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>1.4.7\<close>, como \<open>F\<close> pertenece al 
+  pertenece al límite y \<open>S'\<close> está contenido en él. Por el lema \<open>4.1.7\<close>, como \<open>F\<close> pertenece al 
   límite, deducimos que existe un \<open>k \<in> \<nat>\<close> tal que \<open>F \<in> S\<^sub>k\<close>. Por otro lado, como \<open>S'\<close> está contenido
   en el límite, por hipótesis de inducción existe algún \<open>k' \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<^sub>'\<close>. El resultado 
   se obtiene considerando el máximo entre \<open>k\<close> y \<open>k'\<close>, que notaremos por \<open>k''\<close>. En efecto, por la 
@@ -488,12 +489,12 @@ text \<open>En esta sección demostraremos finalmente el
 
 text \<open>En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 
-  límite de toda sucesión de conjuntos de \<open>C\<close> según la definición \<open>1.4.1\<close> pertenece a \<open>C\<close>.
+  límite de toda sucesión de conjuntos de \<open>C\<close> según la definición \<open>4.1.1\<close> pertenece a \<open>C\<close>.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es 
     cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos
-    de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión está en
+    de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>4.1.1\<close>. Entonces, el límite de la sucesión está en
     \<open>C\<close>.
   \end{lema}
 
@@ -507,10 +508,7 @@ text \<open>En primer lugar, probemos que si \<open>C\<close> es una colección 
     De este modo, para demostrar que el límite de la sucesión \<open>{S\<^sub>n}\<close> pertenece a \<open>C\<close>, basta probar
     que todo subconjunto finito suyo está en \<open>C\<close>.
 
-    Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por resultados anteriores,
-\comentario {Especificar el índice del resultado}
-
- existe un
+    Sea \<open>S'\<close> un subconjunto finito del límite de la sucesión. Por el lema \<open>1.4.8\<close>, existe un
     \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>. Por tanto, como \<open>S\<^sub>k \<in> C\<close> para todo \<open>k \<in> \<nat>\<close> y \<open>C\<close> es cerrada bajo
     subconjuntos, por definición se tiene que \<open>S' \<in> C\<close>, como queríamos demostrar.
   \end{demostracion}
@@ -587,14 +585,14 @@ proof -
   thus "?cl \<in> C" using fc unfolding finite_character_def by blast
 qed
 
-text \<open>Probemos que, además, el límite de las sucesión definida en \<open>1.4.1\<close> se trata de un elemento 
+text \<open>Probemos que, además, el límite de las sucesión definida en \<open>4.1.1\<close> se trata de un elemento 
   maximal de la colección que lo define si esta verifica la propiedad de consistencia proposicional
   y es cerrada bajo subconjuntos.
 
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto y \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
-    de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión \<open>{S\<^sub>n}\<close> es un elemento 
+    de \<open>S\<close> según la definición \<open>4.1.1\<close>. Entonces, el límite de la sucesión \<open>{S\<^sub>n}\<close> es un elemento 
     maximal de \<open>C\<close>.
   \end{lema}
 
@@ -605,12 +603,12 @@ text \<open>Probemos que, además, el límite de las sucesión definida en \<ope
     La demostración se realizará por reducción al absurdo. Consideremos un conjunto \<open>K \<in> C\<close> que 
     contenga estrictamente al límite de la sucesión \<open>{S\<^sub>n}\<close>. De este modo, existe una fórmula \<open>F\<close> tal 
     que \<open>F \<in> K\<close> y \<open>F\<close> no está en el límite. Supongamos que \<open>F\<close> es la \<open>n\<close>-ésima fórmula según la 
-    enumeración de la definición \<open>1.4.1\<close> utilizada para construir la sucesión. 
+    enumeración de la definición \<open>4.1.1\<close> utilizada para construir la sucesión. 
 
     Por un lado, hemos probado que todo elemento de la sucesión está contenido en el límite, luego 
     en particular obtenemos que \<open>S\<^sub>n\<^sub>+\<^sub>1\<close> está contenido en el límite. De este modo, como \<open>F\<close> no 
     pertenece al límite, es claro que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. Además, \<open>{F} \<union> S\<^sub>n \<notin> C\<close> ya que, en caso contrario, 
-    por la definición \<open>1.4.1\<close> de la sucesión obtendríamos que\\ \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, lo que contradice 
+    por la definición \<open>4.1.1\<close> de la sucesión obtendríamos que\\ \<open>S\<^sub>n\<^sub>+\<^sub>1 = {F} \<union> S\<^sub>n\<close>, lo que contradice 
     que \<open>F \<notin> S\<^sub>n\<^sub>+\<^sub>1\<close>. 
 
     Por otro lado, como \<open>S\<^sub>n\<close> también está contenida en el límite que, a su vez, está contenido en 
@@ -710,14 +708,14 @@ proof (rule ccontr)
   with 1 show False ..
 qed
 
-text \<open>A continuación mostremos un resultado sobre el límite de la sucesión de \<open>1.4.1\<close> que es 
+text \<open>A continuación mostremos un resultado sobre el límite de la sucesión de \<open>4.1.1\<close> que es 
   consecuencia de que dicho límite sea un elemento maximal de la colección que lo define si esta
   verifica la propiedad de consistencia proposicional y es cerrada bajo subconjuntos.
   
   \begin{corolario}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional y
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto, \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
-    de \<open>S\<close> según la definición \<open>1.4.1\<close> y las fórmulas proposicionales \<open>F\<close> y \<open>G\<close>. Entonces, si 
+    de \<open>S\<close> según la definición \<open>4.1.1\<close> y \<open>F\<close> una fórmula proposicional. Entonces, si\\
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
     $F \in \bigcup_{n = 0}^{\infty} S_{n}$. 
   \end{corolario}
@@ -759,7 +757,7 @@ lemma cl_max':
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
   using cl_max[OF assms] by blast+
 
-text \<open>El siguiente resultado prueba que el límite de la sucesión definida en \<open>1.4.1\<close> es un conjunto
+text \<open>El siguiente resultado prueba que el límite de la sucesión definida en \<open>4.1.1\<close> es un conjunto
   de Hintikka si la colección que lo define verifica la propiedad de consistencia proposicional, es
   es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \<open>teorema de Hintikka\<close>,
   se trata en particular de un conjunto satisfacible. 
@@ -767,7 +765,7 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
   \begin{lema}
     Sea \<open>C\<close> una colección de conjuntos que verifica la propiedad de consistencia proposicional, es
     es cerrada bajo subconjuntos y es de carácter finito. Sea \<open>S \<in> C\<close> y \<open>{S\<^sub>n}\<close> la sucesión de
-    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close>. Entonces, el límite de la sucesión
+    conjuntos de \<open>C\<close> a partir de \<open>S\<close> según la definición \<open>4.1.1\<close>. Entonces, el límite de la sucesión
     \<open>{S\<^sub>n}\<close> es un conjunto de Hintikka.
   \end{lema}
 
@@ -815,7 +813,7 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     obtenida anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
     proposicional mediante notación uniforme, se cumple que\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. Observemos que
     se verifica \<open>L\<^sub>S\<^sub>C \<subseteq> {\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close>. De este modo, como \<open>C\<close> es una colección con la propiedad de 
-    consistencia proposicional y cerrada bajo subconjuntos, por el lema \<open>1.5.2\<close> se tiene que\\ 
+    consistencia proposicional y cerrada bajo subconjuntos, por el lema \<open>4.2.2\<close> se tiene que 
     los conjuntos \<open>L\<^sub>S\<^sub>C\<close> y \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> L\<^sub>S\<^sub>C\<close> coinciden. Por tanto, es claro que \<open>\<alpha>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> y \<open>\<alpha>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>, 
     como queríamos demostrar.
 
@@ -824,7 +822,7 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     anteriormente para \<open>L\<^sub>S\<^sub>C\<close> por el lema de caracterización de la propiedad de consistencia 
     proposicional mediante notación uniforme, se cumple que o bien\\ \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close> o bien 
     \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>. De este modo, si suponemos que \<open>{\<beta>\<^sub>1} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, como \<open>C\<close> tiene la propiedad de 
-    consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>1.5.3\<close> se tiene 
+    consistencia proposicional y es cerrada bajo subconjuntos, por el corolario \<open>4.2.3\<close> se tiene 
     que \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close>. Por tanto, se cumple que o bien \<open>\<beta>\<^sub>1 \<in> L\<^sub>S\<^sub>C\<close> o bien \<open>\<beta>\<^sub>2 \<in> L\<^sub>S\<^sub>C\<close>. Si suponemos que 
     \<open>{\<beta>\<^sub>2} \<union> L\<^sub>S\<^sub>C \<in> C\<close>, se observa fácilmente que llegamos a la misma conclusión de manera análoga. 
     Por lo tanto, queda probado el resultado.
@@ -1023,18 +1021,18 @@ text\<open>De este modo, procedamos finalmente con la demostración del teorema.
     consistencia proposicional y \<open>S \<in> C\<close>. Vamos a probar que \<open>S\<close> es satisfacible.
 
     En primer lugar, como \<open>C\<close> verifica la propiedad de consistencia proposicional, por el lema 
-    \<open>1.3.3\<close> podemos extenderla a una colección \<open>C'\<close> que también verifique la propiedad y
-    sea cerrada bajo subconjuntos. A su vez, por el lema \<open>1.3.5\<close>, como la extensión 
+    \<open>3.0.3\<close> podemos extenderla a una colección \<open>C'\<close> que también verifique la propiedad y
+    sea cerrada bajo subconjuntos. A su vez, por el lema \<open>3.0.5\<close>, como la extensión 
     \<open>C'\<close> es una colección con la propiedad de consistencia proposicional y cerrada bajo 
     subconjuntos, podemos extenderla a otra colección \<open>C''\<close> que también verifica la propiedad de
     consistencia proposicional y sea de carácter finito. De este modo, por la transitividad de la 
     contención, es claro que \<open>C''\<close> es una extensión de \<open>C\<close>, luego \<open>S \<in> C''\<close> por hipótesis. 
-    Por otro lado, por el lema \<open>1.3.4\<close>, como \<open>C''\<close> es de carácter finito, se tiene que es 
+    Por otro lado, por el lema \<open>3.0.4\<close>, como \<open>C''\<close> es de carácter finito, se tiene que es 
     cerrada bajo subconjuntos. 
 
     En suma, \<open>C''\<close> es una extensión de \<open>C\<close> que verifica la propiedad de consistencia proposicional, 
-    es cerrada bajo subconjuntos y es de carácter finito. Luego, por el lema \<open>1.5.4\<close>, el límite de 
-    la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a partir de \<open>S\<close> según la definición \<open>1.4.1\<close> es un 
+    es cerrada bajo subconjuntos y es de carácter finito. Luego, por el lema \<open>4.2.4\<close>, el límite de 
+    la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a partir de \<open>S\<close> según la definición \<open>4.1.1\<close> es un 
     conjunto de Hintikka. Por tanto, por el \<open>teorema de Hintikka\<close>, se trata de un conjunto 
     satisfacible. 
 
@@ -1124,8 +1122,7 @@ section \<open>Teorema de Compacidad\<close>
 text \<open>\comentario{Añadir explicación nexo.}
 
   \begin{teorema}[Teorema de Compacidad]
-    Sea \<open>S\<close> un conjunto de fórmulas proposicionales finitamente satisfacible. Entonces, \<open>S\<close> es 
-    satisfacible.
+    Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
   \end{teorema}
 
   \comentario{Añadir demostracion y nexos.}\<close>
@@ -1138,7 +1135,7 @@ lemma set_in_colecComp:
   shows "S \<in> colecComp S"
   unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
-lemma pcp_colecComp_bot:
+(*lemma pcp_colecComp_bot:
   assumes "W \<in> (colecComp S)"
   shows "\<bottom> \<notin> W"
 proof (rule ccontr)
@@ -1167,7 +1164,9 @@ proof (rule ccontr)
     using H \<open>\<bottom> \<in> {\<bottom>}\<close> by (rule bspec)
   thus "False"
     by (simp only: formula_semantics.simps(2))
-qed
+qed*)
+
+text \<open>\comentario{No sé por qué no me permite probar el sorry. El caso de bot está comentado.}\<close>
 
 lemma pcp_colecComp_atoms:
   assumes "W \<in> (colecComp S)"
@@ -1520,7 +1519,7 @@ proof (rule allI)+
   qed
 qed
 
-lemma pcp_colecComp: "pcp (colecComp S)"
+(*lemma pcp_colecComp: "pcp (colecComp S)"
 proof (rule pcp_alt2)
   show "\<forall>W \<in> (colecComp S). \<bottom> \<notin> W
         \<and> (\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False)
@@ -1543,7 +1542,7 @@ proof (rule pcp_alt2)
           \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
       using C1 C2 C3 C4 by (iprover intro: conjI)
   qed
-qed
+qed*)
 
 lemma prop_Compactness:
   assumes "fin_sat S"

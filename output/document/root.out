@@ -6,26 +6,27 @@
 \BOOKMARK [0][-]{chapter.4}{Teorema de existencia de modelo}{}% 6
 \BOOKMARK [1][-]{section.4.1}{Sucesiones de conjuntos de una colecci\363n}{chapter.4}% 7
 \BOOKMARK [1][-]{section.4.2}{El teorema de existencia de modelo}{chapter.4}% 8
-\BOOKMARK [0][-]{appendix.A}{Lemas de HOL usados}{}% 9
-\BOOKMARK [1][-]{section.A.1}{La base de l\363gica de primer orden \(2\)}{appendix.A}% 10
-\BOOKMARK [2][-]{subsection.A.1.1}{L\363gica primitiva \(2.1\)}{section.A.1}% 11
-\BOOKMARK [2][-]{subsection.A.1.2}{Reglas fundamentales \(2.2\)}{section.A.1}% 12
-\BOOKMARK [2][-]{subsection.A.1.3}{Configuraci\363n del paquete \(2.3\)}{section.A.1}% 13
-\BOOKMARK [1][-]{section.A.2}{Grupos, tambi\351n combinados con \363rdenes \(5\)}{appendix.A}% 14
-\BOOKMARK [2][-]{subsection.A.2.1}{Estructuras abstractas}{section.A.2}% 15
-\BOOKMARK [1][-]{section.A.3}{Ret\355culos abstractos \(6\)}{appendix.A}% 16
-\BOOKMARK [1][-]{section.A.4}{Teor\355a de conjuntos para l\363gica de orden superior \(7\)}{appendix.A}% 17
-\BOOKMARK [2][-]{subsection.A.4.1}{Subconjuntos y cuantificadores acotados \(7.2\)}{section.A.4}% 18
-\BOOKMARK [2][-]{subsection.A.4.2}{Operaciones b\341sicas \(7.3\)}{section.A.4}% 19
-\BOOKMARK [2][-]{subsection.A.4.3}{M\341s operaciones y lemas \(7.4\)}{section.A.4}% 20
-\BOOKMARK [1][-]{section.A.5}{Nociones sobre funciones \(9\)}{appendix.A}% 21
-\BOOKMARK [2][-]{subsection.A.5.1}{Actualizaci\363n de funciones \(9.6\)}{section.A.5}% 22
-\BOOKMARK [1][-]{section.A.6}{Ret\355culos completos \(10\)}{appendix.A}% 23
-\BOOKMARK [2][-]{subsection.A.6.1}{Ret\355culos completos en conjuntos \(10.6\)}{section.A.6}% 24
-\BOOKMARK [1][-]{section.A.7}{Conjuntos finitos \(18\)}{appendix.A}% 25
-\BOOKMARK [2][-]{subsection.A.7.1}{Predicado de conjuntos finitos \(18.1\)}{section.A.7}% 26
-\BOOKMARK [2][-]{subsection.A.7.2}{Finitud y operaciones de conjuntos comunes \(18.2\)}{section.A.7}% 27
-\BOOKMARK [1][-]{section.A.8}{Composici\363n de functores naturales acotados \(33\)}{appendix.A}% 28
-\BOOKMARK [1][-]{section.A.9}{El tipo de datos de la listas finitas \(66\)}{appendix.A}% 29
-\BOOKMARK [2][-]{subsection.A.9.1}{Funciones b\341sicas de procesamiento de listas \(66.1\)}{section.A.9}% 30
-\BOOKMARK [0][-]{appendix*.22}{Bibliograf\355a}{}% 31
+\BOOKMARK [1][-]{section.4.3}{Teorema de Compacidad}{chapter.4}% 9
+\BOOKMARK [0][-]{appendix.A}{Lemas de HOL usados}{}% 10
+\BOOKMARK [1][-]{section.A.1}{La base de l\363gica de primer orden \(2\)}{appendix.A}% 11
+\BOOKMARK [2][-]{subsection.A.1.1}{L\363gica primitiva \(2.1\)}{section.A.1}% 12
+\BOOKMARK [2][-]{subsection.A.1.2}{Reglas fundamentales \(2.2\)}{section.A.1}% 13
+\BOOKMARK [2][-]{subsection.A.1.3}{Configuraci\363n del paquete \(2.3\)}{section.A.1}% 14
+\BOOKMARK [1][-]{section.A.2}{Grupos, tambi\351n combinados con \363rdenes \(5\)}{appendix.A}% 15
+\BOOKMARK [2][-]{subsection.A.2.1}{Estructuras abstractas}{section.A.2}% 16
+\BOOKMARK [1][-]{section.A.3}{Ret\355culos abstractos \(6\)}{appendix.A}% 17
+\BOOKMARK [1][-]{section.A.4}{Teor\355a de conjuntos para l\363gica de orden superior \(7\)}{appendix.A}% 18
+\BOOKMARK [2][-]{subsection.A.4.1}{Subconjuntos y cuantificadores acotados \(7.2\)}{section.A.4}% 19
+\BOOKMARK [2][-]{subsection.A.4.2}{Operaciones b\341sicas \(7.3\)}{section.A.4}% 20
+\BOOKMARK [2][-]{subsection.A.4.3}{M\341s operaciones y lemas \(7.4\)}{section.A.4}% 21
+\BOOKMARK [1][-]{section.A.5}{Nociones sobre funciones \(9\)}{appendix.A}% 22
+\BOOKMARK [2][-]{subsection.A.5.1}{Actualizaci\363n de funciones \(9.6\)}{section.A.5}% 23
+\BOOKMARK [1][-]{section.A.6}{Ret\355culos completos \(10\)}{appendix.A}% 24
+\BOOKMARK [2][-]{subsection.A.6.1}{Ret\355culos completos en conjuntos \(10.6\)}{section.A.6}% 25
+\BOOKMARK [1][-]{section.A.7}{Conjuntos finitos \(18\)}{appendix.A}% 26
+\BOOKMARK [2][-]{subsection.A.7.1}{Predicado de conjuntos finitos \(18.1\)}{section.A.7}% 27
+\BOOKMARK [2][-]{subsection.A.7.2}{Finitud y operaciones de conjuntos comunes \(18.2\)}{section.A.7}% 28
+\BOOKMARK [1][-]{section.A.8}{Composici\363n de functores naturales acotados \(33\)}{appendix.A}% 29
+\BOOKMARK [1][-]{section.A.9}{El tipo de datos de la listas finitas \(66\)}{appendix.A}% 30
+\BOOKMARK [2][-]{subsection.A.9.1}{Funciones b\341sicas de procesamiento de listas \(66.1\)}{section.A.9}% 31
+\BOOKMARK [0][-]{appendix*.20}{Bibliograf\355a}{}% 32

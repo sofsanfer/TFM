@@ -37,7 +37,7 @@ text \<open>En esta sección introduciremos la notación uniforme inicialmente
 
 definition "semanticEq F G \<equiv> \<forall>\<A>. (\<A> \<Turnstile> F) \<longleftrightarrow> (\<A> \<Turnstile> G)"
 
-text \<open>De este modo, según la definición del valor de verdad de una fórmula proposicional en una 
+text \<open>Según la definición del valor de verdad de una fórmula proposicional en una 
   interpretación dada, podemos ver los siguientes ejemplos de fórmulas semánticamente equivalentes.\<close>
 
 lemma "semanticEq (Atom p) ((Atom p) \<^bold>\<or> (Atom p))" 
@@ -147,8 +147,7 @@ inductive Dis :: "'a formula => 'a formula => 'a formula => bool" where
 "Dis (Not (And F G)) (Not F) (Not G)" |
 "Dis (Not (Not F)) F F"
 
-text \<open>Del mismo modo, las reglas de introducción que proporciona esta formalización se muestran a 
-  continuación.
+text \<open>Las reglas de introducción que proporciona esta formalización se muestran a continuación.
 
   \begin{itemize}
     \item[] @{thm[mode=Rule] Dis.intros[no_vars]} 
@@ -197,8 +196,8 @@ lemma con_dis_simps:
     a1 = \<^bold>\<not> (\<^bold>\<not> a2) \<and> a3 = a2)" 
   by (simp_all add: Con.simps Dis.simps)
 
-text\<open>Por último, introduzcamos resultados que permiten caracterizar los conjuntos de Hintikka y la 
-  propiedad de consistencia proposicional empleando la notación uniforme.
+text\<open>Por último, introduzcamos un resultado que permite caracterizar los conjuntos de Hintikka 
+  empleando la notación uniforme.
 
   \begin{lema}[Caracterización de los conjuntos de Hintikka mediante la notación uniforme]
     Dado un conjunto de fórmulas proposicionales \<open>S\<close>, son equivalentes:

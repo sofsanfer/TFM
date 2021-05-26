@@ -715,7 +715,7 @@ text\<open>Introduzcamos el último resultado de la sección.
     every node/.style       = {font=\tiny},
     sloped
   ]
-  \node [root] {\<open>ex3\<close>\\ \<open>(Lema 1.3.5)\<close>}
+  \node [root] {\<open>ex3\<close>\\ \<open>(Lema 3.0.5)\<close>}
     child { node [env] {\<open>ex3_finite_character\<close>\\ \<open>(C' tiene la propiedad de carácter finito)\<close>}}
     child { node [env] {\<open>ex3_pcp\<close>\\ \<open>(C' tiene la propiedad de consistencia proposicional)\<close>}
       		child { node [env] {\<open>ex3_pcp_SinC\<close>\\ \<open>(Caso del conjunto en C)\<close>}}
@@ -1572,7 +1572,7 @@ proof (rule ballI)
   qed
 qed
 
-text \<open>Por último, podemos dar la prueba completa del lema \<open>1.3.5\<close> en Isabelle.\<close>
+text \<open>Por último, podemos dar la prueba completa del lema \<open>3.0.5\<close> en Isabelle.\<close>
 
 lemma ex3:
   assumes "pcp C"
