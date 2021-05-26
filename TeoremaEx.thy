@@ -720,12 +720,8 @@ text \<open>A continuación mostremos un resultado sobre el límite de la sucesi
     es cerrada bajo subconjuntos, \<open>S\<close> un conjunto, \<open>{S\<^sub>n}\<close> la sucesión de conjuntos de \<open>C\<close> a partir 
     de \<open>S\<close> según la definición \<open>1.4.1\<close> y las fórmulas proposicionales \<open>F\<close> y \<open>G\<close>. Entonces, si 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se verifica que 
-    $F \in \bigcup_{n = 0}^{\infty} S_{n}$. De hecho, si 
-    $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, se tiene que
-    $F \in \bigcup_{n = 0}^{\infty} S_{n}$ y $G \in \bigcup_{n = 0}^{\infty} S_{n}$.
+    $F \in \bigcup_{n = 0}^{\infty} S_{n}$. 
   \end{corolario}
-
-\comentario{No entiendo bien el enunciado del corolario}
 
   \begin{demostracion}
     Como \<open>C\<close> es una colección que verifica la propiedad de consistencia proposicional y es cerrada 
@@ -734,11 +730,6 @@ text \<open>A continuación mostremos un resultado sobre el límite de la sucesi
     está contenido en dicho conjunto, se cumple que 
     $\{F\} \cup \bigcup_{n = 0}^{\infty} S_{n} = \bigcup_{n = 0}^{\infty} S_{n}$, luego \<open>F\<close> 
     pertenece al límite, como queríamos demostrar.
-
-    En efecto, si suponemos que $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n} \in C$, como hemos 
-    visto que el límite es maximal en \<open>C\<close> y está contenido en 
-    $\{F,G\} \cup \bigcup_{n = 0}^{\infty} S_{n}$, se tiene que coincide con dicho conjunto. Por 
-    tanto, es claro que tanto \<open>F\<close> como \<open>G\<close> pertenecen al límite.
   \end{demostracion}
 
   Veamos su formalización y prueba detallada en Isabelle/HOL.\<close>
@@ -747,45 +738,18 @@ lemma
   assumes "pcp C"
   assumes "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-        "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
 proof -
-  show "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-  proof -
-    assume "insert F (pcp_lim C S) \<in> C"
-    have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
-      by (rule subset_insertI) 
-    have "pcp_lim C S = insert F (pcp_lim C S)"
-      using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
-    then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
-      by (rule equalityD2)
-    then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
-      by (simp only: insert_subset)
-    thus "F \<in> pcp_lim C S"
-      by (rule conjunct1)
-  qed
-next
-  show "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
-  proof (rule conjI)
-    assume "insert F (insert G (pcp_lim C S )) \<in> C"
-    have "pcp_lim C S \<subseteq> insert G (pcp_lim C S)"
-      by (rule subset_insertI)
-    then have "pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))"
-      by (rule subset_insertI2)
-    have "pcp_lim C S = insert F (insert G (pcp_lim C S))" 
-      using assms(1) assms(2) \<open>insert F (insert G (pcp_lim C S)) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (insert G (pcp_lim C S))\<close> by (rule cl_max)
-    then have "insert F (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S" 
-      by (rule equalityD2)
-    then have 1:"F \<in> pcp_lim C S \<and> (insert G (pcp_lim C S)) \<subseteq> pcp_lim C S" 
-      by (simp only: insert_subset)
-    thus "F \<in> pcp_lim C S" 
-      by (rule conjunct1)
-    have "insert G (pcp_lim C S) \<subseteq> pcp_lim C S" 
-      using 1 by (rule conjunct2)
-    then have "G \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S" 
-      by (simp only: insert_subset)
-    thus "G \<in> pcp_lim C S" 
-      by (rule conjunct1)
-  qed
+  assume "insert F (pcp_lim C S) \<in> C"
+  have "pcp_lim C S \<subseteq> insert F (pcp_lim C S)"
+    by (rule subset_insertI) 
+  have "pcp_lim C S = insert F (pcp_lim C S)"
+    using assms(1) assms(2) \<open>insert F (pcp_lim C S) \<in> C\<close> \<open>pcp_lim C S \<subseteq> insert F (pcp_lim C S)\<close> by (rule cl_max)
+  then have "insert F (pcp_lim C S) \<subseteq> pcp_lim C S"
+    by (rule equalityD2)
+  then have "F \<in> pcp_lim C S \<and> pcp_lim C S \<subseteq> pcp_lim C S"
+    by (simp only: insert_subset)
+  thus "F \<in> pcp_lim C S"
+    by (rule conjunct1)
 qed
 
 text \<open>Mostremos su demostración automática.\<close>
@@ -794,7 +758,6 @@ lemma cl_max':
   assumes c: "pcp C"
   assumes sc: "subset_closed C"
   shows "insert F (pcp_lim C S) \<in> C \<Longrightarrow> F \<in> pcp_lim C S"
-    "insert F (insert G (pcp_lim C S)) \<in> C \<Longrightarrow> F \<in> pcp_lim C S \<and> G \<in> pcp_lim C S"
   using cl_max[OF assms] by blast+
 
 text \<open>El siguiente resultado prueba que el límite de la sucesión definida en \<open>1.4.1\<close> es un conjunto
@@ -866,6 +829,8 @@ text \<open>El siguiente resultado prueba que el límite de la sucesión definid
     Por lo tanto, queda probado el resultado.
   \end{demostracion}
 
+\comentario{modificar dem a mano.}
+
   Veamos su formalización y prueba detallada en Isabelle.\<close>
 
 lemma
@@ -912,10 +877,26 @@ proof (rule Hintikka_alt2)
         by (rule insertSetElem)
       then have "(insert G (insert H ?cl)) \<in> C"
         using \<open>{G,H} \<union> ?cl \<in> C\<close> by (simp only: \<open>(insert G (insert H ?cl)) = {G,H} \<union> ?cl\<close>)
-      have "(insert G (insert H ?cl)) \<in> C \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-        using assms(1) assms(2) by (rule cl_max')
-      thus "G \<in> ?cl \<and> H \<in> ?cl"
-        by (simp only: \<open>insert G (insert H ?cl) \<in> C\<close>) 
+      have "?cl \<subseteq> insert H ?cl"
+        by (rule subset_insertI)
+      then have "?cl \<subseteq> insert G (insert H ?cl)"
+        by (rule subset_insertI2)
+      have "?cl = insert G (insert H ?cl)" 
+        using assms(1) assms(2) \<open>insert G (insert H ?cl) \<in> C\<close> \<open>?cl \<subseteq> insert G (insert H ?cl)\<close> by (rule cl_max)
+      then have "insert G (insert H ?cl) \<subseteq> ?cl" 
+        by (rule equalityD2)
+      then have 1:"G \<in> ?cl \<and> (insert H ?cl) \<subseteq> pcp_lim C S" 
+        by (simp only: insert_subset)
+      then have "G \<in> ?cl" 
+        by (rule conjunct1)
+      have "insert H ?cl \<subseteq> ?cl" 
+        using 1 by (rule conjunct2)
+      then have "H \<in> ?cl \<and> ?cl \<subseteq> ?cl" 
+        by (simp only: insert_subset)
+      then have "H \<in> ?cl" 
+        by (rule conjunct1)
+      show "G \<in> ?cl \<and> H \<in> ?cl"
+        using \<open>G \<in> ?cl\<close> \<open>H \<in> ?cl\<close> by (rule conjI)
     qed
   qed
   have Dis:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> ?cl \<longrightarrow> {G} \<union> ?cl \<in> C \<or> {H} \<union> ?cl \<in> C"
@@ -984,12 +965,9 @@ proof -
     "Atom k \<in> ?cl \<Longrightarrow> \<^bold>\<not> (Atom k) \<in> ?cl \<Longrightarrow> False"
     "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G (insert H ?cl) \<in> C"
     "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> insert G ?cl \<in> C \<or> insert H ?cl \<in> C"
-  for k F G H by force+
-  have "Con F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<and> H \<in> ?cl"
-       "Dis F G H \<Longrightarrow> F \<in> ?cl \<Longrightarrow> G \<in> ?cl \<or> H \<in> ?cl"
-    for F G H
-       by(auto dest: d(3-) cl_max'[OF c sc])
-  with d(1,2) show ?thesis unfolding Hintikka_alt by fast
+    for k F G H by force+
+  with d(1,2) show "Hintikka ?cl" unfolding Hintikka_alt 
+    using c cl_max cl_max' d(4) sc by blast
 qed
 
 text \<open>Finalmente, vamos a demostrar el \<open>teorema de existencia de modelo\<close>. Para ello precisaremos de
