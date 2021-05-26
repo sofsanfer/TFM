@@ -1275,6 +1275,8 @@ proof -
     using Ex1 by (rule exE)
   have "\<A> \<Turnstile> F"
     using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  have "{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo"
+    by blast (*Pendiente*)
   have "F = G \<^bold>\<and> H \<or> 
     (\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1) \<or> 
     (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
@@ -1298,7 +1300,104 @@ proof -
     thus "sat ({G,H,F} \<union> Wo)"
       by (simp only: sat_def)
   next
-    oops
+    assume "(\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1) \<or> 
+    (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
+    F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+    thus "sat ({G,H,F} \<union> Wo)"
+    proof (rule disjE)
+      assume Ex2:"\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1" 
+      obtain F1 G1 where 2:"F = \<^bold>\<not>(F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1"
+        using Ex2 by (iprover elim: exE)
+      have "G = \<^bold>\<not> F1"
+        using 2 by (iprover elim: conjunct1)
+      have "H = \<^bold>\<not> G1"
+        using 2 by (iprover elim: conjunct2)
+      have "F = \<^bold>\<not>(F1 \<^bold>\<or> G1)"
+        using 2 by (rule conjunct1)
+      then have "\<A> \<Turnstile> \<^bold>\<not>(F1 \<^bold>\<or> G1)"
+        using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+      then have "\<not>(\<A> \<Turnstile> (F1 \<^bold>\<or> G1))"
+        by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+      then have "\<not>(\<A> \<Turnstile> F1 \<or> \<A> \<Turnstile> G1)"
+        by (simp add: formula_semantics.simps(5)) (*Pendiente*)
+      then have "\<not> \<A> \<Turnstile> F1 \<and> \<not> \<A> \<Turnstile> G1"
+        by simp (*Pendiente*)
+      then have "\<A> \<Turnstile> \<^bold>\<not> F1 \<and> \<A> \<Turnstile> \<^bold>\<not> G1"
+        by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+      then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
+        by (simp only: \<open>G = \<^bold>\<not> F1\<close> \<open>H = \<^bold>\<not> G1\<close>)
+      then have "\<A> \<Turnstile> G"
+        by (rule conjunct1)
+      have "\<A> \<Turnstile> H"
+        using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2) 
+      have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+        using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+      then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+        by blast (*Pendiente*)
+      thus "sat ({G,H,F} \<union> Wo)"
+        by (simp only: sat_def)
+    next
+      assume "(\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
+              F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+      thus "sat ({G,H,F} \<union> Wo)"
+      proof (rule disjE)
+        assume Ex3:"\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1"
+        obtain H1 where 3:"F = \<^bold>\<not>(G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1"
+          using Ex3 by (rule exE)
+        have "H = \<^bold>\<not> H1"
+          using 3 by (rule conjunct2)
+        have "F = \<^bold>\<not>(G \<^bold>\<rightarrow> H1)"
+          using 3 by (rule conjunct1)
+        then have "\<A> \<Turnstile> \<^bold>\<not>(G \<^bold>\<rightarrow> H1)"
+          using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+        then have "\<not>(\<A> \<Turnstile> (G \<^bold>\<rightarrow> H1))"
+          by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+        then have "\<not>(\<A> \<Turnstile> G \<longrightarrow> \<A> \<Turnstile> H1)"
+          by (simp add: formula_semantics.simps(6)) (*Pendiente*)
+        then have "\<A> \<Turnstile> G \<and> \<not> (\<A> \<Turnstile> H1)"
+          by simp (*Pendiente*)
+        then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> \<^bold>\<not> H1"
+          by (simp add: formula_semantics.simps(3))
+        then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
+          by (simp only: \<open>H = \<^bold>\<not> H1\<close>)
+        then have "\<A> \<Turnstile> G"
+          by (rule conjunct1)
+        have "\<A> \<Turnstile> H"
+          using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2) 
+        have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+          using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+        then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+          by blast (*Pendiente*)
+        thus "sat ({G,H,F} \<union> Wo)"
+          by (simp only: sat_def)
+      next
+        assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        then have "H = G"
+          by (rule conjunct2)
+        have "F = \<^bold>\<not> (\<^bold>\<not> G)"
+          using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct1)
+        then have "\<A> \<Turnstile> \<^bold>\<not> (\<^bold>\<not> G)"
+          using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+        then have "\<not> \<A> \<Turnstile> \<^bold>\<not> G"
+          by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+        then have "\<not> \<not>\<A> \<Turnstile> G"
+          by (simp add: formula_semantics.simps(3))
+        then have "\<A> \<Turnstile> G"
+          by (rule notnotD)
+        then have "\<A> \<Turnstile> H"
+          by (simp only: \<open>H = G\<close>)
+        have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+          using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+        then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+          by blast (*Pendiente*)
+        thus "sat ({G,H,F} \<union> Wo)"
+          by (simp only: sat_def)
+      qed
+    qed
+  qed
+  thus "sat ({G,H} \<union> Wo)"
+    using \<open>{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo\<close> by (simp only: sat_mono)
+qed
       
 
 
