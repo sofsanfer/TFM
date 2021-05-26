@@ -1239,10 +1239,83 @@ lemma finite_subset_insert1:
 lemma finite_subset_insert2:
   assumes "finite S'"
           "S' \<subseteq> {a,b} \<union> B"
-        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-  oops
+        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+proof -
+  have "S' \<subseteq> {a} \<union> ({b} \<union> B)"
+    using assms(2) by blast (*Pendiente*)
+  then have Ex1:"\<exists>Wo \<subseteq> ({b} \<union> B). finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+    by (meson assms(1) finite_subset_insert1) (*Pendiente*)
+  obtain Wo where "Wo \<subseteq> {b} \<union> B" and 1:"finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+    using Ex1 by blast (*Pendiente*)
+  have "finite Wo"
+    using 1 by (rule conjunct1)
+  have Ex2:"\<exists>Wo' \<subseteq> B. finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
+    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {b} \<union> B\<close> by (meson finite_subset_insert1) (*Pendiente*)
+  obtain Wo' where "Wo' \<subseteq> B" and 2:"finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
+    using Ex2 by blast (*Pendiente*)
+  have "finite Wo'"
+    using 2 by (rule conjunct1)
+  have "Wo = {b} \<union> Wo' \<or> Wo = Wo'"
+    using 2 by (rule conjunct2)
+  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+  proof (rule disjE)
+    assume "Wo = {b} \<union> Wo'"
+    have "S' = {a} \<union> Wo \<or> S' = Wo"
+      using 1 by (rule conjunct2)
+    thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+    proof (rule disjE)
+      assume "S' = {a} \<union> Wo"
+      then have "S' = {a} \<union> {b} \<union> Wo'"
+        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>) (*Pendiente*)
+      then have "S' = {a,b} \<union> Wo'"
+        by blast (*Pendiente*)
+      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
+        by (iprover intro: disjI1)
+      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
+        using \<open>finite Wo'\<close> by (iprover intro: conjI)
+      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+    next
+      assume "S' = Wo"
+      then have "S' = {b} \<union> Wo'"
+        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>)
+      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
+        by (iprover intro: disjI1)
+      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
+        using \<open>finite Wo'\<close> by (iprover intro: conjI)
+      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+    qed
+  next
+    assume "Wo = Wo'"
+    have "S' = {a} \<union> Wo \<or> S' = Wo"
+      using 1 by (rule conjunct2)
+    thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+    proof (rule disjE)
+      assume "S' = {a} \<union> Wo"
+      then have "S' = {a} \<union> Wo'"
+        by (simp add: \<open>Wo = Wo'\<close>) (*Pendiente*)
+      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
+        by (iprover intro: disjI1)
+      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
+        using \<open>finite Wo'\<close> by (iprover intro: conjI)
+      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+    next
+      assume "S' = Wo"
+      then have "S' = Wo'"
+        by (simp add: \<open>Wo = Wo'\<close>)
+      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
+        by (iprover intro: disjI1)
+      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
+        using \<open>finite Wo'\<close> by (iprover intro: conjI)
+      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
+        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+    qed
+  qed
+qed
 
-lemma pcp_colecComp_CON_GH:
+lemma pcp_colecComp_CON_both:
   assumes "W \<in> (colecComp S)"
           "Con F G H"
           "F \<in> W"
@@ -1399,9 +1472,7 @@ proof -
     using \<open>{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo\<close> by (simp only: sat_mono)
 qed
       
-
-
-(*lemma pcp_colecComp_CON:
+lemma pcp_colecComp_CON:
   assumes "W \<in> (colecComp S)"
   shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
 proof (rule allI)+
@@ -1419,49 +1490,58 @@ proof (rule allI)+
       proof (rule sallI)
         fix S'
         assume "S' \<subseteq> {G,H} \<union> W"
-        (*then have "S' \<subseteq> {G} \<union> ({H} \<union> W)"
+        then have "S' \<subseteq> {G} \<union> ({H} \<union> W)"
           by blast (*Pendiente*)
         show "finite S' \<longrightarrow> sat S'"
         proof (rule impI)
           assume "finite S'" 
-          then have Ex1:"\<exists>Wo \<subseteq> ({H} \<union> W). finite Wo \<and> (S' = {G} \<union> Wo \<or> S' = Wo)"
-            using \<open>S' \<subseteq> {G} \<union> ({H} \<union> W)\<close> by (rule finite_subset_insert1)
-          obtain Wo where "Wo \<subseteq> ({H} \<union> W)" and 1:"finite Wo \<and> (S' = {G} \<union> Wo \<or> S' = Wo)"
-            using Ex1 by blast (*Pendiente*)
-          have "finite Wo"
+          have Ex:"\<exists>Wo \<subseteq> W. finite Wo \<and> (S' = {G,H} \<union> Wo \<or> S' = {G} \<union> Wo \<or> S' = {H} \<union> Wo \<or> S' = Wo)"
+            using \<open>finite S'\<close> \<open>S' \<subseteq> {G,H} \<union> W\<close> by (rule finite_subset_insert2)
+          obtain Wo' where "Wo' \<subseteq> W" and 1:"finite Wo' \<and> (S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo')"
+            using Ex by blast (*Pendiente*)
+          have "finite Wo'"
             using 1 by (rule conjunct1)
-          have "S' = {G} \<union> Wo \<or> S' = Wo"
+            have "sat ({G,H} \<union> Wo')" 
+              using \<open>W \<in> (colecComp S)\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_both)
+          have "S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
             using 1 by (rule conjunct2)
           thus "sat S'"
           proof (rule disjE)
-            assume "S' = {G} \<union> Wo"
-            have "Wo \<subseteq> {G} \<union> Wo"
-              by blast (*Pendiente*)
-            then have "\<exists>Wa \<subseteq> Wo. finite Wa \<and> (Wo = {G} \<union> Wa \<or> Wo = Wa)" try
-              using \<open>finite Wo\<close> by (rule finite_subset_insert1)*)
-
-
-          thus "sat S'"
-          proof (rule disjE)
-            assume H1:"\<exists>C \<subseteq> {H} \<union> W. finite C \<and> S' = {G} \<union> C"
-            obtain C where "C \<subseteq> {H} \<union> W" and C1:"finite C \<and> S' = {G} \<union> C"
-              using H1 by blast (*Pendiente*)
-            have "finite C"
-              using C1 by (rule conjunct1)
-            then have "(\<exists>C' \<subseteq> W. finite C' \<and> C = {H} \<union> C') \<or> (\<exists>D' \<subseteq> W. finite D' \<and> H \<notin> D' \<and> C = D')"
-              using \<open>C \<subseteq> {H} \<union> W\<close> by (rule finite_subset_insert)
+            assume "S' = {G,H} \<union> Wo'"
+            show "sat S'"
+              using \<open>sat({G,H} \<union> Wo')\<close> by (simp only: \<open>S' = {G,H} \<union> Wo'\<close>)
+          next
+            assume "S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
             thus "sat S'"
             proof (rule disjE)
-              assume H11:"\<exists>C' \<subseteq> W. finite C' \<and> C = {H} \<union> C'"
-              obtain C' where "C' \<subseteq> W" and C11:"finite C' \<and> C = {H} \<union> C'"
-                using H11 by blast (*Pendiente*)
-              have "C = {H} \<union> C'"
-                using C11 by (rule conjunct2)
-              have "finite C'" 
-                using C11 by (rule conjunct1)
-              then have "finite C"
-                using \<open>C = {H} \<union> C'\<close> by blast (*Pendiente*)
-              oops*)
+              assume "S' = {G} \<union> Wo'"
+              then have "S' \<subseteq> {G,H} \<union> Wo'"
+                by blast (*Pendiente*)
+              thus "sat S'"
+                using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+            next
+              assume "S' = {H} \<union> Wo' \<or> S' = Wo'"
+              thus "sat S'"
+              proof (rule disjE)
+                assume "S' = {H} \<union> Wo'"
+                then have "S' \<subseteq> {G,H} \<union> Wo'"
+                  by blast (*Pendiente*)
+                thus "sat S'"
+                  using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+              next
+                assume "S' = Wo'"
+                then have "S' \<subseteq> {G,H} \<union> Wo'"
+                  by blast (*Pendiente*)
+                thus "sat S'"
+                  using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+              qed
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+qed
 
 lemma pcp_colecComp: "pcp (colecComp S)"
 proof (rule pcp_alt2)
@@ -1473,11 +1553,11 @@ proof (rule pcp_alt2)
     fix W
     assume H:"W \<in> (colecComp S)"
     have C1:"\<bottom> \<notin> W"
-      using H sorry
+      using H by (rule pcp_colecComp_bot)
     have C2:"\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False"
-      using H sorry
+      using H by (rule pcp_colecComp_atoms)
     have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
-      using H sorry
+      using H by (rule pcp_colecComp_CON)
     have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
       using H sorry
     show "\<bottom> \<notin> W
