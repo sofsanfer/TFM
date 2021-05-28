@@ -1289,7 +1289,8 @@ next
   apply (erule exE)
   oops*)
  
-
+lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
+  by blast
 
 lemma finite_subset_insert1:
   assumes "finite S'"
@@ -1304,17 +1305,17 @@ lemma finite_subset_insert2:
         shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
 proof -
   have "S' \<subseteq> {a} \<union> ({b} \<union> B)"
-    using assms(2) by blast (*Pendiente*)
+    using assms(2) by blast
   then have Ex1:"\<exists>Wo \<subseteq> ({b} \<union> B). finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-    by (meson assms(1) finite_subset_insert1) (*Pendiente*)
+    using assms(1) by (simp only: finite_subset_insert1)
   obtain Wo where "Wo \<subseteq> {b} \<union> B" and 1:"finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-    using Ex1 by blast (*Pendiente*)
+    using Ex1 by (rule subexE)
   have "finite Wo"
     using 1 by (rule conjunct1)
   have Ex2:"\<exists>Wo' \<subseteq> B. finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
-    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {b} \<union> B\<close> by (meson finite_subset_insert1) (*Pendiente*)
+    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {b} \<union> B\<close> by (rule finite_subset_insert1)
   obtain Wo' where "Wo' \<subseteq> B" and 2:"finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
-    using Ex2 by blast (*Pendiente*)
+    using Ex2 by (rule subexE)
   have "finite Wo'"
     using 2 by (rule conjunct1)
   have "Wo = {b} \<union> Wo' \<or> Wo = Wo'"
@@ -1328,15 +1329,15 @@ proof -
     proof (rule disjE)
       assume "S' = {a} \<union> Wo"
       then have "S' = {a} \<union> {b} \<union> Wo'"
-        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>) (*Pendiente*)
+        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>)
       then have "S' = {a,b} \<union> Wo'"
-        by blast (*Pendiente*)
+        by blast
       then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
         by (iprover intro: disjI1)
       then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
         using \<open>finite Wo'\<close> by (iprover intro: conjI)
       thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
     next
       assume "S' = Wo"
       then have "S' = {b} \<union> Wo'"
@@ -1346,7 +1347,7 @@ proof -
       then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
         using \<open>finite Wo'\<close> by (iprover intro: conjI)
       thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
     qed
   next
     assume "Wo = Wo'"
@@ -1356,13 +1357,13 @@ proof -
     proof (rule disjE)
       assume "S' = {a} \<union> Wo"
       then have "S' = {a} \<union> Wo'"
-        by (simp add: \<open>Wo = Wo'\<close>) (*Pendiente*)
+        by (simp add: \<open>Wo = Wo'\<close>)
       then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
         by (iprover intro: disjI1)
       then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
         using \<open>finite Wo'\<close> by (iprover intro: conjI)
       thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
     next
       assume "S' = Wo"
       then have "S' = Wo'"
@@ -1372,7 +1373,7 @@ proof -
       then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
         using \<open>finite Wo'\<close> by (iprover intro: conjI)
       thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by blast (*Pendiente*)
+        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
     qed
   qed
 qed
