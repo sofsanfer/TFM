@@ -1385,10 +1385,18 @@ lemma pcp_colecComp_elem_sat:
           "Wo \<subseteq> W"
         shows "sat ({F} \<union> Wo)"
 proof -
-  have "finite ({F} \<union> Wo)"
-    using assms(3) by blast (*Pendiente*)
-  have "{F} \<union> Wo \<subseteq> W"
-    using assms(2) assms(4) by blast (*Pendiente*)
+  have 1:"insert F Wo = {F} \<union> Wo"
+    by (rule insert_is_Un)
+  have "finite (insert F Wo)"
+    using assms(3) by (simp only: finite_insert)
+  then have "finite ({F} \<union> Wo)"
+    by (simp only: 1) 
+  have "F \<in> W \<and> Wo \<subseteq> W"
+    using assms(2) assms(4) by (rule conjI)
+  then have "insert F Wo \<subseteq> W"
+    by (simp only: insert_subset)
+  then have "{F} \<union> Wo \<subseteq> W"
+    by (simp only: 1)
   show "sat ({F} \<union> Wo)"
     using assms(1) \<open>{F} \<union> Wo \<subseteq> W\<close> \<open>finite ({F} \<union> Wo)\<close> by (rule colecComp_subset_finite)
 qed
