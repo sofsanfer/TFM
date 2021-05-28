@@ -1125,7 +1125,10 @@ text \<open>\comentario{Añadir explicación nexo.}
     Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
   \end{teorema}
 
-  \comentario{Añadir demostracion y nexos.}\<close>
+  \comentario{Añadir demostracion y nexos.}
+
+
+\<close>
 
 definition colecComp :: "'a formula set \<Rightarrow> ('a formula set) set"
   where colecComp: "colecComp S = {W. fin_sat W}"
@@ -1135,38 +1138,72 @@ lemma set_in_colecComp:
   shows "S \<in> colecComp S"
   unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
-(*lemma pcp_colecComp_bot:
+lemma colecComp_subset_finite: 
+  assumes "W \<in> colecComp S"
+          "Wo \<subseteq> W"
+          "finite Wo"
+  shows "sat Wo" 
+proof -
+  have "\<forall>Wo \<subseteq> W. finite Wo \<longrightarrow> sat Wo"
+    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD)
+  then have "finite Wo \<longrightarrow> sat Wo"
+    using \<open>Wo \<subseteq> W\<close> by (rule sspec)
+  thus "sat Wo"
+    using \<open>finite Wo\<close> by (rule mp)
+qed
+
+text \<open>
+
+1. Por bot_no_sat: {\<bottom>} no es satisfacible.
+2. Por ??:  {\<bottom>} es finito.
+Entonces, si  \<bottom> \<in> W
+==>         {\<bottom>} \<subseteq> W y es finito, por 2
+==>          {\<bottom>} es fin_sat
+==>         {\<bottom>} es satisfacible por definición de W
+==>      contradice 1
+\<close>
+
+lemma pcp_colecComp_bot:
   assumes "W \<in> (colecComp S)"
   shows "\<bottom> \<notin> W"
 proof (rule ccontr)
   assume "\<not>(\<bottom> \<notin> W)"
   then have "\<bottom> \<in> W"
     by (rule notnotD)
-  have "{\<bottom>} \<subseteq> W"
-    using \<open>\<bottom> \<in> W\<close> by blast (*Pendiente*)
-  have "finite {\<bottom>}"
+  then have "{\<bottom>} \<subseteq> W" 
     by blast (*Pendiente*)
-  have "\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
-    using assms unfolding colecComp fin_sat_def by (rule CollectD)
-  then have "finite {\<bottom>} \<longrightarrow> sat {\<bottom>}"
-    using \<open>{\<bottom>} \<subseteq> W\<close> sorry
-  then have "sat {\<bottom>}"
-    using \<open>finite {\<bottom>}\<close> by (rule mp)
-  then have "sat {\<bottom>}"
-    by (simp add: sat_def) (*Pendiente*)
-  then have Sat:"\<exists>\<A>. \<forall>F \<in> {\<bottom>}. \<A> \<Turnstile> F"
-    by (simp add: sat_def) (*Pendiente*)
-  obtain \<A> where H:"\<forall>F \<in> {\<bottom>}. \<A> \<Turnstile> F"
-    using Sat by (rule exE)
-  have "\<bottom> \<in> {\<bottom>}"
-    by blast (*Pendiente*)
-  have "\<A> \<Turnstile> \<bottom>"
-    using H \<open>\<bottom> \<in> {\<bottom>}\<close> by (rule bspec)
-  thus "False"
-    by (simp only: formula_semantics.simps(2))
-qed*)
+  have "finite  {\<bottom>}" 
+    by simp (*Pendiente*)
+  have "sat {\<bottom> :: 'a formula}" 
+    using assms \<open>{\<bottom>} \<subseteq> W\<close> \<open>finite {\<bottom>}\<close> by (rule colecComp_subset_finite)
+  have "\<not> sat {\<bottom> :: 'a formula}" 
+    by (simp add: sat_def)
+  then show False 
+    using \<open>sat {\<bottom> :: 'a formula}\<close> by (rule notE)
+qed
 
-text \<open>\comentario{No sé por qué no me permite probar el sorry. El caso de bot está comentado.}\<close>
+lemma not_sat_atoms: "\<not> sat({Atom k, \<^bold>\<not> (Atom k)})"
+proof (rule ccontr)
+  assume "\<not> \<not> sat({Atom k, \<^bold>\<not> (Atom k)})"
+  then have "sat({Atom k, \<^bold>\<not> (Atom k)})"
+    by (rule notnotD)
+  then have Sat:"\<exists>\<A>. \<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
+    by (simp add: sat_def) (*Pendiente*)
+  obtain \<A> where H:"\<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
+    using Sat by (rule exE)
+  have "Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}"
+    by blast (*Pendiente*)
+  have "\<A> \<Turnstile> Atom k"
+    using H \<open>Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
+  have "\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}"
+    by blast (*Pendiente*)
+  have "\<A> \<Turnstile> \<^bold>\<not>(Atom k)"
+    using H \<open>\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
+  then have "\<not> \<A> \<Turnstile> Atom k"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  thus "False"
+    using \<open>\<A> \<Turnstile> Atom k\<close> by (rule notE)
+qed
 
 lemma pcp_colecComp_atoms:
   assumes "W \<in> (colecComp S)"
@@ -1181,36 +1218,80 @@ proof (rule allI)
       using 1 2 by blast (*Pendiente*)
     have "finite {Atom k, \<^bold>\<not>(Atom k)}"
       by blast (*Pendiente*)
-    have "\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
-      using assms unfolding colecComp fin_sat_def by (rule CollectD)
-    then have "finite {Atom k, \<^bold>\<not>(Atom k)} \<longrightarrow> sat {Atom k, \<^bold>\<not>(Atom k)}"
-      using \<open>{Atom k, \<^bold>\<not>(Atom k)} \<subseteq> W\<close> by (rule sspec)
-    then have "sat {Atom k, \<^bold>\<not>(Atom k)}"
-      using \<open>finite {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule mp)
-    then have Sat:"\<exists>\<A>. \<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
-      by (simp add: sat_def) (*Pendiente*)
-    obtain \<A> where H:"\<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
-      using Sat by (rule exE)
-    have "Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}"
-      by blast (*Pendiente*)
-    have "\<A> \<Turnstile> Atom k"
-      using H \<open>Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
-    have "\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}"
-      by blast (*Pendiente*)
-    have "\<A> \<Turnstile> \<^bold>\<not>(Atom k)"
-      using H \<open>\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
-    then have "\<not> \<A> \<Turnstile> Atom k"
-      by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+    have "sat ({Atom k, \<^bold>\<not>(Atom k)})"
+      using assms \<open>{Atom k, \<^bold>\<not>(Atom k)} \<subseteq> W\<close> \<open>finite {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule colecComp_subset_finite)
+    have "\<not> sat ({Atom k, \<^bold>\<not>(Atom k)})"
+      by (rule not_sat_atoms)
     thus "False"
-      using \<open>\<A> \<Turnstile> Atom k\<close> by (rule notE)
+      using \<open>sat ({Atom k, \<^bold>\<not>(Atom k)})\<close> by (rule notE)
   qed
 qed
+
+(*lemma finite_subset_insert1_alt:
+  "\<lbrakk>finite S'; S' \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
+     \<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+proof (induct rule: finite_induct)
+  assume "{} \<subseteq> {a} \<union> B"
+  have "{} = {}"
+    by blast (**Pendiente*)
+  then have "{} = {a} \<union> {} \<or> {} = {}"
+    by (rule disjI2)
+  have "{} \<subseteq> B"
+    by blast (*Pendiente*)
+  have "finite {}"
+    by simp (*Pendiente*)
+  then have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
+    using \<open>{} = {a} \<union> {} \<or> {} = {}\<close> by (rule conjI)
+  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> ({} = {a} \<union> Wo \<or> {} = Wo)"
+    using \<open>{} \<subseteq> B\<close> by smt (*Pendiente*)
+next
+  fix x A
+  assume HI:"\<lbrakk>finite A; A \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+  (*show "\<lbrakk>finite (insert x A); insert x A \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"*)
+  assume "finite A"
+  assume "x \<notin> A"
+  (*assume HI:"A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"*)
+  assume "{x} \<union> A \<subseteq> {a} \<union> B"
+  then have "A \<subseteq> {a} \<union> B"
+    by blast (*Pendiente*)
+  have "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+  proof -
+    have Ex1:"\<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+      using \<open>finite A\<close> \<open>A \<subseteq> {a} \<union> B\<close> by (rule HI)
+    obtain Wo where "Wo \<subseteq> B" and C1:"finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+      using Ex1 by blast (*Pendiente*)
+    have "finite Wo"
+      using C1 by (rule conjunct1)
+    then have "finite (insert x Wo)"
+      by simp (*Pendiente*)
+    have "A = {a} \<union> Wo \<or> A = Wo"
+      using C1 by (rule conjunct2)
+    thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+    proof (rule disjE)
+      assume "A = {a} \<union> Wo"
+      then have "insert x A = insert x ({a} \<union> Wo)"
+        by simp (*Pendiente*)
+      then have "insert x A = {a} \<union> (insert x Wo)"
+        by blast (*Pendiente*)
+      then have 2:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = (insert x Wo)"
+        by (rule disjI1)
+      have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = (insert x Wo))"
+        using \<open>finite (insert x Wo)\<close> 2 by (rule conjI)
+      thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"*)
+  (*apply (induct rule: finite_induct)
+  apply simp
+  apply simp
+  apply (erule exE)
+  oops*)
+ 
+
 
 lemma finite_subset_insert1:
   assumes "finite S'"
           "S' \<subseteq> {a} \<union> B"
-        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-  by (metis Diff_empty Diff_insert0 Diff_subset_conv Un_Diff_cancel assms(1) assms(2) finite_Diff insert_Diff insert_is_Un)
+   shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+by (metis Diff_empty Diff_insert0 Diff_subset_conv 
+     Un_Diff_cancel assms(1) assms(2) finite_Diff insert_Diff insert_is_Un)
 
 lemma finite_subset_insert2:
   assumes "finite S'"
@@ -1291,31 +1372,31 @@ proof -
   qed
 qed
 
-lemma pcp_colecComp_CON_both:
+lemma pcp_colecComp_elem_sat:
   assumes "W \<in> (colecComp S)"
-          "Con F G H"
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
-        shows "sat ({G,H} \<union> Wo)"
+        shows "sat ({F} \<union> Wo)"
 proof -
-  have WcolecComp:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
-    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD)
-  then have "finite Wo \<longrightarrow> sat Wo"
-    using assms(5) by blast (*Pendiente*)
-  then have "sat Wo"
-    using assms(4) by (rule mp)
+  have "finite ({F} \<union> Wo)"
+    using assms(3) by blast (*Pendiente*)
+  have "{F} \<union> Wo \<subseteq> W"
+    using assms(2) assms(4) by blast (*Pendiente*)
+  show "sat ({F} \<union> Wo)"
+    using assms(1) \<open>{F} \<union> Wo \<subseteq> W\<close> \<open>finite ({F} \<union> Wo)\<close> by (rule colecComp_subset_finite)
+qed
+
+lemma pcp_colecComp_CON_sat1:
+  assumes "W \<in> (colecComp S)"
+          "F = G \<^bold>\<and> H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,H,F} \<union> Wo)"
+proof -
   have "sat ({F} \<union> Wo)"
-  proof -
-    have "finite ({F} \<union> Wo)"
-      using assms(4) by blast (*Pendiente*)
-    have "{F} \<union> Wo \<subseteq> W"
-      using assms(3) assms(5) by blast (*Pendiente*)
-    have "finite ({F} \<union> Wo) \<longrightarrow> sat ({F} \<union> Wo)"
-      using WcolecComp \<open>{F} \<union> Wo \<subseteq> W\<close> by (rule sspec)
-    thus "sat ({F} \<union> Wo)"
-      using \<open>finite ({F} \<union> Wo)\<close> by (rule mp)
-  qed
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
   have "F \<in> {F} \<union> Wo"
     by simp (*Pendiente*)
   have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
@@ -1324,6 +1405,147 @@ proof -
     using Ex1 by (rule exE)
   have "\<A> \<Turnstile> F"
     using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> (G \<^bold>\<and> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
+    by (simp only: formula_semantics.simps(4))
+  then have "\<A> \<Turnstile> G"
+    by (rule conjunct1)
+  have "\<A> \<Turnstile> H"
+    using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2)
+  have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+    using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+  then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+    by blast (*Pendiente*)
+  thus "sat ({G,H,F} \<union> Wo)"
+    by (simp only: sat_def)
+qed
+
+lemma pcp_colecComp_CON_sat2:
+  assumes "W \<in> (colecComp S)"
+          "F = \<^bold>\<not>(G \<^bold>\<or> H)"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> \<^bold>\<not>(G \<^bold>\<or> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<not>(\<A> \<Turnstile> (G \<^bold>\<or> H))"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not>(\<A> \<Turnstile> G \<or> \<A> \<Turnstile> H)"
+    by (simp add: formula_semantics.simps(5)) (*Pendiente*)
+  then have "\<not> \<A> \<Turnstile> G \<and> \<not> \<A> \<Turnstile> H"
+    by simp (*Pendiente*)
+  then have "\<A> \<Turnstile> \<^bold>\<not> G \<and> \<A> \<Turnstile> \<^bold>\<not> H"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*) 
+  then have "\<A> \<Turnstile> \<^bold>\<not> G"
+    by (rule conjunct1)
+  have "\<A> \<Turnstile> \<^bold>\<not> H"
+    using \<open>\<A> \<Turnstile> \<^bold>\<not> G \<and> \<A> \<Turnstile> \<^bold>\<not> H\<close> by (rule conjunct2)
+  have "\<forall>F \<in> {\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo. \<A> \<Turnstile> F"
+    using Forall1 \<open>\<A> \<Turnstile> \<^bold>\<not> G\<close> \<open>\<A> \<Turnstile> \<^bold>\<not> H\<close> by blast (*Pendiente*)
+  then have "\<exists>\<A>. \<forall>F \<in> ({\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo). \<A> \<Turnstile> F"
+    by blast (*Pendiente*)
+  thus "sat ({\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo)"
+    by (simp only: sat_def)
+qed
+
+lemma pcp_colecComp_CON_sat3:
+  assumes "W \<in> (colecComp S)"
+          "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H)"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,\<^bold>\<not> H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> \<^bold>\<not>(G \<^bold>\<rightarrow> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<not>(\<A> \<Turnstile> (G \<^bold>\<rightarrow> H))"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not>(\<A> \<Turnstile> G \<longrightarrow> \<A> \<Turnstile> H)"
+    by (simp add: formula_semantics.simps(6)) (*Pendiente*)
+  then have "\<A> \<Turnstile> G \<and> \<not> \<A> \<Turnstile> H"
+    by simp (*Pendiente*)
+  then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> \<^bold>\<not> H"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*) 
+  then have "\<A> \<Turnstile> G"
+    by (rule conjunct1)
+  have "\<A> \<Turnstile> \<^bold>\<not> H"
+    using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> \<^bold>\<not> H\<close> by (rule conjunct2)
+  have "\<forall>F \<in> {G,\<^bold>\<not> H,F} \<union> Wo. \<A> \<Turnstile> F"
+    using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> \<^bold>\<not> H\<close> by blast (*Pendiente*)
+  then have "\<exists>\<A>. \<forall>F \<in> ({G,\<^bold>\<not> H,F} \<union> Wo). \<A> \<Turnstile> F"
+    by blast (*Pendiente*)
+  thus "sat ({G,\<^bold>\<not> H,F} \<union> Wo)"
+    by (simp only: sat_def)
+qed
+
+lemma pcp_colecComp_CON_sat4:
+  assumes "W \<in> (colecComp S)"
+          "F = \<^bold>\<not> (\<^bold>\<not> G)"
+          "H = G"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,4,5,6) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> \<^bold>\<not>(\<^bold>\<not> G)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<not> \<A> \<Turnstile> \<^bold>\<not> G"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not> \<not>\<A> \<Turnstile> G"
+    by (simp add: formula_semantics.simps(3))
+  then have "\<A> \<Turnstile> G"
+    by (rule notnotD)
+  then have "\<A> \<Turnstile> H"
+    by (simp only: \<open>H = G\<close>)
+  have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+    using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+  then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+    by blast (*Pendiente*)
+  thus "sat ({G,H,F} \<union> Wo)"
+    by (simp only: sat_def)
+qed
+
+lemma pcp_colecComp_CON_sat:
+  assumes "W \<in> (colecComp S)"
+          "Con F G H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,H} \<union> Wo)"
+proof -
   have "{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo"
     by blast (*Pendiente*)
   have "F = G \<^bold>\<and> H \<or> 
@@ -1334,20 +1556,8 @@ proof -
   then have "sat ({G,H,F} \<union> Wo)"
   proof (rule disjE)
     assume "F = G \<^bold>\<and> H"
-    then have "\<A> \<Turnstile> (G \<^bold>\<and> H)"
-      using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
-    then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
-      by (simp only: formula_semantics.simps(4))
-    then have "\<A> \<Turnstile> G"
-      by (rule conjunct1)
-    have "\<A> \<Turnstile> H"
-      using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2)
-    have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-      using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
-    then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-      by blast (*Pendiente*)
-    thus "sat ({G,H,F} \<union> Wo)"
-      by (simp only: sat_def)
+    show "sat ({G,H,F} \<union> Wo)"
+      using assms(1) \<open>F = G \<^bold>\<and> H\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat1)
   next
     assume "(\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1) \<or> 
     (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
@@ -1363,28 +1573,10 @@ proof -
         using 2 by (iprover elim: conjunct2)
       have "F = \<^bold>\<not>(F1 \<^bold>\<or> G1)"
         using 2 by (rule conjunct1)
-      then have "\<A> \<Turnstile> \<^bold>\<not>(F1 \<^bold>\<or> G1)"
-        using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
-      then have "\<not>(\<A> \<Turnstile> (F1 \<^bold>\<or> G1))"
-        by (simp add: formula_semantics.simps(3)) (*Pendiente*)
-      then have "\<not>(\<A> \<Turnstile> F1 \<or> \<A> \<Turnstile> G1)"
-        by (simp add: formula_semantics.simps(5)) (*Pendiente*)
-      then have "\<not> \<A> \<Turnstile> F1 \<and> \<not> \<A> \<Turnstile> G1"
-        by simp (*Pendiente*)
-      then have "\<A> \<Turnstile> \<^bold>\<not> F1 \<and> \<A> \<Turnstile> \<^bold>\<not> G1"
-        by (simp add: formula_semantics.simps(3)) (*Pendiente*)
-      then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
-        by (simp only: \<open>G = \<^bold>\<not> F1\<close> \<open>H = \<^bold>\<not> G1\<close>)
-      then have "\<A> \<Turnstile> G"
-        by (rule conjunct1)
-      have "\<A> \<Turnstile> H"
-        using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2) 
-      have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-        using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
-      then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-        by blast (*Pendiente*)
+      have "sat ({\<^bold>\<not> F1, \<^bold>\<not> G1, F} \<union> Wo)"
+        using assms(1) \<open>F = \<^bold>\<not>(F1 \<^bold>\<or> G1)\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat2)
       thus "sat ({G,H,F} \<union> Wo)"
-        by (simp only: sat_def)
+        by (simp only: \<open>G = \<^bold>\<not> F1\<close> \<open>H = \<^bold>\<not> G1\<close>)
     next
       assume "(\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
               F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
@@ -1397,50 +1589,18 @@ proof -
           using 3 by (rule conjunct2)
         have "F = \<^bold>\<not>(G \<^bold>\<rightarrow> H1)"
           using 3 by (rule conjunct1)
-        then have "\<A> \<Turnstile> \<^bold>\<not>(G \<^bold>\<rightarrow> H1)"
-          using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
-        then have "\<not>(\<A> \<Turnstile> (G \<^bold>\<rightarrow> H1))"
-          by (simp add: formula_semantics.simps(3)) (*Pendiente*)
-        then have "\<not>(\<A> \<Turnstile> G \<longrightarrow> \<A> \<Turnstile> H1)"
-          by (simp add: formula_semantics.simps(6)) (*Pendiente*)
-        then have "\<A> \<Turnstile> G \<and> \<not> (\<A> \<Turnstile> H1)"
-          by simp (*Pendiente*)
-        then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> \<^bold>\<not> H1"
-          by (simp add: formula_semantics.simps(3))
-        then have "\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H"
-          by (simp only: \<open>H = \<^bold>\<not> H1\<close>)
-        then have "\<A> \<Turnstile> G"
-          by (rule conjunct1)
-        have "\<A> \<Turnstile> H"
-          using \<open>\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H\<close> by (rule conjunct2) 
-        have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-          using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
-        then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-          by blast (*Pendiente*)
+        have "sat ({G, \<^bold>\<not> H1, F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not>(G \<^bold>\<rightarrow> H1)\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat3)
         thus "sat ({G,H,F} \<union> Wo)"
-          by (simp only: sat_def)
+          by (simp only: \<open>H = \<^bold>\<not> H1\<close>)
       next
         assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
         then have "H = G"
           by (rule conjunct2)
         have "F = \<^bold>\<not> (\<^bold>\<not> G)"
           using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct1)
-        then have "\<A> \<Turnstile> \<^bold>\<not> (\<^bold>\<not> G)"
-          using \<open>\<A> \<Turnstile> F\<close> by (simp only: \<open>\<A> \<Turnstile> F\<close>)
-        then have "\<not> \<A> \<Turnstile> \<^bold>\<not> G"
-          by (simp add: formula_semantics.simps(3)) (*Pendiente*)
-        then have "\<not> \<not>\<A> \<Turnstile> G"
-          by (simp add: formula_semantics.simps(3))
-        then have "\<A> \<Turnstile> G"
-          by (rule notnotD)
-        then have "\<A> \<Turnstile> H"
-          by (simp only: \<open>H = G\<close>)
-        have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-          using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
-        then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-          by blast (*Pendiente*)
-        thus "sat ({G,H,F} \<union> Wo)"
-          by (simp only: sat_def)
+        show "sat ({G, H, F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> \<open>H = G\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat4)
       qed
     qed
   qed
@@ -1453,8 +1613,6 @@ lemma pcp_colecComp_CON:
   shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
 proof (rule allI)+
   fix F G H
-  have Hip:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
-    using assms unfolding colecComp fin_sat_def by (rule CollectD)
   show "Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
   proof (rule impI)+
     assume "Con F G H"
@@ -1478,7 +1636,7 @@ proof (rule allI)+
           have "finite Wo'"
             using 1 by (rule conjunct1)
             have "sat ({G,H} \<union> Wo')" 
-              using \<open>W \<in> (colecComp S)\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_both)
+              using \<open>W \<in> (colecComp S)\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_sat)
           have "S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
             using 1 by (rule conjunct2)
           thus "sat S'"
@@ -1519,7 +1677,456 @@ proof (rule allI)+
   qed
 qed
 
-(*lemma pcp_colecComp: "pcp (colecComp S)"
+lemma pcp_colecComp_DIS_sat1:
+  assumes "W \<in> (colecComp S)"
+          "F = G \<^bold>\<or> H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> (G \<^bold>\<or> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<A> \<Turnstile> G \<or> \<A> \<Turnstile> H"
+    by (simp only: formula_semantics.simps(5))
+  thus ?thesis
+  proof (rule disjE)
+    assume "\<A> \<Turnstile> G"
+    have "\<forall>F \<in> {G,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile> G\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({G,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({G,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI1)
+  next
+    assume "\<A> \<Turnstile> H"
+    have "\<forall>F \<in> {H,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile>H\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({H,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({H,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI2)
+  qed
+qed
+
+lemma pcp_colecComp_DIS_sat2:
+  assumes "W \<in> (colecComp S)"
+          "F = G \<^bold>\<rightarrow> H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({\<^bold>\<not> G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> (G \<^bold>\<rightarrow> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<A> \<Turnstile> G \<longrightarrow> \<A> \<Turnstile> H"
+    by (simp only: formula_semantics.simps(6))
+  then have "(\<not>(\<not> \<A> \<Turnstile> G)) \<longrightarrow> \<A> \<Turnstile> H"
+    by blast (*Pendiente*)
+  then have "(\<not> \<A> \<Turnstile> G) \<or> \<A> \<Turnstile> H"
+    by blast (*Pendiente*)
+  thus ?thesis
+  proof (rule disjE)
+    assume "\<not> \<A> \<Turnstile> G"
+    then have "\<A> \<Turnstile> (\<^bold>\<not> G)"
+      by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+    have "\<forall>F \<in> {\<^bold>\<not> G,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile> (\<^bold>\<not> G)\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({\<^bold>\<not> G,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({\<^bold>\<not> G,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI1)
+  next
+    assume "\<A> \<Turnstile> H"
+    have "\<forall>F \<in> {H,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile>H\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({H,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({H,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI2)
+  qed
+qed
+
+lemma pcp_colecComp_DIS_sat3:
+  assumes "W \<in> (colecComp S)"
+          "F = \<^bold>\<not> (G \<^bold>\<and> H)"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({\<^bold>\<not> G,F} \<union> Wo) \<or> sat ({\<^bold>\<not> H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> \<^bold>\<not> (G \<^bold>\<and> H)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<not> (\<A> \<Turnstile> (G \<^bold>\<and> H))"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not>(\<A> \<Turnstile> G \<and> \<A> \<Turnstile> H)"
+    by (simp add: formula_semantics.simps(4)) (*Pendiente*)
+  then have "\<not> (\<A> \<Turnstile> G) \<or> \<not> (\<A> \<Turnstile> H)"
+    by blast (*Pendiente*)
+  thus ?thesis
+  proof (rule disjE)
+    assume "\<not> (\<A> \<Turnstile> G)"
+    then have "\<A> \<Turnstile> \<^bold>\<not> G"
+      by (simp add: formula_semantics.simps(3))
+    have "\<forall>F \<in> {\<^bold>\<not> G,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile> \<^bold>\<not> G\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({\<^bold>\<not> G,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({\<^bold>\<not> G,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI1)
+  next
+    assume "\<not> (\<A> \<Turnstile> H)"
+    then have "\<A> \<Turnstile> \<^bold>\<not> H"
+      by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+    have "\<forall>F \<in> {\<^bold>\<not> H,F} \<union> Wo. \<A> \<Turnstile> F"
+      using Forall1 \<open>\<A> \<Turnstile> \<^bold>\<not> H\<close> by blast (*Pendiente*)
+    then have "\<exists>\<A>. \<forall>F \<in> ({\<^bold>\<not> H,F} \<union> Wo). \<A> \<Turnstile> F"
+      by blast (*Pendiente*)
+    then have "sat ({\<^bold>\<not> H,F} \<union> Wo)"
+      by (simp only: sat_def)
+    thus ?thesis
+      by (rule disjI2)
+  qed
+qed
+
+lemma pcp_colecComp_DIS_sat4:
+  assumes "W \<in> (colecComp S)"
+          "F = \<^bold>\<not> (\<^bold>\<not> G)"
+          "H = G"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+proof -
+  have "sat ({F} \<union> Wo)"
+    using assms(1,4,5,6) by (rule pcp_colecComp_elem_sat)
+  have "F \<in> {F} \<union> Wo"
+    by simp (*Pendiente*)
+  have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
+  obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Ex1 by (rule exE)
+  have "\<A> \<Turnstile> F"
+    using Forall1 \<open>F \<in> {F} \<union> Wo\<close> by (rule bspec)
+  then have "\<A> \<Turnstile> \<^bold>\<not>(\<^bold>\<not> G)"
+    using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
+  then have "\<not> \<A> \<Turnstile> \<^bold>\<not> G"
+    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not> \<not>\<A> \<Turnstile> G"
+    by (simp add: formula_semantics.simps(3))
+  then have "\<A> \<Turnstile> G"
+    by (rule notnotD)
+  have "\<forall>F \<in> {G,F} \<union> Wo. \<A> \<Turnstile> F"
+    using Forall1 \<open>\<A> \<Turnstile> G\<close> by blast (*Pendiente*)
+  then have "\<exists>\<A>. \<forall>F \<in> ({G,F} \<union> Wo). \<A> \<Turnstile> F"
+    by blast (*Pendiente*)
+  then have "sat ({G,F} \<union> Wo)"
+    by (simp only: sat_def)
+  thus ?thesis
+    by (rule disjI1)
+qed
+
+lemma pcp_colecComp_DIS_sat:
+  assumes "W \<in> (colecComp S)"
+          "Dis F G H"
+          "F \<in> W"
+          "finite Wo"
+          "Wo \<subseteq> W"
+        shows "sat ({G} \<union> Wo) \<or> sat ({H} \<union> Wo)"
+proof -
+  have "(F = G \<^bold>\<or> H \<or> 
+        (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+        (\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+        F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G)"
+    using assms(2) by (simp only: con_dis_simps(2))
+  thus ?thesis
+  proof (rule disjE)
+    assume "F = G \<^bold>\<or> H"
+    have "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+      using assms(1) \<open>F = G \<^bold>\<or> H\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat1)
+    thus ?thesis
+    proof (rule disjE)
+      assume "sat ({G,F} \<union> Wo)"
+      have "{G} \<union> Wo \<subseteq> {G,F} \<union> Wo"
+        by blast (*Pendiente*)
+      then have "sat({G} \<union> Wo)"
+        using \<open>sat({G,F} \<union> Wo)\<close> by (rule sat_mono)
+      thus ?thesis
+        by (rule disjI1)
+    next
+      assume "sat ({H,F} \<union> Wo)"
+      have "{H} \<union> Wo \<subseteq> {H,F} \<union> Wo"
+        by blast (*Pendiente*)
+      then have "sat({H} \<union> Wo)"
+        using \<open>sat({H,F} \<union> Wo)\<close> by (rule sat_mono)
+      thus ?thesis
+        by (rule disjI2)
+    qed
+  next
+    assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
+        (\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+        F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+    thus ?thesis
+    proof (rule disjE)
+      assume Ex1:"\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+      obtain G1 H1 where C1:"F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1"
+        using Ex1 by (iprover elim: exE)
+      have "F = G1 \<^bold>\<rightarrow> H1"
+        using C1 by (rule conjunct1)
+      have "G = \<^bold>\<not> G1"
+        using C1 by (iprover elim: conjunct1)
+      have "H = H1"
+        using C1 by (iprover elim: conjunct2)
+      have "sat ({\<^bold>\<not> G1,F} \<union> Wo) \<or> sat ({H1,F} \<union> Wo)"
+        using assms(1) \<open>F = G1 \<^bold>\<rightarrow> H1\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat2)
+      thus ?thesis
+      proof (rule disjE)
+        assume "sat ({\<^bold>\<not> G1,F} \<union> Wo)"
+        have "{\<^bold>\<not> G1} \<union> Wo \<subseteq> {\<^bold>\<not> G1,F} \<union> Wo"
+          by blast (*Pendiente*)
+        then have "sat({\<^bold>\<not> G1} \<union> Wo)"
+          using \<open>sat({\<^bold>\<not> G1,F} \<union> Wo)\<close> by (rule sat_mono)
+        then have "sat({G} \<union> Wo)"
+          by (simp only: \<open>G = \<^bold>\<not> G1\<close>)
+        thus ?thesis
+          by (rule disjI1)
+    next
+        assume "sat ({H1,F} \<union> Wo)"
+        have "{H1} \<union> Wo \<subseteq> {H1,F} \<union> Wo"
+          by blast (*Pendiente*)
+        then have "sat({H1} \<union> Wo)"
+          using \<open>sat({H1,F} \<union> Wo)\<close> by (rule sat_mono)
+        then have "sat({H} \<union> Wo)"
+          by (simp only: \<open>H = H1\<close>)
+        thus ?thesis
+          by (rule disjI2)
+      qed
+    next
+      assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
+        F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+      thus ?thesis
+      proof (rule disjE)
+        assume Ex2:"\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+        obtain G1 H1 where C2:"F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1"
+          using Ex2 by (iprover elim: exE)
+        have "F = \<^bold>\<not> (G1 \<^bold>\<and> H1)"
+          using C2 by (rule conjunct1)
+        have "G = \<^bold>\<not> G1"
+          using C2 by (iprover elim: conjunct1)
+        have "H = \<^bold>\<not> H1"
+          using C2 by (iprover elim: conjunct2)
+        have "sat ({\<^bold>\<not> G1,F} \<union> Wo) \<or> sat ({\<^bold>\<not> H1,F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not> (G1 \<^bold>\<and> H1)\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat3)
+        thus ?thesis
+        proof (rule disjE)
+          assume "sat ({\<^bold>\<not> G1,F} \<union> Wo)"
+          have "{\<^bold>\<not> G1} \<union> Wo \<subseteq> {\<^bold>\<not> G1,F} \<union> Wo"
+            by blast (*Pendiente*)
+          then have "sat({\<^bold>\<not> G1} \<union> Wo)"
+            using \<open>sat({\<^bold>\<not> G1,F} \<union> Wo)\<close> by (rule sat_mono)
+          then have "sat({G} \<union> Wo)"
+            by (simp only: \<open>G = \<^bold>\<not> G1\<close>)
+          thus ?thesis
+            by (rule disjI1)
+        next
+          assume "sat ({\<^bold>\<not> H1,F} \<union> Wo)"
+          have "{\<^bold>\<not> H1} \<union> Wo \<subseteq> {\<^bold>\<not> H1,F} \<union> Wo"
+            by blast (*Pendiente*)
+          then have "sat({\<^bold>\<not> H1} \<union> Wo)"
+            using \<open>sat({\<^bold>\<not> H1,F} \<union> Wo)\<close> by (rule sat_mono)
+          then have "sat({H} \<union> Wo)"
+            by (simp only: \<open>H = \<^bold>\<not> H1\<close>)
+          thus ?thesis
+            by (rule disjI2)
+        qed
+      next
+        assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
+        then have "F = \<^bold>\<not> (\<^bold>\<not> G)"
+          by (rule conjunct1)
+        have "H = G"
+          using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct2)
+        have "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close> \<open>H = G\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat4)
+        thus ?thesis
+        proof (rule disjE)
+          assume "sat ({G,F} \<union> Wo)"
+          have "{G} \<union> Wo \<subseteq> {G,F} \<union> Wo"
+            by blast (*Pendiente*)
+          then have "sat({G} \<union> Wo)"
+            using \<open>sat({G,F} \<union> Wo)\<close> by (rule sat_mono)
+          thus ?thesis
+            by (rule disjI1)
+        next
+          assume "sat ({H,F} \<union> Wo)"
+          have "{H} \<union> Wo \<subseteq> {H,F} \<union> Wo"
+            by blast (*Pendiente*)
+          then have "sat({H} \<union> Wo)"
+            using \<open>sat({H,F} \<union> Wo)\<close> by (rule sat_mono)
+          thus ?thesis
+            by (rule disjI2)
+        qed
+      qed
+    qed
+  qed
+qed
+
+lemma sat_subset_ccontr:
+  assumes "A \<subseteq> B"
+          "\<not> sat A"
+        shows "\<not> sat B"
+  using assms(1) assms(2) sat_mono by blast (*Pendiente*)
+
+lemma not_colecComp:
+  assumes "W \<in> (colecComp S)"
+          "{x} \<union> W \<notin> (colecComp S)"
+        shows "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
+proof -
+  have WCol:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
+    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD) 
+  have "\<not>(\<forall>Wo \<subseteq> {x} \<union> W. finite Wo \<longrightarrow> sat Wo)"
+    using assms(2) unfolding colecComp fin_sat_def by blast (*Pendiente*)
+  then have "\<exists>Wo \<subseteq> {x} \<union> W. \<not>(finite Wo \<longrightarrow> sat Wo)"
+    by blast (*Pendiente*)
+  then have Ex1:"\<exists>Wo \<subseteq> {x} \<union> W. finite Wo \<and> \<not>(sat Wo)"
+    by blast (*Pendiente*)
+  obtain Wo' where "Wo' \<subseteq> {x} \<union> W" and C1:"finite Wo' \<and> \<not>(sat Wo')"
+    using Ex1 by blast (*Pendiente*)
+  have "finite Wo'"
+    using C1 by (rule conjunct1)
+  have "\<not>(sat Wo')"
+    using C1 by (rule conjunct2)
+  have Ex2:"\<exists>Wo \<subseteq> W. finite Wo \<and> (Wo' = {x} \<union> Wo \<or> Wo' = Wo)"
+    using \<open>finite Wo'\<close> \<open>Wo' \<subseteq> {x} \<union> W\<close> by (rule finite_subset_insert1)
+  obtain Wo where "Wo \<subseteq> W" and C2:"finite Wo \<and> (Wo' = {x} \<union> Wo \<or> Wo' = Wo)"
+    using Ex2 by blast
+  have "finite Wo"
+    using C2 by (rule conjunct1)
+  have "Wo' = {x} \<union> Wo \<or> Wo' = Wo"
+    using C2 by (rule conjunct2)
+  thus ?thesis
+  proof (rule disjE)
+    assume "Wo' = {x} \<union> Wo"
+    then have "\<not>(sat ({x} \<union> Wo))" try
+      using \<open>\<not> sat Wo'\<close> by blast (*Pendiente*)
+    have "finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
+      using \<open>finite Wo\<close> \<open>\<not>(sat ({x} \<union> Wo))\<close> by (rule conjI)
+    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
+      using \<open>Wo \<subseteq> W\<close> by blast (*Pendiente*)
+  next
+    assume "Wo' = Wo"
+    then have "Wo' \<subseteq> W"
+      using \<open>Wo \<subseteq> W\<close> by blast (*Pendiente*)
+    have "finite Wo' \<longrightarrow> sat Wo'"
+      using WCol \<open>Wo' \<subseteq> W\<close> by blast (*Pendiente*)
+    then have "sat Wo'"
+      using \<open>finite Wo'\<close> by (rule mp)
+    show ?thesis
+      using \<open>\<not> sat Wo'\<close> \<open>sat Wo'\<close> by (rule notE)
+  qed
+qed
+
+lemma pcp_colecComp_DIS:
+  assumes "W \<in> (colecComp S)"
+  shows "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+proof (rule allI)+
+  fix F G H
+  show "Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+  proof (rule impI)+
+    assume "Dis F G H"
+    assume "F \<in> W"
+    show "{G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+    proof (rule ccontr)
+      assume "\<not>({G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
+      then have C:"{G} \<union> W \<notin> (colecComp S) \<and> {H} \<union> W \<notin> (colecComp S)"
+        by blast (*PEndiente*)
+      then have "{G} \<union> W \<notin> (colecComp S)"
+        by (rule conjunct1)
+      have Ex1:"\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({G} \<union> Wo))"
+        using assms \<open>{G} \<union> W \<notin> (colecComp S)\<close> by (rule not_colecComp)
+      obtain W1 where "W1 \<subseteq> W" and C1:"finite W1 \<and> \<not>(sat ({G} \<union> W1))"
+        using Ex1 by blast
+      have "finite W1"
+        using C1 by (rule conjunct1)
+      have "\<not>(sat ({G} \<union> W1))"
+        using C1 by (rule conjunct2)
+      have "{H} \<union> W \<notin> (colecComp S)"
+        using C by (rule conjunct2) 
+      have Ex2:"\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({H} \<union> Wo))"
+        using assms \<open>{H} \<union> W \<notin> (colecComp S)\<close> by (rule not_colecComp)
+      obtain W2 where "W2 \<subseteq> W" and C2:"finite W2 \<and> \<not>(sat ({H} \<union> W2))"
+        using Ex2 by blast
+      have "finite W2"
+        using C2 by (rule conjunct1)
+      have "\<not>(sat ({H} \<union> W2))"
+        using C2 by (rule conjunct2)
+      let ?Wo = "W1 \<union> W2"
+      have "?Wo \<subseteq> W"
+        using \<open>W1 \<subseteq> W\<close> \<open>W2 \<subseteq> W\<close> by blast (*Pendiente*)
+      have "finite ?Wo"
+        using \<open>finite W1\<close> \<open>finite W2\<close> by blast (*Pendiente*)
+      have "{G} \<union> W1 \<subseteq> {G} \<union> ?Wo"
+        by blast (*Pendiente*)
+      have "\<not> sat ({G} \<union> ?Wo)"
+        using \<open>{G} \<union> W1 \<subseteq> {G} \<union> ?Wo\<close> \<open>\<not> sat ({G} \<union> W1)\<close> by (rule sat_subset_ccontr)
+      have "{H} \<union> W2 \<subseteq> {H} \<union> ?Wo"
+        by blast (*Pendiente*)
+      have "\<not> sat ({H} \<union> ?Wo)"
+        using \<open>{H} \<union> W2 \<subseteq> {H} \<union> ?Wo\<close> \<open>\<not> sat ({H} \<union> W2)\<close> by (rule sat_subset_ccontr)
+      have "\<not> sat ({G} \<union> ?Wo) \<and> \<not> sat ({H} \<union> ?Wo)"
+        using \<open>\<not> sat ({G} \<union> ?Wo)\<close> \<open>\<not> sat ({H} \<union> ?Wo)\<close> by (rule conjI)
+      have "sat ({G} \<union> ?Wo) \<or> sat ({H} \<union> ?Wo)"
+        using assms(1) \<open>Dis F G H\<close> \<open>F \<in> W\<close> \<open>finite ?Wo\<close> \<open>?Wo \<subseteq> W\<close> by (rule pcp_colecComp_DIS_sat)
+      then have "\<not>\<not>(sat ({G} \<union> ?Wo) \<or> sat ({H} \<union> ?Wo))"
+        by blast (*Pendiente*)
+      then have "\<not>(\<not>(sat ({G} \<union> ?Wo)) \<and> \<not>(sat ({H} \<union> ?Wo)))"
+        by blast (*Pendiente*)
+      thus "False"
+        using \<open>\<not>(sat ({G} \<union> ?Wo)) \<and> \<not>(sat ({H} \<union> ?Wo))\<close> by (rule notE)
+    qed
+  qed
+qed
+
+lemma pcp_colecComp: "pcp (colecComp S)"
 proof (rule pcp_alt2)
   show "\<forall>W \<in> (colecComp S). \<bottom> \<notin> W
         \<and> (\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False)
@@ -1535,14 +2142,14 @@ proof (rule pcp_alt2)
     have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
       using H by (rule pcp_colecComp_CON)
     have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
-      using H sorry
+      using H by (rule pcp_colecComp_DIS)
     show "\<bottom> \<notin> W
           \<and> (\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False)
           \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S))
           \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
       using C1 C2 C3 C4 by (iprover intro: conjI)
   qed
-qed*)
+qed
 
 lemma prop_Compactness:
   assumes "fin_sat S"
