@@ -1152,17 +1152,6 @@ proof -
     using \<open>finite Wo\<close> by (rule mp)
 qed
 
-text \<open>
-
-1. Por bot_no_sat: {\<bottom>} no es satisfacible.
-2. Por ??:  {\<bottom>} es finito.
-Entonces, si  \<bottom> \<in> W
-==>         {\<bottom>} \<subseteq> W y es finito, por 2
-==>          {\<bottom>} es fin_sat
-==>         {\<bottom>} es satisfacible por definición de W
-==>      contradice 1
-\<close>
-
 lemma pcp_colecComp_bot:
   assumes "W \<in> (colecComp S)"
   shows "\<bottom> \<notin> W"
@@ -1170,10 +1159,14 @@ proof (rule ccontr)
   assume "\<not>(\<bottom> \<notin> W)"
   then have "\<bottom> \<in> W"
     by (rule notnotD)
-  then have "{\<bottom>} \<subseteq> W" 
-    by blast (*Pendiente*)
-  have "finite  {\<bottom>}" 
-    by simp (*Pendiente*)
+  have "{} \<subseteq> W" 
+    by (simp only: empty_subsetI) 
+  have "\<bottom> \<in> W \<and> {} \<subseteq> W"
+    using \<open>\<bottom> \<in> W\<close> \<open>{} \<subseteq> W\<close> by (rule conjI)
+  then have "{\<bottom>} \<subseteq> W"
+    by (simp only: insert_subset)
+  have "finite {\<bottom>}" using [[simp_trace]]
+    by (simp only: finite.emptyI finite_insert)
   have "sat {\<bottom> :: 'a formula}" 
     using assms \<open>{\<bottom>} \<subseteq> W\<close> \<open>finite {\<bottom>}\<close> by (rule colecComp_subset_finite)
   have "\<not> sat {\<bottom> :: 'a formula}" 
