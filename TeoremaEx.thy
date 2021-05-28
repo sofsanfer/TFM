@@ -1440,7 +1440,7 @@ proof -
   have "\<forall>F \<in> ({G} \<union> {H}) \<union> ({F} \<union> Wo). \<A> \<Turnstile> F"
     using Forall1 1 2 by (iprover intro: ball_Un)
   then have "\<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-    by blast
+    by simp
   then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
     by (iprover intro: exI)
   thus "sat ({G,H,F} \<union> Wo)"
@@ -1468,19 +1468,25 @@ proof -
   then have "\<A> \<Turnstile> \<^bold>\<not>(G \<^bold>\<or> H)"
     using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
   then have "\<not>(\<A> \<Turnstile> (G \<^bold>\<or> H))"
-    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+    by (simp only: formula_semantics.simps(3) simp_thms(8))
   then have "\<not>(\<A> \<Turnstile> G \<or> \<A> \<Turnstile> H)"
-    by (simp add: formula_semantics.simps(5)) (*Pendiente*)
-  then have "\<not> \<A> \<Turnstile> G \<and> \<not> \<A> \<Turnstile> H"
-    by simp (*Pendiente*)
+    by (simp only: formula_semantics.simps(5) simp_thms(8))
+  then have "\<not> \<A> \<Turnstile> G \<and> \<not> \<A> \<Turnstile> H" 
+    by (simp only: de_Morgan_disj simp_thms(8))
   then have "\<A> \<Turnstile> \<^bold>\<not> G \<and> \<A> \<Turnstile> \<^bold>\<not> H"
-    by (simp add: formula_semantics.simps(3)) (*Pendiente*) 
+    by (simp only: formula_semantics.simps(3) simp_thms(8)) 
   then have "\<A> \<Turnstile> \<^bold>\<not> G"
     by (rule conjunct1)
+  then have 1:"\<forall>F \<in> {\<^bold>\<not> G}. \<A> \<Turnstile> F"
+    by simp
   have "\<A> \<Turnstile> \<^bold>\<not> H"
     using \<open>\<A> \<Turnstile> \<^bold>\<not> G \<and> \<A> \<Turnstile> \<^bold>\<not> H\<close> by (rule conjunct2)
-  have "\<forall>F \<in> {\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo. \<A> \<Turnstile> F"
-    using Forall1 \<open>\<A> \<Turnstile> \<^bold>\<not> G\<close> \<open>\<A> \<Turnstile> \<^bold>\<not> H\<close> by blast (*Pendiente*)
+  then have 2:"\<forall>F \<in> {\<^bold>\<not> H}. \<A> \<Turnstile> F"
+    by simp
+  have "\<forall>F \<in> ({\<^bold>\<not> G} \<union> {\<^bold>\<not> H}) \<union> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Forall1 1 2 by (iprover intro: ball_Un)
+  then have "\<forall>F \<in> ({\<^bold>\<not> G,\<^bold>\<not> H, F} \<union> Wo). \<A> \<Turnstile> F"
+    by simp
   then have "\<exists>\<A>. \<forall>F \<in> ({\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo). \<A> \<Turnstile> F"
     by (iprover intro: exI)
   thus "sat ({\<^bold>\<not> G,\<^bold>\<not> H,F} \<union> Wo)"
