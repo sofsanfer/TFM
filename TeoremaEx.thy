@@ -1181,19 +1181,19 @@ proof (rule ccontr)
   then have "sat({Atom k, \<^bold>\<not> (Atom k)})"
     by (rule notnotD)
   then have Sat:"\<exists>\<A>. \<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
-    by (simp add: sat_def) (*Pendiente*)
+    by (simp only: sat_def)
   obtain \<A> where H:"\<forall>F \<in> {Atom k, \<^bold>\<not>(Atom k)}. \<A> \<Turnstile> F"
     using Sat by (rule exE)
   have "Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}"
-    by blast (*Pendiente*)
+    by simp
   have "\<A> \<Turnstile> Atom k"
     using H \<open>Atom k \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
   have "\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}"
-    by blast (*Pendiente*)
+    by simp
   have "\<A> \<Turnstile> \<^bold>\<not>(Atom k)"
     using H \<open>\<^bold>\<not>(Atom k) \<in> {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule bspec)
-  then have "\<not> \<A> \<Turnstile> Atom k"
-    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+  then have "\<not> \<A> \<Turnstile> Atom k" 
+    by (simp only: simp_thms(8) formula_semantics.simps(3))
   thus "False"
     using \<open>\<A> \<Turnstile> Atom k\<close> by (rule notE)
 qed
