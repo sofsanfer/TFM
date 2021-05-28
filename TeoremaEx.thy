@@ -1165,7 +1165,7 @@ proof (rule ccontr)
     using \<open>\<bottom> \<in> W\<close> \<open>{} \<subseteq> W\<close> by (rule conjI)
   then have "{\<bottom>} \<subseteq> W"
     by (simp only: insert_subset)
-  have "finite {\<bottom>}" using [[simp_trace]]
+  have "finite {\<bottom>}" 
     by (simp only: finite.emptyI finite_insert)
   have "sat {\<bottom> :: 'a formula}" 
     using assms \<open>{\<bottom>} \<subseteq> W\<close> \<open>finite {\<bottom>}\<close> by (rule colecComp_subset_finite)
@@ -1207,10 +1207,22 @@ proof (rule allI)
   proof (rule impI)+
     assume 1:"Atom k \<in> W"
     assume 2:"\<^bold>\<not> (Atom k) \<in> W"
-    have "{Atom k, \<^bold>\<not>(Atom k)} \<subseteq> W"
-      using 1 2 by blast (*Pendiente*)
+    have "{} \<subseteq> W"
+      by (simp only: empty_subsetI) 
+    have "Atom k \<in> W \<and> {} \<subseteq> W"
+      using 1 \<open>{} \<subseteq> W\<close> by (rule conjI)
+    then have "{Atom k} \<subseteq> W"
+      by (simp only: insert_subset)
+    have "\<^bold>\<not> (Atom k) \<in> W \<and> {} \<subseteq> W"
+      using 2 \<open>{} \<subseteq> W\<close> by (rule conjI)
+    then have "{\<^bold>\<not>(Atom k)} \<subseteq> W"
+      by (simp only: insert_subset)
+    have "{Atom k} \<union> {\<^bold>\<not>(Atom k)} \<subseteq> W"
+      using \<open>{Atom k} \<subseteq> W\<close> \<open>{\<^bold>\<not>(Atom k)} \<subseteq> W\<close> by (simp only: Un_least)
+    then have "{Atom k, \<^bold>\<not>(Atom k)} \<subseteq> W"
+      by simp 
     have "finite {Atom k, \<^bold>\<not>(Atom k)}"
-      by blast (*Pendiente*)
+      by blast
     have "sat ({Atom k, \<^bold>\<not>(Atom k)})"
       using assms \<open>{Atom k, \<^bold>\<not>(Atom k)} \<subseteq> W\<close> \<open>finite {Atom k, \<^bold>\<not>(Atom k)}\<close> by (rule colecComp_subset_finite)
     have "\<not> sat ({Atom k, \<^bold>\<not>(Atom k)})"
