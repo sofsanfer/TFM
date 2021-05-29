@@ -1232,72 +1232,126 @@ proof (rule allI)
   qed
 qed
 
-(*lemma finite_subset_insert1_alt:
-  "\<lbrakk>finite S'; S' \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
-     \<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-proof (induct rule: finite_induct)
-  assume "{} \<subseteq> {a} \<union> B"
-  have "{} = {}"
-    by blast (**Pendiente*)
-  then have "{} = {a} \<union> {} \<or> {} = {}"
-    by (rule disjI2)
-  have "{} \<subseteq> B"
-    by blast (*Pendiente*)
-  have "finite {}"
-    by simp (*Pendiente*)
-  then have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
-    using \<open>{} = {a} \<union> {} \<or> {} = {}\<close> by (rule conjI)
-  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> ({} = {a} \<union> Wo \<or> {} = Wo)"
-    using \<open>{} \<subseteq> B\<close> by smt (*Pendiente*)
-next
-  fix x A
-  assume HI:"\<lbrakk>finite A; A \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-  (*show "\<lbrakk>finite (insert x A); insert x A \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"*)
-  assume "finite A"
-  assume "x \<notin> A"
-  (*assume HI:"A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"*)
-  assume "{x} \<union> A \<subseteq> {a} \<union> B"
-  then have "A \<subseteq> {a} \<union> B"
-    by blast (*Pendiente*)
-  have "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-  proof -
-    have Ex1:"\<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-      using \<open>finite A\<close> \<open>A \<subseteq> {a} \<union> B\<close> by (rule HI)
-    obtain Wo where "Wo \<subseteq> B" and C1:"finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-      using Ex1 by blast (*Pendiente*)
-    have "finite Wo"
-      using C1 by (rule conjunct1)
-    then have "finite (insert x Wo)"
-      by simp (*Pendiente*)
-    have "A = {a} \<union> Wo \<or> A = Wo"
-      using C1 by (rule conjunct2)
-    thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-    proof (rule disjE)
-      assume "A = {a} \<union> Wo"
-      then have "insert x A = insert x ({a} \<union> Wo)"
-        by simp (*Pendiente*)
-      then have "insert x A = {a} \<union> (insert x Wo)"
-        by blast (*Pendiente*)
-      then have 2:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = (insert x Wo)"
-        by (rule disjI1)
-      have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = (insert x Wo))"
-        using \<open>finite (insert x Wo)\<close> 2 by (rule conjI)
-      thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"*)
-  (*apply (induct rule: finite_induct)
-  apply simp
-  apply simp
-  apply (erule exE)
-  oops*)
- 
 lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
   by blast
 
 lemma finite_subset_insert1:
-  assumes "finite S'"
-          "S' \<subseteq> {a} \<union> B"
-   shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-by (metis Diff_empty Diff_insert0 Diff_subset_conv 
-     Un_Diff_cancel assms(1) assms(2) finite_Diff insert_Diff insert_is_Un)
+  "\<lbrakk>finite S'; S' \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
+     \<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
+proof (induct rule: finite_induct)
+  case empty
+  have "{} = {}"
+    by (simp only: simp_thms(6))
+  then have "{} = {a} \<union> {} \<or> {} = {}"
+    by (rule disjI2)
+  have "{} \<subseteq> B"
+    by (rule empty_subsetI)
+  have "finite {}"
+    by (simp only: finite.emptyI)
+  then have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
+    using \<open>{} = {a} \<union> {} \<or> {} = {}\<close> by (rule conjI)
+  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> ({} = {a} \<union> Wo \<or> {} = Wo)"
+    using \<open>{} \<subseteq> B\<close> by (rule subexI)
+next
+  case (insert x A)
+  assume "finite A"
+  assume "x \<notin> A"
+  assume HI:"A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+  show "insert x A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+  proof -
+    assume "insert x A \<subseteq> {a} \<union> B" 
+    then have C:"x \<in> {a} \<union> B \<and> A \<subseteq> {a} \<union> B"
+      by (simp only: insert_subset)
+    then have "A \<subseteq> {a} \<union> B"
+      by (rule conjunct2)
+    have Ex1:"\<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+      using \<open>A \<subseteq> {a} \<union> B\<close> by (rule HI)
+    obtain Wo where "Wo \<subseteq> B" and C1:"finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
+      using Ex1 by (rule subexE)
+    have "finite Wo"
+      using C1 by (rule conjunct1)
+    then have "finite (insert x Wo)"
+      by (simp only: finite.insertI)
+    have "x \<in> {a} \<union> B"
+      using C by (rule conjunct1)
+    then have "x \<in> {a} \<or> x \<in> B"
+      by (simp only: Un_iff)
+    then have "x = a \<or> x \<in> B"
+      by (simp only: singleton_iff)
+    thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+    proof (rule disjE)
+      assume "x = a"
+      have "A = {a} \<union> Wo \<or> A = Wo"
+        using C1 by (rule conjunct2)
+      thus ?thesis
+      proof (rule disjE)
+        assume "A = {a} \<union> Wo"
+        have "x \<in> {a}"
+          using \<open>x = a\<close> by (simp only: singleton_iff)
+        then have "x \<in> {a} \<union> Wo" 
+          by (simp only: UnI1)
+        then have "insert x ({a} \<union> Wo) = {a} \<union> Wo"
+          by (rule insert_absorb)
+        have "insert x A = insert x ({a} \<union> Wo)"
+          by (simp only: \<open>A = {a} \<union> Wo\<close>)
+        then have "insert x A = {a} \<union> Wo"
+          by (simp only: \<open>insert x ({a} \<union> Wo) = {a} \<union> Wo\<close>)
+        then have 1:"insert x A = {a} \<union> Wo \<or> insert x A = Wo"
+          by (rule disjI1)
+        have "finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+          using \<open>finite Wo\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>Wo \<subseteq> B\<close> by (rule subexI)
+      next
+        assume "A = Wo"
+        have "insert x A = {x} \<union> A"
+          by (rule insert_is_Un)
+        then have "insert x A = {a} \<union> Wo"
+          by (simp only: \<open>x = a\<close> \<open>A = Wo\<close>)
+        then have 1:"insert x A = {a} \<union> Wo \<or> insert x A = Wo"
+          by (rule disjI1)
+        have "finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
+          using \<open>finite Wo\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>Wo \<subseteq> B\<close> by (rule subexI)
+      qed
+    next
+      assume "x \<in> B"
+      have "x \<in> B \<and> Wo \<subseteq> B"
+        using \<open>x \<in> B\<close> \<open>Wo \<subseteq> B\<close> by (rule conjI)
+      then have "insert x Wo \<subseteq> B"
+        by (simp only: insert_subset)
+      have "finite (insert x Wo)"
+        using \<open>finite Wo\<close> by (simp only: finite.insertI)
+      have "A = {a} \<union> Wo \<or> A = Wo"
+        using C1 by (rule conjunct2)
+      thus ?thesis
+      proof (rule disjE)
+        assume "A = {a} \<union> Wo"
+        have "insert x A = insert x ({a} \<union> Wo)"
+          by (simp only: \<open>A = {a} \<union> Wo\<close>)
+        then have "insert x A = {a} \<union> (insert x Wo)"
+          by blast
+        then have 1:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo"
+          by (rule disjI1)
+        have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo)"
+          using \<open>finite (insert x Wo)\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>insert x Wo \<subseteq> B\<close> by (rule subexI)
+      next
+        assume "A = Wo"
+        have "insert x A = insert x Wo"
+          by (simp only: \<open>A = Wo\<close>)
+        then have 1:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo"
+          by (rule disjI2)
+        have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo)"
+          using \<open>finite (insert x Wo)\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>insert x Wo \<subseteq> B\<close> by (rule subexI)
+      qed
+    qed
+  qed
+qed
 
 lemma finite_subset_insert2:
   assumes "finite S'"
