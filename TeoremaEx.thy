@@ -1551,7 +1551,7 @@ proof -
   have "sat ({F} \<union> Wo)"
     using assms(1,4,5,6) by (rule pcp_colecComp_elem_sat)
   have "F \<in> {F} \<union> Wo"
-    by simp (*Pendiente*)
+    by (simp add: insertI1)
   have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
     using \<open>sat ({F} \<union> Wo)\<close> by (simp only: sat_def)
   obtain \<A> where Forall1:"\<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
@@ -1561,17 +1561,23 @@ proof -
   then have "\<A> \<Turnstile> \<^bold>\<not>(\<^bold>\<not> G)"
     using assms(2) by (simp only: \<open>\<A> \<Turnstile> F\<close>)
   then have "\<not> \<A> \<Turnstile> \<^bold>\<not> G"
-    by (simp add: formula_semantics.simps(3)) (*Pendiente*)
+    by (simp only: formula_semantics.simps(3) simp_thms(8))
   then have "\<not> \<not>\<A> \<Turnstile> G"
-    by (simp add: formula_semantics.simps(3))
+    by (simp only: formula_semantics.simps(3) simp_thms(8))
   then have "\<A> \<Turnstile> G"
     by (rule notnotD)
-  then have "\<A> \<Turnstile> H"
-    by (simp only: \<open>H = G\<close>)
-  have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-    using Forall1 \<open>\<A> \<Turnstile> G\<close> \<open>\<A> \<Turnstile> H\<close> by blast (*Pendiente*)
+  then have 1:"\<forall>F \<in> {G}. \<A> \<Turnstile> F"
+    by simp
+  have "\<A> \<Turnstile> H"
+    using \<open>\<A> \<Turnstile> G\<close> by (simp only: \<open>H = G\<close>)
+  then have 2:"\<forall>F \<in> {H}. \<A> \<Turnstile> F"
+    by simp
+  have "\<forall>F \<in> ({G} \<union> {H}) \<union> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Forall1 1 2 by (iprover intro: ball_Un)
+  then have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
+    by simp
   then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
-    by blast (*Pendiente*)
+    by (iprover intro: exI)
   thus "sat ({G,H,F} \<union> Wo)"
     by (simp only: sat_def)
 qed
