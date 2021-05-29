@@ -1591,7 +1591,7 @@ lemma pcp_colecComp_CON_sat:
         shows "sat ({G,H} \<union> Wo)"
 proof -
   have "{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo"
-    by blast (*Pendiente*)
+    by blast
   have "F = G \<^bold>\<and> H \<or> 
     (\<exists>F1 G1. F = \<^bold>\<not> (F1 \<^bold>\<or> G1) \<and> G = \<^bold>\<not> F1 \<and> H = \<^bold>\<not> G1) \<or> 
     (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
