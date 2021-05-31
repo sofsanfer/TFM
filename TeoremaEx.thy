@@ -1128,7 +1128,256 @@ text \<open>\comentario{Añadir explicación nexo.}
   \comentario{Añadir demostracion y nexos.}
 
 
+  \begin{lema}
+    Sea un conjunto de la forma \<open>{a} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces,
+    existe un subconjunto finito \<open>S' \<subseteq> B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
+  \end{lema}
+
+  \begin{demostracion}
+    La prueba del resultado se realiza por inducción en la estructura recursiva de los conjuntos 
+    finitos.
+
+    En primer lugar, probemos el caso base correspondiente al conjunto vacío. Si consideramos 
+    \<open>S = {}\<close>, tomando también \<open>S' = {}\<close> es claro que verifica que es subconjunto finito de \<open>B\<close>
+    y o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
+
+    Veamos el caso de inducción. Sea \<open>S\<close> un conjunto finito verificando la hipótesis de inducción:
+    
+    \<open>(HI): Si S \<subseteq> {a} \<union> B, entonces existe un subconjunto finito S' de B tal que o bien
+    S = {a} \<union> S' o bien S = S'.\<close>
+
+    Sea un elemento cualquiera \<open>x \<notin> S\<close>. Vamos a probar que se verifica el resultado para el conjunto
+    \<open>{x} \<union> S\<close>. Es decir, si \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>, vamos a encontrar un subconjunto finito \<open>S''\<close> de 
+    \<open>B\<close> tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>.
+
+    Supongamos, pues, que \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>. En este caso, es claro que se verifica que
+    \<open>x \<in> {a} \<union> B\<close> y \<open>S \<subseteq> {a} \<union> B\<close>. De este modo, por hipótesis de inducción, podemos hallar un
+    subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>. Por otro lado,
+    como \<open>x \<in> {a} \<union> B\<close>, deducimos que o bien \<open>x = a\<close> o bien \<open>x \<in> B\<close>. En efecto, 
+    probemos que se verifica el resultado para ambos casos.
+
+    En primer lugar, supongamos que \<open>x = a\<close>. En este caso, el conjunto \<open>S''\<close> que verifica el
+    resultado es el propio \<open>S'\<close>. Se observa fácilmente ya que, si \<open>S = {a} \<union> S'\<close>, como \<open>x = a\<close>
+    se obtiene que \<open>{x} \<union> S = {a} \<union> S'\<close>, de modo que \<open>S'' = S'\<close> es un subconjunto finito de \<open>B\<close>
+    tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>. Por otro lado, suponiendo que 
+    \<open>S = S'\<close>, se deduce análogamente que \<open>{x} \<union> S = {a} \<union> S'\<close> pues se tiene que \<open>x = a\<close>, llegando
+    a la misma conclusión.
+
+    Por otra parte, supongamos que \<open>x \<in> B\<close>. En este caso, el conjunto \<open>S''\<close> que verifica el
+    resultado es el conjunto \<open>{x} \<union> S'\<close>. Observemos que se trata de un subconjunto finito de \<open>B\<close> ya 
+    que \<open>S' \<subseteq> B\<close> es un subconjunto finito y \<open>x \<in> B\<close>. Además, en efecto si \<open>S = {a} \<union> S'\<close>, se deduce 
+    que \<open>{x} \<union> S = {x,a} \<union> S' = {a} \<union> S''\<close>, luego cumple que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien
+    \<open>{x} \<union> S = S''\<close>. Por otro lado, en el caso en que \<open>S = S'\<close>, es claro que \<open>{x} \<union> S = S''\<close> por
+    la elección de \<open>S''\<close>, llegando la misma conclusión.
+  \end{demostracion}
 \<close>
+
+lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
+  by blast
+
+lemma finite_subset_insert1:
+  "\<lbrakk>finite S; S \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
+     \<exists>S' \<subseteq> B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
+proof (induct rule: finite_induct)
+  case empty
+  have "{} \<subseteq> B"
+    by (rule empty_subsetI)
+  have 1:"finite {}"
+    by (simp only: finite.emptyI)
+  have "{} = {}"
+    by (simp only: simp_thms(6))
+  then have 2:"{} = {a} \<union> {} \<or> {} = {}"
+    by (rule disjI2)
+  have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
+    using 1 2 by (rule conjI)
+  thus "\<exists>S' \<subseteq> B. finite S' \<and> ({} = {a} \<union> S' \<or> {} = S')"
+    using \<open>{} \<subseteq> B\<close> by (rule subexI)
+next
+  case (insert x S)
+  assume "finite S"
+  assume "x \<notin> S"
+  assume HI:"S \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>S'\<subseteq>B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
+  show "insert x S \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>S''\<subseteq>B. finite S'' \<and> (insert x S = {a} \<union> S'' \<or> insert x S = S'')"
+  proof -
+    assume "insert x S \<subseteq> {a} \<union> B" 
+    then have C:"x \<in> {a} \<union> B \<and> S \<subseteq> {a} \<union> B"
+      by (simp only: insert_subset)
+    then have "S \<subseteq> {a} \<union> B"
+      by (rule conjunct2)
+    have Ex1:"\<exists>S'\<subseteq>B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
+      using \<open>S \<subseteq> {a} \<union> B\<close> by (rule HI)
+    obtain S' where "S' \<subseteq> B" and C1:"finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
+      using Ex1 by (rule subexE)
+    have "finite S'"
+      using C1 by (rule conjunct1)
+    then have "finite (insert x S')"
+      by (simp only: finite.insertI)
+    have "x \<in> {a} \<union> B"
+      using C by (rule conjunct1)
+    then have "x \<in> {a} \<or> x \<in> B"
+      by (simp only: Un_iff)
+    then have "x = a \<or> x \<in> B"
+      by (simp only: singleton_iff)
+    thus "\<exists>S''\<subseteq>B. finite S'' \<and> (insert x S = {a} \<union> S'' \<or> insert x S = S'')"
+    proof (rule disjE)
+      assume "x = a"
+      have "S = {a} \<union> S' \<or> S = S'"
+        using C1 by (rule conjunct2)
+      thus ?thesis
+      proof (rule disjE)
+        assume "S = {a} \<union> S'"
+        have "x \<in> {a}"
+          using \<open>x = a\<close> by (simp only: singleton_iff)
+        then have "x \<in> {a} \<union> S'" 
+          by (simp only: UnI1)
+        then have "insert x ({a} \<union> S') = {a} \<union> S'"
+          by (rule insert_absorb)
+        have "insert x S = insert x ({a} \<union> S')"
+          by (simp only: \<open>S = {a} \<union> S'\<close>)
+        then have "insert x S = {a} \<union> S'"
+          by (simp only: \<open>insert x ({a} \<union> S') = {a} \<union> S'\<close>)
+        then have 1:"insert x S = {a} \<union> S' \<or> insert x S = S'"
+          by (rule disjI1)
+        have "finite S' \<and> (insert x S = {a} \<union> S' \<or> insert x S = S')"
+          using \<open>finite S'\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>S' \<subseteq> B\<close> by (rule subexI)
+      next
+        assume "S = S'"
+        have "insert x S = {x} \<union> S"
+          by (rule insert_is_Un)
+        then have "insert x S = {a} \<union> S'"
+          by (simp only: \<open>x = a\<close> \<open>S = S'\<close>)
+        then have 1:"insert x S = {a} \<union> S' \<or> insert x S = S'"
+          by (rule disjI1)
+        have "finite S' \<and> (insert x S = {a} \<union> S' \<or> insert x S = S')"
+          using \<open>finite S'\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>S' \<subseteq> B\<close> by (rule subexI)
+      qed
+    next
+      assume "x \<in> B"
+      have "x \<in> B \<and> S' \<subseteq> B"
+        using \<open>x \<in> B\<close> \<open>S' \<subseteq> B\<close> by (rule conjI)
+      then have "insert x S' \<subseteq> B"
+        by (simp only: insert_subset)
+      have "finite (insert x S')"
+        using \<open>finite S'\<close> by (simp only: finite.insertI)
+      have "S = {a} \<union> S' \<or> S = S'"
+        using C1 by (rule conjunct2)
+      thus ?thesis
+      proof (rule disjE)
+        assume "S = {a} \<union> S'"
+        have "insert x S = insert x ({a} \<union> S')"
+          by (simp only: \<open>S = {a} \<union> S'\<close>)
+        then have "insert x S = {a} \<union> (insert x S')"
+          by blast
+        then have 1:"insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S'"
+          by (rule disjI1)
+        have "finite (insert x S') \<and> (insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S')"
+          using \<open>finite (insert x S')\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>insert x S' \<subseteq> B\<close> by (rule subexI)
+      next
+        assume "S = S'"
+        have "insert x S = insert x S'"
+          by (simp only: \<open>S = S'\<close>)
+        then have 1:"insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S'"
+          by (rule disjI2)
+        have "finite (insert x S') \<and> (insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S')"
+          using \<open>finite (insert x S')\<close> 1 by (rule conjI)
+        thus ?thesis
+          using \<open>insert x S' \<subseteq> B\<close> by (rule subexI)
+      qed
+    qed
+  qed
+qed
+
+text \<open>
+\begin{lema}
+  Sea un conjunto de la forma \<open>{a,b} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces, existe un
+  subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>, \<open>S = {b} \<union> S'\<close> 
+  o \<open>S = S'\<close>.
+\end{lema}\<close>
+
+lemma finite_subset_insert2:
+  assumes "finite S"
+          "S \<subseteq> {a,b} \<union> B"
+        shows "\<exists>S' \<subseteq> B. finite S' \<and> (S = {a,b} \<union> S' \<or> S = {a} \<union> S' \<or> S = {b} \<union> S' \<or> S = S')"
+proof -
+  have "S \<subseteq> {a} \<union> ({b} \<union> B)"
+    using assms(2) by blast
+  then have Ex1:"\<exists>S1 \<subseteq> ({b} \<union> B). finite S1 \<and> (S = {a} \<union> S1 \<or> S = S1)"
+    using assms(1) by (simp only: finite_subset_insert1)
+  obtain S1 where "S1 \<subseteq> {b} \<union> B" and 1:"finite S1 \<and> (S = {a} \<union> S1 \<or> S = S1)"
+    using Ex1 by (rule subexE)
+  have "finite S1"
+    using 1 by (rule conjunct1)
+  have Ex2:"\<exists>S2 \<subseteq> B. finite S2 \<and> (S1 = {b} \<union> S2 \<or> S1 = S2)"
+    using \<open>finite S1\<close> \<open>S1 \<subseteq> {b} \<union> B\<close> by (rule finite_subset_insert1)
+  obtain S2 where "S2 \<subseteq> B" and 2:"finite S2 \<and> (S1 = {b} \<union> S2 \<or> S1 = S2)"
+    using Ex2 by (rule subexE)
+  have "finite S2"
+    using 2 by (rule conjunct1)
+  have "S1 = {b} \<union> S2 \<or> S1 = S2"
+    using 2 by (rule conjunct2)
+  thus ?thesis
+  proof (rule disjE)
+    assume "S1 = {b} \<union> S2"
+    have "S = {a} \<union> S1 \<or> S = S1"
+      using 1 by (rule conjunct2)
+    thus ?thesis
+    proof (rule disjE)
+      assume "S = {a} \<union> S1"
+      then have "S = {a} \<union> {b} \<union> S2"
+        by (simp add: \<open>S1 = {b} \<union> S2\<close>)
+      then have "S = {a,b} \<union> S2"
+        by blast
+      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+        by (iprover intro: disjI1)
+      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
+        using \<open>finite S2\<close> by (iprover intro: conjI)
+      thus ?thesis
+        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+    next
+      assume "S = S1"
+      then have "S = {b} \<union> S2"
+        by (simp add: \<open>S1 = {b} \<union> S2\<close>)
+      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+        by (iprover intro: disjI1)
+      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
+        using \<open>finite S2\<close> by (iprover intro: conjI)
+      thus ?thesis
+        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+    qed
+  next
+    assume "S1 = S2"
+    have "S = {a} \<union> S1 \<or> S = S1"
+      using 1 by (rule conjunct2)
+    thus ?thesis
+    proof (rule disjE)
+      assume "S = {a} \<union> S1"
+      then have "S = {a} \<union> S2"
+        by (simp only: \<open>S1 = S2\<close>)
+      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+        by (iprover intro: disjI1)
+      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
+        using \<open>finite S2\<close> by (iprover intro: conjI)
+      thus ?thesis
+        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+    next
+      assume "S = S1"
+      then have "S = S2"
+        by (simp only: \<open>S1 = S2\<close>)
+      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+        by (iprover intro: disjI1)
+      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
+        using \<open>finite S2\<close> by (iprover intro: conjI)
+      thus ?thesis
+        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+    qed
+  qed
+qed
 
 definition colecComp :: "'a formula set \<Rightarrow> ('a formula set) set"
   where colecComp: "colecComp S = {W. fin_sat W}"
@@ -1229,206 +1478,6 @@ proof (rule allI)
       by (rule not_sat_atoms)
     thus "False"
       using \<open>sat ({Atom k, \<^bold>\<not>(Atom k)})\<close> by (rule notE)
-  qed
-qed
-
-lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
-  by blast
-
-lemma finite_subset_insert1:
-  "\<lbrakk>finite S'; S' \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
-     \<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-proof (induct rule: finite_induct)
-  case empty
-  have "{} = {}"
-    by (simp only: simp_thms(6))
-  then have "{} = {a} \<union> {} \<or> {} = {}"
-    by (rule disjI2)
-  have "{} \<subseteq> B"
-    by (rule empty_subsetI)
-  have "finite {}"
-    by (simp only: finite.emptyI)
-  then have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
-    using \<open>{} = {a} \<union> {} \<or> {} = {}\<close> by (rule conjI)
-  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> ({} = {a} \<union> Wo \<or> {} = Wo)"
-    using \<open>{} \<subseteq> B\<close> by (rule subexI)
-next
-  case (insert x A)
-  assume "finite A"
-  assume "x \<notin> A"
-  assume HI:"A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-  show "insert x A \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-  proof -
-    assume "insert x A \<subseteq> {a} \<union> B" 
-    then have C:"x \<in> {a} \<union> B \<and> A \<subseteq> {a} \<union> B"
-      by (simp only: insert_subset)
-    then have "A \<subseteq> {a} \<union> B"
-      by (rule conjunct2)
-    have Ex1:"\<exists>Wo\<subseteq>B. finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-      using \<open>A \<subseteq> {a} \<union> B\<close> by (rule HI)
-    obtain Wo where "Wo \<subseteq> B" and C1:"finite Wo \<and> (A = {a} \<union> Wo \<or> A = Wo)"
-      using Ex1 by (rule subexE)
-    have "finite Wo"
-      using C1 by (rule conjunct1)
-    then have "finite (insert x Wo)"
-      by (simp only: finite.insertI)
-    have "x \<in> {a} \<union> B"
-      using C by (rule conjunct1)
-    then have "x \<in> {a} \<or> x \<in> B"
-      by (simp only: Un_iff)
-    then have "x = a \<or> x \<in> B"
-      by (simp only: singleton_iff)
-    thus "\<exists>Wo\<subseteq>B. finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-    proof (rule disjE)
-      assume "x = a"
-      have "A = {a} \<union> Wo \<or> A = Wo"
-        using C1 by (rule conjunct2)
-      thus ?thesis
-      proof (rule disjE)
-        assume "A = {a} \<union> Wo"
-        have "x \<in> {a}"
-          using \<open>x = a\<close> by (simp only: singleton_iff)
-        then have "x \<in> {a} \<union> Wo" 
-          by (simp only: UnI1)
-        then have "insert x ({a} \<union> Wo) = {a} \<union> Wo"
-          by (rule insert_absorb)
-        have "insert x A = insert x ({a} \<union> Wo)"
-          by (simp only: \<open>A = {a} \<union> Wo\<close>)
-        then have "insert x A = {a} \<union> Wo"
-          by (simp only: \<open>insert x ({a} \<union> Wo) = {a} \<union> Wo\<close>)
-        then have 1:"insert x A = {a} \<union> Wo \<or> insert x A = Wo"
-          by (rule disjI1)
-        have "finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-          using \<open>finite Wo\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>Wo \<subseteq> B\<close> by (rule subexI)
-      next
-        assume "A = Wo"
-        have "insert x A = {x} \<union> A"
-          by (rule insert_is_Un)
-        then have "insert x A = {a} \<union> Wo"
-          by (simp only: \<open>x = a\<close> \<open>A = Wo\<close>)
-        then have 1:"insert x A = {a} \<union> Wo \<or> insert x A = Wo"
-          by (rule disjI1)
-        have "finite Wo \<and> (insert x A = {a} \<union> Wo \<or> insert x A = Wo)"
-          using \<open>finite Wo\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>Wo \<subseteq> B\<close> by (rule subexI)
-      qed
-    next
-      assume "x \<in> B"
-      have "x \<in> B \<and> Wo \<subseteq> B"
-        using \<open>x \<in> B\<close> \<open>Wo \<subseteq> B\<close> by (rule conjI)
-      then have "insert x Wo \<subseteq> B"
-        by (simp only: insert_subset)
-      have "finite (insert x Wo)"
-        using \<open>finite Wo\<close> by (simp only: finite.insertI)
-      have "A = {a} \<union> Wo \<or> A = Wo"
-        using C1 by (rule conjunct2)
-      thus ?thesis
-      proof (rule disjE)
-        assume "A = {a} \<union> Wo"
-        have "insert x A = insert x ({a} \<union> Wo)"
-          by (simp only: \<open>A = {a} \<union> Wo\<close>)
-        then have "insert x A = {a} \<union> (insert x Wo)"
-          by blast
-        then have 1:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo"
-          by (rule disjI1)
-        have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo)"
-          using \<open>finite (insert x Wo)\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>insert x Wo \<subseteq> B\<close> by (rule subexI)
-      next
-        assume "A = Wo"
-        have "insert x A = insert x Wo"
-          by (simp only: \<open>A = Wo\<close>)
-        then have 1:"insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo"
-          by (rule disjI2)
-        have "finite (insert x Wo) \<and> (insert x A = {a} \<union> (insert x Wo) \<or> insert x A = insert x Wo)"
-          using \<open>finite (insert x Wo)\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>insert x Wo \<subseteq> B\<close> by (rule subexI)
-      qed
-    qed
-  qed
-qed
-
-lemma finite_subset_insert2:
-  assumes "finite S'"
-          "S' \<subseteq> {a,b} \<union> B"
-        shows "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-proof -
-  have "S' \<subseteq> {a} \<union> ({b} \<union> B)"
-    using assms(2) by blast
-  then have Ex1:"\<exists>Wo \<subseteq> ({b} \<union> B). finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-    using assms(1) by (simp only: finite_subset_insert1)
-  obtain Wo where "Wo \<subseteq> {b} \<union> B" and 1:"finite Wo \<and> (S' = {a} \<union> Wo \<or> S' = Wo)"
-    using Ex1 by (rule subexE)
-  have "finite Wo"
-    using 1 by (rule conjunct1)
-  have Ex2:"\<exists>Wo' \<subseteq> B. finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
-    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {b} \<union> B\<close> by (rule finite_subset_insert1)
-  obtain Wo' where "Wo' \<subseteq> B" and 2:"finite Wo' \<and> (Wo = {b} \<union> Wo' \<or> Wo = Wo')"
-    using Ex2 by (rule subexE)
-  have "finite Wo'"
-    using 2 by (rule conjunct1)
-  have "Wo = {b} \<union> Wo' \<or> Wo = Wo'"
-    using 2 by (rule conjunct2)
-  thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-  proof (rule disjE)
-    assume "Wo = {b} \<union> Wo'"
-    have "S' = {a} \<union> Wo \<or> S' = Wo"
-      using 1 by (rule conjunct2)
-    thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-    proof (rule disjE)
-      assume "S' = {a} \<union> Wo"
-      then have "S' = {a} \<union> {b} \<union> Wo'"
-        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>)
-      then have "S' = {a,b} \<union> Wo'"
-        by blast
-      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
-        by (iprover intro: disjI1)
-      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
-        using \<open>finite Wo'\<close> by (iprover intro: conjI)
-      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
-    next
-      assume "S' = Wo"
-      then have "S' = {b} \<union> Wo'"
-        by (simp add: \<open>Wo = {b} \<union> Wo'\<close>)
-      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
-        by (iprover intro: disjI1)
-      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
-        using \<open>finite Wo'\<close> by (iprover intro: conjI)
-      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
-    qed
-  next
-    assume "Wo = Wo'"
-    have "S' = {a} \<union> Wo \<or> S' = Wo"
-      using 1 by (rule conjunct2)
-    thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-    proof (rule disjE)
-      assume "S' = {a} \<union> Wo"
-      then have "S' = {a} \<union> Wo'"
-        by (simp add: \<open>Wo = Wo'\<close>)
-      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
-        by (iprover intro: disjI1)
-      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
-        using \<open>finite Wo'\<close> by (iprover intro: conjI)
-      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
-    next
-      assume "S' = Wo"
-      then have "S' = Wo'"
-        by (simp add: \<open>Wo = Wo'\<close>)
-      then have "S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo'"
-        by (iprover intro: disjI1)
-      then have "finite Wo' \<and> (S' = {a,b} \<union> Wo' \<or> S' = {a} \<union> Wo' \<or> S' = {b} \<union> Wo' \<or> S' = Wo')"
-        using \<open>finite Wo'\<close> by (iprover intro: conjI)
-      thus "\<exists>Wo \<subseteq> B. finite Wo \<and> (S' = {a,b} \<union> Wo \<or> S' = {a} \<union> Wo \<or> S' = {b} \<union> Wo \<or> S' = Wo)"
-        using \<open>Wo' \<subseteq> B\<close> by (rule subexI)
-    qed
   qed
 qed
 
