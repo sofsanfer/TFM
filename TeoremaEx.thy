@@ -14,7 +14,7 @@ text \<open>\comentario{Añadir introducción.}\<close>
 
 text \<open>\comentario{Cambiar referencias de los lemas tras el cambio de índice.}\<close>
 
-section \<open>Sucesiones de conjuntos de una colección\<close>
+section \<open>Sucesiones de conjuntos\<close>
 
 text\<open>En este apartado daremos una introducción sobre sucesiones de conjuntos de fórmulas a 
   partir de una colección y un conjunto de la misma. De este modo, se mostrarán distintas 
@@ -30,8 +30,9 @@ text\<open>En este apartado daremos una introducción sobre sucesiones de conjun
   proposicionales a partir de una colección y un conjunto de la misma.
 
 \begin{definicion}
-  Sea \<open>C\<close> una colección, \<open>S \<in> C\<close> y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una enumeración de 
-  las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de S\<close> como sigue:
+  Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales, \<open>S \<in> C\<close> y \<open>F\<^sub>1, F\<^sub>2, F\<^sub>3 \<dots>\<close> una 
+  enumeración de las fórmulas proposicionales. Se define la \<open>sucesión de conjuntos de C a partir de 
+  S\<close> como sigue:
 
   $S_{0} = S$
 
