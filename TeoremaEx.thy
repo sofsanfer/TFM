@@ -1298,7 +1298,25 @@ text \<open>
   Sea un conjunto de la forma \<open>{a,b} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces, existe un
   subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>, \<open>S = {b} \<union> S'\<close> 
   o \<open>S = S'\<close>.
-\end{lema}\<close>
+\end{lema}
+
+\begin{demostracion}
+  En particular, \<open>S\<close> es un subconjunto finito de \<open>{a} \<union> ({b} \<union> B)\<close> luego, aplicando el lema (añadir
+  ref) anterior, podemos hallar un subconjunto finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close> tal que o bien 
+  \<open>S = {a} \<union> S\<^sub>1\<close> o bien \<open>S = S\<^sub>1\<close>. A su vez, podemos aplicar dicho resultado para el subconjunto
+  finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close>, obteniendo un subconjunto finito \<open>S\<^sub>2\<close> de \<open>B\<close> tal que o bien 
+  \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close> o bien \<open>S\<^sub>1 = S\<^sub>2\<close>. Veamos que el lema se verifica para el conjunto \<open>S' = S\<^sub>2\<close> para
+  ambas opciones posibles de \<open>S\<^sub>1\<close>.
+
+  En primer lugar, supongamos que \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close>. De este modo, se verifica el resultado tanto para
+  \<open>S = {a} \<union> S\<^sub>1\<close> como para \<open>S = S\<^sub>1\<close>. En efecto, en la primera opción, por elección de \<open>S\<^sub>1\<close>, es claro
+  que \<open>S = {a,b} \<union> S\<^sub>2\<close>. Finalmente, para \<open>S = S\<^sub>1\<close>, obtenemos que \<open>S = {b} \<union> S\<^sub>2\<close>, lo que prueba
+  igualmente el lema para \<open>S' = S\<^sub>2\<close>.
+
+  Por último, supongamos que \<open>S\<^sub>1 = S\<^sub>2\<close>. Análogamente, el resultado es inmediato pues si 
+  \<open>S = {a} \<union> S\<^sub>1\<close> obtenemos que \<open>S = {a} \<union> S\<^sub>2\<close>, y si suponemos \<open>S = S\<^sub>1\<close> obtenemos \<open>S = S\<^sub>2\<close>, probando
+  así el lema.
+\end{demostracion}\<close>
 
 lemma finite_subset_insert2:
   assumes "finite S"
