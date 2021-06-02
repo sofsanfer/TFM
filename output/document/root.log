@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  26 MAY 2021 20:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  2 JUN 2021 12:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1291,7 +1291,9 @@ LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <14.4> not available
 
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} </Users/
-sofiasantiagofernandez/TFM/TFM/document/sello.png>] [2] (./root.toc
+sofiasantiagofernandez/TFM/TFM/document/sello.png>] [2] [3] [4
+
+] (./root.toc
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1.
 LaTeX Font Info:    Try loading font information for OML+zplm on input line 7.
@@ -1334,13 +1336,11 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 9.37807pt on input line 7.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 7.29405pt on input line 7.
- [3
-
-])
+ [5])
 \tf@toc=\write7
 \openout7 = `root.toc'.
 
- [4]
+ [6]
 (./Resumen.tex
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-34.def
 File: uni-34.def 2013/05/13 UCS: Unicode data U+2200..U+22FF
@@ -1353,17 +1353,17 @@ Overfull \hbox (6.02591pt too wide) in paragraph at lines 43--62
 its rea-son-ing. In this project,
  []
 
-[5
+[7
 
-]) [6] (./Introduccion.tex [7
+]) [8] (./Introduccion.tex [9
 
-] [8]
+] [10]
 Overfull \hbox (8.65407pt too wide) in paragraph at lines 123--133
 []\OT1/ppl/m/n/12 En el si-guiente cap[]^^Ptulo pre-cisamos la sem[]antica aso-
 ciada a las es-truc-turas sint[]acticas.
  []
 
-[9]) [10]
+[11]) [12]
 Cap\'{\i }tulo 1.
 (./Notunif.tex
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
@@ -1379,7 +1379,7 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
 (Font)              using `U/stmry/m/n' instead on input line 53.
 
-[11
+[13
 
 ]
 Overfull \hbox (40.43016pt too wide) in paragraph at lines 232--234
@@ -1387,19 +1387,19 @@ Overfull \hbox (40.43016pt too wide) in paragraph at lines 232--234
 []ormulas que no son sem[]anticamente
  []
 
-[12]
+[14]
 Overfull \hbox (7.68268pt too wide) in paragraph at lines 285--290
 []\OT1/ppl/m/n/12 De este modo, de los ejem-p-los an-te-rio-res pode-mos de-duc
 ir que las f[]ormulas at[]omicas
  []
 
-[13]
+[15]
 Overfull \hbox (20.90643pt too wide) in paragraph at lines 328--331
 []\OT1/ppl/m/n/12 De los ejem-p-los da-dos an-te-ri-or-mente, pode-mos de-ducir
  an[]alogamente que las f[]ormulas
  []
 
-[14]
+[16]
 Overfull \hbox (31.40279pt too wide) in paragraph at lines 476--477
 []
  []
@@ -1408,8 +1408,8 @@ LaTeX Font Info:    Try loading font information for TS1+ppl on input line 481.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
-) [15] [16]
-[17] [18]
+) [17] [18]
+[19] [20]
 Overfull \hbox (1.11465pt too wide) in paragraph at lines 642--645
 []\OT1/ppl/m/n/12 Supongamos que \OT1/ppl/m/it/12 G $\OMS/zplm/m/n/12 ^$ \OT1/p
 pl/m/it/12 H \OT1/ppl/m/n/12 est[]a en \OT1/ppl/m/it/12 S \OT1/ppl/m/n/12 para 
@@ -1425,16 +1425,16 @@ f[]ormulas \OT1/ppl/m/it/12 G \OT1/ppl/m/n/12 y \OT1/ppl/m/it/12 H \OT1/ppl/m/n
 /12 cua-lesquiera. Por definici[]on,
  []
 
-[19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29]) [30]
+[21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31]) [32]
 Cap\'{\i }tulo 2.
-(./Pcp.tex [31
+(./Pcp.tex [33
 
-] [32]
+] [34]
 Overfull \hbox (10.31827pt too wide) in paragraph at lines 174--175
 []\OT1/ppl/m/it/12 Dada una colecci^^Son
  []
 
-[33]
+[35]
 Overfull \hbox (10.5851pt too wide) in paragraph at lines 226--229
 []\OT1/ppl/m/n/12 Consideremos un con-junto de f[]ormulas \OT1/ppl/m/it/12 S \O
 T1/ppl/m/n/12 per-te-ne-ciente a la colecci[]on \OT1/ppl/m/it/12 C\OT1/ppl/m/n/
@@ -1447,13 +1447,13 @@ Overfull \hbox (3.83032pt too wide) in paragraph at lines 255--262
 rres-pon-diente a las f[]ormulas
  []
 
-[34] [35]
+[36] [37]
 Overfull \hbox (8.2093pt too wide) in paragraph at lines 327--330
 []\OT1/ppl/m/n/12 Probemos que \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 ve-ri-fica la
  pro-pie-dad de con-sis-ten-cia proposi-cional. Por la definici[]on
  []
 
-[36]
+[38]
 Overfull \hbox (0.9946pt too wide) in paragraph at lines 353--356
 []\OT1/ppl/m/n/12 Supongamos que la f[]ormula \OT1/ppl/m/it/12 G $\OMS/zplm/m/n
 /12 ^$ \OT1/ppl/m/it/12 H \OT1/ppl/m/n/12 pertenece a \OT1/ppl/m/it/12 S \OT1/p
@@ -1469,15 +1469,15 @@ pl/m/n/12 para f[]ormulas \OT1/ppl/m/it/12 G \OT1/ppl/m/n/12 y \OT1/ppl/m/it/12
  H \OT1/ppl/m/n/12 cua-lesquiera.
  []
 
-[37] [38] [39] [40] [41]
+[39] [40] [41] [42] [43]
 Overfull \hbox (3.89061pt too wide) in paragraph at lines 769--771
 []\OT1/ppl/m/n/12 De esta ma-nera, me-diante los an-te-rio-res lemas au-xi-lia-
 res pode-mos pro-bar la primera
  []
 
-[42] [43] [44] [45] [46] [47] [48] [49]) [50]
+[44] [45] [46] [47] [48] [49] [50] [51]) [52]
 Cap\'{\i }tulo 3.
-(./ColecScfc.tex [51
+(./ColecScfc.tex [53
 
 ]
 Overfull \hbox (8.69589pt too wide) in paragraph at lines 148--150
@@ -1485,14 +1485,14 @@ Overfull \hbox (8.69589pt too wide) in paragraph at lines 148--150
 ^Sacter finito si para cualquier
  []
 
-[52]
+[54]
 Overfull \hbox (2.22229pt too wide) in paragraph at lines 261--265
 \OT1/ppl/b/n/12 Demostraci^^Son: \OT1/ppl/m/n/12 Dada una colecci[]on de con-ju
 n-tos cualquiera \OT1/ppl/m/it/12 C\OT1/ppl/m/n/12 , con-sid-er-e-mos la colecc
 i[]on
  []
 
-[53] [54]
+[55] [56]
 Overfull \hbox (10.97018pt too wide) in paragraph at lines 332--335
 []\OT1/ppl/m/n/12 En con-clusi[]on, por el lema de car-ac-ter-i-zaci[]on de la 
 pro-pie-dad de con-sis-ten-cia proposi-
@@ -1504,7 +1504,7 @@ Overfull \hbox (6.94962pt too wide) in paragraph at lines 370--372
 lar al lema \OT1/ppl/m/it/12 bspec \OT1/ppl/m/n/12 de Isa-belle/HOL
  []
 
-[55] [56] [57] [58] [59] [60]
+[57] [58] [59] [60] [61] [62]
 Overfull \hbox (0.40977pt too wide) in paragraph at lines 971--975
 \OT1/ppl/b/n/12 Demostraci^^Son: \OT1/ppl/m/n/12 Con-sid-er-e-mos una colecci[]
 on de con-jun-tos \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 con la pro-pie-dad de car[
@@ -1517,14 +1517,14 @@ Overfull \hbox (7.82524pt too wide) in paragraph at lines 971--975
 e cada con-junto de \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 pertenece
  []
 
-[61] [62] [63]
+[63] [64] [65]
 Overfull \hbox (16.14209pt too wide) in paragraph at lines 1194--1199
 []\OT1/ppl/m/n/12 En primer lu-gar va-mos a de-mostrar que $\OMS/zplm/m/n/12 ?$
  $[]$ \OT1/ppl/m/it/12 S \OT1/ppl/m/n/12 por re-ducci[]on al ab-surdo. Si supon
 emos
  []
 
-[64] [65] [66]
+[66] [67] [68]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
 (Font)              scaled to size 11.40997pt on input line 1310.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
@@ -1550,7 +1550,7 @@ Overfull \hbox (52.41675pt too wide) in paragraph at lines 1319--1320
 [][] 
  []
 
-[67]
+[69]
 Overfull \hbox (7.13678pt too wide) in paragraph at lines 1340--1345
 []\OT1/ppl/m/n/12 Formalizado como \OT1/ppl/m/it/12 ex3[]pcp[]SinE[]DIS[]auxEx\
 OT1/ppl/m/n/12 . Prueba que dada \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 una colecci
@@ -1563,13 +1563,13 @@ Overfull \hbox (9.05693pt too wide) in paragraph at lines 1345--1348
 se\OT1/ppl/m/n/12 . Uti-liza \OT1/ppl/m/it/12 ex3[]pcp[]SinE[]DIS[]auxEx
  []
 
-[68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79]
+[70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80] [81]
 Overfull \hbox (5.96658pt too wide) in paragraph at lines 2390--2395
 []\OT1/ppl/m/n/12 Una vez in-tro-duci-dos los lemas an-te-rio-res, pode-mos pro
 -bar el lema \OT1/ppl/m/it/12 ex3[]pcp[]SinE[]DIS
  []
 
-[80] [81] [82] [83]
+[82] [83] [84] [85]
 Overfull \hbox (56.2221pt too wide) in paragraph at lines 2735--2738
 [][]      \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\OT1
 /ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\O
@@ -1581,7 +1581,7 @@ l/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12 rule ex3[]pcp[]SinE[]DIS[]auxF
 alse$\OT1/zplm/m/n/12 )$[] 
  []
 
-[84] [85] [86]
+[86] [87] [88]
 Overfull \hbox (2.72685pt too wide) in paragraph at lines 3026--3029
 [][]        \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\O
 T1/ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($
@@ -1592,33 +1592,33 @@ OT1/ppl/m/it/12 simp only$\OT1/zplm/m/n/12 :$ \OT1/ppl/m/it/12 ex3[]pcp[]SinE[]
 CON$\OT1/zplm/m/n/12 )$[] 
  []
 
-[87] [88]) [89] [90
+[89] [90]) [91] [92
 
 ]
 Cap\'{\i }tulo 4.
 (./TeoremaEx.tex
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <17.28> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 33.
- [91] [92] [93] [94]
+ [93] [94] [95] [96]
 Overfull \hbox (8.97728pt too wide) in paragraph at lines 362--364
 []\OT1/ppl/m/n/12 A con-tin-uaci[]on dare-mos un lema que per-mite car-ac-teri-
 zar un el-e-mento de la sucesi[]on
  []
 
-[95] [96] [97] [98] [99] [100]
+[97] [98] [99] [100] [101] [102]
 Overfull \hbox (3.37346pt too wide) in paragraph at lines 946--956
 \OT1/ppl/m/n/12 En esta secci[]on de-mostraremos fi-nal-mente el \OT1/ppl/m/it/
 12 teo-rema de ex-is-ten-cia de mo-delo\OT1/ppl/m/n/12 , el cual prueba
  []
 
-[101] [102] [103] [104] [105] [106]
+[103] [104] [105] [106] [107] [108]
 Overfull \hbox (12.01335pt too wide) in paragraph at lines 1446--1454
 \OT1/ppl/b/n/12 Demostraci^^Son: \OT1/ppl/m/n/12 Como \OT1/ppl/m/it/12 C \OT1/p
 pl/m/n/12 es una colecci[]on que ve-ri-fica la pro-pie-dad de con-sis-ten-cia p
 roposi-
  []
 
-[107] [108] [109] [110] [111] [112] [113]
+[109] [110] [111] [112] [113] [114] [115]
 Overfull \hbox (4.71341pt too wide) in paragraph at lines 2001--2003
 []\OT1/ppl/m/it/12 Todo con-junto de f^^Sormulas per-te-ne-ciente
  []
@@ -1630,19 +1630,36 @@ a ex-tensi[]on de \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 que ve-ri-fica la pro-pie-
 dad de con-sis-ten-cia proposi-
  []
 
-[114] [115] [116] [117]
-Overfull \hbox (9.75632pt too wide) in paragraph at lines 2378--2391
-[][]  \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12 metis Diff[]empty
- Diff[]insert0 Diff[]subset[]conv Un[]Diff[]cancel assms$\OT1/zplm/m/n/12 ($\OT
-1/ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\
-OT1/ppl/m/it/12 2$\OT1/zplm/m/n/12 )$ \OT1/ppl/m/it/12 finite[]Diff
+[116] [117] [118] [119] [120] [121] [122] [123] [124] [125]
+Overfull \hbox (12.43446pt too wide) in paragraph at lines 2851--2856
+[]\OT1/ppl/m/n/12 Demostremos la primera condici[]on por re-ducci[]on al ab-sur
+do. En efecto, si suponemos
  []
 
-[118] [119] [120] [121] [122] [123] [124] [125]) [126]
-Ap\'endice A.
-(./Glosario.tex [127
+[126] [127] [128] [129] [130] [131] [132] [133] [134] [135] [136] [137]
+[138] [139] [140] [141] [142] [143] [144] [145] [146] [147]
+Overfull \hbox (17.2695pt too wide) in paragraph at lines 4970--4974
+[][]    \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\OT1/p
+pl/m/it/12 2$\OT1/zplm/m/n/12 )$ \OT1/ppl/b/n/12 un-fold-ing \OT1/ppl/m/it/12 c
+olec-Comp fin[]sat[]def \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12
+ simp only$\OT1/zplm/m/n/12 :$ \OT1/ppl/m/it/12 mem[]Collect[]eq simp[]thms$\OT
+1/zplm/m/n/12 ($\OT1/ppl/m/it/12 8$\OT1/zplm/m/n/12 )$$)$[] 
+ []
 
-] [128] [129] [130] [131] [132] [133]
+[148] [149]
+Overfull \hbox (12.87888pt too wide) in paragraph at lines 5214--5217
+[][]        \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\O
+T1/ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ []\OT1/ppl/m/it/12 Dis F G H[] []F $\OMS/z
+plm/m/n/12 2$ \OT1/ppl/m/it/12 W[] []finite ?Wo[] []?Wo $\OMS/zplm/m/n/12 ^^R$ 
+\OT1/ppl/m/it/12 W[] \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12 ru
+le pcp[]colecComp[]DIS[]sat$\OT1/zplm/m/n/12 )$[] 
+ []
+
+[150]) [151] [152
+
+]
+Ap\'endice A.
+(./Glosario.tex [153] [154] [155] [156] [157] [158] [159]
 LaTeX Font Info:    Try loading font information for OT1+phv on input line 877.
 
 
@@ -1653,8 +1670,8 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 877.
 LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
 (Font)              scaled to size 10.79993pt on input line 877.
- [134])
-(./root.bbl [135] [136
+ [160])
+(./root.bbl [161] [162
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 44--49
@@ -1680,24 +1697,24 @@ Underfull \hbox (badness 3049) in paragraph at lines 73--78
  / isabelle . in . tum . de /
  []
 
-[137]) [138]
+[163]) [164]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
  (./root.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 176.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 176.
 Package rerunfilecheck Info: File `root.out' has not changed.
-(rerunfilecheck)             Checksum: BA252B3D5F421C4E2314275C2330F9A3;2637.
+(rerunfilecheck)             Checksum: B23A94172EB99994D9865D25823D3951;2618.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 38982 strings out of 492649
- 831090 string characters out of 6129622
- 898110 words of memory out of 5000000
- 41886 multiletter control sequences out of 15000+600000
+ 39001 strings out of 492649
+ 831162 string characters out of 6129622
+ 897967 words of memory out of 5000000
+ 41880 multiletter control sequences out of 15000+600000
  583659 words of font info for 174 fonts, out of 8000000 for 9000
  1206 hyphenation exceptions out of 8191
  62i,16n,104p,10397b,1814s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1716,10 +1733,10 @@ texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 1/urw/palatino/uplri8a.pfb>
-Output written on root.pdf (138 pages, 586405 bytes).
+Output written on root.pdf (164 pages, 631892 bytes).
 PDF statistics:
- 1123 PDF objects out of 1200 (max. 8388607)
- 940 compressed objects within 10 object streams
- 318 named destinations out of 1000 (max. 500000)
+ 1239 PDF objects out of 1440 (max. 8388607)
+ 1029 compressed objects within 11 object streams
+ 343 named destinations out of 1000 (max. 500000)
  376 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -2,10 +2,10 @@
 \BOOKMARK [0][-]{chapter*.3}{Introducci\363n}{}% 2
 \BOOKMARK [0][-]{chapter.1}{Notaci\363n uniforme}{}% 3
 \BOOKMARK [0][-]{chapter.2}{Propiedad de consistencia proposicional}{}% 4
-\BOOKMARK [0][-]{chapter.3}{Colecciones cerradas bajo subconjuntos y colecciones de car\341cter finito}{}% 5
+\BOOKMARK [0][-]{chapter.3}{Colecciones de conjuntos cerradas bajo subconjuntos y de car\341cter finito}{}% 5
 \BOOKMARK [0][-]{chapter.4}{Teorema de existencia de modelo}{}% 6
-\BOOKMARK [1][-]{section.4.1}{Sucesiones de conjuntos de una colecci\363n}{chapter.4}% 7
-\BOOKMARK [1][-]{section.4.2}{El teorema de existencia de modelo}{chapter.4}% 8
+\BOOKMARK [1][-]{section.4.1}{Sucesiones de conjuntos}{chapter.4}% 7
+\BOOKMARK [1][-]{section.4.2}{El Teorema de Existencia de Modelo}{chapter.4}% 8
 \BOOKMARK [1][-]{section.4.3}{Teorema de Compacidad}{chapter.4}% 9
 \BOOKMARK [0][-]{appendix.A}{Lemas de HOL usados}{}% 10
 \BOOKMARK [1][-]{section.A.1}{La base de l\363gica de primer orden \(2\)}{appendix.A}% 11
@@ -29,4 +29,4 @@
 \BOOKMARK [1][-]{section.A.8}{Composici\363n de functores naturales acotados \(33\)}{appendix.A}% 29
 \BOOKMARK [1][-]{section.A.9}{El tipo de datos de la listas finitas \(66\)}{appendix.A}% 30
 \BOOKMARK [2][-]{subsection.A.9.1}{Funciones b\341sicas de procesamiento de listas \(66.1\)}{section.A.9}% 31
-\BOOKMARK [0][-]{appendix*.20}{Bibliograf\355a}{}% 32
+\BOOKMARK [0][-]{appendix*.17}{Bibliograf\355a}{}% 32

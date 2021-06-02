@@ -221,14 +221,13 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
   generalizada en Isabelle/HOL perteneciente a la teoría 
   \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}, junto con distintas propiedades sobre la misma
-  definidas en dicha teoría. En Isabelle, los conjuntos se formalizan como equivalentes a los 
+  definidas en dicha teoría. El uso de teoría de retículos en este caso se debe a que la teoría de 
+  conjuntos \href{https://bit.ly/3ibCuje}{Set.thy} de Isabelle formaliza los conjuntos como 
   predicados, de manera que un elemento pertenece a un conjunto si verifica el predicado que lo 
-  caracteriza. De este modo, cada conjunto conforma un retículo cuyo orden parcial establecido es la 
-  relación de contención. En consecuencia, los conjuntos de conjuntos forman un retículo completo 
-  con dicho orden parcial, de manera que la unión generalizada de conjuntos se formaliza en Isabelle 
-  como el supremo del retículo completo que conforman.
-
-\comentario{No sé si está bien explicado.}
+  caracteriza. De este modo, en dicha teoría se instancia que el tipo de los conjuntos es un álgebra 
+  de \<open>Boole\<close> acotada, es decir, es un retículo distributivo para las operaciones unión e 
+  intersección que tiene un supremo y un ínfimo. En consecuencia, la unión generalizada de conjuntos 
+  se formaliza en Isabelle como el supremo del retículo completo que conforman.
 
   Veamos la prueba detallada del resultado en Isabelle/HOL.\<close>
 
