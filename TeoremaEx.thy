@@ -472,7 +472,7 @@ proof(induction S' rule: finite_induct)
   thus ?case by blast
 qed simp
 
-section \<open>El teorema de existencia de modelo\<close>
+section \<open>El Teorema de Existencia de Modelo\<close>
 
 text \<open>En esta sección demostraremos finalmente el 
   \<open>teorema de existencia de modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
@@ -1120,14 +1120,20 @@ qed
 
 section \<open>Teorema de Compacidad\<close>
 
-text \<open>\comentario{Añadir explicación nexo.}
+text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<close> para la lógica proposicional
+  mediante el \<open>Teorema de Existencia de Modelo\<close>.
 
   \begin{teorema}[Teorema de Compacidad]
     Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
   \end{teorema}
 
-  \comentario{Añadir demostracion y nexos.}
+  Para su demostración consideraremos la colección formada por los conjuntos de fórmulas finitamente 
+  satisfacibles. Probaremos que dicha colección verifica la propiedad de consistencia proposicional
+  y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto perteneciente a la colección será
+  satisfacible.
 
+  Previo a la demostración del teorema, mostremos dos resultados sobre subconjuntos finitos que
+  emplearemos en la prueba.
 
   \begin{lema}
     Sea un conjunto de la forma \<open>{a} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces,
@@ -1171,10 +1177,14 @@ text \<open>\comentario{Añadir explicación nexo.}
     \<open>{x} \<union> S = S''\<close>. Por otro lado, en el caso en que \<open>S = S'\<close>, es claro que \<open>{x} \<union> S = S''\<close> por
     la elección de \<open>S''\<close>, llegando la misma conclusión.
   \end{demostracion}
-\<close>
+
+  Procedamos con la prueba detallada y formalización en Isabelle. Para ello, hemos utilizado el
+  siguiente lema auxiliar.\<close>
 
 lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
   by blast
+
+text \<open>De este modo, probemos detalladamente el resultado.\<close>
 
 lemma finite_subset_insert1:
   "\<lbrakk>finite S; S \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
@@ -1294,7 +1304,8 @@ next
   qed
 qed
 
-text \<open>
+text \<open>Veamos el siguiente resultado, consecuencia del anterior, sobre subconjuntos finitos.
+
 \begin{lema}
   Sea un conjunto de la forma \<open>{a,b} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces, existe un
   subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>, \<open>S = {b} \<union> S'\<close> 
@@ -1317,7 +1328,9 @@ text \<open>
   Por último, supongamos que \<open>S\<^sub>1 = S\<^sub>2\<close>. Análogamente, el resultado es inmediato pues si 
   \<open>S = {a} \<union> S\<^sub>1\<close> obtenemos que \<open>S = {a} \<union> S\<^sub>2\<close>, y si suponemos \<open>S = S\<^sub>1\<close> obtenemos \<open>S = S\<^sub>2\<close>, probando
   así el lema.
-\end{demostracion}\<close>
+\end{demostracion}
+
+  Su formalización y prueba detallada en Isabelle/HOL son las siguientes.\<close>
 
 lemma finite_subset_insert2:
   assumes "finite S"
@@ -1398,16 +1411,57 @@ proof -
   qed
 qed
 
-definition colecComp :: "'a formula set \<Rightarrow> ('a formula set) set"
-  where colecComp: "colecComp S = {W. fin_sat W}"
+text \<open>Una vez introducidos los resultados anteriores, procedamos con la prueba del \<open>Teorema de
+  Compacidad\<close>.
+
+  \begin{demostracion}
+    En primer lugar, recordemos que un conjunto de fórmulas es finitamente satisfacible si todo
+    subconjunto finito suyo es satisfacible.
+  
+    Consideremos la colección \<open>C\<close> formada por los conjuntos de fórmulas finitamente satisfacibles.
+    Vamos a probar que dicho conjunto verifica la propiedad de consistencia proposicional y, 
+    aplicando el \<open>Teorema de Existencia de Modelo\<close>, quedará probado que todo conjunto de \<open>C\<close> es
+    satisfacible, probando así el teorema.
+
+    Para probar que \<open>C\<close> verifica la propiedad de consistencia proposicional, basta demostrar por el 
+    lema de caracterización \<open>referencia\<close> que se verifican las siguientes condiciones para todo 
+    conjunto \<open>W \<in> C\<close>:
+    \begin{itemize}
+     \item \<open>\<bottom> \<notin> W\<close>.
+     \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+      simultáneamente que\\ \<open>p \<in> W\<close> y \<open>\<not> p \<in> W\<close>.
+     \item Para toda fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>\<alpha>\<close>
+      pertenece a \<open>W\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> pertenece a \<open>C\<close>.
+     \item Para toda fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>\<beta>\<close>
+      pertenece a \<open>W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W\<close> pertenece a \<open>C\<close> o 
+      bien \<open>{\<beta>\<^sub>2} \<union> W\<close> pertenece a \<open>C\<close>.
+    \end{itemize}
+
+    Demostremos la primera condición por reducción al absurdo. En efecto, si suponemos que \<open>\<bottom> \<in> W\<close>,
+    es claro que \<open>{\<bottom>}\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W \<in> C\<close>, se trata de un conjunto
+    finitamente satisfacible, luego se verifica que \<open>{\<bottom>}\<close> es satisfacible. Sin embargo, esto no es
+    cierto ya que, en caso contrario, existiría una interpretación que fuese modelo de \<open>\<bottom>\<close>, 
+    llegando así a una contradicción.
+
+    A continuación probaremos que, si \<open>W \<in> C\<close>, entonces dada \<open>p\<close> una fórmula atómica cualquiera, no 
+    se tiene simultáneamente que \<open>p \<in> W\<close> y \<open>\<not> p \<in> W\<close>. Veamos dicho resultado por reducción al 
+    absurdo, suponiendo que tanto \<open>p\<close> como \<open>\<not> p\<close> están en \<open>W\<close>. En este caso, \<open>{p,\<not> p}\<close> sería un
+    subconjunto finito de \<open>W\<close> y, por ser \<open>W\<close> finitamente satisfacible ya que \<open>W \<in> C\<close>, obtendríamos 
+    que \<open>{p,\<not> p}\<close> es satisfacible. Sin embargo, esto no es cierto ya que, en ese caso, existiría
+    una interpretación que sería modelo tanto de \<open>p\<close> como de \<open>\<not> p\<close>, llegando así a una 
+    contradicción.
+  \end{demostracion}\<close>
+
+definition colecComp :: "('a formula set) set"
+  where colecComp: "colecComp = {W. fin_sat W}"
 
 lemma set_in_colecComp: 
   assumes "fin_sat S"
-  shows "S \<in> colecComp S"
+  shows "S \<in> colecComp"
   unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
 lemma colecComp_subset_finite: 
-  assumes "W \<in> colecComp S"
+  assumes "W \<in> colecComp"
           "Wo \<subseteq> W"
           "finite Wo"
   shows "sat Wo" 
@@ -1420,8 +1474,25 @@ proof -
     using \<open>finite Wo\<close> by (rule mp)
 qed
 
+lemma not_sat_bot: "\<not> sat {\<bottom>}"
+proof (rule ccontr)
+  assume "\<not>(\<not>sat{\<bottom> :: 'a formula})"
+  then have "sat {\<bottom> :: 'a formula}"
+    by (rule notnotD)
+  then have Ex:"\<exists>\<A>. \<forall>F \<in> {\<bottom> :: 'a formula}. \<A> \<Turnstile> F"
+    by (simp only: sat_def)
+  obtain \<A> where 1:"\<forall>F \<in> {\<bottom> :: 'a formula}. \<A> \<Turnstile> F"
+    using Ex by (rule exE)
+  have 2:"\<bottom> \<in> {\<bottom>:: 'a formula}"
+    by (simp only: singletonI)
+  have "\<A> \<Turnstile> \<bottom>"
+    using 1 2 by (rule bspec)
+  thus "False"
+    by (simp only: formula_semantics.simps(2))
+qed
+
 lemma pcp_colecComp_bot:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
   shows "\<bottom> \<notin> W"
 proof (rule ccontr)
   assume "\<not>(\<bottom> \<notin> W)"
@@ -1438,7 +1509,7 @@ proof (rule ccontr)
   have "sat {\<bottom> :: 'a formula}" 
     using assms \<open>{\<bottom>} \<subseteq> W\<close> \<open>finite {\<bottom>}\<close> by (rule colecComp_subset_finite)
   have "\<not> sat {\<bottom> :: 'a formula}" 
-    by (simp add: sat_def)
+    by (rule not_sat_bot)
   then show False 
     using \<open>sat {\<bottom> :: 'a formula}\<close> by (rule notE)
 qed
@@ -1467,7 +1538,7 @@ proof (rule ccontr)
 qed
 
 lemma pcp_colecComp_atoms:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
   shows "\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False"
 proof (rule allI)
   fix k
@@ -1501,7 +1572,7 @@ proof (rule allI)
 qed
 
 lemma pcp_colecComp_elem_sat:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
@@ -1530,7 +1601,7 @@ lemma ball_Un:
   using assms by blast
 
 lemma pcp_colecComp_CON_sat1:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = G \<^bold>\<and> H"
           "F \<in> W"
           "finite Wo"
@@ -1570,7 +1641,7 @@ proof -
 qed
 
 lemma pcp_colecComp_CON_sat2:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = \<^bold>\<not>(G \<^bold>\<or> H)"
           "F \<in> W"
           "finite Wo"
@@ -1616,7 +1687,7 @@ proof -
 qed
 
 lemma pcp_colecComp_CON_sat3:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H)"
           "F \<in> W"
           "finite Wo"
@@ -1662,7 +1733,7 @@ proof -
 qed
 
 lemma pcp_colecComp_CON_sat4:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
           "H = G"
           "F \<in> W"
@@ -1705,7 +1776,7 @@ proof -
 qed
 
 lemma pcp_colecComp_CON_sat:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "Con F G H"
           "F \<in> W"
           "finite Wo"
@@ -1775,15 +1846,15 @@ proof -
 qed
       
 lemma pcp_colecComp_CON:
-  assumes "W \<in> (colecComp S)"
-  shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
+  shows "\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> colecComp"
 proof (rule allI)+
   fix F G H
-  show "Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
+  show "Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> colecComp"
   proof (rule impI)+
     assume "Con F G H"
     assume "F \<in> W"
-    show "{G,H} \<union> W \<in> (colecComp S)"
+    show "{G,H} \<union> W \<in> colecComp"
       unfolding colecComp fin_sat_def
     proof (rule CollectI)
       show "\<forall>S' \<subseteq> {G,H} \<union> W. finite S' \<longrightarrow> sat S'"
@@ -1802,7 +1873,7 @@ proof (rule allI)+
           have "finite Wo'"
             using 1 by (rule conjunct1)
             have "sat ({G,H} \<union> Wo')" 
-              using \<open>W \<in> (colecComp S)\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_sat)
+              using \<open>W \<in> colecComp\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_sat)
           have "S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
             using 1 by (rule conjunct2)
           thus "sat S'"
@@ -1844,7 +1915,7 @@ proof (rule allI)+
 qed
 
 lemma pcp_colecComp_DIS_sat1:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = G \<^bold>\<or> H"
           "F \<in> W"
           "finite Wo"
@@ -1898,7 +1969,7 @@ proof -
 qed
 
 lemma pcp_colecComp_DIS_sat2:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = G \<^bold>\<rightarrow> H"
           "F \<in> W"
           "finite Wo"
@@ -1958,7 +2029,7 @@ proof -
 qed
 
 lemma pcp_colecComp_DIS_sat3:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (G \<^bold>\<and> H)"
           "F \<in> W"
           "finite Wo"
@@ -2020,7 +2091,7 @@ proof -
 qed
 
 lemma pcp_colecComp_DIS_sat4:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
           "H = G"
           "F \<in> W"
@@ -2061,7 +2132,7 @@ proof -
 qed
 
 lemma pcp_colecComp_DIS_sat:
-  assumes "W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
           "Dis F G H"
           "F \<in> W"
           "finite Wo"
@@ -2228,8 +2299,8 @@ proof -
 qed
 
 lemma not_colecComp:
-  assumes "W \<in> (colecComp S)"
-          "{x} \<union> W \<notin> (colecComp S)"
+  assumes "W \<in> colecComp"
+          "{x} \<union> W \<notin> colecComp"
         shows "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
 proof -
   have WCol:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
@@ -2277,33 +2348,33 @@ proof -
 qed
 
 lemma pcp_colecComp_DIS:
-  assumes "W \<in> (colecComp S)"
-  shows "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+  assumes "W \<in> colecComp"
+  shows "\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp"
 proof (rule allI)+
   fix F G H
-  show "Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+  show "Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp"
   proof (rule impI)+
     assume "Dis F G H"
     assume "F \<in> W"
-    show "{G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+    show "{G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp"
     proof (rule ccontr)
-      assume "\<not>({G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
-      then have C:"{G} \<union> W \<notin> (colecComp S) \<and> {H} \<union> W \<notin> (colecComp S)"
+      assume "\<not>({G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp)"
+      then have C:"{G} \<union> W \<notin> colecComp \<and> {H} \<union> W \<notin> colecComp"
         by (simp only: de_Morgan_disj simp_thms(8))
-      then have "{G} \<union> W \<notin> (colecComp S)"
+      then have "{G} \<union> W \<notin> colecComp"
         by (rule conjunct1)
       have Ex1:"\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({G} \<union> Wo))"
-        using assms \<open>{G} \<union> W \<notin> (colecComp S)\<close> by (rule not_colecComp)
+        using assms \<open>{G} \<union> W \<notin> colecComp\<close> by (rule not_colecComp)
       obtain W1 where "W1 \<subseteq> W" and C1:"finite W1 \<and> \<not>(sat ({G} \<union> W1))"
         using Ex1 by (rule subexE)
       have "finite W1"
         using C1 by (rule conjunct1)
       have "\<not>(sat ({G} \<union> W1))"
         using C1 by (rule conjunct2)
-      have "{H} \<union> W \<notin> (colecComp S)"
+      have "{H} \<union> W \<notin> colecComp"
         using C by (rule conjunct2) 
       have Ex2:"\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({H} \<union> Wo))"
-        using assms \<open>{H} \<union> W \<notin> (colecComp S)\<close> by (rule not_colecComp)
+        using assms \<open>{H} \<union> W \<notin> colecComp\<close> by (rule not_colecComp)
       obtain W2 where "W2 \<subseteq> W" and C2:"finite W2 \<and> \<not>(sat ({H} \<union> W2))"
         using Ex2 by (rule subexE)
       have "finite W2"
@@ -2343,27 +2414,27 @@ proof (rule allI)+
   qed
 qed
 
-lemma pcp_colecComp: "pcp (colecComp S)"
+lemma pcp_colecComp: "pcp colecComp"
 proof (rule pcp_alt2)
-  show "\<forall>W \<in> (colecComp S). \<bottom> \<notin> W
+  show "\<forall>W \<in> colecComp. \<bottom> \<notin> W
         \<and> (\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False)
-        \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S))
-        \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
+        \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> colecComp)
+        \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp)"
   proof (rule ballI)
     fix W
-    assume H:"W \<in> (colecComp S)"
+    assume H:"W \<in> colecComp"
     have C1:"\<bottom> \<notin> W"
       using H by (rule pcp_colecComp_bot)
     have C2:"\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False"
       using H by (rule pcp_colecComp_atoms)
-    have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S)"
+    have C3:"\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> colecComp"
       using H by (rule pcp_colecComp_CON)
-    have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S)"
+    have C4:"\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp"
       using H by (rule pcp_colecComp_DIS)
     show "\<bottom> \<notin> W
           \<and> (\<forall>k. Atom k \<in> W \<longrightarrow> \<^bold>\<not> (Atom k) \<in> W \<longrightarrow> False)
-          \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> (colecComp S))
-          \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> (colecComp S) \<or> {H} \<union> W \<in> (colecComp S))"
+          \<and> (\<forall>F G H. Con F G H \<longrightarrow> F \<in> W \<longrightarrow> {G,H} \<union> W \<in> colecComp)
+          \<and> (\<forall>F G H. Dis F G H \<longrightarrow> F \<in> W \<longrightarrow> {G} \<union> W \<in> colecComp \<or> {H} \<union> W \<in> colecComp)"
       using C1 C2 C3 C4 by (iprover intro: conjI)
   qed
 qed
@@ -2373,12 +2444,12 @@ lemma prop_Compactness:
   assumes "fin_sat S"
   shows "sat S"
 proof -
-  have "pcp (colecComp S)"
+  have "pcp colecComp"
     by (rule pcp_colecComp)
-  have "S \<in> colecComp S"
+  have "S \<in> colecComp"
     using assms by (rule set_in_colecComp)
-  thus "sat S"
-    using \<open>pcp (colecComp S)\<close> by (simp only: pcp_sat)
+  thus "sat S" 
+    using \<open>pcp colecComp\<close> pcp_sat by blast (*Pendiente*)
 qed
 
 (*<*)
