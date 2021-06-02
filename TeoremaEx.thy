@@ -221,13 +221,14 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
   generalizada en Isabelle/HOL perteneciente a la teoría 
   \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}, junto con distintas propiedades sobre la misma
-  definidas en dicha teoría. El uso de teoría de retículos en este caso se debe a que la teoría de 
-  conjuntos \href{https://bit.ly/3ibCuje}{Set.thy} de Isabelle formaliza los conjuntos como 
-  predicados, de manera que un elemento pertenece a un conjunto si verifica el predicado que lo 
-  caracteriza. De este modo, en dicha teoría se instancia que el tipo de los conjuntos es un álgebra 
-  de \<open>Boole\<close> acotada, es decir, es un retículo distributivo para las operaciones unión e 
-  intersección que tiene un supremo y un ínfimo. En consecuencia, la unión generalizada de conjuntos 
-  se formaliza en Isabelle como el supremo del retículo completo que conforman.
+  definidas en dicha teoría. El uso de teoría de retículos en este caso se debe a que, en Isabelle,
+  los conjuntos se han formalizado como predicados según la teoría 
+  \href{https://bit.ly/3ibCuje}{Set.thy}. De esta manera, un elemento pertenece a un conjunto si 
+  verifica el predicado que lo caracteriza. Además, en dicha teoría se instancia que el tipo de los 
+  conjuntos es un álgebra de \<open>Boole\<close> acotada, es decir, es un retículo distributivo para las 
+  operaciones unión e intersección que tiene un supremo y un ínfimo. En consecuencia, la unión 
+  generalizada de conjuntos se formaliza en Isabelle como el supremo del retículo completo que 
+  conforman.
 
   Veamos la prueba detallada del resultado en Isabelle/HOL.\<close>
 
@@ -1120,7 +1121,7 @@ qed
 section \<open>Teorema de Compacidad\<close>
 
 text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<close> para la lógica proposicional
-  mediante el \<open>Teorema de Existencia de Modelo\<close>.
+  como consecuencia del \<open>Teorema de Existencia de Modelo\<close>.
 
   \begin{teorema}[Teorema de Compacidad]
     Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
@@ -1128,15 +1129,15 @@ text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<cl
 
   Para su demostración consideraremos la colección formada por los conjuntos de fórmulas finitamente 
   satisfacibles. Probaremos que dicha colección verifica la propiedad de consistencia proposicional
-  y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto perteneciente a la colección será
+  y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto perteneciente a ella será
   satisfacible.
 
-  Previo a la demostración del teorema, mostremos dos resultados sobre subconjuntos finitos que
-  emplearemos en la prueba.
+  Mostremos, previamente, dos resultados sobre subconjuntos finitos que emplearemos en la 
+  demostración del teorema.
 
   \begin{lema}
     Sea un conjunto de la forma \<open>{a} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces,
-    existe un subconjunto finito \<open>S' \<subseteq> B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
+    existe un subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
   \end{lema}
 
   \begin{demostracion}
@@ -1149,32 +1150,33 @@ text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<cl
 
     Veamos el caso de inducción. Sea \<open>S\<close> un conjunto finito verificando la hipótesis de inducción:
     
-    \<open>(HI): Si S \<subseteq> {a} \<union> B, entonces existe un subconjunto finito S' de B tal que o bien
-    S = {a} \<union> S' o bien S = S'.\<close>
+    \<open>(HI): Si S \<subseteq> {a} \<union> B, entonces existe un subconjunto finito S' de B tal que o bien\<close>
+
+    \hspace{1cm}\<open>S = {a} \<union> S' o bien S = S'.\<close>
 
     Sea un elemento cualquiera \<open>x \<notin> S\<close>. Vamos a probar que se verifica el resultado para el conjunto
     \<open>{x} \<union> S\<close>. Es decir, si \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>, vamos a encontrar un subconjunto finito \<open>S''\<close> de 
     \<open>B\<close> tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>.
 
     Supongamos, pues, que \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>. En este caso, es claro que se verifica que
-    \<open>x \<in> {a} \<union> B\<close> y \<open>S \<subseteq> {a} \<union> B\<close>. De este modo, por hipótesis de inducción, podemos hallar un
-    subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>. Por otro lado,
-    como \<open>x \<in> {a} \<union> B\<close>, deducimos que o bien \<open>x = a\<close> o bien \<open>x \<in> B\<close>. En efecto, 
-    probemos que se verifica el resultado para ambos casos.
+    \<open>x \<in> {a} \<union> B\<close> y \<open>S \<subseteq> {a} \<union> B\<close>. Por lo último, aplicando hipótesis de inducción, podemos hallar 
+    un subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>. Por otro lado,
+    como \<open>x \<in> {a} \<union> B\<close>, deducimos que o bien \<open>x = a\<close> o bien \<open>x \<in> B\<close>. En efecto, probemos que se 
+    verifica el resultado para ambos casos de la última disyunción.
 
-    En primer lugar, supongamos que \<open>x = a\<close>. En este caso, el conjunto \<open>S''\<close> que verifica el
-    resultado es el propio \<open>S'\<close>. Se observa fácilmente ya que, si \<open>S = {a} \<union> S'\<close>, como \<open>x = a\<close>
-    se obtiene que \<open>{x} \<union> S = {a} \<union> S'\<close>, de modo que \<open>S'' = S'\<close> es un subconjunto finito de \<open>B\<close>
-    tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>. Por otro lado, suponiendo que 
+    En primer lugar, supongamos que \<open>x = a\<close>. En este caso, veremos que el conjunto \<open>S''\<close> que 
+    verifica el resultado es el propio \<open>S'\<close>. Se observa fácilmente ya que, si \<open>S = {a} \<union> S'\<close>, como 
+    \<open>x = a\<close> se obtiene que \<open>{x} \<union> S = {a} \<union> S'\<close>, de modo que \<open>S'' = S'\<close> es un subconjunto finito de 
+    \<open>B\<close> tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>. Por otro lado, suponiendo que 
     \<open>S = S'\<close>, se deduce análogamente que \<open>{x} \<union> S = {a} \<union> S'\<close> pues se tiene que \<open>x = a\<close>, llegando
     a la misma conclusión.
 
     Por otra parte, supongamos que \<open>x \<in> B\<close>. En este caso, el conjunto \<open>S''\<close> que verifica el
     resultado es el conjunto \<open>{x} \<union> S'\<close>. Observemos que se trata de un subconjunto finito de \<open>B\<close> ya 
-    que \<open>S' \<subseteq> B\<close> es un subconjunto finito y \<open>x \<in> B\<close>. Además, en efecto si \<open>S = {a} \<union> S'\<close>, se deduce 
-    que \<open>{x} \<union> S = {x,a} \<union> S' = {a} \<union> S''\<close>, luego cumple que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien
-    \<open>{x} \<union> S = S''\<close>. Por otro lado, en el caso en que \<open>S = S'\<close>, es claro que \<open>{x} \<union> S = S''\<close> por
-    la elección de \<open>S''\<close>, llegando la misma conclusión.
+    que \<open>S'\<close> es un subconjunto finito de \<open>B\<close> y \<open>x \<in> B\<close>. Además, en efecto si \<open>S = {a} \<union> S'\<close>, se 
+    deduce que \<open>{x} \<union> S = {x,a} \<union> S' = {a} \<union> S''\<close>, luego cumple que o bien\\ \<open>{x} \<union> S = {a} \<union> S''\<close> o 
+    bien \<open>{x} \<union> S = S''\<close>. Por otro lado, en el caso en que \<open>S = S'\<close>, es claro que \<open>{x} \<union> S = S''\<close> 
+    por la elección de \<open>S''\<close>, llegando la misma conclusión.
   \end{demostracion}
 
   Procedamos con la prueba detallada y formalización en Isabelle. Para ello, hemos utilizado el
@@ -1303,21 +1305,21 @@ next
   qed
 qed
 
-text \<open>Veamos el siguiente resultado, consecuencia del anterior, sobre subconjuntos finitos.
+text \<open>El segundo resultado sobre subconjuntos finitos es consecuencia del anterior.
 
 \begin{lema}
   Sea un conjunto de la forma \<open>{a,b} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces, existe un
-  subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>, \<open>S = {b} \<union> S'\<close> 
+  subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>,\\ \<open>S = {b} \<union> S'\<close> 
   o \<open>S = S'\<close>.
 \end{lema}
 
 \begin{demostracion}
-  En particular, \<open>S\<close> es un subconjunto finito de \<open>{a} \<union> ({b} \<union> B)\<close> luego, aplicando el lema (añadir
-  ref) anterior, podemos hallar un subconjunto finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close> tal que o bien 
-  \<open>S = {a} \<union> S\<^sub>1\<close> o bien \<open>S = S\<^sub>1\<close>. A su vez, podemos aplicar dicho resultado para el subconjunto
-  finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close>, obteniendo un subconjunto finito \<open>S\<^sub>2\<close> de \<open>B\<close> tal que o bien 
-  \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close> o bien \<open>S\<^sub>1 = S\<^sub>2\<close>. Veamos que el lema se verifica para el conjunto \<open>S' = S\<^sub>2\<close> para
-  ambas opciones posibles de \<open>S\<^sub>1\<close>.
+  En particular, \<open>S\<close> es un subconjunto finito de \<open>{a} \<union> ({b} \<union> B)\<close> luego, aplicando el lema \<open>4.3.2\<close>
+  anterior, podemos hallar un subconjunto finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close> tal que o bien \<open>S = {a} \<union> S\<^sub>1\<close> o 
+  bien \<open>S = S\<^sub>1\<close>. A su vez, podemos aplicar dicho resultado para el subconjunto finito \<open>S\<^sub>1\<close> de 
+  \<open>{b} \<union> B\<close>, obteniendo un subconjunto finito \<open>S\<^sub>2\<close> de \<open>B\<close> tal que o bien \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close> o bien 
+  \<open>S\<^sub>1 = S\<^sub>2\<close>. Veamos que el lema se verifica en ambas opciones posibles de \<open>S\<^sub>1\<close> para el conjunto 
+  \<open>S' = S\<^sub>2\<close>.
 
   En primer lugar, supongamos que \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close>. De este modo, se verifica el resultado tanto para
   \<open>S = {a} \<union> S\<^sub>1\<close> como para \<open>S = S\<^sub>1\<close>. En efecto, en la primera opción, por elección de \<open>S\<^sub>1\<close>, es claro
@@ -1325,7 +1327,7 @@ text \<open>Veamos el siguiente resultado, consecuencia del anterior, sobre subc
   igualmente el lema para \<open>S' = S\<^sub>2\<close>.
 
   Por último, supongamos que \<open>S\<^sub>1 = S\<^sub>2\<close>. Análogamente, el resultado es inmediato pues si 
-  \<open>S = {a} \<union> S\<^sub>1\<close> obtenemos que \<open>S = {a} \<union> S\<^sub>2\<close>, y si suponemos \<open>S = S\<^sub>1\<close> obtenemos \<open>S = S\<^sub>2\<close>, probando
+  \<open>S = {a} \<union> S\<^sub>1\<close> obtenemos que \<open>S = {a} \<union> S\<^sub>2\<close>, y si suponemos \<open>S = S\<^sub>1\<close> obtenemos\\ \<open>S = S\<^sub>2\<close>, probando
   así el lema.
 \end{demostracion}
 
@@ -1414,17 +1416,15 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
   Compacidad\<close>.
 
   \begin{demostracion}
-    En primer lugar, recordemos que un conjunto de fórmulas es finitamente satisfacible si todo
-    subconjunto finito suyo es satisfacible.
-  
     Consideremos la colección \<open>C\<close> formada por los conjuntos de fórmulas finitamente satisfacibles.
-    Vamos a probar que dicho conjunto verifica la propiedad de consistencia proposicional y, 
-    aplicando el \<open>Teorema de Existencia de Modelo\<close>, quedará probado que todo conjunto de \<open>C\<close> es
-    satisfacible, probando así el teorema.
+    Recordemos que un conjunto de fórmulas es finitamente satisfacible si todo subconjunto finito 
+    suyo es satisfacible. Vamos a probar que dicho conjunto verifica la propiedad de consistencia 
+    proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, quedará probado que todo conjunto de 
+    \<open>C\<close> es satisfacible, lo que demuestra el teorema.
 
-    Para probar que \<open>C\<close> verifica la propiedad de consistencia proposicional, basta demostrar por el 
-    lema de caracterización \<open>referencia\<close> que se verifican las siguientes condiciones para todo 
-    conjunto \<open>W \<in> C\<close>:
+    Para probar que \<open>C\<close> verifica la propiedad de consistencia proposicional, por el lema \<open>2.0.2\<close> de 
+    caracterización mediante notación uniforme, basta demostrar que se verifican las siguientes 
+    condiciones para todo conjunto \<open>W \<in> C\<close>:
     \begin{itemize}
      \item \<open>\<bottom> \<notin> W\<close>.
      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
@@ -1436,11 +1436,14 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
       bien \<open>{\<beta>\<^sub>2} \<union> W\<close> pertenece a \<open>C\<close>.
     \end{itemize}
 
-    Demostremos la primera condición por reducción al absurdo. En efecto, si suponemos que \<open>\<bottom> \<in> W\<close>,
-    es claro que \<open>{\<bottom>}\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W \<in> C\<close>, se trata de un conjunto
-    finitamente satisfacible, luego se verifica que \<open>{\<bottom>}\<close> es satisfacible. Sin embargo, esto no es
-    cierto ya que, en caso contrario, existiría una interpretación que fuese modelo de \<open>\<bottom>\<close>, 
-    llegando así a una contradicción.
+    De este modo, consideremos un conjunto cualquiera \<open>W \<in> C\<close> y procedamos a probar cada una de las
+    condiciones anteriores.
+
+    La primera condición se demuestra por reducción al absurdo. En efecto, si suponemos que 
+    \<open>\<bottom> \<in> W\<close>, es claro que \<open>{\<bottom>}\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W\<close> es un conjunto
+    finitamente satisfacible por pertenecer a \<open>C\<close>, se tiene por lo anterior que \<open>{\<bottom>}\<close> es 
+    satisfacible. De este modo, llegamos a una contradicción pues, por definición, no existe ninguna 
+    interpretación que sea modelo de \<open>\<bottom>\<close>.
 
     A continuación probaremos que, si \<open>W \<in> C\<close>, entonces dada \<open>p\<close> una fórmula atómica cualquiera, no 
     se tiene simultáneamente que \<open>p \<in> W\<close> y \<open>\<not> p \<in> W\<close>. Veamos dicho resultado por reducción al 
