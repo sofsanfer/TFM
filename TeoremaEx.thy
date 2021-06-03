@@ -1452,6 +1452,66 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     que \<open>{p,\<not> p}\<close> es satisfacible. Sin embargo, esto no es cierto ya que, en ese caso, existiría
     una interpretación que sería modelo tanto de \<open>p\<close> como de \<open>\<not> p\<close>, llegando así a una 
     contradicción.
+
+    Probemos ahora que dada una fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>F \<in> W\<close>,
+    se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> pertenece a \<open>C\<close>. Por definición de la colección, basta probar que 
+    \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> es finitamente satisfacible, es decir, que todo subconjunto finito suyo es
+    satisfacible. Consideremos un subconjunto finito \<open>S\<close> de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close>. En estas condiciones,
+    por el lema \<open>añadir ref\<close>, existe un subconjunto finito \<open>W\<^sub>0\<close> de \<open>W\<close> tal que \<open>S = {\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<^sub>0\<close>,
+    \<open>S = {\<alpha>\<^sub>1} \<union> W\<^sub>0\<close>, \<open>S = {\<alpha>\<^sub>2} \<union> W\<^sub>0\<close> o \<open>S = W\<^sub>0\<close>. Para probar que \<open>S\<close> es satisfacible en cada uno de 
+    estos posibles casos, basta demostrar que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible. De este
+    modo, puesto que todas las opciones posibles de \<open>S\<close> están contenidas en dicho conjunto, se
+    tiene la satisfacibilidad de cada una de ellas.
+
+    Para probar que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible en estas condiciones, demostremos 
+    que se verifica para cada caso de la fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close>:
+    \begin{enumerate}
+      \item[\<open>F = \<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>:] Observemos que, como \<open>W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close> y \<open>F \<in> W\<close> por
+      hipótesis, tenemos que \<open>{F} \<union> W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W\<close> es finitamente
+      satisfacible ya que pertenece a \<open>C\<close>, se tiene que \<open>{F} \<union> W\<^sub>0\<close> es satisfacible. Luego, por 
+      definición, existe una interpretación \<open>\<A>\<close> que es modelo de todas sus fórmulas y, en 
+      particular, \<open>\<A>\<close> es modelo de \<open>F\<close>. Como \<open>F = \<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>, obtenemos por definición del valor de
+      una fórmula en una interpretación que \<open>\<A>\<close> es modelo de \<open>\<alpha>\<^sub>1\<close> y de \<open>\<alpha>\<^sub>2\<close>. Por lo tanto, \<open>\<A>\<close> es 
+      modelo de todas las fórmulas del conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba que se trata de un 
+      conjunto satisfacible.
+      \item[\<open>F = \<not>(G \<or> H), para ciertas fórmulas G y H\<close>:] Análogamente al caso anterior, obtenemos 
+      que el conjunto \<open>{F} \<union> W\<^sub>0\<close> es satisfacible. Luego, por definición, existe una interpretación 
+      \<open>\<A>\<close> que es modelo de todas sus fórmulas y, en particular, de \<open>F\<close>. Por definición de \<open>F\<close> para 
+      este caso y la definición del valor de una fórmula en una interpretación, obtenemos que no es 
+      cierto que \<open>\<A>\<close> sea modelo de \<open>G \<or> H\<close>. Aplicando de nuevo la definición del valor de una 
+      fórmula en una interpretación, se obtiene que no es cierto que \<open>\<A>\<close> se modelo de \<open>G\<close> o de \<open>H\<close>. 
+      Por las leyes de \<open>Morgan\<close> para la disyunción, obtenemos que esto es equivalente a que \<open>\<A>\<close> no 
+      es modelo de \<open>G\<close> y \<open>\<A>\<close> no es modelo de \<open>H\<close>. Por lo tanto, por el valor de una fórmula en una 
+      interpretación, obtenemos que \<open>\<A>\<close> no es modelo de \<open>\<not> G\<close> y \<open>\<A>\<close> no es modelo de \<open>\<not> H\<close>. Como 
+      las componentes conjuntivas en este caso son \<open>\<alpha>\<^sub>1 = \<not> G\<close> y \<open>\<alpha>\<^sub>2 = \<not> H\<close>, es claro que \<open>\<A>\<close> es 
+      modelo de \<open>\<alpha>\<^sub>1\<close> y de \<open>\<alpha>\<^sub>2\<close>. Por lo tanto, la interpretación \<open>\<A>\<close> es modelo de todas las fórmulas
+      del conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba por definición que se trata de un conjunto 
+      satisfacible. 
+      \item[\<open>F = \<not>(G \<longrightarrow> H), para ciertas fórmulas G y H\<close>:] Como hemos visto que \<open>{F} \<union> W\<^sub>0\<close> es un
+      conjunto satisfacible, existe una interpretación \<open>\<A>\<close> que es modelo de todas sus fórmulas. En
+      particular, \<open>\<A>\<close> es modelo de \<open>F\<close> luego, por definición del valor de una fórmula en una
+      interpretación, es claro que \<open>\<A>\<close> no es modelo de \<open>G \<longrightarrow> H\<close>. De nuevo por el valor de una
+      fórmula en una interpretación, obtenemos que no es cierto que si \<open>\<A>\<close> es modelo de \<open>G\<close>, 
+      entonces sea modelo de \<open>H\<close>. Esto último es equivalente a que \<open>\<A>\<close> es modelo de \<open>G\<close> y no es
+      modelo de \<open>H\<close>. Por lo tanto, por la definición del valor de una fórmula en una interpretación,
+      se obtiene que \<open>\<A>\<close> es modelo de \<open>G\<close> y de \<open>\<not> H\<close>. Como en este caso las componentes conjuntivas
+      son \<open>\<alpha>\<^sub>1 = G\<close> y \<open>\<alpha>\<^sub>2 = \<not> H\<close>, es claro que \<open>\<A>\<close> es modelo de \<open>\<alpha>\<^sub>1\<close> y de \<open>\<alpha>\<^sub>2\<close>. Por lo tanto, \<open>\<A>\<close> es
+      modelo de todas las fórmulas del conjunto  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, probando así su satisfacibilidad.
+      \item[\<open>F = \<not>(\<not> G), para cierta fórmula G\<close>:] Análogamente a los casos anteriores, se prueba 
+      que existe una interpretación \<open>\<A>\<close> que es modelo de todas las fórmulas del conjunto \<open>{F} \<union> W\<^sub>0\<close>
+      por ser este satisfacible. En particular, \<open>\<A>\<close> es modelo de \<open>F\<close> luego, por definición del
+      valor de una fórmula en una interpretación, obtenemos que no es cierto que \<open>\<A>\<close> no es modelo
+      de \<open>G\<close>. Es decir, \<open>\<A>\<close> es modelo de \<open>G\<close> y, como en este caso ambas componentes disyuntivas son
+      \<open>G\<close>, es claro que \<open>\<A>\<close> es modelo de \<open>\<alpha>\<^sub>1\<close> y de \<open>\<alpha>\<^sub>2\<close>. Por tanto, \<open>\<A>\<close> es modelo de todas las
+      fórmulas del conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba su satisfacibilidad por definición.
+    \end{enumerate}
+
+    Por lo tanto, \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es un conjunto satisfacible para todos los casos de la fórmula
+    \<open>F\<close> de tipo \<open>\<alpha>\<close>. De este modo, como el subconjunto finito \<open>S\<close> de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> es de la forma
+    \<open>S = {\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<^sub>0\<close>, \<open>S = {\<alpha>\<^sub>1} \<union> W\<^sub>0\<close>, \<open>S = {\<alpha>\<^sub>2} \<union> W\<^sub>0\<close> o \<open>S = W\<^sub>0\<close>, se prueba la satisfacibilidad
+    de \<open>S\<close> para cada uno de los casos por estar contenidos en el conjunto satisfacible
+    \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>. Por lo tanto, \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> es finitamente satisfacible y, por definición de 
+    la colección \<open>C\<close>, pertenece a dicha colección, como queríamos demostrar.
   \end{demostracion}\<close>
 
 definition colecComp :: "('a formula set) set"
@@ -1783,7 +1843,7 @@ lemma pcp_colecComp_CON_sat:
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
-        shows "sat ({G,H} \<union> Wo)"
+        shows "sat ({G,H,F} \<union> Wo)"
 proof -
   have "{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo"
     by blast
@@ -1792,7 +1852,7 @@ proof -
     (\<exists>H1. F = \<^bold>\<not> (G \<^bold>\<rightarrow> H1) \<and> H = \<^bold>\<not> H1) \<or> 
     F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
     using assms(2) by (simp only: con_dis_simps(1))
-  then have "sat ({G,H,F} \<union> Wo)"
+  thus "sat ({G,H,F} \<union> Wo)"
   proof (rule disjE)
     assume "F = G \<^bold>\<and> H"
     show "sat ({G,H,F} \<union> Wo)"
@@ -1843,8 +1903,6 @@ proof -
       qed
     qed
   qed
-  thus "sat ({G,H} \<union> Wo)"
-    using \<open>{G,H} \<union> Wo \<subseteq> {G,H,F} \<union> Wo\<close> by (simp only: sat_mono)
 qed
       
 lemma pcp_colecComp_CON:
@@ -1859,54 +1917,56 @@ proof (rule allI)+
     show "{G,H} \<union> W \<in> colecComp"
       unfolding colecComp fin_sat_def
     proof (rule CollectI)
-      show "\<forall>S' \<subseteq> {G,H} \<union> W. finite S' \<longrightarrow> sat S'"
+      show "\<forall>S \<subseteq> {G,H} \<union> W. finite S \<longrightarrow> sat S"
       proof (rule sallI)
-        fix S'
-        assume "S' \<subseteq> {G,H} \<union> W"
-        then have "S' \<subseteq> {G} \<union> ({H} \<union> W)"
+        fix S
+        assume "S \<subseteq> {G,H} \<union> W"
+        then have "S \<subseteq> {G} \<union> ({H} \<union> W)"
           by blast 
-        show "finite S' \<longrightarrow> sat S'"
+        show "finite S \<longrightarrow> sat S"
         proof (rule impI)
-          assume "finite S'" 
-          have Ex:"\<exists>Wo \<subseteq> W. finite Wo \<and> (S' = {G,H} \<union> Wo \<or> S' = {G} \<union> Wo \<or> S' = {H} \<union> Wo \<or> S' = Wo)"
-            using \<open>finite S'\<close> \<open>S' \<subseteq> {G,H} \<union> W\<close> by (rule finite_subset_insert2)
-          obtain Wo' where "Wo' \<subseteq> W" and 1:"finite Wo' \<and> (S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo')"
+          assume "finite S" 
+          have Ex:"\<exists>Wo \<subseteq> W. finite Wo \<and> (S = {G,H} \<union> Wo \<or> S = {G} \<union> Wo \<or> S = {H} \<union> Wo \<or> S = Wo)"
+            using \<open>finite S\<close> \<open>S \<subseteq> {G,H} \<union> W\<close> by (rule finite_subset_insert2)
+          obtain Wo where "Wo \<subseteq> W" and 1:"finite Wo \<and> (S = {G,H} \<union> Wo \<or> S = {G} \<union> Wo \<or> S = {H} \<union> Wo \<or> S = Wo)"
             using Ex by (rule subexE)
-          have "finite Wo'"
+          have "finite Wo"
             using 1 by (rule conjunct1)
-            have "sat ({G,H} \<union> Wo')" 
-              using \<open>W \<in> colecComp\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo'\<close> \<open>Wo' \<subseteq> W\<close> by (rule pcp_colecComp_CON_sat)
-          have "S' = {G,H} \<union> Wo' \<or> S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
+            have "sat ({G,H,F} \<union> Wo)" 
+              using \<open>W \<in> colecComp\<close> \<open>Con F G H\<close> \<open>F \<in> W\<close> \<open>finite Wo\<close> \<open>Wo \<subseteq> W\<close> by (rule pcp_colecComp_CON_sat)
+          have "S = {G,H} \<union> Wo \<or> S = {G} \<union> Wo \<or> S = {H} \<union> Wo \<or> S = Wo"
             using 1 by (rule conjunct2)
-          thus "sat S'"
+          thus "sat S"
           proof (rule disjE)
-            assume "S' = {G,H} \<union> Wo'"
-            show "sat S'"
-              using \<open>sat({G,H} \<union> Wo')\<close> by (simp only: \<open>S' = {G,H} \<union> Wo'\<close>)
+            assume "S = {G,H} \<union> Wo"
+            then have "S \<subseteq> {G,H,F} \<union> Wo"
+              by blast
+            show "sat S"
+              using \<open>sat({G,H,F} \<union> Wo)\<close> \<open>S \<subseteq> {G,H,F} \<union> Wo\<close> by (simp only: sat_mono)
           next
-            assume "S' = {G} \<union> Wo' \<or> S' = {H} \<union> Wo' \<or> S' = Wo'"
-            thus "sat S'"
+            assume "S = {G} \<union> Wo \<or> S = {H} \<union> Wo \<or> S = Wo"
+            thus "sat S"
             proof (rule disjE)
-              assume "S' = {G} \<union> Wo'"
-              then have "S' \<subseteq> {G,H} \<union> Wo'"
+              assume "S = {G} \<union> Wo"
+              then have "S \<subseteq> {G,H,F} \<union> Wo"
                 by blast 
-              thus "sat S'"
-                using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+              thus "sat S"
+                using \<open>sat({G,H,F} \<union> Wo)\<close> by (rule sat_mono)
             next
-              assume "S' = {H} \<union> Wo' \<or> S' = Wo'"
-              thus "sat S'"
+              assume "S = {H} \<union> Wo \<or> S = Wo"
+              thus "sat S"
               proof (rule disjE)
-                assume "S' = {H} \<union> Wo'"
-                then have "S' \<subseteq> {G,H} \<union> Wo'"
+                assume "S = {H} \<union> Wo"
+                then have "S \<subseteq> {G,H,F} \<union> Wo"
                   by blast 
-                thus "sat S'"
-                  using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+                thus "sat S"
+                  using \<open>sat({G,H,F} \<union> Wo)\<close> by (rule sat_mono)
               next
-                assume "S' = Wo'"
-                then have "S' \<subseteq> {G,H} \<union> Wo'"
+                assume "S = Wo"
+                then have "S \<subseteq> {G,H,F} \<union> Wo"
                   by (simp only: Un_upper2)
-                thus "sat S'"
-                  using \<open>sat({G,H} \<union> Wo')\<close> by (rule sat_mono)
+                thus "sat S"
+                  using \<open>sat({G,H,F} \<union> Wo)\<close> by (rule sat_mono)
               qed
             qed
           qed
