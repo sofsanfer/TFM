@@ -2199,7 +2199,7 @@ lemma pcp_colecComp_DIS_sat:
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
-        shows "sat ({G} \<union> Wo) \<or> sat ({H} \<union> Wo)"
+        shows "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
 proof -
   have "(F = G \<^bold>\<or> H \<or> 
         (\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
@@ -2209,26 +2209,8 @@ proof -
   thus ?thesis
   proof (rule disjE)
     assume "F = G \<^bold>\<or> H"
-    have "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+    show "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
       using assms(1) \<open>F = G \<^bold>\<or> H\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat1)
-    thus ?thesis
-    proof (rule disjE)
-      assume "sat ({G,F} \<union> Wo)"
-      have "{G} \<union> Wo \<subseteq> {G,F} \<union> Wo"
-        by blast
-      then have "sat({G} \<union> Wo)"
-        using \<open>sat({G,F} \<union> Wo)\<close> by (rule sat_mono)
-      thus ?thesis
-        by (rule disjI1)
-    next
-      assume "sat ({H,F} \<union> Wo)"
-      have "{H} \<union> Wo \<subseteq> {H,F} \<union> Wo"
-        by blast
-      then have "sat({H} \<union> Wo)"
-        using \<open>sat({H,F} \<union> Wo)\<close> by (rule sat_mono)
-      thus ?thesis
-        by (rule disjI2)
-    qed
   next
     assume "(\<exists>G1 H1. F = G1 \<^bold>\<rightarrow> H1 \<and> G = \<^bold>\<not> G1 \<and> H = H1) \<or> 
         (\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
@@ -2246,28 +2228,8 @@ proof -
         using C1 by (iprover elim: conjunct2)
       have "sat ({\<^bold>\<not> G1,F} \<union> Wo) \<or> sat ({H1,F} \<union> Wo)"
         using assms(1) \<open>F = G1 \<^bold>\<rightarrow> H1\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat2)
-      thus ?thesis
-      proof (rule disjE)
-        assume "sat ({\<^bold>\<not> G1,F} \<union> Wo)"
-        have "{\<^bold>\<not> G1} \<union> Wo \<subseteq> {\<^bold>\<not> G1,F} \<union> Wo"
-          by blast
-        then have "sat({\<^bold>\<not> G1} \<union> Wo)"
-          using \<open>sat({\<^bold>\<not> G1,F} \<union> Wo)\<close> by (rule sat_mono)
-        then have "sat({G} \<union> Wo)"
-          by (simp only: \<open>G = \<^bold>\<not> G1\<close>)
-        thus ?thesis
-          by (rule disjI1)
-    next
-        assume "sat ({H1,F} \<union> Wo)"
-        have "{H1} \<union> Wo \<subseteq> {H1,F} \<union> Wo"
-          by blast
-        then have "sat({H1} \<union> Wo)"
-          using \<open>sat({H1,F} \<union> Wo)\<close> by (rule sat_mono)
-        then have "sat({H} \<union> Wo)"
-          by (simp only: \<open>H = H1\<close>)
-        thus ?thesis
-          by (rule disjI2)
-      qed
+      thus "sat ({G, F} \<union> Wo) \<or> sat ({H, F} \<union> Wo)"
+        by (simp only: \<open>G = \<^bold>\<not> G1\<close> \<open>H = H1\<close>) 
     next
       assume "(\<exists>G1 H1. F = \<^bold>\<not> (G1 \<^bold>\<and> H1) \<and> G = \<^bold>\<not> G1 \<and> H = \<^bold>\<not> H1) \<or> 
         F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
@@ -2284,54 +2246,16 @@ proof -
           using C2 by (iprover elim: conjunct2)
         have "sat ({\<^bold>\<not> G1,F} \<union> Wo) \<or> sat ({\<^bold>\<not> H1,F} \<union> Wo)"
           using assms(1) \<open>F = \<^bold>\<not> (G1 \<^bold>\<and> H1)\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat3)
-        thus ?thesis
-        proof (rule disjE)
-          assume "sat ({\<^bold>\<not> G1,F} \<union> Wo)"
-          have "{\<^bold>\<not> G1} \<union> Wo \<subseteq> {\<^bold>\<not> G1,F} \<union> Wo"
-            by blast
-          then have "sat({\<^bold>\<not> G1} \<union> Wo)"
-            using \<open>sat({\<^bold>\<not> G1,F} \<union> Wo)\<close> by (rule sat_mono)
-          then have "sat({G} \<union> Wo)"
-            by (simp only: \<open>G = \<^bold>\<not> G1\<close>)
-          thus ?thesis
-            by (rule disjI1)
-        next
-          assume "sat ({\<^bold>\<not> H1,F} \<union> Wo)"
-          have "{\<^bold>\<not> H1} \<union> Wo \<subseteq> {\<^bold>\<not> H1,F} \<union> Wo"
-            by blast
-          then have "sat({\<^bold>\<not> H1} \<union> Wo)"
-            using \<open>sat({\<^bold>\<not> H1,F} \<union> Wo)\<close> by (rule sat_mono)
-          then have "sat({H} \<union> Wo)"
-            by (simp only: \<open>H = \<^bold>\<not> H1\<close>)
-          thus ?thesis
-            by (rule disjI2)
-        qed
+        thus "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+          by (simp only: \<open>G = \<^bold>\<not> G1\<close> \<open>H = \<^bold>\<not> H1\<close>)
       next
         assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
         then have "F = \<^bold>\<not> (\<^bold>\<not> G)"
           by (rule conjunct1)
         have "H = G"
           using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct2)
-        have "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+        show "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
           using assms(1) \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close> \<open>H = G\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat4)
-        thus ?thesis
-        proof (rule disjE)
-          assume "sat ({G,F} \<union> Wo)"
-          have "{G} \<union> Wo \<subseteq> {G,F} \<union> Wo"
-            by blast
-          then have "sat({G} \<union> Wo)"
-            using \<open>sat({G,F} \<union> Wo)\<close> by (rule sat_mono)
-          thus ?thesis
-            by (rule disjI1)
-        next
-          assume "sat ({H,F} \<union> Wo)"
-          have "{H} \<union> Wo \<subseteq> {H,F} \<union> Wo"
-            by blast
-          then have "sat({H} \<union> Wo)"
-            using \<open>sat({H,F} \<union> Wo)\<close> by (rule sat_mono)
-          thus ?thesis
-            by (rule disjI2)
-        qed
       qed
     qed
   qed
@@ -2362,50 +2286,52 @@ qed
 
 lemma not_colecComp:
   assumes "W \<in> colecComp"
-          "{x} \<union> W \<notin> colecComp"
-        shows "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
+          "{F} \<union> W \<notin> colecComp"
+        shows "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
 proof -
   have WCol:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
     using assms(1) unfolding colecComp fin_sat_def by (rule CollectD) 
-  have "\<not>(\<forall>Wo \<subseteq> {x} \<union> W. finite Wo \<longrightarrow> sat Wo)"
+  have "\<not>(\<forall>Wo \<subseteq> {F} \<union> W. finite Wo \<longrightarrow> sat Wo)"
     using assms(2) unfolding colecComp fin_sat_def by (simp only: mem_Collect_eq simp_thms(8))
-  then have "\<exists>Wo \<subseteq> {x} \<union> W. \<not>(finite Wo \<longrightarrow> sat Wo)"
+  then have "\<exists>Wo \<subseteq> {F} \<union> W. \<not>(finite Wo \<longrightarrow> sat Wo)"
     by (rule sall_simps_not_all)
-  then have Ex1:"\<exists>Wo \<subseteq> {x} \<union> W. finite Wo \<and> \<not>(sat Wo)"
+  then have Ex1:"\<exists>Wo \<subseteq> {F} \<union> W. finite Wo \<and> \<not>(sat Wo)"
     by (simp only: not_imp)
-  obtain Wo' where "Wo' \<subseteq> {x} \<union> W" and C1:"finite Wo' \<and> \<not>(sat Wo')"
+  obtain Wo where "Wo \<subseteq> {F} \<union> W" and C1:"finite Wo \<and> \<not>(sat Wo)"
     using Ex1 by (rule subexE)
-  have "finite Wo'"
-    using C1 by (rule conjunct1)
-  have "\<not>(sat Wo')"
-    using C1 by (rule conjunct2)
-  have Ex2:"\<exists>Wo \<subseteq> W. finite Wo \<and> (Wo' = {x} \<union> Wo \<or> Wo' = Wo)"
-    using \<open>finite Wo'\<close> \<open>Wo' \<subseteq> {x} \<union> W\<close> by (rule finite_subset_insert1)
-  obtain Wo where "Wo \<subseteq> W" and C2:"finite Wo \<and> (Wo' = {x} \<union> Wo \<or> Wo' = Wo)"
-    using Ex2 by blast
   have "finite Wo"
+    using C1 by (rule conjunct1)
+  have "\<not>(sat Wo)"
+    using C1 by (rule conjunct2)
+  have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = {F} \<union> Wo' \<or> Wo = Wo')"
+    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {F} \<union> W\<close> by (rule finite_subset_insert1)
+  obtain Wo' where "Wo' \<subseteq> W" and C2:"finite Wo' \<and> (Wo = {F} \<union> Wo' \<or> Wo = Wo')"
+    using Ex2 by blast
+  have "finite Wo'"
     using C2 by (rule conjunct1)
-  have "Wo' = {x} \<union> Wo \<or> Wo' = Wo"
+  have "Wo = {F} \<union> Wo' \<or> Wo = Wo'"
     using C2 by (rule conjunct2)
   thus ?thesis
   proof (rule disjE)
-    assume "Wo' = {x} \<union> Wo"
-    then have "\<not>(sat ({x} \<union> Wo))" 
-      using \<open>\<not> sat Wo'\<close> by (simp only: \<open>Wo' = {x} \<union> Wo\<close> simp_thms(8))
-    have "finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
-      using \<open>finite Wo\<close> \<open>\<not>(sat ({x} \<union> Wo))\<close> by (rule conjI)
-    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({x} \<union> Wo))"
-      using \<open>Wo \<subseteq> W\<close> by (rule subexI)
+    assume "Wo = {F} \<union> Wo'"
+    then have "\<not>(sat ({F} \<union> Wo'))" 
+      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = {F} \<union> Wo'\<close> simp_thms(8))
+    have "finite Wo' \<and> \<not>(sat ({F} \<union> Wo'))"
+      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F} \<union> Wo'))\<close> by (rule conjI)
+    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
+      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
   next
-    assume "Wo' = Wo"
-    then have "Wo' \<subseteq> W"
-      using \<open>Wo \<subseteq> W\<close> by (simp only: \<open>Wo' = Wo\<close>)
-    have "finite Wo' \<longrightarrow> sat Wo'"
-      using WCol \<open>Wo' \<subseteq> W\<close> by (rule sspec)
-    then have "sat Wo'"
-      using \<open>finite Wo'\<close> by (rule mp)
-    show ?thesis
-      using \<open>\<not> sat Wo'\<close> \<open>sat Wo'\<close> by (rule notE)
+    assume "Wo = Wo'"
+    then have "\<not> (sat Wo')"
+      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = Wo'\<close> simp_thms(8))
+    have "Wo' \<subseteq> {F} \<union> Wo'"
+      by blast
+    then have "\<not> (sat ({F} \<union> Wo'))"
+      using \<open>\<not> (sat Wo')\<close> by (rule sat_subset_ccontr)
+    have "finite Wo' \<and> \<not>(sat ({F} \<union> Wo'))"
+      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F} \<union> Wo'))\<close> by (rule conjI)
+    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
+      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
   qed
 qed
 
@@ -2454,6 +2380,10 @@ proof (rule allI)+
         by (simp only: Un_assoc)
       have "\<not> sat ({G} \<union> ?Wo)"
         using \<open>{G} \<union> W1 \<subseteq> {G} \<union> ?Wo\<close> \<open>\<not> sat ({G} \<union> W1)\<close> by (rule sat_subset_ccontr)
+      have "{G} \<union> ?Wo \<subseteq> {G,F} \<union> ?Wo"
+        by blast (*Pendiente*)
+      then have 1:"\<not>(sat({G,F} \<union> ?Wo))"
+        using \<open>\<not>sat ({G} \<union> ?Wo)\<close> by (rule sat_subset_ccontr)
       have "{H} \<union> W2 \<subseteq> ({H} \<union> W2) \<union> W1"
         by (simp only: Un_upper1)
       then have "{H} \<union> W2 \<subseteq> {H} \<union> (W2 \<union> W1)"
@@ -2462,16 +2392,20 @@ proof (rule allI)+
         by (simp only: Un_commute)
       have "\<not> sat ({H} \<union> ?Wo)"
         using \<open>{H} \<union> W2 \<subseteq> {H} \<union> ?Wo\<close> \<open>\<not> sat ({H} \<union> W2)\<close> by (rule sat_subset_ccontr)
-      have "\<not> sat ({G} \<union> ?Wo) \<and> \<not> sat ({H} \<union> ?Wo)"
-        using \<open>\<not> sat ({G} \<union> ?Wo)\<close> \<open>\<not> sat ({H} \<union> ?Wo)\<close> by (rule conjI)
-      have "sat ({G} \<union> ?Wo) \<or> sat ({H} \<union> ?Wo)"
+      have "{H} \<union> ?Wo \<subseteq> {H,F} \<union> ?Wo"
+        by blast (*Pendiente*)
+      then have 2:"\<not>(sat({H,F} \<union> ?Wo))"
+        using \<open>\<not>sat ({H} \<union> ?Wo)\<close> by (rule sat_subset_ccontr)
+      have "\<not> sat ({G,F} \<union> ?Wo) \<and> \<not> sat ({H,F} \<union> ?Wo)"
+        using 1 2 by (rule conjI)
+      have "sat ({G,F} \<union> ?Wo) \<or> sat ({H,F} \<union> ?Wo)"
         using assms(1) \<open>Dis F G H\<close> \<open>F \<in> W\<close> \<open>finite ?Wo\<close> \<open>?Wo \<subseteq> W\<close> by (rule pcp_colecComp_DIS_sat)
-      then have "\<not>\<not>(sat ({G} \<union> ?Wo) \<or> sat ({H} \<union> ?Wo))"
+      then have "\<not>\<not>(sat ({G,F} \<union> ?Wo) \<or> sat ({H,F} \<union> ?Wo))"
         by (simp only: not_not)
-      then have "\<not>(\<not>(sat ({G} \<union> ?Wo)) \<and> \<not>(sat ({H} \<union> ?Wo)))"
+      then have "\<not>(\<not>(sat ({G,F} \<union> ?Wo)) \<and> \<not>(sat ({H,F} \<union> ?Wo)))"
         by (simp only: de_Morgan_disj simp_thms(8))
       thus "False"
-        using \<open>\<not>(sat ({G} \<union> ?Wo)) \<and> \<not>(sat ({H} \<union> ?Wo))\<close> by (rule notE)
+        using \<open>\<not>(sat ({G,F} \<union> ?Wo)) \<and> \<not>(sat ({H,F} \<union> ?Wo))\<close> by (rule notE)
     qed
   qed
 qed
