@@ -1466,14 +1466,15 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     Para probar que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible en estas condiciones, demostremos 
     que se verifica para cada caso de la fórmula \<open>F\<close> de tipo \<open>\<alpha>\<close>:
     \begin{enumerate}
-      \item[\<open>F = \<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>:] Observemos que, como \<open>W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close> y \<open>F \<in> W\<close> por
-      hipótesis, tenemos que \<open>{F} \<union> W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W\<close> es finitamente
-      satisfacible ya que pertenece a \<open>C\<close>, se tiene que \<open>{F} \<union> W\<^sub>0\<close> es satisfacible. Luego, por 
-      definición, existe una interpretación \<open>\<A>\<close> que es modelo de todas sus fórmulas y, en 
-      particular, \<open>\<A>\<close> es modelo de \<open>F\<close>. Como \<open>F = \<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>, obtenemos por definición del valor de
-      una fórmula en una interpretación que \<open>\<A>\<close> es modelo de \<open>\<alpha>\<^sub>1\<close> y de \<open>\<alpha>\<^sub>2\<close>. Por lo tanto, \<open>\<A>\<close> es 
-      modelo de todas las fórmulas del conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba que se trata de un 
-      conjunto satisfacible.
+      \item[\<open>F = G \<and> H, para ciertas fórmulas G y H\<close>:] Observemos que, como \<open>W\<^sub>0\<close> es un subconjunto 
+      finito de \<open>W\<close> y \<open>F \<in> W\<close> por hipótesis, tenemos que \<open>{F} \<union> W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close>. 
+      Como \<open>W\<close> es finitamente satisfacible ya que pertenece a \<open>C\<close>, se tiene que \<open>{F} \<union> W\<^sub>0\<close> es 
+      satisfacible. Luego, por definición, existe una interpretación \<open>\<A>\<close> que es modelo de todas sus 
+      fórmulas y, en particular, \<open>\<A>\<close> es modelo de \<open>F\<close>. Como \<open>F = G \<and> H\<close>, obtenemos por definición 
+      del valor de una fórmula en una interpretación que \<open>\<A>\<close> es modelo de \<open>G\<close> y de \<open>H\<close>.En este caso,
+      las componentes conjuntivas son \<open>\<alpha>\<^sub>1 = G\<close> y \<open>\<alpha>\<^sub>2 = H\<close>, luego \<open>\<A>\<close> es modelo de ambas componentes.
+      Por lo tanto, \<open>\<A>\<close> es modelo de todas las fórmulas del conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba 
+      que se trata de un conjunto satisfacible.
       \item[\<open>F = \<not>(G \<or> H), para ciertas fórmulas G y H\<close>:] Análogamente al caso anterior, obtenemos 
       que el conjunto \<open>{F} \<union> W\<^sub>0\<close> es satisfacible. Luego, por definición, existe una interpretación 
       \<open>\<A>\<close> que es modelo de todas sus fórmulas y, en particular, de \<open>F\<close>. Por definición de \<open>F\<close> para 
@@ -1512,15 +1513,84 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     de \<open>S\<close> para cada uno de los casos por estar contenidos en el conjunto satisfacible
     \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>. Por lo tanto, \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> es finitamente satisfacible y, por definición de 
     la colección \<open>C\<close>, pertenece a dicha colección, como queríamos demostrar.
+
+    Finalmente probemos que para toda fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que 
+    \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W\<close> pertenece a \<open>C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> W\<close> pertenece a \<open>C\<close>. La
+    demostración se realizará por reducción al absurdo, luego supongamos en estas condiciones que
+    \<open>{\<beta>\<^sub>1} \<union> W \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> W \<notin> C\<close>. 
+
+    En primer lugar, veamos que si \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close> bajo las condiciones anteriores, entonces 
+    existe un subconjunto finito \<open>W\<^sub>i\<close> de \<open>W\<close> tal que el conjunto \<open>{\<beta>\<^sub>i} \<union> W\<^sub>i\<close> no es satisfacible para
+    los valores \<open>1\<close> y \<open>2\<close> de \<open>i\<close>. En efecto, si \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close>, por definición de la colección \<open>C\<close>
+    tenemos que \<open>{\<beta>\<^sub>i} \<union> W\<close> no es finitamente satisfacible. Por lo tanto, existe un subconjunto
+    finito \<open>W\<^sub>i'\<close> de \<open>{\<beta>\<^sub>i} \<union> W\<close> que no es satisfacible. Por el lema \<open>añadir referencia\<close>, obtenemos
+    que existe un subconjunto finito \<open>W\<^sub>i\<close> de \<open>W\<close> tal que o bien \<open>W\<^sub>i' = {\<beta>\<^sub>i} \<union> W\<^sub>i\<close> o bien
+    \<open>W\<^sub>i' = W\<^sub>i\<close>. En efecto, si \<open>W\<^sub>i' = {\<beta>\<^sub>i} \<union> W\<^sub>i\<close>, como \<open>W\<^sub>i'\<close> no es satisfacible, se obtiene el
+    resultado para \<open>W\<^sub>i\<close>. Por otro lado, supongamos que \<open>W\<^sub>i' = W\<^sub>i\<close>. Como \<open>W\<^sub>i'\<close> no es satisfacible, 
+    entonces \<open>{\<beta>\<^sub>i} \<union> W\<^sub>i\<close> tampoco es satisfacible ya que, en caso contrario, obtendríamos que
+    \<open>W\<^sub>i = W\<^sub>i'\<close> es satisfacible. Luego se verifica el resultado para \<open>W\<^sub>i\<close>.
+
+    De este modo, obtenemos que existen subconjuntos finitos \<open>W\<^sub>1\<close> y \<open>W\<^sub>2\<close> de \<open>W\<close> tales que los
+    conjunto \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2\<close> no son satisfacibles. Consideremos el conjunto \<open>W\<^sub>o = W\<^sub>1 \<union> W\<^sub>2\<close>.
+    Es claro que se tiene que \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1 \<subseteq> {\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> y que \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2 \<subseteq> {\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>. Por lo
+    tanto, los conjuntos \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> y \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> no son satisfacibles ya que, en caso
+    contrario, \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2\<close> serían satisfacibles. Para llegar a la contradicción, basta
+    probar que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> es satisfacible. Para ello,
+    veamos que se verifica el resultado para cada uno de los casos posibles fórmula de tipo \<open>\<beta>\<close> para
+    \<open>F\<close>.
+    \begin{enumerate}
+      \item[\<open>F = G \<or> H, para ciertas fórmulas G y H\<close>:] Observemos que \<open>W\<^sub>0 = W\<^sub>1 \<union> W\<^sub>2\<close> es un 
+      subconjunto finito de \<open>W\<close> por ser \<open>W\<^sub>1\<close> y \<open>W\<^sub>2\<close> subconjuntos finitos de \<open>W\<close>. Además, como 
+      \<open>F \<in> W\<close> por hipótesis, tenemos que \<open>{F} \<union> W\<^sub>0\<close> es un subconjunto finito de \<open>W\<close>. Como \<open>W\<close> es 
+      finitamente satisfacible ya que pertenece a \<open>C\<close>, se tiene que \<open>{F} \<union> W\<^sub>0\<close> es satisfacible. 
+      Luego, por definición, existe una interpretación \<open>\<A>\<close> que es modelo de todas sus fórmulas y, 
+      en particular, \<open>\<A>\<close> es modelo de \<open>F\<close>. Por definición del valor de una fórmula en una
+      interpretación, obtenemos que o bien \<open>\<A>\<close> es modelo de \<open>G\<close> o bien \<open>\<A>\<close> es modelo de \<open>H\<close>.
+      Como en este caso las componentes disyuntivas son \<open>\<beta>\<^sub>1 = G\<close> y \<open>\<beta>\<^sub>2 = H\<close>, se tiene que o bien \<open>\<A>\<close>
+      es modelo de \<open>\<beta>\<^sub>1\<close> o bien \<open>\<A>\<close> es modelo de \<open>\<beta>\<^sub>2\<close>. Por lo tanto, es claro que o bien \<open>\<A>\<close> es
+      modelo de todas las fórmulas del conjunto \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close> o bien es modelo de todas las fórmulas
+      de \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>. Luego, por definición de conjunto satisfacible se tiene el resultado.
+      \item[\<open>F = G \<longrightarrow> H, para ciertas fórmulas G y H\<close>:] Análogamente se tiene que el conjunto
+      \<open>{F} \<union> W\<^sub>0\<close> es satisfacible, luego existe una interpretación \<open>\<A>\<close> que es modelo de todas sus
+      fórmulas. En particular, \<open>\<A>\<close> es modelo de \<open>F\<close> y, por definición del valor de una fórmulas en
+      una interpretación, se obtiene que si \<open>\<A>\<close> es modelo de \<open>G\<close>, entonces es modelo de \<open>H\<close>.
+      Equivalentemente, tenemos que \<open>\<A>\<close> no es modelo de \<open>G\<close> o \<open>\<A>\<close> es modelo de \<open>H\<close>. Por un lado,
+      si suponemos que \<open>\<A>\<close> no es modelo de \<open>G\<close>, por definición obtenemos que \<open>\<A>\<close> es modelo de \<open>\<not> G\<close>.
+      Como en este caso tenemos que \<open>\<beta>\<^sub>1 = \<not> G\<close>, obtenemos que \<open>\<A>\<close> es modelo de \<open>G\<close>. Por tanto, es
+      modelo de todas las fórmulas de \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close>, luego es un conjunto satisfacible y se verifica 
+      el resultado para este caso. Por otro lado, si suponemos que \<open>\<A>\<close> es modelo de \<open>H\<close>, como 
+      \<open>\<beta>\<^sub>2 = H\<close>, obtenemos que \<open>\<A>\<close> es modelo de \<open>\<beta>\<^sub>2\<close>. Luego, análogamente, \<open>\<A>\<close> es modelo de toda
+      fórmula de \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>, lo que prueba que se trata de un conjunto satisfacible por
+      definición, verificándose el resultado para este caso. 
+      \item[\<open>F = \<not>(G \<and> H), para ciertas fórmulas G y H\<close>:] Como \<open>{F} \<union> W\<^sub>0\<close> es satisfacible,
+      existe una interpretación \<open>\<A>\<close> que es modelo de todas sus fórmulas y, en particular, de \<open>F\<close>.
+      Luego por definición del valor de una fórmula en una interpretación, obtenemos que \<open>\<A>\<close> no
+      es modelo de \<open>G \<and> H\<close>. De nuevo por definición, esto implica que no es cierto que \<open>\<A>\<close> sea 
+      modelo de \<open>G\<close> y de \<open>H\<close>, es decir, o bien \<open>\<A>\<close> no es modelo de \<open>G\<close> o bien \<open>\<A>\<close> no es modelo de
+      \<open>H\<close>. Si suponemos que no es modelo de \<open>G\<close>, por definición se obtiene que \<open>\<A>\<close> es modelo de
+      \<open>\<not> G\<close>. Como en este caso la componente disyuntiva \<open>\<beta>\<^sub>1\<close> es \<open>\<not> G\<close>, se deduce que \<open>\<A>\<close> es modelo
+      de \<open>\<beta>\<^sub>1\<close>. Por tanto, \<open>\<A>\<close> es modelo de todas las fórmulas del conjunto \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close>, por lo que
+      se demuestra que dicho conjunto es satisfacible, probando el resultado. Por otro lado, si
+      suponemos que \<open>\<A>\<close> no es modelo de \<open>H\<close>, se tiene que sí lo es de \<open>\<not> H\<close>. Como \<open>\<beta>\<^sub>2\<close> es \<open>\<not> H\<close>
+      en este caso, obtenemos que \<open>\<A>\<close> es modelo de \<open>\<beta>\<^sub>2\<close>. Luego \<open>\<A>\<close> es modelo de todas las fórmulas
+      de \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>, demostrando así que es un conjunto satisfacible. Por tanto, se demuestra
+      el resultado en ambos casos.
+      \item[\<open>F = \<not>(\<not> G), para cierta fórmula G\<close>:] Puesto que \<open>{F} \<union> W\<^sub>0\<close> es satisfacible, existe una
+      interpretación \<open>\<A>\<close> modelo de todas sus fórmulas y, en particular, modelo de \<open>F\<close>. Luego, por
+      definición del valor de una fórmula en una interpretación obtenemos que no es cierto que \<open>\<A>\<close> 
+      no sea modelo de \<open>G\<close>, es decir, \<open>\<A>\<close> es modelo de \<open>G\<close>. Como las componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> son
+      ambas \<open>G\<close> en este caso, se obtiene que \<open>\<A>\<close> es modelo suyo. En particular, lo es de \<open>\<beta>\<^sub>1\<close>, de
+      modo que \<open>\<A>\<close> es modelo de todas las fórmulas de \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close>, probando así que es 
+      satisfacible. Por lo tanto, se verifica el resultado.
+    \end{enumerate}
+    
+    En conclusión, hemos probado que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> es 
+    satisfacible. Por lo tanto, se tiene que no es cierto que ninguno de los dos conjuntos sea
+    insatisfacible. Esto contradice lo demostrado anteriormente, llegando así a una contradicción.
   \end{demostracion}\<close>
 
 definition colecComp :: "('a formula set) set"
   where colecComp: "colecComp = {W. fin_sat W}"
-
-lemma set_in_colecComp: 
-  assumes "fin_sat S"
-  shows "S \<in> colecComp"
-  unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
 lemma colecComp_subset_finite: 
   assumes "W \<in> colecComp"
@@ -1535,6 +1605,11 @@ proof -
   thus "sat Wo"
     using \<open>finite Wo\<close> by (rule mp)
 qed
+
+lemma set_in_colecComp: 
+  assumes "fin_sat S"
+  shows "S \<in> colecComp"
+  unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
 lemma not_sat_bot: "\<not> sat {\<bottom>}"
 proof (rule ccontr)
@@ -2378,24 +2453,20 @@ proof (rule allI)+
         by (simp only: Un_upper1)
       then have "{G} \<union> W1 \<subseteq> {G} \<union> ?Wo"
         by (simp only: Un_assoc)
-      have "\<not> sat ({G} \<union> ?Wo)"
-        using \<open>{G} \<union> W1 \<subseteq> {G} \<union> ?Wo\<close> \<open>\<not> sat ({G} \<union> W1)\<close> by (rule sat_subset_ccontr)
-      have "{G} \<union> ?Wo \<subseteq> {G,F} \<union> ?Wo"
-        by blast (*Pendiente*)
+      then have "{G} \<union> W1 \<subseteq> {G,F} \<union> ?Wo"
+        by blast
       then have 1:"\<not>(sat({G,F} \<union> ?Wo))"
-        using \<open>\<not>sat ({G} \<union> ?Wo)\<close> by (rule sat_subset_ccontr)
+        using \<open>\<not>sat ({G} \<union> W1)\<close> by (rule sat_subset_ccontr)
       have "{H} \<union> W2 \<subseteq> ({H} \<union> W2) \<union> W1"
         by (simp only: Un_upper1)
       then have "{H} \<union> W2 \<subseteq> {H} \<union> (W2 \<union> W1)"
         by (simp only: Un_assoc) 
       then have "{H} \<union> W2 \<subseteq> {H} \<union> ?Wo"
         by (simp only: Un_commute)
-      have "\<not> sat ({H} \<union> ?Wo)"
-        using \<open>{H} \<union> W2 \<subseteq> {H} \<union> ?Wo\<close> \<open>\<not> sat ({H} \<union> W2)\<close> by (rule sat_subset_ccontr)
-      have "{H} \<union> ?Wo \<subseteq> {H,F} \<union> ?Wo"
-        by blast (*Pendiente*)
+      then have "{H} \<union> W2 \<subseteq> {H,F} \<union> ?Wo"
+        by blast
       then have 2:"\<not>(sat({H,F} \<union> ?Wo))"
-        using \<open>\<not>sat ({H} \<union> ?Wo)\<close> by (rule sat_subset_ccontr)
+        using \<open>\<not>sat ({H} \<union> W2)\<close> by (rule sat_subset_ccontr)
       have "\<not> sat ({G,F} \<union> ?Wo) \<and> \<not> sat ({H,F} \<union> ?Wo)"
         using 1 2 by (rule conjI)
       have "sat ({G,F} \<union> ?Wo) \<or> sat ({H,F} \<union> ?Wo)"
