@@ -1587,10 +1587,16 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     En conclusión, hemos probado que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> es 
     satisfacible. Por lo tanto, se tiene que no es cierto que ninguno de los dos conjuntos sea
     insatisfacible. Esto contradice lo demostrado anteriormente, llegando así a una contradicción.
-  \end{demostracion}\<close>
+  \end{demostracion}
+
+  Procedamos con la demostración detallada del teorema en Isabelle/HOL. Para ello, definamos en
+  primer lugar la colección \<open>C\<close> de conjuntos finitamente satisfacibles considerada en la prueba.\<close>
 
 definition colecComp :: "('a formula set) set"
   where colecComp: "colecComp = {W. fin_sat W}"
+
+text \<open>Para facilitar la demostración introduciremos el siguiente lema auxiliar que prueba que
+  todo subconjunto finito de un conjunto perteneciente a la colección anterior es satisfacible.\<close>
 
 lemma colecComp_subset_finite: 
   assumes "W \<in> colecComp"
@@ -1606,10 +1612,18 @@ proof -
     using \<open>finite Wo\<close> by (rule mp)
 qed
 
+text \<open>Por otro lado, el siguiente lema prueba que si un conjunto es finitamente 
+  satisfacible, entonces pertenece a la colección \<open>C\<close> definida en la prueba del teorema.\<close>
+
 lemma set_in_colecComp: 
   assumes "fin_sat S"
   shows "S \<in> colecComp"
   unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
+
+text \<open>Probemos ahora que la colección de los conjuntos finitamente satisfacibles verifica la
+  propiedad de consistencia proposicional.
+
+  \comentario{Voy redactando por aquí.}\<close>
 
 lemma not_sat_bot: "\<not> sat {\<bottom>}"
 proof (rule ccontr)
