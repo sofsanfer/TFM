@@ -1621,9 +1621,12 @@ lemma set_in_colecComp:
   unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
 
 text \<open>Probemos ahora que la colección de los conjuntos finitamente satisfacibles verifica la
-  propiedad de consistencia proposicional.
-
-  \comentario{Voy redactando por aquí.}\<close>
+  propiedad de consistencia proposicional. Para ello, dado un conjunto \<open>W\<close> perteneciente a la 
+  colección de conjuntos finitamente satisfacibles, probaremos por separado que se verifican cada
+  una de las condiciones suficientes del lema \<open>añadir referencia\<close>.
+  
+  En primer lugar, veamos que \<open>\<bottom> \<notin> W\<close>. Dicha prueba se realiza por reducción al absurdo, de modo 
+  que precisaremos del siguiente lema auxiliar que prueba que el conjunto \<open>{\<bottom>}\<close> no es satisfacible.\<close>
 
 lemma not_sat_bot: "\<not> sat {\<bottom>}"
 proof (rule ccontr)
@@ -1641,6 +1644,9 @@ proof (rule ccontr)
   thus "False"
     by (simp only: formula_semantics.simps(2))
 qed
+
+text \<open>Por tanto, el siguiente lema auxiliar prueba que dado un conjunto \<open>W\<close> perteneciente a la
+  colección de los conjuntos finitamente satisfacibles, entonces \<open>\<bottom> \<notin> W\<close>.\<close>
 
 lemma pcp_colecComp_bot:
   assumes "W \<in> colecComp"
@@ -1665,6 +1671,12 @@ proof (rule ccontr)
     using \<open>sat {\<bottom> :: 'a formula}\<close> by (rule notE)
 qed
 
+text \<open>Por otro lado, vamos a probar que dado un conjunto \<open>W\<close> perteneciente a la colección de
+  conjuntos finitamente satisfacibles y \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
+  simultáneamente que \<open>p \<in> W\<close> y \<open>\<not> p \<in> W\<close>. La demostración se realizará por reducción al absurdo.
+  Para ello, emplea el siguiente lema auxiliar que prueba que el conjunto \<open>{p,\<not> p}\<close> es 
+  insatisfacible para cualquier fórmula atómica \<open>p\<close>.\<close>
+
 lemma not_sat_atoms: "\<not> sat({Atom k, \<^bold>\<not> (Atom k)})"
 proof (rule ccontr)
   assume "\<not> \<not> sat({Atom k, \<^bold>\<not> (Atom k)})"
@@ -1687,6 +1699,10 @@ proof (rule ccontr)
   thus "False"
     using \<open>\<A> \<Turnstile> Atom k\<close> by (rule notE)
 qed
+
+text \<open>El siguiente lema prueba, por tanto, la condición: dado un conjunto perteneciente a la 
+  colección de conjuntos finitamente satisfacibles se tiene que una fórmula atómica y su negación no 
+  pertenecen simultáneamente al conjunto.\<close>
 
 lemma pcp_colecComp_atoms:
   assumes "W \<in> colecComp"
@@ -1722,6 +1738,18 @@ proof (rule allI)
   qed
 qed
 
+text \<open>Por otra parte, vamos a probar la tercera condición necesaria del lema \<open>...\<close>: dados \<open>W \<in> C\<close> y 
+  \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que 
+  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W \<in> C\<close>. Como hemos visto en la demostración, como \<open>C\<close> es la colección de los conjuntos
+  finitamente satisfacibles, basta probar que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close> es finitamente satisfacible. Para probar 
+  dicho resultado, según hemos visto en la prueba, es suficiente demostrar que para todo subconjunto 
+  finito \<open>W\<^sub>0\<close> de \<open>W\<close> se verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es un conjunto satisfacible. En efecto, veamos 
+  que dicho resultado se cumple para cada tipo de fórmula \<open>\<alpha>\<close>. 
+
+  En las demostraciones detalladas del resultado para cada tipo de fórmula \<open>\<alpha>\<close> emplearemos el 
+  siguiente lema auxiliar que prueba que dado un conjunto \<open>W \<in> C\<close>, \<open>F\<close> una fórmula perteneciente a 
+  \<open>W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces \<open>{F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+
 lemma pcp_colecComp_elem_sat:
   assumes "W \<in> colecComp"
           "F \<in> W"
@@ -1745,11 +1773,20 @@ proof -
     using assms(1) \<open>{F} \<union> Wo \<subseteq> W\<close> \<open>finite ({F} \<union> Wo)\<close> by (rule colecComp_subset_finite)
 qed
 
+text \<open>De este modo, vamos a probar para cada caso de fórmula \<open>\<alpha>\<close> que dados \<open>W \<in> C\<close>, \<open>F\<close> una fórmula 
+  de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, se 
+  verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible. Para ello, emplearemos el siguiente lema auxiliar
+  en Isabelle.\<close>
+
 lemma ball_Un: 
   assumes "\<forall>x \<in> A. P x"
           "\<forall>x \<in> B. P x"
         shows "\<forall>x \<in> (A \<union> B). P x" 
   using assms by blast
+
+text \<open>El siguiente lema auxiliar prueba el resultado para el primer caso de fórmula de tipo \<open>\<alpha>\<close>: 
+  dados \<open>W \<in> C\<close>, una fórmula \<open>F = G \<and> H\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un 
+  subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_CON_sat1:
   assumes "W \<in> colecComp"
@@ -1790,6 +1827,10 @@ proof -
   thus "sat ({G,H,F} \<union> Wo)"
     by (simp only: sat_def)
 qed
+
+text \<open>A continuación veamos la prueba detallada del resultado para el segundo caso de fórmula de 
+  tipo \<open>\<alpha>\<close>: dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(G \<or> H)\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close> tal que 
+  \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, se verifica que \<open>{\<not> G,\<not> H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_CON_sat2:
   assumes "W \<in> colecComp"
@@ -1837,6 +1878,10 @@ proof -
     by (simp only: sat_def)
 qed
 
+text \<open>Probemos detalladamente del resultado para el tercer caso de fórmula de tipo \<open>\<alpha>\<close>: dados 
+  \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(G \<longrightarrow> H)\<close> para ciertas fórmulas \<open>G\<close> y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un 
+  subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,\<not> H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+
 lemma pcp_colecComp_CON_sat3:
   assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (G \<^bold>\<rightarrow> H)"
@@ -1883,6 +1928,10 @@ proof -
     by (simp only: sat_def)
 qed
 
+text \<open>Por último, la prueba detallada del resultado para el cuarto caso de fórmula de tipo \<open>\<alpha>\<close>: 
+  dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(\<not> G)\<close> para cierta fórmula \<open>G\<close> tal que \<open>F \<in> W\<close>, \<open>H = G\<close> y \<open>W\<^sub>0\<close> 
+  un subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+
 lemma pcp_colecComp_CON_sat4:
   assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
@@ -1925,6 +1974,10 @@ proof -
   thus "sat ({G,H,F} \<union> Wo)"
     by (simp only: sat_def)
 qed
+
+text \<open>Por tanto, por las pruebas detalladas de los casos anteriores, podemos demostrar que dados 
+  \<open>W \<in> C\<close>, \<open>F \<in> W\<close> una fórmula de tipo \<open>\<alpha>\<close> y componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de 
+  \<open>W\<close>, se verifica que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_CON_sat:
   assumes "W \<in> colecComp"
@@ -1993,6 +2046,10 @@ proof -
     qed
   qed
 qed
+
+text \<open>Finalmente, con el resultado anterior, podemos probar la tercera condición suficiente del
+  lema \<open>...\<close>: dados \<open>W \<in> C\<close> y \<open>F\<close> una fórmula de tipo \<open>\<alpha>\<close> con componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> tal que 
+  \<open>F \<in> W\<close>, se tiene que \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W \<in> C\<close>.\<close>
       
 lemma pcp_colecComp_CON:
   assumes "W \<in> colecComp"
@@ -2065,6 +2122,106 @@ proof (rule allI)+
   qed
 qed
 
+text \<open>Por último, probemos la cuarta condición suficiente del lema \<open>...\<close>: dados \<open>W \<in> C\<close> y \<open>F\<close> una 
+  fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> 
+  o bien \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>. Como vimos en la demostración, la prueba se realizará por reducción al 
+  absurdo, de modo que supondremos que ni \<open>{\<beta>\<^sub>1} \<union> W\<close> ni \<open>{\<beta>\<^sub>2} \<union> W\<close> pertenecen a \<open>C\<close>.
+
+  De este modo, con vistas a aplicarlo a los conjuntos \<open>{\<beta>\<^sub>1} \<union> W\<close> y \<open>{\<beta>\<^sub>2} \<union> W\<close> que no pertenecen a 
+  \<open>C\<close> por hipótesis, introduciremos un lema auxiliar que demuestre que dado \<open>W \<in> C\<close> y \<open>F'\<close> una 
+  fórmula cualquiera tal que \<open>{F'} \<union> W \<notin> C\<close>, entonces existe un subconjunto finito \<open>W\<^sub>F\<close> de \<open>W\<close> tal 
+  que el conjunto \<open>{F'} \<union> W\<^sub>F\<close> no es satisfacible. Para ello, precisaremos del siguiente lema 
+  auxiliar que prueba que todo conjunto que contiene un subconjunto insatisfacible es también 
+  insatisfacible.\<close>
+
+lemma sat_subset_ccontr:
+  assumes "A \<subseteq> B"
+          "\<not> sat A"
+        shows "\<not> sat B"
+proof -
+  have "A \<subseteq> B \<and> sat B \<longrightarrow> sat A"
+    using sat_mono by blast
+  then have "\<not>(A \<subseteq> B \<and> sat B)"
+    using assms(2) by (rule mt)
+  then have "\<not>(A \<subseteq> B) \<or> \<not>(sat B)"
+    by (simp only: de_Morgan_conj)
+  thus ?thesis
+  proof (rule disjE)
+    assume "\<not>(A \<subseteq> B)"
+    thus ?thesis
+      using assms(1) by (rule notE)
+  next
+    assume "\<not>(sat B)"
+    thus ?thesis
+      by this
+  qed
+qed
+
+text \<open>Procedamos con la demostración del lema auxiliar que prueba que dado \<open>W \<in> C\<close> y \<open>F'\<close> una 
+  fórmula cualquiera tal que \<open>{F'} \<union> W \<notin> C\<close>, entonces existe un subconjunto finito \<open>W\<^sub>F\<close> de \<open>W\<close> tal 
+  que el conjunto \<open>{F'} \<union> W\<^sub>F\<close> no es satisfacible.\<close>
+
+lemma not_colecComp:
+  assumes "W \<in> colecComp"
+          "{F'} \<union> W \<notin> colecComp"
+        shows "\<exists>Wf \<subseteq> W. finite Wf \<and> \<not>(sat ({F'} \<union> Wf))"
+proof -
+  have WCol:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
+    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD) 
+  have "\<not>(\<forall>Wo \<subseteq> {F'} \<union> W. finite Wo \<longrightarrow> sat Wo)"
+    using assms(2) unfolding colecComp fin_sat_def by (simp only: mem_Collect_eq simp_thms(8))
+  then have "\<exists>Wo \<subseteq> {F'} \<union> W. \<not>(finite Wo \<longrightarrow> sat Wo)"
+    by (rule sall_simps_not_all)
+  then have Ex1:"\<exists>Wo \<subseteq> {F'} \<union> W. finite Wo \<and> \<not>(sat Wo)"
+    by (simp only: not_imp)
+  obtain Wo where "Wo \<subseteq> {F'} \<union> W" and C1:"finite Wo \<and> \<not>(sat Wo)"
+    using Ex1 by (rule subexE)
+  have "finite Wo"
+    using C1 by (rule conjunct1)
+  have "\<not>(sat Wo)"
+    using C1 by (rule conjunct2)
+  have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = {F'} \<union> Wo' \<or> Wo = Wo')"
+    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {F'} \<union> W\<close> by (rule finite_subset_insert1)
+  obtain Wo' where "Wo' \<subseteq> W" and C2:"finite Wo' \<and> (Wo = {F'} \<union> Wo' \<or> Wo = Wo')"
+    using Ex2 by blast
+  have "finite Wo'"
+    using C2 by (rule conjunct1)
+  have "Wo = {F'} \<union> Wo' \<or> Wo = Wo'"
+    using C2 by (rule conjunct2)
+  thus ?thesis
+  proof (rule disjE)
+    assume "Wo = {F'} \<union> Wo'"
+    then have "\<not>(sat ({F'} \<union> Wo'))" 
+      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = {F'} \<union> Wo'\<close> simp_thms(8))
+    have "finite Wo' \<and> \<not>(sat ({F'} \<union> Wo'))"
+      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F'} \<union> Wo'))\<close> by (rule conjI)
+    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F'} \<union> Wo))"
+      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
+  next
+    assume "Wo = Wo'"
+    then have "\<not> (sat Wo')"
+      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = Wo'\<close> simp_thms(8))
+    have "Wo' \<subseteq> {F'} \<union> Wo'"
+      by blast
+    then have "\<not> (sat ({F'} \<union> Wo'))"
+      using \<open>\<not> (sat Wo')\<close> by (rule sat_subset_ccontr)
+    have "finite Wo' \<and> \<not>(sat ({F'} \<union> Wo'))"
+      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F'} \<union> Wo'))\<close> by (rule conjI)
+    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F'} \<union> Wo))"
+      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
+  qed
+qed
+
+text \<open>Para llegar a la contradicción que pruebe el resultado por reducción al absurdo, precisaremos
+  de un lema auxiliar que pruebe que dados \<open>W \<in> C\<close>, \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> y componentes \<open>\<beta>\<^sub>1\<close> y
+  \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o bien 
+  \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible. Vamos a probar
+  que, en efecto, se tiene el resultado para cada tipo de fórmula \<open>\<beta>\<close>.
+
+  En primer lugar, probemos que dados \<open>W \<in> C\<close>, una fórmula \<open>F = G \<and> H\<close> para ciertas fórmulas \<open>G\<close> y 
+  \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o bien 
+  \<open>{G,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+
 lemma pcp_colecComp_DIS_sat1:
   assumes "W \<in> colecComp"
           "F = G \<^bold>\<or> H"
@@ -2118,6 +2275,10 @@ proof -
       by (rule disjI2)
   qed
 qed
+
+text \<open>El siguiente lema auxiliar demuestra que dados \<open>W \<in> C\<close>, una fórmula \<open>F = G \<longrightarrow> H\<close> para ciertas 
+  fórmulas \<open>G\<close> y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o 
+  bien \<open>{\<not> G,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_DIS_sat2:
   assumes "W \<in> colecComp"
@@ -2178,6 +2339,10 @@ proof -
       by (rule disjI2)
   qed
 qed
+
+text \<open>Por otro lado probemos que dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(G \<and> H)\<close> para ciertas fórmulas 
+  \<open>G\<close> y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o bien 
+  \<open>{\<not> G,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{\<not> H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_DIS_sat3:
   assumes "W \<in> colecComp"
@@ -2241,6 +2406,10 @@ proof -
   qed
 qed
 
+text \<open>Por último, el siguiente lema prueba que dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not> (\<not> G)\<close> para 
+  cierta fórmula \<open>G\<close> tal que \<open>F \<in> W\<close>, \<open>H = G\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene 
+  que o bien \<open>{G,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+
 lemma pcp_colecComp_DIS_sat4:
   assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
@@ -2281,6 +2450,11 @@ proof -
   thus ?thesis
     by (rule disjI1)
 qed
+
+text \<open>Finalmente, por los lemas auxiliares anteriores para los distintos tipos de fórmula \<open>\<beta>\<close>, se
+  demuestra que dados \<open>W \<in> C\<close>, \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que 
+  \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close> es 
+  satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_DIS_sat:
   assumes "W \<in> colecComp"
@@ -2350,79 +2524,9 @@ proof -
   qed
 qed
 
-lemma sat_subset_ccontr:
-  assumes "A \<subseteq> B"
-          "\<not> sat A"
-        shows "\<not> sat B"
-proof -
-  have "A \<subseteq> B \<and> sat B \<longrightarrow> sat A"
-    using sat_mono by blast
-  then have "\<not>(A \<subseteq> B \<and> sat B)"
-    using assms(2) by (rule mt)
-  then have "\<not>(A \<subseteq> B) \<or> \<not>(sat B)"
-    by (simp only: de_Morgan_conj)
-  thus ?thesis
-  proof (rule disjE)
-    assume "\<not>(A \<subseteq> B)"
-    thus ?thesis
-      using assms(1) by (rule notE)
-  next
-    assume "\<not>(sat B)"
-    thus ?thesis
-      by this
-  qed
-qed
-
-lemma not_colecComp:
-  assumes "W \<in> colecComp"
-          "{F} \<union> W \<notin> colecComp"
-        shows "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
-proof -
-  have WCol:"\<forall>S' \<subseteq> W. finite S' \<longrightarrow> sat S'"
-    using assms(1) unfolding colecComp fin_sat_def by (rule CollectD) 
-  have "\<not>(\<forall>Wo \<subseteq> {F} \<union> W. finite Wo \<longrightarrow> sat Wo)"
-    using assms(2) unfolding colecComp fin_sat_def by (simp only: mem_Collect_eq simp_thms(8))
-  then have "\<exists>Wo \<subseteq> {F} \<union> W. \<not>(finite Wo \<longrightarrow> sat Wo)"
-    by (rule sall_simps_not_all)
-  then have Ex1:"\<exists>Wo \<subseteq> {F} \<union> W. finite Wo \<and> \<not>(sat Wo)"
-    by (simp only: not_imp)
-  obtain Wo where "Wo \<subseteq> {F} \<union> W" and C1:"finite Wo \<and> \<not>(sat Wo)"
-    using Ex1 by (rule subexE)
-  have "finite Wo"
-    using C1 by (rule conjunct1)
-  have "\<not>(sat Wo)"
-    using C1 by (rule conjunct2)
-  have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = {F} \<union> Wo' \<or> Wo = Wo')"
-    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {F} \<union> W\<close> by (rule finite_subset_insert1)
-  obtain Wo' where "Wo' \<subseteq> W" and C2:"finite Wo' \<and> (Wo = {F} \<union> Wo' \<or> Wo = Wo')"
-    using Ex2 by blast
-  have "finite Wo'"
-    using C2 by (rule conjunct1)
-  have "Wo = {F} \<union> Wo' \<or> Wo = Wo'"
-    using C2 by (rule conjunct2)
-  thus ?thesis
-  proof (rule disjE)
-    assume "Wo = {F} \<union> Wo'"
-    then have "\<not>(sat ({F} \<union> Wo'))" 
-      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = {F} \<union> Wo'\<close> simp_thms(8))
-    have "finite Wo' \<and> \<not>(sat ({F} \<union> Wo'))"
-      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F} \<union> Wo'))\<close> by (rule conjI)
-    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
-      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
-  next
-    assume "Wo = Wo'"
-    then have "\<not> (sat Wo')"
-      using \<open>\<not> sat Wo\<close> by (simp only: \<open>Wo = Wo'\<close> simp_thms(8))
-    have "Wo' \<subseteq> {F} \<union> Wo'"
-      by blast
-    then have "\<not> (sat ({F} \<union> Wo'))"
-      using \<open>\<not> (sat Wo')\<close> by (rule sat_subset_ccontr)
-    have "finite Wo' \<and> \<not>(sat ({F} \<union> Wo'))"
-      using \<open>finite Wo'\<close> \<open>\<not>(sat ({F} \<union> Wo'))\<close> by (rule conjI)
-    thus "\<exists>Wo \<subseteq> W. finite Wo \<and> \<not>(sat ({F} \<union> Wo))"
-      using \<open>Wo' \<subseteq> W\<close> by (rule subexI)
-  qed
-qed
+text \<open>Con los lemas auxiliares anteriores, podemos demostrar detalladamente la cuarta condición 
+  suficiente del lema \<open>...\<close>: dados \<open>W \<in> C\<close> y \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> 
+  tal que \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>.\<close>
 
 lemma pcp_colecComp_DIS:
   assumes "W \<in> colecComp"
@@ -2495,6 +2599,10 @@ proof (rule allI)+
   qed
 qed
 
+text \<open>De este modo, con los lemas \<open>pcp_colecComp_bot\<close>, \<open>pcp_colecComp_atoms\<close>, \<open>pcp_colecComp_CON\<close> y
+  \<open>pcp_colecComp_DIS\<close> podemos probar de manera detallada que la colección \<open>C\<close> de los conjuntos de
+  fórmulas finitamente satisfacibles verifica la propiedad de consistencia proposicional.\<close>
+
 lemma pcp_colecComp: "pcp colecComp"
 proof (rule pcp_alt2)
   show "\<forall>W \<in> colecComp. \<bottom> \<notin> W
@@ -2519,6 +2627,8 @@ proof (rule pcp_alt2)
       using C1 C2 C3 C4 by (iprover intro: conjI)
   qed
 qed
+
+text \<open>Finalmente, mostremos la demostración del \<open>Teorema de Compacidad\<close>.\<close>
 
 lemma prop_Compactness:
   fixes S :: "'a :: countable formula set"
