@@ -1459,7 +1459,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     satisfacible. Consideremos un subconjunto finito \<open>S\<close> de \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<close>. En estas condiciones,
     por el lema \<open>4.3.3\<close>, existe un subconjunto finito \<open>W\<^sub>0\<close> de \<open>W\<close> tal que\\ \<open>S = {\<alpha>\<^sub>1,\<alpha>\<^sub>2} \<union> W\<^sub>0\<close>,
     \<open>S = {\<alpha>\<^sub>1} \<union> W\<^sub>0\<close>, \<open>S = {\<alpha>\<^sub>2} \<union> W\<^sub>0\<close> o \<open>S = W\<^sub>0\<close>. Para probar que \<open>S\<close> es satisfacible en cada uno de 
-    estos posibles casos, basta demostrar que el conjunto \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible. De este
+    estos posibles casos, basta demostrar que el conjunto\\ \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible. De este
     modo, puesto que todas las opciones posibles de \<open>S\<close> están contenidas en dicho conjunto, se
     tiene la satisfacibilidad de cada una de ellas.
 
@@ -1501,7 +1501,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
       todas las fórmulas del conjunto  \<open>{\<alpha>\<^sub>1,\<alpha>\<^sub>2,F} \<union> W\<^sub>0\<close>, probando así su satisfacibilidad.
 
       $\textbf{\<open>\<four>) F = \<not>(\<not> G), para cierta fórmula G\<close>:}$ Análogamente a los casos anteriores, se 
-      prueba que existe una interpretación \<open>\<A>\<close> que es modelo de todas las fórmulas del conjunto 
+      prueba que existe una interpretación \<open>\<A>\<close> que es modelo de todas las fórmulas del conjunto\\ 
       \<open>{F} \<union> W\<^sub>0\<close> por ser este satisfacible. En particular, \<open>\<A>\<close> es modelo de \<open>F\<close> luego, por 
       definición del valor de una fórmula en una interpretación, obtenemos que no es cierto que \<open>\<A>\<close> 
       no es modelo de \<open>G\<close>. Es decir, \<open>\<A>\<close> es modelo de \<open>G\<close> y, como en este caso ambas componentes 
@@ -1517,22 +1517,22 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
 
     Finalmente probemos que para toda fórmula \<open>F\<close> de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que 
     \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>. La
-    demostración se realizará por reducción al absurdo, luego supongamos en estas condiciones que
+    demostración se realizará por reducción al absurdo, luego supongamos en estas condiciones que\\
     \<open>{\<beta>\<^sub>1} \<union> W \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> W \<notin> C\<close>. 
 
     En primer lugar, veamos que si \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close>, entonces existe un subconjunto finito \<open>W\<^sub>i\<close> de 
     \<open>W\<close> tal que el conjunto \<open>{\<beta>\<^sub>i} \<union> W\<^sub>i\<close> no es satisfacible. En efecto, si \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close>, por 
     definición de la colección \<open>C\<close> tenemos que \<open>{\<beta>\<^sub>i} \<union> W\<close> no es finitamente satisfacible. Por lo 
     tanto, existe un subconjunto finito \<open>W\<^sub>i'\<close> de \<open>{\<beta>\<^sub>i} \<union> W\<close> que no es satisfacible. Por el lema 
-    \<open>4.3.2\<close>, obtenemos que existe un subconjunto finito \<open>W\<^sub>i\<close> de \<open>W\<close> tal que o bien \<open>W\<^sub>i' = {\<beta>\<^sub>i} \<union> W\<^sub>i\<close> 
+    \<open>4.3.2\<close>, obtenemos que existe un subconjunto finito \<open>W\<^sub>i\<close> de \<open>W\<close> tal que o bien\\ \<open>W\<^sub>i' = {\<beta>\<^sub>i} \<union> W\<^sub>i\<close> 
     o bien \<open>W\<^sub>i' = W\<^sub>i\<close>. En efecto, si \<open>W\<^sub>i' = {\<beta>\<^sub>i} \<union> W\<^sub>i\<close>, como \<open>W\<^sub>i'\<close> no es satisfacible, se obtiene el
-    resultado para \<open>W\<^sub>i\<close>. Por otro lado, supongamos que \<open>W\<^sub>i' = W\<^sub>i\<close>. Como \<open>W\<^sub>i'\<close> no es satisfacible, 
+    resultado para \<open>W\<^sub>i\<close>. Por otro lado, supongamos que\\ \<open>W\<^sub>i' = W\<^sub>i\<close>. Como \<open>W\<^sub>i'\<close> no es satisfacible, 
     entonces \<open>{\<beta>\<^sub>i} \<union> W\<^sub>i\<close> tampoco es satisfacible ya que, en caso contrario, obtendríamos que
     \<open>W\<^sub>i = W\<^sub>i'\<close> es satisfacible. Luego se verifica también el resultado para \<open>W\<^sub>i\<close>.
 
     De este modo, como \<open>{\<beta>\<^sub>1} \<union> W \<notin> C\<close> y \<open>{\<beta>\<^sub>2} \<union> W \<notin> C\<close>, obtenemos que existen subconjuntos finitos 
     \<open>W\<^sub>1\<close> y \<open>W\<^sub>2\<close> de \<open>W\<close> tales que los conjunto \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2\<close> no son satisfacibles. 
-    Consideremos el conjunto \<open>W\<^sub>o = W\<^sub>1 \<union> W\<^sub>2\<close>. Es claro que se tiene que \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1 \<subseteq> {\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> y 
+    Consideremos el conjunto \<open>W\<^sub>o = W\<^sub>1 \<union> W\<^sub>2\<close>. Es claro que se tiene que\\ \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1 \<subseteq> {\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> y 
     que \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2 \<subseteq> {\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>. Por lo tanto, los conjuntos \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> y \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> no son 
     satisfacibles ya que, en caso contrario, \<open>{\<beta>\<^sub>1} \<union> W\<^sub>1\<close> y \<open>{\<beta>\<^sub>2} \<union> W\<^sub>2\<close> serían satisfacibles. Para 
     llegar a la contradicción, basta probar que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien 
@@ -1549,10 +1549,10 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
       Como en este caso las componentes disyuntivas son \<open>\<beta>\<^sub>1 = G\<close> y \<open>\<beta>\<^sub>2 = H\<close>, se tiene que o bien \<open>\<A>\<close>
       es modelo de \<open>\<beta>\<^sub>1\<close> o bien \<open>\<A>\<close> es modelo de \<open>\<beta>\<^sub>2\<close>. Por lo tanto, es claro que o bien \<open>\<A>\<close> es
       modelo de todas las fórmulas del conjunto \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close> o bien es modelo de todas las fórmulas
-      de \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>. Luego, por definición de conjunto satisfacible tenemos que o bien 
+      de \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close>. Luego, por definición de conjunto satisfacible tenemos que o bien\\ 
       \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>0\<close> es satisfacible, como queríamos demostrar.
 
-      $\textbf{\<open>\<three>) F = G \<longrightarrow> H, para ciertas fórmulas G y H\<close>:}$ Análogamente se tiene que el 
+      $\textbf{\<open>\<two>) F = G \<longrightarrow> H, para ciertas fórmulas G y H\<close>:}$ Análogamente se tiene que el 
       conjunto \<open>{F} \<union> W\<^sub>0\<close> es satisfacible, luego existe una interpretación \<open>\<A>\<close> que es modelo de 
       todas sus fórmulas. En particular, \<open>\<A>\<close> es modelo de \<open>F\<close> y, por definición del valor de una 
       fórmula en una interpretación, se obtiene que si \<open>\<A>\<close> es modelo de \<open>G\<close>, entonces es modelo de 
@@ -1570,7 +1570,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
       Luego, por definición del valor de una fórmula en una interpretación, obtenemos que \<open>\<A>\<close> no
       es modelo de \<open>G \<and> H\<close>. De nuevo por definición, esto implica que no es cierto que \<open>\<A>\<close> sea 
       modelo de \<open>G\<close> y de \<open>H\<close>. Es decir, o bien \<open>\<A>\<close> no es modelo de \<open>G\<close> o bien \<open>\<A>\<close> no es modelo de
-      \<open>H\<close>. Si suponemos que no es modelo de \<open>G\<close>, por definición se obtiene que \<open>\<A>\<close> es modelo de
+      \<open>H\<close>. Si suponemos que no es modelo de \<open>G\<close>, por definición se obtiene que \<open>\<A>\<close> es modelo de\\
       \<open>\<not> G\<close>. Como en este caso la componente disyuntiva \<open>\<beta>\<^sub>1\<close> es \<open>\<not> G\<close>, se deduce que \<open>\<A>\<close> es modelo
       de \<open>\<beta>\<^sub>1\<close>. Por tanto, \<open>\<A>\<close> es modelo de todas las fórmulas del conjunto \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close>, por lo que
       se demuestra que dicho conjunto es satisfacible, probando el resultado. Por otro lado, si
@@ -1587,7 +1587,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
       es de \<open>\<beta>\<^sub>1\<close>, de modo que \<open>\<A>\<close> es modelo de todas las fórmulas de \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>0\<close>, probando así que 
       es satisfacible. Por lo tanto, se verifica el resultado.
     
-    En conclusión, hemos probado que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> es 
+    En conclusión, hemos probado que o bien \<open>{\<beta>\<^sub>1,F} \<union> W\<^sub>o\<close> es satisfacible o bien\\ \<open>{\<beta>\<^sub>2,F} \<union> W\<^sub>o\<close> es 
     satisfacible. Por lo tanto, se tiene que no es cierto que ninguno de los dos conjuntos sea
     insatisfacible. Esto contradice lo demostrado anteriormente, llegando así a una contradicción
     que prueba por reducción al absurdo la última condición del lema \<open>2.0.2\<close>. De este modo, queda
@@ -1635,7 +1635,7 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
     level 5/.style          = {sibling distance=5cm}
     level 6/.style          = {sibling distance=5cm}
     level 7/.style          = {sibling distance=5cm};
-    level distance          = 4cm,
+    level distance          = 4.5cm,
     edge from parent/.style = {draw},
     every node/.style       = {font=\tiny},
     sloped
@@ -1691,7 +1691,7 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
     \item \<open>pcp_colecComp_DIS\<close>: La prueba se realizará por reducción al absurdo. Para ello
     precisa de dos resultados.
     \begin{itemize}
-      \item \<open>Resultado \<two>\<close>: Dados \<open>W \<in> C\<close> y \<open>\<beta>\<^sub>i\<close> una fórmula cualquiera tal que \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close>, 
+      \item \<open>Resultado \<two>\<close>: Dados \<open>W \<in> C\<close> y \<open>\<beta>\<^sub>i\<close> una fórmula cualquiera tal que\\ \<open>{\<beta>\<^sub>i} \<union> W \<notin> C\<close>, 
       entonces existe un subconjunto finito \<open>W\<^sub>i\<close> de \<open>W\<close> tal que el conjunto \<open>{\<beta>\<^sub>i} \<union> W\<^sub>i\<close> no es 
       satisfacible. En Isabelle ha sido formalizado como \<open>not_colecComp\<close>. A su vez, ha precisado
       para su prueba del lema auxiliar \<open>sat_subset_ccontr\<close> que demuestra que todo conjunto de 
@@ -1871,7 +1871,7 @@ lemma ball_Un:
   using assms by blast
 
 text \<open>En primer lugar, probemos que dados \<open>W \<in> C\<close>, una fórmula \<open>F = G \<and> H\<close> para ciertas fórmulas \<open>G\<close> 
-  y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,H,F} \<union> W\<^sub>0\<close> es 
+  y \<open>H\<close> tal que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, se verifica que\\ \<open>{G,H,F} \<union> W\<^sub>0\<close> es 
   satisfacible.\<close>
 
 lemma pcp_colecComp_CON_sat1:
@@ -2209,7 +2209,7 @@ proof (rule allI)+
 qed
 
 text \<open>Por último, probemos la cuarta condición del lema \<open>2.0.2\<close>: dados \<open>W \<in> C\<close> y \<open>F\<close> una 
-  fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> 
+  fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que o bien\\ \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> 
   o bien \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>. 
   
   Por un lado, precisaremos para ello de un lema auxiliar que demuestre que dado \<open>W \<in> C\<close> y \<open>\<beta>\<^sub>i\<close> una 
@@ -2610,7 +2610,7 @@ qed
 
 text \<open>Finalmente, con los lemas auxiliares anteriores podemos demostrar detalladamente la cuarta 
   condición del lema \<open>2.0.2\<close>: dados \<open>W \<in> C\<close> y \<open>F\<close> una fórmula de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y 
-  \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> o bien \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>.\<close>
+  \<open>\<beta>\<^sub>2\<close> tal que \<open>F \<in> W\<close>, se tiene que o bien \<open>{\<beta>\<^sub>1} \<union> W \<in> C\<close> o bien\\ \<open>{\<beta>\<^sub>2} \<union> W \<in> C\<close>.\<close>
 
 lemma pcp_colecComp_DIS:
   assumes "W \<in> colecComp"
