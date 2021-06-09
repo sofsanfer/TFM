@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  2 JUN 2021 14:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  9 JUN 2021 10:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1636,9 +1636,28 @@ Overfull \hbox (12.09848pt too wide) in paragraph at lines 2854--2859
 surdo. En efecto, si suponemos
  []
 
-[124] [125] [126] [127] [128] [129] [130] [131] [132] [133] [134] [135]
-[136] [137] [138] [139] [140] [141] [142] [143] [144] [145]
-Overfull \hbox (17.2695pt too wide) in paragraph at lines 4973--4977
+[124] [125] [126] [127]
+Overfull \hbox (116.40729pt too wide) in paragraph at lines 3094--3095
+[][] 
+ []
+
+[128]
+Overfull \hbox (5.79846pt too wide) in paragraph at lines 3134--3141
+\OT1/ppl/m/n/12 tipo $\OML/zplm/m/it/12 ^^L$\OT1/ppl/m/n/12 : \OT1/ppl/m/it/12 
+pcp[]colecComp[]DIS[]sat1\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]DIS
+[]sat2\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]DIS[]sat3\OT1/ppl/m/n/
+12 ,
+ []
+
+[129]
+Overfull \hbox (4.52666pt too wide) in paragraph at lines 3144--3147
+[]\OT1/ppl/m/n/12 Comencemos con las de-mostra-ciones de los lemas au-xi-lia-re
+s em-plea-dos en la prueba
+ []
+
+[130] [131] [132] [133] [134] [135] [136] [137] [138] [139] [140] [141]
+[142]
+Overfull \hbox (17.2695pt too wide) in paragraph at lines 4425--4429
 [][]    \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\OT1/p
 pl/m/it/12 2$\OT1/zplm/m/n/12 )$ \OT1/ppl/b/n/12 un-fold-ing \OT1/ppl/m/it/12 c
 olec-Comp fin[]sat[]def \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12
@@ -1646,8 +1665,8 @@ olec-Comp fin[]sat[]def \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12
 1/zplm/m/n/12 ($\OT1/ppl/m/it/12 8$\OT1/zplm/m/n/12 )$$)$[] 
  []
 
-[146] [147]
-Overfull \hbox (12.87888pt too wide) in paragraph at lines 5217--5220
+[143] [144] [145] [146] [147] [148] [149] [150] [151] [152]
+Overfull \hbox (12.87888pt too wide) in paragraph at lines 5403--5406
 [][]        \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\O
 T1/ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ []\OT1/ppl/m/it/12 Dis F G H[] []F $\OMS/z
 plm/m/n/12 2$ \OT1/ppl/m/it/12 W[] []finite ?Wo[] []?Wo $\OMS/zplm/m/n/12 ^^R$ 
@@ -1655,11 +1674,18 @@ plm/m/n/12 2$ \OT1/ppl/m/it/12 W[] []finite ?Wo[] []?Wo $\OMS/zplm/m/n/12 ^^R$
 le pcp[]colecComp[]DIS[]sat$\OT1/zplm/m/n/12 )$[] 
  []
 
-[148]) [149] [150
+[153]
+Overfull \hbox (22.14189pt too wide) in paragraph at lines 5436--5439
+[]\OT1/ppl/m/n/12 De este modo, con los lemas \OT1/ppl/m/it/12 pcp[]colecComp[]
+bot\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]atoms\OT1/ppl/m/n/12 , \O
+T1/ppl/m/it/12 pcp[]colecComp[]CON
+ []
+
+[154]) [155] [156
 
 ]
 Ap\'endice A.
-(./Glosario.tex [151] [152] [153] [154] [155] [156] [157]
+(./Glosario.tex [157] [158] [159] [160] [161] [162] [163]
 LaTeX Font Info:    Try loading font information for OT1+phv on input line 877.
 
 
@@ -1670,8 +1696,8 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 877.
 LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
 (Font)              scaled to size 10.79993pt on input line 877.
- [158])
-(./root.bbl [159] [160
+ [164])
+(./root.bbl [165] [166
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 44--49
@@ -1697,7 +1723,7 @@ Underfull \hbox (badness 3049) in paragraph at lines 73--78
  / isabelle . in . tum . de /
  []
 
-[161]) [162]
+[167]) [168]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 176.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 176.
  (./root.aux)
@@ -1711,11 +1737,11 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 38996 strings out of 492649
- 831092 string characters out of 6129622
- 897916 words of memory out of 5000000
- 41878 multiletter control sequences out of 15000+600000
- 583659 words of font info for 174 fonts, out of 8000000 for 9000
+ 39097 strings out of 492649
+ 833357 string characters out of 6129622
+ 903853 words of memory out of 5000000
+ 41972 multiletter control sequences out of 15000+600000
+ 583916 words of font info for 175 fonts, out of 8000000 for 9000
  1206 hyphenation exceptions out of 8191
  62i,16n,104p,10397b,1814s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
@@ -1733,10 +1759,10 @@ texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 1/urw/palatino/uplri8a.pfb>
-Output written on root.pdf (162 pages, 631072 bytes).
+Output written on root.pdf (168 pages, 662619 bytes).
 PDF statistics:
- 1229 PDF objects out of 1440 (max. 8388607)
- 1021 compressed objects within 11 object streams
- 340 named destinations out of 1000 (max. 500000)
+ 1255 PDF objects out of 1440 (max. 8388607)
+ 1041 compressed objects within 11 object streams
+ 346 named destinations out of 1000 (max. 500000)
  376 words of extra memory for PDF output out of 10000 (max. 10000000)
 
