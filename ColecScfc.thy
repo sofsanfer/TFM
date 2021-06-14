@@ -9,13 +9,14 @@ theory ColecScfc
 begin
 (*>*)
 
-text \<open>En este apartado definiremos las propiedades sobre colecciones de conjuntos de ser \<open>cerrada 
-  bajo subconjuntos\<close> y de \<open>carácter finito\<close>. Posteriormente daremos distintos resultados que las
-  relacionan con la propiedad de consistencia proposicional y emplearemos en la prueba del 
-  \<open>teorema de existencia de modelo\<close>.
-
-\comentario{Volver a revisar el párrafo anterior al final de la
-redacción de la sección.}
+text \<open>En este apartado definiremos colecciones de conjuntos \<open>cerradas bajo subconjuntos\<close> y de 
+  \<open>carácter finito\<close>, junto con tres resultados sobre las mismas. El primero de ellos permite
+  extender una colección que verifique la propiedad de consistencia proposicional a otra que 
+  también la verifique y sea cerrada bajo subconjuntos. Posteriormente probaremos que toda colección
+  de carácter finito es cerrada bajo subconjuntos. Finalmente, mostraremos un resultado que 
+  permite extender una colección cerrada bajo subconjuntos que verifique la propiedad de
+  consistencia proposicional a otra que también verifique dicha propiedad y sea de carácter 
+  finito.
 
   \begin{definicion}
     Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 

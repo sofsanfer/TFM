@@ -9,8 +9,6 @@ begin
 
 text \<open>
 \comentario{Localización de sello.png.}
-\comentario{Cambiar los directores}
-\comentario{Introducción. Mirar fitting p. 53 y 54}
 
 \<close>
 

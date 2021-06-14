@@ -10,18 +10,19 @@ theory TeoremaEx
 begin
 (*>*)
 
-text \<open>\comentario{Añadir introducción.}\<close>
-
-text \<open>\comentario{Cambiar referencias de los lemas tras el cambio de índice.}\<close>
+text \<open>\comentario{Tutores: cambiar José Antonio por Joaquín}\<close>
 
 section \<open>Sucesiones de conjuntos\<close>
 
-text\<open>En este apartado daremos una introducción sobre sucesiones de conjuntos de fórmulas a 
-  partir de una colección y un conjunto de la misma. De este modo, se mostrarán distintas 
-  características sobre las sucesiones y se definirá su límite. En la siguiente sección 
-  probaremos que dicho límite constituye un conjunto satisfacible por el lema de Hintikka.
-
-\comentario{Revisar el párrafo anterior al final}
+text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
+  partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>. De este modo, se demostrará que si
+  \<open>C\<close> verifica la propiedad de consistencia proposicional, entonces todo elemento de la suceción
+  \<open>{S\<^sub>n}\<close> pertenece a la colección. Igualmente, daremos un resultado que permite caracterizar 
+  conjuntos de \<open>{S\<^sub>n}\<close> en función de los anteriores. Por otro lado, definiremos el límite de dichas 
+  sucesiones, probando que todo conjunto de \<open>{S\<^sub>n}\<close> está contenido en el límite. Además, se
+  demostrará que si una fórmula pertenece al límite, entonces pertenece a algún conjunto de
+  la sucesión \<open>{S\<^sub>n}\<close>. Finalmente, mostraremos un resultado sobre conjuntos finitos contenidos en
+  el límite.
 
   Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
   de un alfabeto numerable de variables proposicionales. Por lo tanto, el conjunto de fórmulas 
@@ -218,17 +219,19 @@ text \<open>A continuación daremos un lema que permite caracterizar un elemento
   Lo que prueba el resultado.
 \end{demostracion}
 
-  Procedamos a su formalización y demostración detallada. Para ello, emplearemos la unión 
-  generalizada en Isabelle/HOL perteneciente a la teoría 
-  \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}, junto con distintas propiedades sobre la misma
-  definidas en dicha teoría. El uso de teoría de retículos en este caso se debe a que, en Isabelle,
-  los conjuntos se han formalizado como predicados según la teoría 
-  \href{https://bit.ly/3ibCuje}{Set.thy}. De esta manera, un elemento pertenece a un conjunto si 
-  verifica el predicado que lo caracteriza. Además, en dicha teoría se instancia que el tipo de los 
-  conjuntos es un álgebra de \<open>Boole\<close> acotada, es decir, es un retículo distributivo para las 
-  operaciones unión e intersección que tiene un supremo y un ínfimo. En consecuencia, la unión 
-  generalizada de conjuntos se formaliza en Isabelle como el supremo del retículo completo que 
-  conforman.
+  Para formalizar dicho resultado y su demostración en Isabelle, hay que tener en cuenta cómo está
+  formalizada la \<open>Teoría de Conjuntos\<close> \href{https://bit.ly/3ibCuje}{Set.thy}. Los conjuntos están 
+  formalizados como predicados, junto con la función \<open>Collect\<close> y el predicado \<open>member\<close>, verificando 
+  los siguientes axiomas:
+
+  \<open>mem_Collect_eq:\<close>  "\<open>member a (Collect P) = P a\<close>"
+
+  \<open>Collect_mem_eq:\<close> "\<open>Collect (\<lambda>x. member x A) = A\<close>"
+
+  Se demuestra también que el tipo de los conjuntos constituye un álgebra de \<open>Boole\<close>, en el que el 
+  supremo de dos conjuntos es la unión y el ínfimo es la intersección. De esta forma, podemos usar 
+  la unión generalizada, definida en la la teoría de retículos completos de Isabelle 
+  \href{https://n9.cl/gtf5x}{Complete-Lattices.thy}.
 
   Veamos la prueba detallada del resultado en Isabelle/HOL.\<close>
 
@@ -474,21 +477,28 @@ qed simp
 
 section \<open>El Teorema de Existencia de Modelo\<close>
 
-text \<open>En esta sección demostraremos finalmente el 
-  \<open>teorema de existencia de modelo\<close>, el cual prueba que todo conjunto de fórmulas perteneciente a 
-  una colección que verifique la propiedad de consistencia proposicional es satisfacible. Para ello, 
-  considerando una colección \<open>C\<close> cualquiera y \<open>S \<in> C\<close>, empleando resultados anteriores extenderemos 
-  la colección a una colección \<open>C''\<close> que tenga la propiedad de consistencia proposicional, sea
-  cerrada bajo subconjuntos y sea de carácter finito. De este modo, en esta sección probaremos que el 
-  límite de la sucesión formada a partir de una colección que tenga dichas condiciones y un conjunto
-  cualquiera \<open>S\<close> como se indica en la definición \<open>1.4.1\<close> pertenece a la colección. Es más, 
-  demostraremos que dicho límite se trata de un conjunto de \<open>Hintikka\<close> luego, por el \<open>teorema de 
-  Hintikka\<close>, es satisfacible. Finalmente, como \<open>S\<close> está contenido en el límite, quedará demostrada 
-  la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención.
+text \<open>En esta sección demostraremos finalmente el \<open>Teorema de Existencia de Modelo\<close>, el cual prueba 
+  que todo conjunto de fórmulas \<open>S\<close> perteneciente a una colección \<open>C\<close> que verifique la propiedad de 
+  consistencia proposicional es satisfacible. Para ello, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
+  que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y sea de 
+  carácter finito. De este modo, introduciremos distintos resultados sobre colecciones \<open>C'\<close> con 
+  las características anteriores. En primer lugar, probaremos que el límite de la sucesión definida
+  según la definición \<open>4.1.1\<close> pertenece a la colección \<open>C'\<close> que la define si esta verifica la 
+  propiedad de consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito. De 
+  hecho, probaremos que dicho límite es un elemento maximal de la colección que lo define si esta es 
+  cerrada bajo subconjuntos y verifica la propiedad de consistencia proposicional. Por otra parte 
+  demostraremos que el límite se trata de un conjunto de \<open>Hintikka\<close> si está definido a partir de una 
+  colección \<open>C'\<close> que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos 
+  y sea de carácter finito. Por tanto, por el \<open>Teorema de Hintikka\<close>, en las condiciones anteriores 
+  el límite es un conjunto satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión 
+  \<open>C'\<close>, se verifica que está contenido en el límite de la sucesión definida según la definición 
+  \<open>4.1.1\<close> a partir de \<open>C'\<close> y \<open>S \<in> C'\<close>. Por tanto, como \<open>C'\<close> verifica las características anteriores, 
+  quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención del límite, lo 
+  que prueba el \<open>Teorema de Existencia de Modelo\<close>.
 
-  \comentario{Habrá que modificar el párrafo anterior al final.}\<close>
+  \comentario{Echarle otro ojo.}
 
-text \<open>En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
+  En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 
   límite de toda sucesión de conjuntos de \<open>C\<close> según la definición \<open>4.1.1\<close> pertenece a \<open>C\<close>.
 
@@ -1043,8 +1053,6 @@ text\<open>De este modo, procedamos finalmente con la demostración del teorema.
     satisfacible, queda demostrada la satisfacibilidad de \<open>S\<close>.
   \end{demostracion}
 
-  \comentario{Tal vez sería buena idea hacer un grafo similar al de ex3.}
-
   Mostremos su formalización y demostración detallada en Isabelle.\<close>
 
 theorem
@@ -1136,199 +1144,92 @@ text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<cl
   demostración del teorema.
 
   \begin{lema}
-    Sea un conjunto de la forma \<open>{a} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces,
-    existe un subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
+    Sea \<open>S\<close> un conjunto finito tal que \<open>S \<subseteq> {a} \<union> B\<close>. Entonces, existe un conjunto finito \<open>S' \<subseteq> B\<close> 
+    tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
   \end{lema}
 
   \begin{demostracion}
-    La prueba del resultado se realiza por inducción en la estructura recursiva de los conjuntos 
-    finitos.
+   La prueba se realiza considerando dos casos: \<open>a \<in> S\<close> o \<open>a \<notin> S\<close>.
 
-    En primer lugar, probemos el caso base correspondiente al conjunto vacío. Si consideramos 
-    \<open>S = {}\<close>, tomando también \<open>S' = {}\<close> es claro que verifica que es subconjunto finito de \<open>B\<close>
-    y o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>.
+   Por un lado, si consideramos que \<open>a \<in> S\<close>, basta tomar el conjunto \<open>S' = S - {a}\<close>. 
+   De este modo, como \<open>S \<subseteq> {a} \<union> B\<close>, es claro que \<open>S' \<subseteq> B\<close>. Además, puesto que \<open>S\<close> es finito,
+   se tiene que \<open>S'\<close> también lo es. Finalmente, se observa fácilmente que cumple que \<open>S = S' \<union> {a}\<close>.
 
-    Veamos el caso de inducción. Sea \<open>S\<close> un conjunto finito verificando la hipótesis de inducción:
-    
-    \<open>(HI): Si S \<subseteq> {a} \<union> B, entonces existe un subconjunto finito S' de B tal que o bien\<close>
-
-    \hspace{1cm}\<open>S = {a} \<union> S' o bien S = S'.\<close>
-
-    Sea un elemento cualquiera \<open>x \<notin> S\<close>. Vamos a probar que se verifica el resultado para el conjunto
-    \<open>{x} \<union> S\<close>. Es decir, si \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>, vamos a encontrar un subconjunto finito \<open>S''\<close> de 
-    \<open>B\<close> tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>.
-
-    Supongamos, pues, que \<open>{x} \<union> S \<subseteq> {a} \<union> B\<close>. En este caso, es claro que se verifica que
-    \<open>x \<in> {a} \<union> B\<close> y \<open>S \<subseteq> {a} \<union> B\<close>. Por lo último, aplicando hipótesis de inducción, podemos hallar 
-    un subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que o bien \<open>S = {a} \<union> S'\<close> o bien \<open>S = S'\<close>. Por otro lado,
-    como \<open>x \<in> {a} \<union> B\<close>, deducimos que o bien \<open>x = a\<close> o bien \<open>x \<in> B\<close>. En efecto, probemos que se 
-    verifica el resultado para ambos casos de la última disyunción.
-
-    En primer lugar, supongamos que \<open>x = a\<close>. En este caso, veremos que el conjunto \<open>S''\<close> que 
-    verifica el resultado es el propio \<open>S'\<close>. Se observa fácilmente ya que, si \<open>S = {a} \<union> S'\<close>, como 
-    \<open>x = a\<close> se obtiene que \<open>{x} \<union> S = {a} \<union> S'\<close>, de modo que \<open>S'' = S'\<close> es un subconjunto finito de 
-    \<open>B\<close> tal que o bien \<open>{x} \<union> S = {a} \<union> S''\<close> o bien \<open>{x} \<union> S = S''\<close>. Por otro lado, suponiendo que 
-    \<open>S = S'\<close>, se deduce análogamente que \<open>{x} \<union> S = {a} \<union> S'\<close> pues se tiene que \<open>x = a\<close>, llegando
-    a la misma conclusión.
-
-    Por otra parte, supongamos que \<open>x \<in> B\<close>. En este caso, el conjunto \<open>S''\<close> que verifica el
-    resultado es el conjunto \<open>{x} \<union> S'\<close>. Observemos que se trata de un subconjunto finito de \<open>B\<close> ya 
-    que \<open>S'\<close> es un subconjunto finito de \<open>B\<close> y \<open>x \<in> B\<close>. Además, en efecto si \<open>S = {a} \<union> S'\<close>, se 
-    deduce que \<open>{x} \<union> S = {x,a} \<union> S' = {a} \<union> S''\<close>, luego cumple que o bien\\ \<open>{x} \<union> S = {a} \<union> S''\<close> o 
-    bien \<open>{x} \<union> S = S''\<close>. Por otro lado, en el caso en que \<open>S = S'\<close>, es claro que \<open>{x} \<union> S = S''\<close> 
-    por la elección de \<open>S''\<close>, llegando la misma conclusión.
+   Por otro lado, supongamos que \<open>a \<notin> S\<close>. En este caso, si tomamos \<open>S' = S\<close> se verifica que
+   \<open>S' \<subseteq> B\<close> ya que \<open>S \<subseteq> {a} \<union> B\<close> y \<open>a \<notin> S\<close>. Además, \<open>S'\<close> es finito por serlo \<open>S\<close>. Luego cumple
+   las condiciones del resultado, como queríamos demostrar.
   \end{demostracion}
 
   Procedamos con la prueba detallada y formalización en Isabelle. Para ello, hemos utilizado el
   siguiente lema auxiliar.\<close>
 
 lemma subexI [intro]: "P A \<Longrightarrow> A \<subseteq> B \<Longrightarrow> \<exists>A\<subseteq>B. P A"
-  by blast
+  by blast  
 
 text \<open>De este modo, probemos detalladamente el resultado.\<close>
 
 lemma finite_subset_insert1:
-  "\<lbrakk>finite S; S \<subseteq> {a} \<union> B \<rbrakk> \<Longrightarrow>
-     \<exists>S' \<subseteq> B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
-proof (induct rule: finite_induct)
-  case empty
-  have "{} \<subseteq> B"
-    by (rule empty_subsetI)
-  have 1:"finite {}"
-    by (simp only: finite.emptyI)
-  have "{} = {}"
-    by (simp only: simp_thms(6))
-  then have 2:"{} = {a} \<union> {} \<or> {} = {}"
-    by (rule disjI2)
-  have "finite {} \<and> ({} = {a} \<union> {} \<or> {} = {})"
-    using 1 2 by (rule conjI)
-  thus "\<exists>S' \<subseteq> B. finite S' \<and> ({} = {a} \<union> S' \<or> {} = S')"
-    using \<open>{} \<subseteq> B\<close> by (rule subexI)
+  assumes "finite S"
+          "S \<subseteq> insert a B"
+  shows "\<exists>S' \<subseteq> B. finite S' \<and> (S = insert a S' \<or> S = S')"
+proof (cases "a \<in> S")
+  assume "a \<in> S"
+  then have "S = insert a (S - {a})" 
+    by (simp only: insert_Diff[THEN sym])
+  then have 1:"S = insert a (S - {a}) \<or> S = S - {a}"
+    by (rule disjI1)
+  have 2:"finite (S - {a})" 
+    using assms(1) by (rule finite_Diff)
+  have 3:"(S - {a}) \<subseteq> B" 
+    using assms(2) by (simp add: Diff_subset_conv)
+  have "finite (S - {a}) \<and> (S = insert a (S - {a}) \<or> S = S - {a})"
+    using 2 1 by (rule conjI)
+  thus ?thesis using 3 by (rule subexI)
 next
-  case (insert x S)
-  assume "finite S"
-  assume "x \<notin> S"
-  assume HI:"S \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>S'\<subseteq>B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
-  show "insert x S \<subseteq> {a} \<union> B \<Longrightarrow> \<exists>S''\<subseteq>B. finite S'' \<and> (insert x S = {a} \<union> S'' \<or> insert x S = S'')"
-  proof -
-    assume "insert x S \<subseteq> {a} \<union> B" 
-    then have C:"x \<in> {a} \<union> B \<and> S \<subseteq> {a} \<union> B"
-      by (simp only: insert_subset)
-    then have "S \<subseteq> {a} \<union> B"
-      by (rule conjunct2)
-    have Ex1:"\<exists>S'\<subseteq>B. finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
-      using \<open>S \<subseteq> {a} \<union> B\<close> by (rule HI)
-    obtain S' where "S' \<subseteq> B" and C1:"finite S' \<and> (S = {a} \<union> S' \<or> S = S')"
-      using Ex1 by (rule subexE)
-    have "finite S'"
-      using C1 by (rule conjunct1)
-    then have "finite (insert x S')"
-      by (simp only: finite.insertI)
-    have "x \<in> {a} \<union> B"
-      using C by (rule conjunct1)
-    then have "x \<in> {a} \<or> x \<in> B"
-      by (simp only: Un_iff)
-    then have "x = a \<or> x \<in> B"
-      by (simp only: singleton_iff)
-    thus "\<exists>S''\<subseteq>B. finite S'' \<and> (insert x S = {a} \<union> S'' \<or> insert x S = S'')"
-    proof (rule disjE)
-      assume "x = a"
-      have "S = {a} \<union> S' \<or> S = S'"
-        using C1 by (rule conjunct2)
-      thus ?thesis
-      proof (rule disjE)
-        assume "S = {a} \<union> S'"
-        have "x \<in> {a}"
-          using \<open>x = a\<close> by (simp only: singleton_iff)
-        then have "x \<in> {a} \<union> S'" 
-          by (simp only: UnI1)
-        then have "insert x ({a} \<union> S') = {a} \<union> S'"
-          by (rule insert_absorb)
-        have "insert x S = insert x ({a} \<union> S')"
-          by (simp only: \<open>S = {a} \<union> S'\<close>)
-        then have "insert x S = {a} \<union> S'"
-          by (simp only: \<open>insert x ({a} \<union> S') = {a} \<union> S'\<close>)
-        then have 1:"insert x S = {a} \<union> S' \<or> insert x S = S'"
-          by (rule disjI1)
-        have "finite S' \<and> (insert x S = {a} \<union> S' \<or> insert x S = S')"
-          using \<open>finite S'\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>S' \<subseteq> B\<close> by (rule subexI)
-      next
-        assume "S = S'"
-        have "insert x S = {x} \<union> S"
-          by (rule insert_is_Un)
-        then have "insert x S = {a} \<union> S'"
-          by (simp only: \<open>x = a\<close> \<open>S = S'\<close>)
-        then have 1:"insert x S = {a} \<union> S' \<or> insert x S = S'"
-          by (rule disjI1)
-        have "finite S' \<and> (insert x S = {a} \<union> S' \<or> insert x S = S')"
-          using \<open>finite S'\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>S' \<subseteq> B\<close> by (rule subexI)
-      qed
-    next
-      assume "x \<in> B"
-      have "x \<in> B \<and> S' \<subseteq> B"
-        using \<open>x \<in> B\<close> \<open>S' \<subseteq> B\<close> by (rule conjI)
-      then have "insert x S' \<subseteq> B"
-        by (simp only: insert_subset)
-      have "finite (insert x S')"
-        using \<open>finite S'\<close> by (simp only: finite.insertI)
-      have "S = {a} \<union> S' \<or> S = S'"
-        using C1 by (rule conjunct2)
-      thus ?thesis
-      proof (rule disjE)
-        assume "S = {a} \<union> S'"
-        have "insert x S = insert x ({a} \<union> S')"
-          by (simp only: \<open>S = {a} \<union> S'\<close>)
-        then have "insert x S = {a} \<union> (insert x S')"
-          by blast
-        then have 1:"insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S'"
-          by (rule disjI1)
-        have "finite (insert x S') \<and> (insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S')"
-          using \<open>finite (insert x S')\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>insert x S' \<subseteq> B\<close> by (rule subexI)
-      next
-        assume "S = S'"
-        have "insert x S = insert x S'"
-          by (simp only: \<open>S = S'\<close>)
-        then have 1:"insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S'"
-          by (rule disjI2)
-        have "finite (insert x S') \<and> (insert x S = {a} \<union> (insert x S') \<or> insert x S = insert x S')"
-          using \<open>finite (insert x S')\<close> 1 by (rule conjI)
-        thus ?thesis
-          using \<open>insert x S' \<subseteq> B\<close> by (rule subexI)
-      qed
-    qed
-  qed
+  assume "a \<notin> S"
+  then have 1:"S \<subseteq> B" 
+    using assms(2) by blast 
+  have 2:"S = insert a S \<or> S = S"
+    by (simp only: disjI1 simp_thms)
+  have "finite S \<and> (S = insert a S \<or> S = S)"
+    using assms(1) 2 by (rule conjI)
+  thus ?thesis 
+    using 1 by (rule subexI)
 qed
 
 text \<open>El segundo resultado sobre subconjuntos finitos es consecuencia del anterior.
 
 \begin{lema}
-  Sea un conjunto de la forma \<open>{a,b} \<union> B\<close> y \<open>S\<close> un subconjunto finito suyo. Entonces, existe un
-  subconjunto finito \<open>S'\<close> de \<open>B\<close> tal que se cumple \<open>S = {a,b} \<union> S'\<close>, \<open>S = {a} \<union> S'\<close>,\\ \<open>S = {b} \<union> S'\<close> 
-  o \<open>S = S'\<close>.
+  Sea \<open>S\<close> un conjunto finito tal que \<open>S \<subseteq> {a,b} \<union> B\<close>. Entonces, existe un conjunto finito \<open>S' \<subseteq> B\<close> 
+  tal que se verifica una de las condiciones siguientes: \<open>S = {a,b} \<union> S'\<close> o \<open>S = {a} \<union> S'\<close> o 
+  \<open>S = {b} \<union> S'\<close> o \<open>S = S'\<close>.
 \end{lema}
 
 \begin{demostracion}
-  En particular, \<open>S\<close> es un subconjunto finito de \<open>{a} \<union> ({b} \<union> B)\<close> luego, aplicando el lema \<open>4.3.2\<close>
-  anterior, podemos hallar un subconjunto finito \<open>S\<^sub>1\<close> de \<open>{b} \<union> B\<close> tal que o bien \<open>S = {a} \<union> S\<^sub>1\<close> o 
-  bien \<open>S = S\<^sub>1\<close>. A su vez, podemos aplicar dicho resultado para el subconjunto finito \<open>S\<^sub>1\<close> de 
-  \<open>{b} \<union> B\<close>, obteniendo un subconjunto finito \<open>S\<^sub>2\<close> de \<open>B\<close> tal que o bien \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close> o bien 
-  \<open>S\<^sub>1 = S\<^sub>2\<close>. Veamos que el lema se verifica en ambas opciones posibles de \<open>S\<^sub>1\<close> para el conjunto 
-  \<open>S' = S\<^sub>2\<close>.
+  La prueba se realiza considerando cuatro casos:
+  \begin{enumerate}
+    \item \<open>a \<in> S\<close> y \<open>b \<in> S\<close>. 
+    \item \<open>a \<in> S\<close> y \<open>b \<notin> S\<close>. 
+    \item \<open>a \<notin> S\<close> y \<open>b \<in> S\<close>.
+    \item \<open>a \<notin> S\<close> y \<open>b \<notin> S\<close>. 
+  \end{enumerate}
 
-  En primer lugar, supongamos que \<open>S\<^sub>1 = {b} \<union> S\<^sub>2\<close>. De este modo, se verifica el resultado tanto para
-  \<open>S = {a} \<union> S\<^sub>1\<close> como para \<open>S = S\<^sub>1\<close>. En efecto, en la primera opción, por elección de \<open>S\<^sub>1\<close>, es claro
-  que \<open>S = {a,b} \<union> S\<^sub>2\<close>. Finalmente, para \<open>S = S\<^sub>1\<close>, obtenemos que \<open>S = {b} \<union> S\<^sub>2\<close>, lo que prueba
-  igualmente el lema para \<open>S' = S\<^sub>2\<close>.
+  En primer lugar, supongamos que \<open>a\<close> y \<open>b\<close> están en \<open>S\<close>. En este caso, basta tomar el conjunto
+  \<open>S' = S - {a,b}\<close>. Como \<open>S \<subseteq> {a,b} \<union> B\<close>, es claro que \<open>S' \<subseteq> B\<close>. Además, como \<open>S\<close> es finito, se
+  tiene que \<open>S'\<close> también es finito. Por último, verifica que \<open>S = {a,b} \<union> S'\<close>, lo que prueba el
+  resultado para este caso.
 
-  Por último, supongamos que \<open>S\<^sub>1 = S\<^sub>2\<close>. Análogamente, el resultado es inmediato pues si 
-  \<open>S = {a} \<union> S\<^sub>1\<close> obtenemos que \<open>S = {a} \<union> S\<^sub>2\<close>, y si suponemos \<open>S = S\<^sub>1\<close> obtenemos\\ \<open>S = S\<^sub>2\<close>, probando
-  así el lema.
+  Supongamos ahora que \<open>a \<in> S\<close> y \<open>b \<notin> S\<close>: considerando el conjunto \<open>S' = S - {a}\<close> se tiene el
+  resultado. Como \<open>S  \<subseteq> {a,b} \<union> B\<close> y \<open>a \<in> S\<close> pero \<open>b \<notin> S\<close>, es claro que \<open>S' \<subseteq> B\<close>. Como \<open>S\<close> es
+  finito, \<open>S'\<close> también lo es. Por último, se tiene que \<open>S = {a} \<union> S'\<close>, lo que verifica el resultado.
+
+  Consideremos el caso \<open>a \<notin> S\<close> y \<open>b \<in> S\<close>. Basta tomar el conjunto \<open>S' = S - {b}\<close> y, de manera 
+  completamente análoga al caso anterior, se demuestra el resultado para dicho caso.
+
+  Finalmente, supongamos que \<open>a \<notin> S\<close> y \<open>b \<notin> S\<close>. Veamos que tomando el conjunto \<open>S' = S\<close> se cumple
+  el resultado. Como \<open>S \<subseteq> {a,b} \<union> B\<close> y ni \<open>a\<close> ni \<open>b\<close> están en \<open>S\<close>, es claro que \<open>S' \<subseteq> B\<close>.
+  Finalmente, como \<open>S\<close> es finito, es claro que \<open>S'\<close> también lo es. Por lo tanto, queda probado el
+  resultado.
 \end{demostracion}
 
   Su formalización y prueba detallada en Isabelle/HOL son las siguientes.\<close>
@@ -1337,79 +1238,94 @@ lemma finite_subset_insert2:
   assumes "finite S"
           "S \<subseteq> {a,b} \<union> B"
         shows "\<exists>S' \<subseteq> B. finite S' \<and> (S = {a,b} \<union> S' \<or> S = {a} \<union> S' \<or> S = {b} \<union> S' \<or> S = S')"
-proof -
-  have "S \<subseteq> {a} \<union> ({b} \<union> B)"
-    using assms(2) by blast
-  then have Ex1:"\<exists>S1 \<subseteq> ({b} \<union> B). finite S1 \<and> (S = {a} \<union> S1 \<or> S = S1)"
-    using assms(1) by (simp only: finite_subset_insert1)
-  obtain S1 where "S1 \<subseteq> {b} \<union> B" and 1:"finite S1 \<and> (S = {a} \<union> S1 \<or> S = S1)"
-    using Ex1 by (rule subexE)
-  have "finite S1"
-    using 1 by (rule conjunct1)
-  have Ex2:"\<exists>S2 \<subseteq> B. finite S2 \<and> (S1 = {b} \<union> S2 \<or> S1 = S2)"
-    using \<open>finite S1\<close> \<open>S1 \<subseteq> {b} \<union> B\<close> by (rule finite_subset_insert1)
-  obtain S2 where "S2 \<subseteq> B" and 2:"finite S2 \<and> (S1 = {b} \<union> S2 \<or> S1 = S2)"
-    using Ex2 by (rule subexE)
-  have "finite S2"
-    using 2 by (rule conjunct1)
-  have "S1 = {b} \<union> S2 \<or> S1 = S2"
-    using 2 by (rule conjunct2)
+proof (cases "a \<in> S \<or> b \<in> S")
+  assume "a \<in> S \<or> b \<in> S"
   thus ?thesis
   proof (rule disjE)
-    assume "S1 = {b} \<union> S2"
-    have "S = {a} \<union> S1 \<or> S = S1"
-      using 1 by (rule conjunct2)
-    thus ?thesis
-    proof (rule disjE)
-      assume "S = {a} \<union> S1"
-      then have "S = {a} \<union> {b} \<union> S2"
-        by (simp add: \<open>S1 = {b} \<union> S2\<close>)
-      then have "S = {a,b} \<union> S2"
+    assume "a \<in> S"
+    show ?thesis
+    proof (cases "b \<in> S")
+      assume "b \<in> S"
+      have 1:"S - {a,b} \<subseteq> B"
+        using assms(2) by blast
+      have "{a,b} \<union> S = S"
+        using \<open>a \<in> S\<close> \<open>b \<in> S\<close> by blast
+      then have "S = {a,b} \<union> (S - {a,b})" 
         by blast
-      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+      then have 2:"S = {a,b} \<union> (S - {a,b}) \<or> S = {a} \<union> (S - {a,b}) \<or> S = {b} \<union> (S - {a,b}) \<or> S = (S - {a,b})"
         by (iprover intro: disjI1)
-      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
-        using \<open>finite S2\<close> by (iprover intro: conjI)
+      have "finite (S - {a,b})"
+        using assms(1) by (rule finite_Diff)
+      then have "finite (S - {a,b}) \<and> (S = {a,b} \<union> (S - {a,b}) \<or> S = {a} \<union> (S - {a,b}) \<or> S = {b} \<union> (S - {a,b}) \<or> S = (S - {a,b}))"
+        using 2 by (rule conjI)
       thus ?thesis
-        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+        using 1 by (rule subexI)
     next
-      assume "S = S1"
-      then have "S = {b} \<union> S2"
-        by (simp add: \<open>S1 = {b} \<union> S2\<close>)
-      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+      assume "b \<notin> S"
+      then have 1:"S - {a} \<subseteq> B"
+        using assms(2) by blast
+      have "{a} \<union> S = S"
+        using \<open>a \<in> S\<close> by blast
+      then have "S = {a} \<union> (S - {a})" 
+        by blast
+      then have 2:"S = {a,b} \<union> (S - {a}) \<or> S = {a} \<union> (S - {a}) \<or> S = {b} \<union> (S - {a}) \<or> S = (S - {a})"
         by (iprover intro: disjI1)
-      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
-        using \<open>finite S2\<close> by (iprover intro: conjI)
+      have "finite (S - {a})"
+        using assms(1) by (rule finite_Diff)
+      then have "finite (S - {a}) \<and> (S = {a,b} \<union> (S - {a}) \<or> S = {a} \<union> (S - {a}) \<or> S = {b} \<union> (S - {a}) \<or> S = (S - {a}))"
+        using 2 by (rule conjI)
       thus ?thesis
-        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+        using 1 by (rule subexI)
     qed
   next
-    assume "S1 = S2"
-    have "S = {a} \<union> S1 \<or> S = S1"
-      using 1 by (rule conjunct2)
-    thus ?thesis
-    proof (rule disjE)
-      assume "S = {a} \<union> S1"
-      then have "S = {a} \<union> S2"
-        by (simp only: \<open>S1 = S2\<close>)
-      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+    assume "b \<in> S"
+    show ?thesis
+    proof (cases "a \<in> S")
+      assume "a \<in> S"
+      have 1:"S - {a,b} \<subseteq> B"
+        using assms(2) by blast
+      have "{a,b} \<union> S = S"
+        using \<open>a \<in> S\<close> \<open>b \<in> S\<close> by blast
+      then have "S = {a,b} \<union> (S - {a,b})" 
+        by blast
+      then have 2:"S = {a,b} \<union> (S - {a,b}) \<or> S = {a} \<union> (S - {a,b}) \<or> S = {b} \<union> (S - {a,b}) \<or> S = (S - {a,b})"
         by (iprover intro: disjI1)
-      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
-        using \<open>finite S2\<close> by (iprover intro: conjI)
+      have "finite (S - {a,b})"
+        using assms(1) by (rule finite_Diff)
+      then have "finite (S - {a,b}) \<and> (S = {a,b} \<union> (S - {a,b}) \<or> S = {a} \<union> (S - {a,b}) \<or> S = {b} \<union> (S - {a,b}) \<or> S = (S - {a,b}))"
+        using 2 by (rule conjI)
       thus ?thesis
-        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+        using 1 by (rule subexI)
     next
-      assume "S = S1"
-      then have "S = S2"
-        by (simp only: \<open>S1 = S2\<close>)
-      then have "S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2"
+      assume "a \<notin> S"
+      then have 1:"S - {b} \<subseteq> B"
+        using assms(2) by blast
+      have "{b} \<union> S = S"
+        using \<open>b \<in> S\<close> by blast
+      then have "S = {b} \<union> (S - {b})" 
+        by blast
+      then have 2:"S = {a,b} \<union> (S - {b}) \<or> S = {a} \<union> (S - {b}) \<or> S = {b} \<union> (S - {b}) \<or> S = (S - {b})"
         by (iprover intro: disjI1)
-      then have "finite S2 \<and> (S = {a,b} \<union> S2 \<or> S = {a} \<union> S2 \<or> S = {b} \<union> S2 \<or> S = S2)"
-        using \<open>finite S2\<close> by (iprover intro: conjI)
+      have "finite (S - {b})"
+        using assms(1) by (rule finite_Diff)
+      then have "finite (S - {b}) \<and> (S = {a,b} \<union> (S - {b}) \<or> S = {a} \<union> (S - {b}) \<or> S = {b} \<union> (S - {b}) \<or> S = (S - {b}))"
+        using 2 by (rule conjI)
       thus ?thesis
-        using \<open>S2 \<subseteq> B\<close> by (rule subexI)
+        using 1 by (rule subexI)
     qed
   qed
+next
+  assume "\<not>(a \<in> S \<or> b \<in> S)"
+  then have "a \<notin> S \<and> b \<notin> S"
+    by (simp only: de_Morgan_disj simp_thms(8))
+  then have 1:"S \<subseteq> B"
+    using assms(2) by blast
+  have 2:"S = {a,b} \<union> S \<or> S = {a} \<union> S \<or> S = {b} \<union> S \<or> S = S"
+    by (iprover intro: disjI1 simp_thms)
+  have "finite S \<and> (S = {a,b} \<union> S \<or> S = {a} \<union> S \<or> S = {b} \<union> S \<or> S = S)"
+    using assms(1) 2 by (rule conjI)
+  thus ?thesis
+    using 1 by (rule subexI)
 qed
 
 text \<open>Una vez introducidos los resultados anteriores, procedamos con la prueba del \<open>Teorema de
@@ -1418,7 +1334,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
   \begin{demostracion}
     Consideremos la colección \<open>C\<close> formada por los conjuntos de fórmulas finitamente satisfacibles.
     Recordemos que un conjunto de fórmulas es finitamente satisfacible si todo subconjunto finito 
-    suyo es satisfacible. Vamos a probar que dicho conjunto verifica la propiedad de consistencia 
+    suyo es satisfacible. Vamos a probar que dicha colección verifica la propiedad de consistencia 
     proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, quedará probado que todo conjunto de 
     \<open>C\<close> es satisfacible, lo que demuestra el teorema.
 
@@ -1642,7 +1558,6 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
   ]
 \raggedright
   \node [root] {\<open>prop_Compactness\<close>\\ \<open>(Teorema de Compacidad (4.3.1))\<close>}
-    child { node [env] {\<open>set_in_colecComp\<close>\\ \<open>(W \<in> C)\<close>}}
     child { node [env] {\<open>pcp_colecComp\<close>\\ \<open>(C tiene la propiedad de consistencia proposicional)\<close>}
           child { node [env] {\<open>pcp_colecComp_bot\<close>\\ \<open>(\<bottom> \<notin> W)\<close>}
               child { node [env] {\<open>not_sat_bot\<close>\\ \<open>({\<bottom>} es insatisfacible)\<close>}}}
@@ -1659,10 +1574,11 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
 \end{tikzpicture}
 
   De este modo, el \<open>Teorema de Compacidad\<close> se demuestra aplicando el \<open>Teorema de\<close>\\ \<open>Existencia de 
-  Modelo\<close> a la colección \<open>C\<close>. Por tanto, basta probar que dado un conjunto finitamente satisfacible 
-  \<open>W\<close> se tiene que \<open>W \<in> C\<close> (formalizado mediante el lema auxiliar \<open>set_in_colecComp\<close>) y que \<open>C\<close> 
-  verifica la propiedad de consistencia proposicional (formalizado como \<open>pcp_colecComp\<close>). Por el 
-  lema \<open>2.0.2\<close>, es suficiente probar las siguientes condiciones dado un conjunto \<open>W \<in> C\<close> cualquiera:
+  Modelo\<close> a la colección \<open>C\<close>. Por tanto, basta probar que la colección \<open>C\<close> verifica la propiedad de 
+  consistencia proposicional (formalizado como \<open>pcp_colecComp\<close>), de modo que todo \<open>W \<in> C\<close> será
+  satisfacible. Para ello, por el lema \<open>2.0.2\<close>, es suficiente probar las siguientes condiciones dado 
+  un conjunto \<open>W \<in> C\<close> cualquiera:
+
     \begin{enumerate}
      \item \<open>\<bottom> \<notin> W\<close>. (\<open>\<Longrightarrow>\<close> formalizado como \<open>pcp_colecComp_sat\<close>)
      \item Dada \<open>p\<close> una fórmula atómica cualquiera, no se tiene 
@@ -1676,6 +1592,7 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
     \end{enumerate}
   A su vez, cada uno de los lemas auxiliares que prueban las condiciones anteriores precisa de los
   siguientes lemas:
+
   \begin{itemize}
     \item \<open>pcp_colecComp_sat\<close>: Se prueba por reducción al absurdo mediante el lema \<open>not_sat_bot\<close> que
     demuestra la insatisfacibilidad del conjunto \<open>{\<bottom>}\<close>.
@@ -1706,17 +1623,9 @@ text \<open>Para facilitar la comprensión de la demostración, mostraremos a co
     \end{itemize}
   \end{itemize}
 
-  Comencemos con las demostraciones de los lemas auxiliares empleados en la prueba del teorema.
-  El siguiente lema prueba que si un conjunto es finitamente satisfacible, entonces pertenece a \<open>C\<close>.\<close>
-
-lemma set_in_colecComp: 
-  assumes "fin_sat S"
-  shows "S \<in> colecComp"
-  unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
-
-text \<open>Probemos ahora que \<open>C\<close> verifica la propiedad de consistencia proposicional. Para ello, dado un 
-  conjunto \<open>W \<in> C\<close>, probaremos por separado que se verifican cada una de las condiciones del 
-  lema \<open>2.0.2\<close>.
+  Comencemos con las demostraciones de los lemas auxiliares empleados en la demostración del 
+  teorema. Para probar que \<open>C\<close> verifica la propiedad de consistencia proposicional, dado un conjunto 
+  \<open>W \<in> C\<close> probaremos por separado que se verifican cada una de las condiciones del lema \<open>2.0.2\<close>.
   
   En primer lugar, veamos que \<open>\<bottom> \<notin> W\<close> si \<open>W \<in> C\<close>. Para ello, precisaremos del siguiente lema 
   auxiliar que prueba que el conjunto \<open>{\<bottom>}\<close> no es satisfacible.\<close>
@@ -2014,21 +1923,19 @@ proof -
     by (simp only: sat_def)
 qed
 
-text \<open>Por último, la prueba detallada del resultado para el cuarto caso de fórmula de tipo \<open>\<alpha>\<close>: 
-  dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(\<not> G)\<close> para cierta fórmula \<open>G\<close> tal que \<open>F \<in> W\<close>, \<open>H = G\<close> y \<open>W\<^sub>0\<close> 
-  un subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+text \<open>Por último probemos que dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not>(\<not> G)\<close> para cierta fórmula \<open>G\<close> tal 
+  que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, se verifica que \<open>{G,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
 
 lemma pcp_colecComp_CON_sat4:
   assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
-          "H = G"
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
-        shows "sat ({G,H,F} \<union> Wo)"
+        shows "sat ({G,F} \<union> Wo)"
 proof -
   have "sat ({F} \<union> Wo)"
-    using assms(1,4,5,6) by (rule pcp_colecComp_elem_sat)
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
   have "F \<in> {F} \<union> Wo"
     by (simp add: insertI1)
   have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
@@ -2047,17 +1954,13 @@ proof -
     by (rule notnotD)
   then have 1:"\<forall>F \<in> {G}. \<A> \<Turnstile> F"
     by simp
-  have "\<A> \<Turnstile> H"
-    using \<open>\<A> \<Turnstile> G\<close> by (simp only: \<open>H = G\<close>)
-  then have 2:"\<forall>F \<in> {H}. \<A> \<Turnstile> F"
+  have "\<forall>F \<in> ({G}) \<union> ({F} \<union> Wo). \<A> \<Turnstile> F"
+    using Forall1 1 by (iprover intro: ball_Un)
+  then have "\<forall>F \<in> {G,F} \<union> Wo. \<A> \<Turnstile> F"
     by simp
-  have "\<forall>F \<in> ({G} \<union> {H}) \<union> ({F} \<union> Wo). \<A> \<Turnstile> F"
-    using Forall1 1 2 by (iprover intro: ball_Un)
-  then have "\<forall>F \<in> {G,H,F} \<union> Wo. \<A> \<Turnstile> F"
-    by simp
-  then have "\<exists>\<A>. \<forall>F \<in> ({G,H,F} \<union> Wo). \<A> \<Turnstile> F"
+  then have "\<exists>\<A>. \<forall>F \<in> ({G,F} \<union> Wo). \<A> \<Turnstile> F"
     by (iprover intro: exI)
-  thus "sat ({G,H,F} \<union> Wo)"
+  thus "sat ({G,F} \<union> Wo)"
     by (simp only: sat_def)
 qed
 
@@ -2124,10 +2027,14 @@ proof -
         assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
         then have "H = G"
           by (rule conjunct2)
+        then have C4:"{G,F} \<union> Wo = {G,H,F} \<union> Wo"
+          by blast
         have "F = \<^bold>\<not> (\<^bold>\<not> G)"
           using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct1)
-        show "sat ({G, H, F} \<union> Wo)"
-          using assms(1) \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> \<open>H = G\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat4)
+        have "sat ({G,F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not>(\<^bold>\<not> G)\<close> assms(3,4,5) by (rule pcp_colecComp_CON_sat4)
+        thus "sat ({G,H,F} \<union> Wo)"
+          by (simp only: C4)
       qed
     qed
   qed
@@ -2264,8 +2171,10 @@ proof -
     using C1 by (rule conjunct1)
   have "\<not>(sat Wo)"
     using C1 by (rule conjunct2)
-  have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = {Gi} \<union> Wo' \<or> Wo = Wo')"
-    using \<open>finite Wo\<close> \<open>Wo \<subseteq> {Gi} \<union> W\<close> by (rule finite_subset_insert1)
+  have "Wo \<subseteq> insert Gi W"
+    using \<open>Wo \<subseteq> {Gi} \<union> W\<close> by blast (**)
+  have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = insert Gi Wo' \<or> Wo = Wo')"
+    using \<open>finite Wo\<close> \<open>Wo \<subseteq> insert Gi W\<close> by (rule finite_subset_insert1)
   obtain Wo' where "Wo' \<subseteq> W" and C2:"finite Wo' \<and> (Wo = {Gi} \<union> Wo' \<or> Wo = Wo')"
     using Ex2 by blast
   have "finite Wo'"
@@ -2491,20 +2400,19 @@ proof -
 qed
 
 text \<open>Por último, probemos que dados \<open>W \<in> C\<close>, una fórmula \<open>F = \<not> (\<not> G)\<close> para cierta fórmula \<open>G\<close> tal 
-  que \<open>F \<in> W\<close>, \<open>H = G\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que o bien 
-  \<open>{G,F} \<union> W\<^sub>0\<close> es satisfacible o bien \<open>{H,F} \<union> W\<^sub>0\<close> es satisfacible.\<close>
+  que \<open>F \<in> W\<close> y \<open>W\<^sub>0\<close> un subconjunto finito de \<open>W\<close>, entonces se tiene que \<open>{G,F} \<union> W\<^sub>0\<close> es 
+  satisfacible.\<close>
 
 lemma pcp_colecComp_DIS_sat4:
   assumes "W \<in> colecComp"
           "F = \<^bold>\<not> (\<^bold>\<not> G)"
-          "H = G"
           "F \<in> W"
           "finite Wo"
           "Wo \<subseteq> W"
-        shows "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+        shows "sat ({G,F} \<union> Wo)"
 proof -
   have "sat ({F} \<union> Wo)"
-    using assms(1,4,5,6) by (rule pcp_colecComp_elem_sat)
+    using assms(1,3,4,5) by (rule pcp_colecComp_elem_sat)
   have "F \<in> {F} \<union> Wo"
     by simp 
   have Ex1:"\<exists>\<A>. \<forall>F \<in> ({F} \<union> Wo). \<A> \<Turnstile> F"
@@ -2529,10 +2437,8 @@ proof -
     by simp
   then have "\<exists>\<A>. \<forall>F \<in> ({G,F} \<union> Wo). \<A> \<Turnstile> F"
     by (iprover intro: exI)
-  then have "sat ({G,F} \<union> Wo)"
-    by (simp only: sat_def)
   thus ?thesis
-    by (rule disjI1)
+    by (simp only: sat_def)
 qed
 
 text \<open>De este modo, por los lemas anteriores para los distintos tipos de fórmula \<open>\<beta>\<close>, se
@@ -2599,10 +2505,10 @@ proof -
         assume "F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G"
         then have "F = \<^bold>\<not> (\<^bold>\<not> G)"
           by (rule conjunct1)
-        have "H = G"
-          using \<open>F = \<^bold>\<not> (\<^bold>\<not> G) \<and> H = G\<close> by (rule conjunct2)
-        show "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
-          using assms(1) \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close> \<open>H = G\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat4)
+        have "sat ({G,F} \<union> Wo)"
+          using assms(1) \<open>F = \<^bold>\<not> (\<^bold>\<not> G)\<close> assms(3,4,5) by (rule pcp_colecComp_DIS_sat4)
+        thus "sat ({G,F} \<union> Wo) \<or> sat ({H,F} \<union> Wo)"
+          by (rule disjI1)
       qed
     qed
   qed
@@ -2720,7 +2626,7 @@ theorem prop_Compactness:
   shows "sat W"
 proof (rule pcp_sat)
   show "W \<in> colecComp"
-    using assms by (simp only: set_in_colecComp)
+    unfolding colecComp using assms unfolding fin_sat_def by (rule CollectI)
   show "pcp colecComp"
     by (simp only: pcp_colecComp)
 qed

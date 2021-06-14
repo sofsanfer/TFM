@@ -27,8 +27,10 @@ text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de 
 
 
 text \<open>En esta sección vamos a definir la \<open>propiedad de consistencia proposicional\<close> para una 
-  colección de conjuntos de fórmulas proposicionales. Finalmente mostraremos un lema
-  que caracteriza dicha propiedad mediante la notación uniforme.\<close>
+  colección de conjuntos de fórmulas proposicionales. De este modo, el \<open>Teorema de Existencia de 
+  Modelo\<close> demuestra la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
+  colección de conjuntos que verifica dicha propiedad. Al final de la sección mostraremos un 
+  lema que caracteriza la propiedad de consistencia proposicional mediante la notación uniforme.\<close>
 
 text \<open>
   \begin{definicion}

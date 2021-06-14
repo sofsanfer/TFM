@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  9 JUN 2021 13:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  14 JUN 2021 13:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1598,92 +1598,92 @@ CON$\OT1/zplm/m/n/12 )$[]
 Cap\'{\i }tulo 4.
 (./TeoremaEx.tex
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 33.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 37.
  [91] [92] [93] [94]
-Overfull \hbox (8.97728pt too wide) in paragraph at lines 362--364
+Overfull \hbox (8.97728pt too wide) in paragraph at lines 366--368
 []\OT1/ppl/m/n/12 A con-tin-uaci[]on dare-mos un lema que per-mite car-ac-teri-
 zar un el-e-mento de la sucesi[]on
  []
 
 [95] [96] [97] [98] [99] [100]
-Overfull \hbox (3.37346pt too wide) in paragraph at lines 946--956
+Overfull \hbox (3.37346pt too wide) in paragraph at lines 952--962
 \OT1/ppl/m/n/12 En esta secci[]on de-mostraremos fi-nal-mente el \OT1/ppl/m/it/
 12 teo-rema de ex-is-ten-cia de mo-delo\OT1/ppl/m/n/12 , el cual prueba
  []
 
 [101] [102] [103] [104] [105] [106]
-Overfull \hbox (12.01335pt too wide) in paragraph at lines 1446--1454
+Overfull \hbox (12.01335pt too wide) in paragraph at lines 1452--1460
 \OT1/ppl/b/n/12 Demostraci^^Son: \OT1/ppl/m/n/12 Como \OT1/ppl/m/it/12 C \OT1/p
 pl/m/n/12 es una colecci[]on que ve-ri-fica la pro-pie-dad de con-sis-ten-cia p
 roposi-
  []
 
 [107] [108] [109] [110] [111] [112] [113]
-Overfull \hbox (4.71341pt too wide) in paragraph at lines 2001--2003
+Overfull \hbox (4.71341pt too wide) in paragraph at lines 2007--2009
 []\OT1/ppl/m/it/12 Todo con-junto de f^^Sormulas per-te-ne-ciente
  []
 
 
-Overfull \hbox (4.54182pt too wide) in paragraph at lines 2019--2024
+Overfull \hbox (4.54182pt too wide) in paragraph at lines 2025--2030
 []\OT1/ppl/m/n/12 En suma, \OT1/ppl/m/it/12 C$ [] $$ [] $ \OT1/ppl/m/n/12 es un
 a ex-tensi[]on de \OT1/ppl/m/it/12 C \OT1/ppl/m/n/12 que ve-ri-fica la pro-pie-
 dad de con-sis-ten-cia proposi-
  []
 
-[114] [115] [116] [117] [118] [119] [120] [121] [122] [123]
-Overfull \hbox (12.09848pt too wide) in paragraph at lines 2854--2859
+[114] [115] [116] [117] [118] [119] [120] [121]
+Overfull \hbox (12.09848pt too wide) in paragraph at lines 2674--2679
 []\OT1/ppl/m/n/12 La primera condici[]on se de-mues-tra por re-ducci[]on al ab-
 surdo. En efecto, si suponemos
  []
 
-[124] [125] [126]
-Overfull \hbox (17.59459pt too wide) in paragraph at lines 3011--3014
+[122] [123] [124]
+Overfull \hbox (17.59459pt too wide) in paragraph at lines 2831--2834
 []\OT1/ppl/m/n/12 Procedamos con la de-mostraci[]on de-ta-llada del \OT1/ppl/m/
 it/12 Teo-rema de Com-paci-dad \OT1/ppl/m/n/12 en Isa-belle/HOL.
  []
 
 
-Overfull \hbox (0.72191pt too wide) in paragraph at lines 3011--3014
+Overfull \hbox (0.72191pt too wide) in paragraph at lines 2831--2834
 \OT1/ppl/m/n/12 Para ello, de-fi-namos la colecci[]on de con-jun-tos fini-ta-me
 nte sat-is-faci-bles en Isa-belle/HOL.
  []
 
-[127]
-Overfull \hbox (116.40729pt too wide) in paragraph at lines 3099--3100
+[125]
+Overfull \hbox (116.40729pt too wide) in paragraph at lines 2918--2919
 [][] 
  []
 
-[128]
-Overfull \hbox (17.12444pt too wide) in paragraph at lines 3121--3124
+[126]
+Overfull \hbox (17.12444pt too wide) in paragraph at lines 2942--2945
 \OT1/ppl/m/n/12 lema \OT1/ppl/m/it/12 not[]sat[]atoms \OT1/ppl/m/n/12 que prueb
 a la in-sat-is-faci-bil-i-dad del con-junto $\OMS/zplm/m/n/12 f$\OT1/ppl/m/it/1
 2 p$\OT1/ppl/m/n/12 ,$$\OMS/zplm/m/n/12 :$ \OT1/ppl/m/it/12 p$\OMS/zplm/m/n/12 
 g$ \OT1/ppl/m/n/12 para cualquier
  []
 
-
-Overfull \hbox (44.71326pt too wide) in paragraph at lines 3133--3138
+[127]
+Overfull \hbox (44.71326pt too wide) in paragraph at lines 2954--2959
 \OT1/ppl/m/it/12 not[]colecComp\OT1/ppl/m/n/12 . A su vez, ha pre-cisado para s
 u prueba del lema au-xi-liar \OT1/ppl/m/it/12 sat[]subset[]ccontr
  []
 
 
-Overfull \hbox (21.15839pt too wide) in paragraph at lines 3138--3145
+Overfull \hbox (21.15839pt too wide) in paragraph at lines 2959--2966
 \OT1/ppl/m/n/12 de tipo $\OML/zplm/m/it/12 ^^L$\OT1/ppl/m/n/12 : \OT1/ppl/m/it/
 12 pcp[]colecComp[]DIS[]sat1\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]
 DIS[]sat2\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]DIS[]sat3\OT1/ppl/m
 /n/12 ,
  []
 
-[129]
-Overfull \hbox (4.52666pt too wide) in paragraph at lines 3148--3150
-[]\OT1/ppl/m/n/12 Comencemos con las de-mostra-ciones de los lemas au-xi-lia-re
-s em-plea-dos en la prueba
+
+Overfull \hbox (3.03741pt too wide) in paragraph at lines 2969--2972
+\OT1/ppl/m/n/12 mostraci[]on del teo-rema. Para pro-bar que \OT1/ppl/m/it/12 C 
+\OT1/ppl/m/n/12 ve-ri-fica la pro-pie-dad de con-sis-ten-cia proposi-
  []
 
-[130] [131] [132] [133] [134] [135] [136] [137] [138] [139] [140] [141]
-[142]
-Overfull \hbox (17.2695pt too wide) in paragraph at lines 4418--4422
+[128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+[140]
+Overfull \hbox (17.2695pt too wide) in paragraph at lines 4210--4214
 [][]    \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\OT1/p
 pl/m/it/12 2$\OT1/zplm/m/n/12 )$ \OT1/ppl/b/n/12 un-fold-ing \OT1/ppl/m/it/12 c
 olec-Comp fin[]sat[]def \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12
@@ -1691,8 +1691,8 @@ olec-Comp fin[]sat[]def \OT1/ppl/b/n/12 by $\OT1/zplm/m/n/12 ($\OT1/ppl/m/it/12
 1/zplm/m/n/12 ($\OT1/ppl/m/it/12 8$\OT1/zplm/m/n/12 )$$)$[] 
  []
 
-[143] [144] [145] [146] [147] [148] [149] [150] [151] [152]
-Overfull \hbox (12.87888pt too wide) in paragraph at lines 5396--5399
+[141] [142] [143] [144] [145] [146] [147] [148] [149] [150]
+Overfull \hbox (12.87888pt too wide) in paragraph at lines 5186--5189
 [][]        \OT1/ppl/b/n/12 us-ing \OT1/ppl/m/it/12 assms$\OT1/zplm/m/n/12 ($\O
 T1/ppl/m/it/12 1$\OT1/zplm/m/n/12 )$ []\OT1/ppl/m/it/12 Dis F G H[] []F $\OMS/z
 plm/m/n/12 2$ \OT1/ppl/m/it/12 W[] []finite ?Wo[] []?Wo $\OMS/zplm/m/n/12 ^^R$ 
@@ -1700,18 +1700,18 @@ plm/m/n/12 2$ \OT1/ppl/m/it/12 W[] []finite ?Wo[] []?Wo $\OMS/zplm/m/n/12 ^^R$
 le pcp[]colecComp[]DIS[]sat$\OT1/zplm/m/n/12 )$[] 
  []
 
-
-Overfull \hbox (13.53796pt too wide) in paragraph at lines 5429--5432
+[151]
+Overfull \hbox (13.53796pt too wide) in paragraph at lines 5219--5222
 []\OT1/ppl/m/n/12 En re-sumen, con los lemas \OT1/ppl/m/it/12 pcp[]colecComp[]b
 ot\OT1/ppl/m/n/12 , \OT1/ppl/m/it/12 pcp[]colecComp[]atoms\OT1/ppl/m/n/12 , \OT
 1/ppl/m/it/12 pcp[]colecComp[]CON
  []
 
-[153]) [154]
-Ap\'endice A.
-(./Glosario.tex [155
+[152]) [153] [154
 
-] [156] [157] [158] [159] [160] [161]
+]
+Ap\'endice A.
+(./Glosario.tex [155] [156] [157] [158] [159] [160] [161]
 LaTeX Font Info:    Try loading font information for OT1+phv on input line 877.
 
 
@@ -1763,10 +1763,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 39125 strings out of 492649
- 833712 string characters out of 6129622
- 905375 words of memory out of 5000000
- 41992 multiletter control sequences out of 15000+600000
+ 39123 strings out of 492649
+ 833620 string characters out of 6129622
+ 905095 words of memory out of 5000000
+ 41986 multiletter control sequences out of 15000+600000
  588588 words of font info for 189 fonts, out of 8000000 for 9000
  1209 hyphenation exceptions out of 8191
  62i,16n,104p,10397b,1814s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1785,10 +1785,10 @@ texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fon
 ts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
 1/urw/palatino/uplri8a.pfb>
-Output written on root.pdf (166 pages, 660798 bytes).
+Output written on root.pdf (166 pages, 656696 bytes).
 PDF statistics:
- 1253 PDF objects out of 1440 (max. 8388607)
- 1041 compressed objects within 11 object streams
- 349 named destinations out of 1000 (max. 500000)
+ 1257 PDF objects out of 1440 (max. 8388607)
+ 1045 compressed objects within 11 object streams
+ 353 named destinations out of 1000 (max. 500000)
  376 words of extra memory for PDF output out of 10000 (max. 10000000)
 
