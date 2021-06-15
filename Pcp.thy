@@ -8,31 +8,13 @@ theory Pcp
 begin
 (*>*)
 
-text \<open>En este capítulo nos centraremos en demostrar el \<open>teorema de existencia de modelos\<close>.
-  Dicho teorema prueba la satisfacibilidad de un conjunto de fórmulas \<open>S\<close> si este pertenece a una 
-  colección de conjuntos \<open>C\<close> que verifica la \<open>propiedad de consistencia proposicional\<close>. Para su 
-  prueba, definiremos las propiedades de \<open>carácter finito\<close> y \<open>ser cerrada bajo subconjuntos\<close> para
-  colecciones de conjuntos de fórmulas. De este modo, mediante distintos resultados que relacionan
-  estas propiedades con la \<open>propiedad de consistencia proposicional\<close>, dada una colección \<open>C\<close> 
-  cualquiera en las condiciones anteriormente descritas, podemos encontrar una colección \<open>C'\<close> que la 
-  contenga que verifique la \<open>propiedad de consistencia proposicional\<close>, sea \<open>cerrada bajo 
-  subconjuntos\<close> y de \<open>carácter finito\<close>. Por otro lado, definiremos una sucesión de conjuntos de
-  fórmulas a partir de la colección \<open>C'\<close> y el conjunto \<open>S\<close>. Además, definiremos el límite de dicha
-  sucesión que, en particular, contendrá al conjunto \<open>S\<close>. Finalmente probaremos que dicho límite es 
-  un conjunto satisfacible por el \<open>lema de Hintikka\<close> y, por contención, quedará probada la 
-  satisfacibilidad del conjunto \<open>S\<close>.
-
-  \comentario{Modificar dicho párrafo al final y ver cómo reubicar explicación completa del
-  teorema de existencia de modelo.}\<close>
-
 
 text \<open>En esta sección vamos a definir la \<open>propiedad de consistencia proposicional\<close> para una 
   colección de conjuntos de fórmulas proposicionales. De este modo, el \<open>Teorema de Existencia de 
   Modelo\<close> demuestra la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
   colección de conjuntos que verifica dicha propiedad. Al final de la sección mostraremos un 
-  lema que caracteriza la propiedad de consistencia proposicional mediante la notación uniforme.\<close>
+  lema que caracteriza la propiedad de consistencia proposicional mediante la notación uniforme.
 
-text \<open>
   \begin{definicion}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales. Decimos que
     \<open>C\<close> verifica la \<open>propiedad de consistencia proposicional\<close> si, para todo

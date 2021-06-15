@@ -2172,7 +2172,7 @@ proof -
   have "\<not>(sat Wo)"
     using C1 by (rule conjunct2)
   have "Wo \<subseteq> insert Gi W"
-    using \<open>Wo \<subseteq> {Gi} \<union> W\<close> by blast (**)
+    using \<open>Wo \<subseteq> {Gi} \<union> W\<close> by blast
   have Ex2:"\<exists>Wo' \<subseteq> W. finite Wo' \<and> (Wo = insert Gi Wo' \<or> Wo = Wo')"
     using \<open>finite Wo\<close> \<open>Wo \<subseteq> insert Gi W\<close> by (rule finite_subset_insert1)
   obtain Wo' where "Wo' \<subseteq> W" and C2:"finite Wo' \<and> (Wo = {Gi} \<union> Wo' \<or> Wo = Wo')"
