@@ -10,12 +10,6 @@ begin
 
 (* chapter \<open>Glosario de reglas\<close> *)
 
-text \<open>\comentario{Modificar las páginas donde se encuentran.}
-  
-  \comentario{Añadir las nuevas reglas usadas.}
-
-  \comentario{Modificar y unificar secciones.}\<close>
-
 text \<open>En este glosario se recoge la lista de los lemas y reglas usadas
   indicando la página del \href{https://acortar.link/BytjC}{libro de HOL} 
   donde se encuentran.\<close>
@@ -95,15 +89,35 @@ text \<open>
       \hfill (@{text if_False})
   \end{itemize}\<close>
 
-section \<open>Grupos, también combinados con órdenes (5)\<close>
+section \<open>Teoría del orden (3)\<close>
 
-text \<open>Los siguientes resultados pertenecen a la teoría de 
-  grupos \href{https://bit.ly/3fwjIPe}{Groups.thy}.\<close>
+text \<open>En Isabelle se corresponde con la teoría 
+\href{https://acortar.link/LxuXO}{Orderings.thy}.\<close>
 
-section \<open>Retículos abstractos (6)\<close>
+text \<open>
+  \begin{itemize}
+    \item (p.75) @{thm[mode=Rule] order_bot_class.bot.extremum[no_vars]} 
+      \hfill (@{text extremum})
+    \item (p.76) @{thm[mode=Rule] order_refl[no_vars]} 
+      \hfill (@{text order_refl})
+    \item (p.77) @{thm[mode=Rule] dual_order.trans[no_vars]} 
+      \hfill (@{text trans})
+  \end{itemize}\<close>
+
+section \<open>Teoría de retículos (5)\<close>
 
 text \<open>Los resultados expuestos a continuación pertenecen a la teoría de 
-  retículos \href{https://bit.ly/2N4lbjn}{Lattices.thy}.\<close>
+  retículos \href{https://acortar.link/ajRsg}{Lattices.thy}.\<close>
+
+text \<open>
+  \begin{itemize}
+    \item (p.140) @{thm[mode=Rule] linorder_class.max.cobounded1[no_vars]} 
+      \hfill (@{text cobounded1})
+    \item (p.140) @{thm[mode=Rule] linorder_class.max.cobounded2[no_vars]} 
+      \hfill (@{text cobounded2})
+    \item (p.140) @{thm[mode=Rule] max.bounded_iff[no_vars]} 
+      \hfill (@{text bounded_iff})
+  \end{itemize}\<close>
 
 section \<open>Teoría de conjuntos (6)\<close>
 
@@ -228,40 +242,59 @@ text \<open>
       \hfill (@{text set_mp})
   \end{itemize}\<close>
 
-section \<open>Nociones sobre funciones (9)\<close>
-
-text \<open>En Isabelle, la teoría de funciones se corresponde con 
-  \href{https://bit.ly/2VBe1Im}{Fun.thy}.\<close>
-
-
 section \<open>Retículos completos (10)\<close>
 
 text \<open>En Isabelle corresponde a la teoría 
-  \href{https://bit.ly/2Y5wxKA}{Complete-Lattices.thy}.\<close>
-
-section \<open>Conjuntos finitos (18)\<close>
-
-text \<open>A continuación se muestran resultados relativos a la teoría 
-  \href{https://bit.ly/3bEIScG}{Finite-Set.thy}.\<close>
+  \href{https://acortar.link/iMt7h}{Complete-Lattices.thy}.\<close>
 
 text \<open>
   \begin{itemize}
-    \item (p.419) @{thm[mode=Rule] finite[no_vars]} 
-      \hfill (@{text finite})
+    \item (p.171) @{thm[mode=Rule] UN_iff[no_vars]} 
+      \hfill (@{text UN_iff})
+    \item (p.241) @{thm[mode=Rule] Union_upper[no_vars]} 
+      \hfill (@{text Union_upper})
+    \item (p.241) @{thm[mode=Rule] Union_Un_distrib[no_vars]} 
+      \hfill (@{text Union_Un_distrib})
   \end{itemize}\<close>
 
-text\<open>  
+section \<open>Números naturales (15)\<close>
+
+text \<open>La teoría de los números naturales en Isabelle se corresponde a la teoría 
+  \href{https://acortar.link/spxlz}{Nat.thy}\<close>
+
+text \<open>
   \begin{itemize}
-    \item (p.423) @{thm[mode=Rule] finite_insert[no_vars]} 
-      \hfill (@{text finite_insert})
+    \item (p.360) @{thm[mode=Rule] le_Suc_eq[no_vars]} 
+      \hfill (@{text le_Suc_eq})
+    \item (p.386) @{thm[mode=Rule] lift_Suc_mono_le[no_vars]} 
+      \hfill (@{text lift_Suc_mono_le})
   \end{itemize}\<close>
 
-section \<open>Composición de functores (33)\<close>
+section \<open>Conjuntos finitos (17)\<close>
 
-text \<open>En esta sección se muestran resultados pertenecientes a la
-  teoría de composición de functores naturales acotados de Isabelle 
-  \href{https://bit.ly/2zGl9v6}{BNFComposition.thy}.\<close>
+text \<open>A continuación se muestran resultados relativos a la teoría 
+  \href{https://acortar.link/F6WFh}{Finite-Set.thy}.\<close>
 
+text \<open>
+  \begin{itemize}
+    \item (p.425) @{thm[mode=Rule] finite[no_vars]} 
+      \hfill (@{text finite})
+    \item (p.429) @{thm[mode=Rule] finite_insert[no_vars]} 
+      \hfill (@{text finite_insert})
+    \item (p.429) @{thm[mode=Rule] finite_Diff[no_vars]} 
+      \hfill (@{text finite_Diff})
+  \end{itemize}\<close>
+
+section \<open>Retículos condicionalmente completos (89)\<close>
+
+text \<open>El Isabelle se corresponde con la teoría 
+  \href{https://acortar.link/1suGL}{Conditionally-Complete-Lattices.thy}.\<close>
+
+text \<open>
+  \begin{itemize}
+    \item (p.1632) @{thm[mode=Rule] cSup_singleton[no_vars]} 
+      \hfill (@{text cSup_singleton})
+  \end{itemize}\<close>
 
 (*<*)
 end

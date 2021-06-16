@@ -496,8 +496,6 @@ text \<open>En esta sección demostraremos finalmente el \<open>Teorema de Exist
   quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención del límite, lo 
   que prueba el \<open>Teorema de Existencia de Modelo\<close>.
 
-  \comentario{Echarle otro ojo.}
-
   En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 
   límite de toda sucesión de conjuntos de \<open>C\<close> según la definición \<open>4.1.1\<close> pertenece a \<open>C\<close>.

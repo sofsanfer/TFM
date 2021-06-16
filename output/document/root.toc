@@ -8,51 +8,12 @@
 \contentsline {section}{\numberline {4.2}El Teorema de Existencia de Modelo}{101}{section.4.2}
 \contentsline {section}{\numberline {4.3}Teorema de Compacidad}{116}{section.4.3}
 \contentsline {chapter}{\numberline {A}Lemas de HOL usados}{155}{appendix.A}
-\contentsline {section}{\numberline {A.1}La base de l\IeC {\'o}gica de primer orden (2)}{155}{section.A.1}
-\contentsline {subsection}{\numberline {A.1.1}L\IeC {\'o}gica primitiva (2.1)}{155}{subsection.A.1.1}
-\contentsline {subsubsection}{\numberline {A.1.1.1}Conectivas y cuantificadores definidos (2.1.2)}{155}{subsubsection.A.1.1.1}
-\contentsline {subsubsection}{\numberline {A.1.1.2}Axiomas y definiciones b\IeC {\'a}sicas (2.1.4)}{155}{subsubsection.A.1.1.2}
-\contentsline {subsection}{\numberline {A.1.2}Reglas fundamentales (2.2)}{156}{subsection.A.1.2}
-\contentsline {subsubsection}{\numberline {A.1.2.1}Reglas de congruencia para aplicaciones (2.2.2)}{156}{subsubsection.A.1.2.1}
-\contentsline {subsubsection}{\numberline {A.1.2.2}Igualdad de booleanos - \emph {\sfcode 42 1000 \sfcode 63 1000 \sfcode 33 1000 \sfcode 58 1000 \sfcode 59 1000 \sfcode 44 1000 \normalfont \itshape iff} (2.2.3)}{156}{subsubsection.A.1.2.2}
-\contentsline {subsubsection}{\numberline {A.1.2.3}Cuantificador universal I (2.2.5)}{156}{subsubsection.A.1.2.3}
-\contentsline {subsubsection}{\numberline {A.1.2.4}Negaci\IeC {\'o}n (2.2.7)}{156}{subsubsection.A.1.2.4}
-\contentsline {subsubsection}{\numberline {A.1.2.5}Implicaci\IeC {\'o}n (2.2.8)}{156}{subsubsection.A.1.2.5}
-\contentsline {subsubsection}{\numberline {A.1.2.6}Disyunci\IeC {\'o}n I (2.2.9)}{157}{subsubsection.A.1.2.6}
-\contentsline {subsubsection}{\numberline {A.1.2.7}Derivaci\IeC {\'o}n de \emph {\sfcode 42 1000 \sfcode 63 1000 \sfcode 33 1000 \sfcode 58 1000 \sfcode 59 1000 \sfcode 44 1000 \normalfont \itshape iffI} (2.2.10)}{157}{subsubsection.A.1.2.7}
-\contentsline {subsubsection}{\numberline {A.1.2.8}Cuantificador universal II (2.2.12)}{157}{subsubsection.A.1.2.8}
-\contentsline {subsubsection}{\numberline {A.1.2.9}Cuantificador existencia (2.2.13)}{157}{subsubsection.A.1.2.9}
-\contentsline {subsubsection}{\numberline {A.1.2.10}Conjunci\IeC {\'o}n (2.2.14)}{157}{subsubsection.A.1.2.10}
-\contentsline {subsubsection}{\numberline {A.1.2.11}Disyunci\IeC {\'o}n II (2.2.15)}{158}{subsubsection.A.1.2.11}
-\contentsline {subsubsection}{\numberline {A.1.2.12}Atomizaci\IeC {\'o}n de conectivas de nivel intermedio (2.2.20)}{158}{subsubsection.A.1.2.12}
-\contentsline {subsection}{\numberline {A.1.3}Configuraci\IeC {\'o}n del paquete (2.3)}{158}{subsection.A.1.3}
-\contentsline {subsubsection}{\numberline {A.1.3.1}Simplificadores (2.3.4)}{158}{subsubsection.A.1.3.1}
-\contentsline {section}{\numberline {A.2}Grupos, tambi\IeC {\'e}n combinados con \IeC {\'o}rdenes (5)}{158}{section.A.2}
-\contentsline {subsection}{\numberline {A.2.1}Estructuras abstractas}{158}{subsection.A.2.1}
-\contentsline {section}{\numberline {A.3}Ret\IeC {\'\i }culos abstractos (6)}{158}{section.A.3}
-\contentsline {section}{\numberline {A.4}Teor\IeC {\'\i }a de conjuntos para l\IeC {\'o}gica de orden superior (7)}{159}{section.A.4}
-\contentsline {subsection}{\numberline {A.4.1}Subconjuntos y cuantificadores acotados (7.2)}{159}{subsection.A.4.1}
-\contentsline {subsection}{\numberline {A.4.2}Operaciones b\IeC {\'a}sicas (7.3)}{159}{subsection.A.4.2}
-\contentsline {subsubsection}{\numberline {A.4.2.1}Subconjuntos (7.3.1)}{159}{subsubsection.A.4.2.1}
-\contentsline {subsubsection}{\numberline {A.4.2.2}El conjunto vac\IeC {\'\i }o (7.3.3)}{159}{subsubsection.A.4.2.2}
-\contentsline {subsubsection}{\numberline {A.4.2.3}Uni\IeC {\'o}n binaria (7.3.8)}{160}{subsubsection.A.4.2.3}
-\contentsline {subsubsection}{\numberline {A.4.2.4}Aumentar un conjunto - insertar (7.3.10)}{160}{subsubsection.A.4.2.4}
-\contentsline {subsubsection}{\numberline {A.4.2.5}Conjuntos unitarios, insertar (7.3.11)}{160}{subsubsection.A.4.2.5}
-\contentsline {subsubsection}{\numberline {A.4.2.6}Imagen de un conjunto por una funci\IeC {\'o}n (7.3.12)}{160}{subsubsection.A.4.2.6}
-\contentsline {subsection}{\numberline {A.4.3}M\IeC {\'a}s operaciones y lemas (7.4)}{160}{subsection.A.4.3}
-\contentsline {subsubsection}{\numberline {A.4.3.1}Reglas derivadas sobre subconjuntos (7.4.2)}{160}{subsubsection.A.4.3.1}
-\contentsline {subsubsection}{\numberline {A.4.3.2}Igualdades sobre la union, intersecci\IeC {\'o}n, inclusion, etc. (7.4.3)}{161}{subsubsection.A.4.3.2}
-\contentsline {subsubsection}{\numberline {A.4.3.3}Monoton\IeC {\'\i }a de varias operaciones (7.4.4)}{161}{subsubsection.A.4.3.3}
-\contentsline {section}{\numberline {A.5}Nociones sobre funciones (9)}{162}{section.A.5}
-\contentsline {subsection}{\numberline {A.5.1}Actualizaci\IeC {\'o}n de funciones (9.6)}{162}{subsection.A.5.1}
-\contentsline {section}{\numberline {A.6}Ret\IeC {\'\i }culos completos (10)}{162}{section.A.6}
-\contentsline {subsection}{\numberline {A.6.1}Ret\IeC {\'\i }culos completos en conjuntos (10.6)}{162}{subsection.A.6.1}
-\contentsline {subsubsection}{\numberline {A.6.1.1}Uni\IeC {\'o}n (10.6.3)}{162}{subsubsection.A.6.1.1}
-\contentsline {section}{\numberline {A.7}Conjuntos finitos (18)}{162}{section.A.7}
-\contentsline {subsection}{\numberline {A.7.1}Predicado de conjuntos finitos (18.1)}{162}{subsection.A.7.1}
-\contentsline {subsection}{\numberline {A.7.2}Finitud y operaciones de conjuntos comunes (18.2)}{163}{subsection.A.7.2}
-\contentsline {section}{\numberline {A.8}Composici\IeC {\'o}n de functores naturales acotados (33)}{163}{section.A.8}
-\contentsline {section}{\numberline {A.9}El tipo de datos de la listas finitas (66)}{163}{section.A.9}
-\contentsline {subsection}{\numberline {A.9.1}Funciones b\IeC {\'a}sicas de procesamiento de listas (66.1)}{163}{subsection.A.9.1}
-\contentsline {subsubsection}{\numberline {A.9.1.1}Funci\IeC {\'o}n \emph {\sfcode 42 1000 \sfcode 63 1000 \sfcode 33 1000 \sfcode 58 1000 \sfcode 59 1000 \sfcode 44 1000 \normalfont \itshape set}}{163}{subsubsection.A.9.1.1}
-\contentsline {chapter}{Bibliograf\'{\i }a}{165}{appendix*.17}
+\contentsline {section}{\numberline {A.1}La base de l\IeC {\'o}gica de primer orden (1)}{155}{section.A.1}
+\contentsline {section}{\numberline {A.2}Teor\IeC {\'\i }a del orden (3)}{159}{section.A.2}
+\contentsline {section}{\numberline {A.3}Teor\IeC {\'\i }a de ret\IeC {\'\i }culos (5)}{159}{section.A.3}
+\contentsline {section}{\numberline {A.4}Teor\IeC {\'\i }a de conjuntos (6)}{159}{section.A.4}
+\contentsline {section}{\numberline {A.5}Ret\IeC {\'\i }culos completos (10)}{163}{section.A.5}
+\contentsline {section}{\numberline {A.6}N\IeC {\'u}meros naturales (15)}{163}{section.A.6}
+\contentsline {section}{\numberline {A.7}Conjuntos finitos (17)}{164}{section.A.7}
+\contentsline {section}{\numberline {A.8}Ret\IeC {\'\i }culos condicionalmente completos (89)}{164}{section.A.8}
+\contentsline {chapter}{Bibliograf\'{\i }a}{165}{appendix*.9}
