@@ -13,8 +13,6 @@ text \<open>En este capítulo se define la \<open>propiedad de consistencia prop
   colección de conjuntos de fórmulas proposicionales y se caracteriza la propiedad 
   de consistencia proposicional mediante la notación uniforme.
 
-\comentario{Modificado el párrafo anterior.}
-
   \begin{definicion}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales. Decimos que
     \<open>C\<close> verifica la \<open>propiedad de consistencia proposicional\<close> si, para todo

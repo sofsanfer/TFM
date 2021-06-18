@@ -10,10 +10,6 @@ theory TeoremaEx
 begin
 (*>*)
 
-text \<open>\comentario{Tutores: cambiar José Antonio por Joaquín}\<close>
-
-text \<open>\comentario{Tutores: No hay que cambiarlos. Estamos José Antonio y yo.}\<close>
-
 section \<open>Sucesiones de conjuntos\<close>
 
 text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
@@ -1218,11 +1214,8 @@ next
     using 1 by (rule subexI)
 qed
 
-text \<open>El segundo resultado sobre subconjuntos finitos es consecuencia
-  del anterior.
-
-\comentario{Suprimir la frase anterio, pues ahora la demostración
-no usa el lema previo.}
+text \<open>Veamos otro resultado sobre subconjuntos finitos que emplearemos en las demostraciones
+  posteriores.
 
 \begin{lema}
   Sea \<open>S\<close> un conjunto finito tal que \<open>S \<subseteq> {a,b} \<union> B\<close>. Entonces, existe un conjunto finito \<open>S' \<subseteq> B\<close> 

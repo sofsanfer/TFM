@@ -18,8 +18,6 @@ text \<open>En este capítulo se estudian las colecciones de conjuntos \<open>ce
   consistencia proposicional se puede extender a otra que también verifique dicha propiedad y sea de carácter 
   finito.
 
-\comentario{Modificado el párrafo anterior.}
-
   \begin{definicion}
     Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 
     de la colección pertenece a la colección.

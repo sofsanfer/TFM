@@ -26,8 +26,6 @@ text \<open>En esta sección introduciremos la notación uniforme inicialmente
   dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. Para justificar dicha clasificación,
   introduzcamos inicialmente la definición de fórmulas semánticamente equivalentes.
 
-\comentario{Modificado el párrafo anterior.}
-
   \begin{definicion}
     Dos fórmulas son \<open>semánticamente equivalentes\<close> si tienen el mismo valor para toda 
     interpretación.
