@@ -89,7 +89,10 @@ text \<open>
       \hfill (@{text if_False})
   \end{itemize}\<close>
 
-section \<open>Teoría del orden (3)\<close>
+section \<open>Teoría de órdenes (3)
+
+\comentario{He modificado el título de la sección.}
+\<close>
 
 text \<open>En Isabelle se corresponde con la teoría 
 \href{https://acortar.link/LxuXO}{Orderings.thy}.\<close>

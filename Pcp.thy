@@ -9,11 +9,11 @@ begin
 (*>*)
 
 
-text \<open>En esta sección vamos a definir la \<open>propiedad de consistencia proposicional\<close> para una 
-  colección de conjuntos de fórmulas proposicionales. De este modo, el \<open>Teorema de Existencia de 
-  Modelo\<close> demuestra la satisfacibilidad de un conjunto de fórmulas si este pertenece a una 
-  colección de conjuntos que verifica dicha propiedad. Al final de la sección mostraremos un 
-  lema que caracteriza la propiedad de consistencia proposicional mediante la notación uniforme.
+text \<open>En este capítulo se define la \<open>propiedad de consistencia proposicional\<close> para una 
+  colección de conjuntos de fórmulas proposicionales y se caracteriza la propiedad 
+  de consistencia proposicional mediante la notación uniforme.
+
+\comentario{Modificado el párrafo anterior.}
 
   \begin{definicion}
     Sea \<open>C\<close> una colección de conjuntos de fórmulas proposicionales. Decimos que

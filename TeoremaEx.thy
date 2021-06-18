@@ -12,6 +12,8 @@ begin
 
 text \<open>\comentario{Tutores: cambiar José Antonio por Joaquín}\<close>
 
+text \<open>\comentario{Tutores: No hay que cambiarlos. Estamos José Antonio y yo.}\<close>
+
 section \<open>Sucesiones de conjuntos\<close>
 
 text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
@@ -23,6 +25,21 @@ text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open
   demostrará que si una fórmula pertenece al límite, entonces pertenece a algún conjunto de
   la sucesión \<open>{S\<^sub>n}\<close>. Finalmente, mostraremos un resultado sobre conjuntos finitos contenidos en
   el límite.
+
+
+\comentario{La introducción al capítulo debe ir antes que la
+subsección.}
+
+\comentario{He realizado cambios al modo impersonal: "se..".}
+\comentario{Cuando es al principio de un capítulo, hay que modificar 
+cuando dices apartado o sección por capítulo.}
+
+\comentario{Párrafo de introducción al capítulo: En este capítulo se demuestra
+el Teorema de Existencia de Modelos para la Lógica Proposicional y
+el Teorema de Compacidad.}
+
+\comentario{En el párrafo de introducción a la sección escribir lo que comentas
+sobre la sucesión de conjuntos que se define.}
 
   Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
   de un alfabeto numerable de variables proposicionales. Por lo tanto, el conjunto de fórmulas 
@@ -477,17 +494,17 @@ qed simp
 
 section \<open>El Teorema de Existencia de Modelo\<close>
 
-text \<open>En esta sección demostraremos finalmente el \<open>Teorema de Existencia de Modelo\<close>, el cual prueba 
+text \<open>En esta sección demostraremos el \<open>Teorema de Existencia de Modelo\<close>, que prueba 
   que todo conjunto de fórmulas \<open>S\<close> perteneciente a una colección \<open>C\<close> que verifique la propiedad de 
   consistencia proposicional es satisfacible. Para ello, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y sea de 
-  carácter finito. De este modo, introduciremos distintos resultados sobre colecciones \<open>C'\<close> con 
+  carácter finito. Pare ello, introduciremos distintos resultados sobre colecciones \<open>C'\<close> con 
   las características anteriores. En primer lugar, probaremos que el límite de la sucesión definida
   según la definición \<open>4.1.1\<close> pertenece a la colección \<open>C'\<close> que la define si esta verifica la 
   propiedad de consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito. De 
   hecho, probaremos que dicho límite es un elemento maximal de la colección que lo define si esta es 
   cerrada bajo subconjuntos y verifica la propiedad de consistencia proposicional. Por otra parte 
-  demostraremos que el límite se trata de un conjunto de \<open>Hintikka\<close> si está definido a partir de una 
+  demostraremos que el límite es un conjunto de \<open>Hintikka\<close> si está definido a partir de una 
   colección \<open>C'\<close> que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos 
   y sea de carácter finito. Por tanto, por el \<open>Teorema de Hintikka\<close>, en las condiciones anteriores 
   el límite es un conjunto satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión 
@@ -495,6 +512,12 @@ text \<open>En esta sección demostraremos finalmente el \<open>Teorema de Exist
   \<open>4.1.1\<close> a partir de \<open>C'\<close> y \<open>S \<in> C'\<close>. Por tanto, como \<open>C'\<close> verifica las características anteriores, 
   quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención del límite, lo 
   que prueba el \<open>Teorema de Existencia de Modelo\<close>.
+
+
+\comentario{En el párrafo anterior hay que sacar factor común el que una clase
+verifique la  propiedad de consistencia proposicional, sea cerrada bajo 
+subconjuntos y de carácter finito, pues se repite varias veces en el
+mismo párrafo.}
 
   En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 
@@ -1195,7 +1218,11 @@ next
     using 1 by (rule subexI)
 qed
 
-text \<open>El segundo resultado sobre subconjuntos finitos es consecuencia del anterior.
+text \<open>El segundo resultado sobre subconjuntos finitos es consecuencia
+  del anterior.
+
+\comentario{Suprimir la frase anterio, pues ahora la demostración
+no usa el lema previo.}
 
 \begin{lema}
   Sea \<open>S\<close> un conjunto finito tal que \<open>S \<subseteq> {a,b} \<union> B\<close>. Entonces, existe un conjunto finito \<open>S' \<subseteq> B\<close> 

@@ -20,11 +20,13 @@ text \<open>En esta sección introduciremos la notación uniforme inicialmente
 
   \comentario{Añadir referencia bibliográfica.}
 
-  De este modo, las fórmulas proposicionales pueden ser de dos tipos: aquellas que 
-  de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
+  De este modo, las fórmulas proposicionales pueden ser de dos tipos:
+  las de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
   Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> respectivamente, tiene asociada sus  
   dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> respectivamente. Para justificar dicha clasificación,
   introduzcamos inicialmente la definición de fórmulas semánticamente equivalentes.
+
+\comentario{Modificado el párrafo anterior.}
 
   \begin{definicion}
     Dos fórmulas son \<open>semánticamente equivalentes\<close> si tienen el mismo valor para toda 
