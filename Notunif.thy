@@ -15,7 +15,7 @@ text \<open>
 text \<open>En este capítulo introduciremos la notación uniforme inicialmente 
   desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
   de dicha notación es reducir el número de casos a considerar sobre la estructura de 
-  las fórmulas al clasificar éstas en dos categorías, facilitando las demostraciones
+  las fórmulas al clasificar estas en dos categorías, facilitando las demostraciones
   y métodos empleados en adelante.
 
   \comentario{Añadir referencia bibliográfica.}
@@ -102,7 +102,7 @@ text \<open>Por tanto, diremos intuitivamente que una fórmula es de tipo \<open
   como reglas de introducción. Además, añadiremos explícitamente una cuarta regla que introduce la 
   doble negación de una fórmula como fórmula de tipo \<open>\<alpha>\<close>. De este modo, facilitaremos la prueba de 
   resultados posteriores relacionados con la definición de conjunto de Hintikka, que constituyen una
-  base para la demostración del \<open>teorema de existencia de modelo\<close>.\<close>
+  base para la demostración del \<open>Teorema de Existencia de Modelo\<close>.\<close>
 
 inductive Con :: "'a formula => 'a formula => 'a formula => bool" where
 "Con (And F G) F G" |

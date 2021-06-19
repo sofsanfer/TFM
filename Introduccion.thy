@@ -87,6 +87,26 @@ text \<open>
 
 \comentario{Modificar en adelante.}
 
+  Este trabajo constituye una continuación del Trabajo de Fin de Grado
+  \<open>Elementos de lógica formalizados en Isabelle/HOL\<close> dedicado al estudio
+  y formalización de la sintaxis, semántica y lema de Hintikka de la lógica
+  proposicional. Inspirado en la primera sección de la publicación 
+  \<open>Propositional Proof Systems\<close> \<open>[10]\<close> de Julius Michaelis y Tobias Nipkow, y
+  basando su contenido teórico en el libro \<open>First-Order Logic and Automated 
+  Theorem Proving\<close> \<open>[4]\<close> de Melvin Fitting, este trabajo tiene como objetivo la
+  demostración y formalización del \<open>Teorema de Existencia de Modelo\<close>, concluyendo
+  con el \<open>Teorema de Compacidad\<close> como consecuencia del mismo. Para ello, consta
+  de un primer capítulo donde se introduce la notación uniforme de fórmulas
+  proposicionales. En el segundo capítulo se define la propiedad de consistencia 
+  proposicional para colecciones de conjuntos de fórmulas. Seguidamente, en el 
+  tercer capítulo se definen las colecciones de conjuntos de fórmulas cerradas 
+  bajo subconjuntos y de carácter finito. En el cuarto y último capítulo se 
+  definen ciertas sucesiones de conjuntos de fórmulas proposicionales para 
+  demostrar finalmente \<open>Teorema de Existencia de Modelo\<close>, concluyendo con la 
+  prueba del \<open>Teorema de Compacidad\<close> como consecuencia de este.
+
+  \comentario{Revisar párrafo anterior.}
+
   El objetivo de este trabajo es la formalización de elementos y 
   resultados destacados de la lógica proposicional en Isabelle/HOL. 
   Está inspirado en la primera sección de la publicación \<open>Propositional 
@@ -102,24 +122,28 @@ text \<open>
   el filósofo y lógico Jaakko Hintikka (1929- 2015) como herramienta 
   para probar la completitud de la lógica de primer orden.
 
-  En el primer capítulo sobre sintaxis se establecen inicialmente las
-  variables proposicionales que conforman los elementos básicos del 
-  alfabeto, junto con una serie de conectivas que actúan sobre ellas. 
-  De este modo, se define por recursión el conjunto de las fórmulas 
-  proposicionales como el menor conjunto de estructuras sintácticas 
-  con dicho alfabeto y conectivas que contiene a las fórmulas
-  básicas (una constante \<open>\<bottom>\<close> y las propias variables proposicionales, 
-  llamadas fórmulas atómicas) y es cerrado mediante procedimientos de 
-  formación de nuevas fórmulas a partir de otras, en los que intervienen 
-  las conectivas. Como es habitual, dada esta definición 
-  recursiva, se dispone de un esquema de inducción sobre fórmulas que
-  nos permitirá probar los resultados expuestos. Del mismo modo, se 
-  define recursivamente el conjunto de subfórmulas de una fórmula, 
-  mostrando propiedades que describen la estructura de las mismas en 
-  relación con las propias fórmulas. Finalmente se presenta la 
-  fórmula \<open>\<top>\<close> a partir de la constante \<open>\<bottom>\<close>, y dos conectivas 
-  generalizadas que permiten extender conectivas binarias a una lista de 
-  fórmulas.  
+  \comentario{El párrafo anterior forma parte de la introducción del TFG.}
+
+  En el primer capítulo se introduce la notación uniforme para las fórmulas
+  proposicionales con el fin de reducir el número de casos a considerar sobre 
+  la estructura de las fórmulas al clasificarlas en dos categorías. Para 
+  justificar la clasificación, se introduce inicialmente la definición de 
+  fórmulas semánticamente equivalentes como aquellas que tienen el mismo 
+  valor para toda interpretación. De este modo, las fórmulas proposicionales
+  pueden ser de dos tipos: las de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las 
+  de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> 
+  respectivamente, tiene asociada sus dos componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close>, o \<open>\<beta>\<^sub>1\<close> y 
+  \<open>\<beta>\<^sub>2\<close> respectivamente. Intuitivamente, una fórmula es de tipo \<open>\<alpha>\<close> con 
+  componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> si es semánticamente equivalente a la fórmula 
+  \<open>\<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>, y una fórmula será de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> si es 
+  semánticamente equivalente a la fórmula \<open>\<beta>\<^sub>1 \<or> \<beta>\<^sub>2\<close>. En Isabelle, formalizaremos
+  sintácticamente los conjuntos de fórmulas de tipo \<open>\<alpha>\<close> y de tipo \<open>\<beta>\<close> como
+  predicados inductivos, simplificando la intuición original al prescindir 
+  de la noción de equivalencia semántica que permite clasificar la totalidad 
+  de las fórmulas proposicionales. Finalmente, el capítulo concluye con un lema
+  de caracterización de los conjuntos de Hintikka mediante la notación uniforme.
+
+\comentario{Revisar párrafo anterior.} 
 
   En el siguiente capítulo precisamos la semántica asociada a las 
   estructuras sintácticas. Para ello, se define una interpretación como 
@@ -149,6 +173,8 @@ text \<open>
   determina paralelamente una interpretación asociada, garantizando que 
   esta es modelo de cada fórmula del conjunto.
 
+\comentario{Modificar hasta aquí.}
+
   En lo referente a las demostraciones asistidas por Isabelle/HOL de
   los resultados formalizados a lo largo de las secciones, se elaborarán 
   dos tipos de pruebas correspondientes a dos tácticas distintas. En 
@@ -170,8 +196,8 @@ text \<open>
   \<open>Este trabajo está disponible en la plataforma\<close> GitHub \<open>mediante el
   siguiente enlace:\<close> 
 
-\href{https://github.com/sofsanfer/TFG}
-                  {\url{https://github.com/sofsanfer/TFG}}\<close>
+\href{https://github.com/sofsanfer/TFM}
+                  {\url{https://github.com/sofsanfer/TFM}}\<close>
 (*<*)
 end
 (*>*) 

@@ -1538,19 +1538,17 @@ qed
 text \<open>Para facilitar la comprensión de la demostración, mostraremos a continuación un grafo que 
   estructura las relaciones de necesidad de los lemas auxiliares empleados.
 
-\comentario{Poner grafo bien.}
-
 \begin{tikzpicture}
   [
     grow                    = down,
-    level 1/.style          = {sibling distance=6cm},
-    level 2/.style          = {sibling distance=4.5cm},
-    level 3/.style          = {sibling distance=8cm}
-    level 4/.style          = {sibling distance=4cm}
-    level 5/.style          = {sibling distance=5cm}
-    level 6/.style          = {sibling distance=5cm}
+    level distance          = 1.3cm,
+    level 1/.style          = {sibling distance=1cm},
+    level 2/.style          = {sibling distance=4.3cm},
+    level 3/.style          = {sibling distance=3cm},
+    level 4/.style          = {sibling distance=4cm},
+    level 5/.style          = {sibling distance=5cm},
+    level 6/.style          = {sibling distance=5cm},
     level 7/.style          = {sibling distance=5cm};
-    level distance          = 4.5cm,
     edge from parent/.style = {draw},
     every node/.style       = {font=\tiny},
     sloped
