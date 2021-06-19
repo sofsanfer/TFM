@@ -17,48 +17,50 @@
 %
 \begin{isamarkuptext}%
 El objetivo de la Lógica es la formalización del conocimiento y su
-razonamiento. En este trabajo, estudiaremos elementos de la lógica
-proposicional desde la perspectiva teórica de \isa{First−Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} de Melvin Fitting. En particular, nos 
-centraremos en la sintaxis y la semántica, concluyendo con la versión 
-proposicional del lema de Hintikka sobre la satisfacibilidad de una 
-clase determinada de conjuntos de fórmulas. Siguiendo la inspiración de 
-\isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} por Julius Michaelis y Tobias 
-Nipkow, los resultados expuestos serán formalizados mediante Isabelle: 
-un demostrador interactivo que incluye herramientas de razonamiento 
-automático para guiar al usuario en el proceso de formalización, 
-verificación y automatización de resultados. Concretamente, Isabelle/HOL 
-es una especialización de Isabelle para la lógica de orden superior. 
-Las demostraciones de los resultados en Isabelle/HOL se elaborarán 
-siguiendo dos tácticas distintas a lo largo del trabajo. En primer 
-lugar, cada lema será probado de manera detallada prescindiendo de toda 
-herramienta de razonamiento automático, como resultado de una búsqueda 
-inversa en cada paso de la prueba. En contraposición, elaboraremos una 
-demostración automática alternativa de cada resultado que utilice todas 
-las herramientas de razonamiento automático que proporciona el 
-demostrador. De este modo, se evidenciará la capacidad de razonamiento 
-automático de Isabelle.%
+razonamiento. Este trabajo constituye una continuación del Trabajo de Fin de
+Grado \isa{Elementos\ de\ lógica\ formalizados\ en\ Isabelle{\isacharslash}HOL}, donde se estudiaron
+la sintaxis, semántica y \isa{Lema\ de\ Hintikka} de la Lógica Proposicional
+desde la perspectiva teórica de \isa{First−Order\ Logic\ and\ Automated\ Theorem\ Proving} 
+\isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} de Melvin Fitting. Manteniendo dicha perspectiva, nos centraremos en la 
+demostración del \isa{Teorema\ de\ Existencia\ de\ Modelo}, concluyendo con 
+el \isa{Teorema\ de\ Compacidad} como consecuencia del mismo. Siguiendo la 
+inspiración de \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} por Julius Michaelis y Tobias 
+Nipkow, los resultados expuestos serán formalizados mediante Isabelle: un demostrador 
+interactivo que incluye herramientas de razonamiento automático para guiar al usuario 
+en el proceso de formalización, verificación y automatización de resultados. 
+Concretamente, Isabelle/HOL es una especialización de Isabelle para la lógica de orden 
+superior. Las demostraciones de los resultados en Isabelle/HOL se elaborarán siguiendo 
+dos tácticas distintas a lo largo del trabajo. En primer lugar, cada lema será probado 
+de manera detallada prescindiendo de toda herramienta de razonamiento automático, como 
+resultado de una búsqueda inversa en cada paso de la prueba. En contraposición, 
+elaboraremos una demostración automática alternativa de cada resultado que utilice todas 
+las herramientas de razonamiento automático que proporciona el demostrador. De este modo, 
+se evidenciará la capacidad de razonamiento automático de Isabelle.%
 \end{isamarkuptext}\isamarkuptrue%
 %
 \begin{isamarkuptext}%
 Logic’s purpose is about knowledge’s formalisation and its 
-reasoning. In this project, we will approach Propositional Logic’s 
-elements from the theoretical perspective of \isa{First−Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} by Melvin Fitting. We will focus on the 
-study of Syntax and Semantics to reach propositional version of 
-Hintikka’s lemma, which determinate the satisfiability of a concrete 
-type of formula set. Inspired by \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} by 
-Julius Michaelis and Tobias Nipkow, these results will be formalised 
-using Isabelle: a proof assistant including automatic reasoning tools 
-to guide the user on formalising, verifying and automating results. In 
-particular, Isabelle/HOL is the specialization of Isabelle for 
-High-Order Logic. The processing of the results formalised in 
+reasoning. This project is a continuation of \isa{Elementos\ de\ lógica\ formalizados\ en\ Isabelle{\isacharslash}HOL} in which we studied Syntax, Semantics and
+a propositional version of Hintikka's lemma from the theoretical perspective 
+of \isa{First−Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} by Melvin Fitting. 
+Following the same perspective, we will focus on the demonstration of 
+\isa{Propositional\ Model\ Existence} theorem, concluding with the \isa{Propositional\ Compactness} theorem as a consecuence. Inspired by \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} by Julius Michaelis and Tobias Nipkow, 
+these results will be formalised using Isabelle: a proof assistant including 
+automatic reasoning tools to guide the user on formalising, verifying and 
+automating results. In particular, Isabelle/HOL is the specialization of 
+Isabelle for High-Order Logic. The processing of the results formalised in 
 Isabelle/HOL follows two directions. In the first place, each lemma 
 will be proved on detail without any automation, as the result of an 
 inverse research on every step of the demonstration until it is only 
 completed with deductions based on elementary rules and definitions. 
 Conversely, we will alternatively prove the results using all the 
 automatic reasoning tools that are provide by the proof assistant. In 
-this way,\\ Isabelle’s power of automatic reasoning will be shown as the 
+this way, Isabelle’s power of automatic reasoning will be shown as the 
 contrast between these two different proving tactics.%
+\end{isamarkuptext}\isamarkuptrue%
+%
+\begin{isamarkuptext}%
+\comentario{Modificar referencia bibliográfica si necesario.}%
 \end{isamarkuptext}\isamarkuptrue%
 %
 \isadelimtheory
@@ -80,42 +82,41 @@ contrast between these two different proving tactics.%
 %:%19=8%:%
 %:%20=9%:%
 %:%21=10%:%
-%:%21=11%:%
-%:%22=12%:%
-%:%23=13%:%
-%:%24=14%:%
-%:%25=15%:%
-%:%26=16%:%
-%:%27=17%:%
-%:%28=18%:%
-%:%29=19%:%
-%:%30=20%:%
-%:%31=21%:%
-%:%32=22%:%
-%:%33=23%:%
-%:%34=24%:%
-%:%35=25%:%
-%:%36=26%:%
-%:%37=27%:%
-%:%38=28%:%
-%:%39=29%:%
-%:%43=34%:%
-%:%44=35%:%
-%:%45=36%:%
-%:%45=37%:%
-%:%46=38%:%
-%:%47=39%:%
-%:%48=40%:%
-%:%49=41%:%
-%:%50=42%:%
-%:%51=43%:%
-%:%52=44%:%
-%:%53=45%:%
-%:%54=46%:%
-%:%55=47%:%
-%:%56=48%:%
-%:%57=49%:%
-%:%58=50%:%
-%:%59=51%:%
-%:%60=52%:%
-%:%61=53%:%
+%:%22=11%:%
+%:%23=12%:%
+%:%24=13%:%
+%:%25=14%:%
+%:%26=15%:%
+%:%27=16%:%
+%:%28=17%:%
+%:%29=18%:%
+%:%30=19%:%
+%:%31=20%:%
+%:%32=21%:%
+%:%33=22%:%
+%:%34=23%:%
+%:%35=24%:%
+%:%36=25%:%
+%:%37=26%:%
+%:%38=27%:%
+%:%42=31%:%
+%:%43=32%:%
+%:%43=33%:%
+%:%44=34%:%
+%:%45=35%:%
+%:%46=36%:%
+%:%47=37%:%
+%:%47=38%:%
+%:%48=39%:%
+%:%49=40%:%
+%:%50=41%:%
+%:%51=42%:%
+%:%52=43%:%
+%:%53=44%:%
+%:%54=45%:%
+%:%55=46%:%
+%:%56=47%:%
+%:%57=48%:%
+%:%58=49%:%
+%:%59=50%:%
+%:%63=53%:%

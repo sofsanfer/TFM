@@ -85,6 +85,8 @@ text \<open>
   herramientas interactivas que asistan a los matemáticos en el proceso 
   de formalización, demostración y búsqueda de nuevos resultados. 
 
+\comentario{Modificar en adelante.}
+
   El objetivo de este trabajo es la formalización de elementos y 
   resultados destacados de la lógica proposicional en Isabelle/HOL. 
   Está inspirado en la primera sección de la publicación \<open>Propositional 

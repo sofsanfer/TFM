@@ -12,11 +12,11 @@ begin
 
 text \<open>En este capítulo se demuestra el \<open>Teorema de Existencia de Modelo\<close> para la Lógica 
   Proposicional y el \<open>Teorema de Compacidad\<close>. Para ello, definiremos ciertas sucesiones monótonas 
-  \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>.\<close>
+  de conjuntos de fórmulas a partir de una colección y un conjunto perteneciente a ella.\<close>
 
 section \<open>Sucesiones de conjuntos\<close>
 
-text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
+text\<open>En este apartado vamos a definir las sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
   partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>. De este modo, se demostrará que si
   \<open>C\<close> verifica la propiedad de consistencia proposicional, entonces todo elemento de la suceción
   \<open>{S\<^sub>n}\<close> pertenece a la colección. Igualmente, daremos un resultado que permite caracterizar 
@@ -25,9 +25,6 @@ text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open
   demostrará que si una fórmula pertenece al límite, entonces pertenece a algún conjunto de
   la sucesión \<open>{S\<^sub>n}\<close>. Finalmente, mostraremos un resultado sobre conjuntos finitos contenidos en
   el límite.
-
-\comentario{En el párrafo de introducción a la sección escribir lo que comentas
-sobre la sucesión de conjuntos que se define.}
 
   Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
   de un alfabeto numerable de variables proposicionales. Por lo tanto, el conjunto de fórmulas 

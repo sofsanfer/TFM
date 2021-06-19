@@ -1,5 +1,5 @@
 \contentsline {chapter}{Sumario}{5}{chapter*.2}
-\contentsline {chapter}{Introducci\IeC {\'o}n}{7}{chapter*.3}
+\contentsline {chapter}{Introducci\IeC {\'o}n}{7}{chapter*.4}
 \contentsline {chapter}{\numberline {1}Notaci\IeC {\'o}n uniforme}{11}{chapter.1}
 \contentsline {chapter}{\numberline {2}Propiedad de consistencia proposicional}{31}{chapter.2}
 \contentsline {chapter}{\numberline {3}Colecciones de conjuntos cerradas bajo subconjuntos y de car\IeC {\'a}cter finito}{51}{chapter.3}
@@ -9,7 +9,7 @@
 \contentsline {section}{\numberline {4.3}Teorema de Compacidad}{116}{section.4.3}
 \contentsline {chapter}{\numberline {A}Lemas de HOL usados}{155}{appendix.A}
 \contentsline {section}{\numberline {A.1}La base de l\IeC {\'o}gica de primer orden (1)}{155}{section.A.1}
-\contentsline {section}{\numberline {A.2}Teor\IeC {\'\i }a del orden (3)}{159}{section.A.2}
+\contentsline {section}{\numberline {A.2}Teor\IeC {\'\i }a de \IeC {\'o}rdenes (3)}{159}{section.A.2}
 \contentsline {section}{\numberline {A.3}Teor\IeC {\'\i }a de ret\IeC {\'\i }culos (5)}{159}{section.A.3}
 \contentsline {section}{\numberline {A.4}Teor\IeC {\'\i }a de conjuntos (6)}{159}{section.A.4}
 \contentsline {section}{\numberline {A.5}Ret\IeC {\'\i }culos completos (10)}{163}{section.A.5}
