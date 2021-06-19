@@ -10,6 +10,10 @@ theory TeoremaEx
 begin
 (*>*)
 
+text \<open>En este capítulo se demuestra el \<open>Teorema de Existencia de Modelo\<close> para la Lógica 
+  Proposicional y el \<open>Teorema de Compacidad\<close>. Para ello, definiremos ciertas sucesiones monótonas 
+  \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>.\<close>
+
 section \<open>Sucesiones de conjuntos\<close>
 
 text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
@@ -21,18 +25,6 @@ text\<open>En este apartado vamos a definir ciertas sucesiones monótonas \<open
   demostrará que si una fórmula pertenece al límite, entonces pertenece a algún conjunto de
   la sucesión \<open>{S\<^sub>n}\<close>. Finalmente, mostraremos un resultado sobre conjuntos finitos contenidos en
   el límite.
-
-
-\comentario{La introducción al capítulo debe ir antes que la
-subsección.}
-
-\comentario{He realizado cambios al modo impersonal: "se..".}
-\comentario{Cuando es al principio de un capítulo, hay que modificar 
-cuando dices apartado o sección por capítulo.}
-
-\comentario{Párrafo de introducción al capítulo: En este capítulo se demuestra
-el Teorema de Existencia de Modelos para la Lógica Proposicional y
-el Teorema de Compacidad.}
 
 \comentario{En el párrafo de introducción a la sección escribir lo que comentas
 sobre la sucesión de conjuntos que se define.}
@@ -496,24 +488,16 @@ text \<open>En esta sección demostraremos el \<open>Teorema de Existencia de Mo
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y sea de 
   carácter finito. Pare ello, introduciremos distintos resultados sobre colecciones \<open>C'\<close> con 
   las características anteriores. En primer lugar, probaremos que el límite de la sucesión definida
-  según la definición \<open>4.1.1\<close> pertenece a la colección \<open>C'\<close> que la define si esta verifica la 
-  propiedad de consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito. De 
-  hecho, probaremos que dicho límite es un elemento maximal de la colección que lo define si esta es 
-  cerrada bajo subconjuntos y verifica la propiedad de consistencia proposicional. Por otra parte 
-  demostraremos que el límite es un conjunto de \<open>Hintikka\<close> si está definido a partir de una 
-  colección \<open>C'\<close> que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos 
-  y sea de carácter finito. Por tanto, por el \<open>Teorema de Hintikka\<close>, en las condiciones anteriores 
-  el límite es un conjunto satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión 
+  según la definición \<open>4.1.1\<close> a partir de \<open>C'\<close> pertenece a \<open>C'\<close>. De hecho, probaremos que 
+  dicho límite es un elemento maximal de la colección que lo define si esta es cerrada bajo 
+  subconjuntos y verifica la propiedad de consistencia proposicional. Por otra parte demostraremos 
+  que el límite es un conjunto de \<open>Hintikka\<close> si está definido a partir de una colección \<open>C'\<close> con las 
+  propiedades descritas. Por tanto, por el \<open>Teorema de Hintikka\<close>, en las condiciones anteriores el 
+  límite es un conjunto satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión 
   \<open>C'\<close>, se verifica que está contenido en el límite de la sucesión definida según la definición 
-  \<open>4.1.1\<close> a partir de \<open>C'\<close> y \<open>S \<in> C'\<close>. Por tanto, como \<open>C'\<close> verifica las características anteriores, 
-  quedará demostrada la satisfacibilidad del conjunto \<open>S\<close> al heredarla por contención del límite, lo 
-  que prueba el \<open>Teorema de Existencia de Modelo\<close>.
-
-
-\comentario{En el párrafo anterior hay que sacar factor común el que una clase
-verifique la  propiedad de consistencia proposicional, sea cerrada bajo 
-subconjuntos y de carácter finito, pues se repite varias veces en el
-mismo párrafo.}
+  \<open>4.1.1\<close> a partir de \<open>C'\<close> y \<open>S \<in> C'\<close>. Por tanto, quedará demostrada la satisfacibilidad del 
+  conjunto \<open>S\<close> al heredarla por contención del límite, lo que prueba el \<open>Teorema de Existencia de 
+  Modelo\<close>.
 
   En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 

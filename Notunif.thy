@@ -12,7 +12,7 @@ text \<open>
 
 \<close>
 
-text \<open>En esta sección introduciremos la notación uniforme inicialmente 
+text \<open>En este capítulo introduciremos la notación uniforme inicialmente 
   desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
   de dicha notación es reducir el número de casos a considerar sobre la estructura de 
   las fórmulas al clasificar éstas en dos categorías, facilitando las demostraciones

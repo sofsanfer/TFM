@@ -13,10 +13,9 @@ text \<open>En este capítulo se estudian las colecciones de conjuntos \<open>ce
   \<open>carácter finito\<close>, y se demuestran tres resultados sobre las mismas. El primero de ellos permite
   extender una colección con la propiedad de consistencia proposicional a otra que 
   también la verifique y sea cerrada bajo subconjuntos. Posteriormente probaremos que toda colección
-  de carácter finito es cerrada bajo subconjuntos. Finalmente, se demuestra que 
-  una colección cerrada bajo subconjuntos que verifique la propiedad de
-  consistencia proposicional se puede extender a otra que también verifique dicha propiedad y sea de carácter 
-  finito.
+  de carácter finito es cerrada bajo subconjuntos. Finalmente, se demuestra que una colección 
+  cerrada bajo subconjuntos que verifique la propiedad de consistencia proposicional se puede 
+  extender a otra que también verifique dicha propiedad y sea de carácter finito.
 
   \begin{definicion}
     Una colección de conjuntos es \<open>cerrada bajo subconjuntos\<close> si todo subconjunto de cada conjunto 
@@ -86,15 +85,7 @@ lemma "\<not> finite_character {{Atom 0}}"
 lemma "finite_character {{Atom 0},{}}"
   unfolding finite_character_def by auto
 
-text \<open>Una vez introducidas las definiciones anteriores, veamos los resultados que las relacionan
-  con la propiedad de consistencia proposicional. De este modo, combinándolos en la prueba del 
-  \<open>teorema de existencia de modelo\<close>, dada una colección \<open>C\<close> cualquiera que verifique la propiedad 
-  de consistencia proposicional, podemos extenderla a una colección \<open>C'\<close> que también la verifique y 
-  además sea cerrada bajo subconjuntos y de carácter finito.
-
-\comentario{Volver a revisar el párrafo anterior al final de la
-redacción de la sección.}
-
+text \<open>
   \begin{lema}
     Toda colección de conjuntos con la propiedad de consistencia proposicional se puede extender a
     una colección que también verifique la propiedad de consistencia proposicional y sea cerrada 
