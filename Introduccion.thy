@@ -85,50 +85,27 @@ text \<open>
   herramientas interactivas que asistan a los matemáticos en el proceso 
   de formalización, demostración y búsqueda de nuevos resultados. 
 
-\comentario{Modificar en adelante.}
-
   Este trabajo constituye una continuación del Trabajo de Fin de Grado
-  \<open>Elementos de lógica formalizados en Isabelle/HOL\<close> dedicado al estudio
+  \<open>Elementos de lógica formalizados en Isabelle/HOL\<close> \<open>[4]\<close> dedicado al estudio
   y formalización de la sintaxis, semántica y lema de Hintikka de la lógica
   proposicional. Inspirado en la primera sección de la publicación 
   \<open>Propositional Proof Systems\<close> \<open>[10]\<close> de Julius Michaelis y Tobias Nipkow, y
   basando su contenido teórico en el libro \<open>First-Order Logic and Automated 
-  Theorem Proving\<close> \<open>[4]\<close> de Melvin Fitting, este trabajo tiene como objetivo la
+  Theorem Proving\<close> \<open>[5]\<close> de Melvin Fitting, este trabajo tiene como objetivo la
   demostración y formalización del \<open>Teorema de Existencia de Modelo\<close>, concluyendo
   con el \<open>Teorema de Compacidad\<close> como consecuencia del mismo. Para ello, consta
-  de un primer capítulo donde se introduce la notación uniforme de fórmulas
-  proposicionales. En el segundo capítulo se define la propiedad de consistencia 
-  proposicional para colecciones de conjuntos de fórmulas. Seguidamente, en el 
-  tercer capítulo se definen las colecciones de conjuntos de fórmulas cerradas 
-  bajo subconjuntos y de carácter finito. En el cuarto y último capítulo se 
-  definen ciertas sucesiones de conjuntos de fórmulas proposicionales para 
-  demostrar finalmente \<open>Teorema de Existencia de Modelo\<close>, concluyendo con la 
-  prueba del \<open>Teorema de Compacidad\<close> como consecuencia de este.
+  de cuatro capítulos. En el primero se introduce la notación uniforme para 
+  fórmulas proposicionales, en el segundo capítulo se define la propiedad de 
+  consistencia proposicional para colecciones de conjuntos de fórmulas, en el 
+  tercero se definen las colecciones cerradas bajo subconjuntos y de carácter 
+  finito y en el último capítulo se demuestra finalmente \<open>Teorema de Existencia 
+  de Modelo\<close>, concluyendo con la prueba del \<open>Teorema de Compacidad\<close>.
 
-  \comentario{Revisar párrafo anterior.}
-
-  El objetivo de este trabajo es la formalización de elementos y 
-  resultados destacados de la lógica proposicional en Isabelle/HOL. 
-  Está inspirado en la primera sección de la publicación \<open>Propositional 
-  Proof Systems\<close> \<open>[10]\<close> de Julius Michaelis y Tobias Nipkow. Del mismo 
-  modo, cabe citar los artículos \<open>Constructive Formalization of 
-  Classical Modal Logic\<close> \<open>[3]\<close> de Christian Doczkal y Gert Smolka, y 
-  \<open>Propositional Calculus in Coq\<close> \<open>[13]\<close> de Floris van Doorn, por la 
-  influencia ejercida en el desarrollo de este trabajo. El contenido 
-  teórico del mismo se fundamenta en el libro \<open>First-Order Logic and 
-  Automated Theorem Proving\<close> \<open>[4]\<close> de Melvin Fitting. Los tres capítulos 
-  tratados consisten en la sintaxis, semántica y, finalmente, la versión 
-  proposicional del lema de Hintikka. Este último fue desarrollado por 
-  el filósofo y lógico Jaakko Hintikka (1929- 2015) como herramienta 
-  para probar la completitud de la lógica de primer orden.
-
-  \comentario{El párrafo anterior forma parte de la introducción del TFG.}
-
-  En el primer capítulo se introduce la notación uniforme para las fórmulas
+  El primer capítulo introduce la notación uniforme para las fórmulas
   proposicionales con el fin de reducir el número de casos a considerar sobre 
   la estructura de las fórmulas al clasificarlas en dos categorías. Para 
-  justificar la clasificación, se introduce inicialmente la definición de 
-  fórmulas semánticamente equivalentes como aquellas que tienen el mismo 
+  justificar la clasificación, se introduce la definición de fórmulas 
+  semánticamente equivalentes como aquellas que tienen el mismo 
   valor para toda interpretación. De este modo, las fórmulas proposicionales
   pueden ser de dos tipos: las de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las 
   de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). Cada fórmula de tipo \<open>\<alpha>\<close>, o \<open>\<beta>\<close> 
@@ -136,44 +113,80 @@ text \<open>
   \<open>\<beta>\<^sub>2\<close> respectivamente. Intuitivamente, una fórmula es de tipo \<open>\<alpha>\<close> con 
   componentes \<open>\<alpha>\<^sub>1\<close> y \<open>\<alpha>\<^sub>2\<close> si es semánticamente equivalente a la fórmula 
   \<open>\<alpha>\<^sub>1 \<and> \<alpha>\<^sub>2\<close>, y una fórmula será de tipo \<open>\<beta>\<close> con componentes \<open>\<beta>\<^sub>1\<close> y \<open>\<beta>\<^sub>2\<close> si es 
-  semánticamente equivalente a la fórmula \<open>\<beta>\<^sub>1 \<or> \<beta>\<^sub>2\<close>. En Isabelle, formalizaremos
+  semánticamente equivalente a la fórmula\\ \<open>\<beta>\<^sub>1 \<or> \<beta>\<^sub>2\<close>. En Isabelle, se formalizarán
   sintácticamente los conjuntos de fórmulas de tipo \<open>\<alpha>\<close> y de tipo \<open>\<beta>\<close> como
   predicados inductivos, simplificando la intuición original al prescindir 
   de la noción de equivalencia semántica que permite clasificar la totalidad 
   de las fórmulas proposicionales. Finalmente, el capítulo concluye con un lema
   de caracterización de los conjuntos de Hintikka mediante la notación uniforme.
 
-\comentario{Revisar párrafo anterior.} 
+  En el siguiente capítulo se define la propiedad de consistencia proposicional
+  para colecciones de conjuntos de fórmulas. Al final del capítulo se introduce 
+  un lema que caracteriza dicha propiedad mediante notación uniforme, lo que 
+  facilita las demostraciones de los resultados posteriores.
 
-  En el siguiente capítulo precisamos la semántica asociada a las 
-  estructuras sintácticas. Para ello, se define una interpretación como 
-  una aplicación que asocia un booleano a cada variable proposicional. 
-  Por recursión sobre la estructura de las fórmulas proposicionales, 
-  podemos definir el valor de una fórmula en una interpretación dada. 
-  De este modo, se prueba que dicho valor queda unívocamente determinado 
-  por la imagen que la interpretación asocia a cada variable
-  proposicional que aparece en la fórmula. Las nociones semánticas se 
-  extienden análogamente a las fórmulas formadas con conectivas 
-  generalizadas.
+  En el tercer capítulo se definen las colecciones de conjuntos de fórmulas
+  cerradas bajo subconjuntos y de carácter finito. Una colección de conjuntos 
+  es cerrada bajo subconjuntos si todo subconjunto de cada conjunto de la 
+  colección pertenece a la colección, mientras que una colección es de 
+  carácter finito si para todo conjunto son equivalentes que el conjunto
+  pertenezca a la colección y que todo subconjunto finito del mismo pertenezca
+  a la colección. Posteriormente se muestran tres resultados sobre las mismas. 
+  El primero de ellos permite extender una colección con la propiedad de 
+  consistencia proposicional a otra que también la verifique y sea cerrada bajo 
+  subconjuntos. Seguidamente se probará que toda colección de carácter finito
+  es cerrada bajo subconjuntos. En último lugar, se demuestra que una colección
+  cerrada bajo subconjuntos que verifique la propiedad de consistencia 
+  proposicional se puede extender a otra que también verifique dicha propiedad 
+  y sea de carácter finito. 
 
-  Posteriormente se introducen dos definiciones semánticas 
-  fundamentales: modelo de una fórmula y fórmula satisfacible. 
-  La primera hace referencia a una interpretación en la que el valor 
-  de una fórmula dada es verdadero, mientras la segunda se trata de una
-  fórmula para la que existe una interpretación que sea modelo suyo. 
-  Ambas nociones se extienden a conjuntos de fórmulas. 
-  Por otro lado, se define el concepto de tautología como aquella 
-  fórmula cuyo valor es verdadero en toda interpretación. Para concluir 
-  la sección, daremos una noción formal de consecuencia lógica. 
+  Finalmente, en el cuarto capítulo se demuestra el \<open>Teorema de Existencia de 
+  Modelo\<close> y el \<open>Teorema de Compacidad\<close> como consecuencia de este. El capítulo 
+  está dividido en tres apartados: el primero donde se definen ciertas 
+  sucesiones de conjuntos de fórmulas a partir de una colección y un conjunto, 
+  el segundo apartado dedicado a la demostración del \<open>Teorema de Existencia de 
+  Modelo\<close> y el tercer apartado donde se demuestra el \<open>Teorema de Compacidad\<close>. 
 
-  El capítulo tercero, y último, tiene como objetivo probar el lema de
-  Hintikka, que manifiesta la satisfacibilidad de ciertos conjuntos de
-  fórmulas. Para ello define dicha clase de conjuntos, llamados 
-  conjuntos de Hintikka, de modo que para cada uno de ellos se 
-  determina paralelamente una interpretación asociada, garantizando que 
-  esta es modelo de cada fórmula del conjunto.
+  En la primera parte del cuarto capítulo se definen ciertas sucesiones 
+  monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a partir de una colección \<open>C\<close> y un 
+  conjunto \<open>S \<in> C\<close>. De este modo, se prueban distintas propiedades sobre dichas 
+  sucesiones de conjuntos que permiten la prueba del \<open>Teorema de Existencia de
+  Modelo\<close>. En primer lugar, se prueba que si \<open>C\<close> verifica la propiedad de 
+  consistencia proposicional, entonces todo elemento de la suceción \<open>{S\<^sub>n}\<close> 
+  pertenece a la colección. Igualmente, se dará un resultado que permite 
+  caracterizar conjuntos de \<open>{S\<^sub>n}\<close> en función de los anteriores. Por otro lado, 
+  definiremos el límite de dichas sucesiones, probando que todo conjunto de 
+  \<open>{S\<^sub>n}\<close> está contenido en el límite. Además, se demostrará que si una fórmula 
+  pertenece al límite, entonces pertenece a algún conjunto de la sucesión \<open>{S\<^sub>n}\<close>. 
+  Finalmente, se mostrará un resultado sobre conjuntos finitos contenidos en el 
+  límite.
 
-\comentario{Modificar hasta aquí.}
+  En la segunda parte del capítulo se demuestra el \<open>Teorema de Existencia
+  de Modelo\<close>, que prueba que todo conjunto de fórmulas \<open>S\<close> perteneciente a una 
+  colección \<open>C\<close> que verifique la propiedad de consistencia proposicional es 
+  satisfacible. Para ello, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> que 
+  tenga la propiedad de consistencia proposicional, sea cerrada bajo 
+  subconjuntos y sea de carácter finito, de modo que se introducirán
+  distintos resultados sobre colecciones con las características anteriores. 
+  En primer lugar, probaremos que el límite de la sucesión \<open>{S\<^sub>n}\<close> definida a 
+  partir de \<open>C'\<close> y \<open>S\<close> pertenece a \<open>C'\<close>. En particular se probará que dicho 
+  límite es un elemento maximal de la colección que lo define si esta es 
+  cerrada bajo subconjuntos y verifica la propiedad de consistencia 
+  proposicional. Por otra parte se demostrará que el límite de \<open>{S\<^sub>n}\<close> es un 
+  conjunto de Hintikka si está definido a partir de una colección \<open>C'\<close> con 
+  las propiedades descritas luego, por el \<open>Teorema de Hintikka\<close>, es
+  satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión \<open>C'\<close>, 
+  se verifica que está contenido en el límite de la sucesión \<open>{S\<^sub>n}\<close> definida a 
+  partir de \<open>C'\<close> y\\ \<open>S \<in> C'\<close>. Por tanto, quedará demostrada la satisfacibilidad 
+  del conjunto \<open>S\<close> al heredarla por contención del límite.
+
+  Por último, el apartado final del capítulo se dedica a la demostración del 
+  \<open>Teorema de Compacidad\<close> que prueba que todo conjunto de fórmulas finitamente 
+  satisfacible es satisfacible. Para su demostración consideraremos la 
+  colección formada por los conjuntos de fórmulas finitamente satisfacibles. 
+  Probaremos que dicha colección verifica la propiedad de consistencia 
+  proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto 
+  perteneciente a ella será satisfacible. 
 
   En lo referente a las demostraciones asistidas por Isabelle/HOL de
   los resultados formalizados a lo largo de las secciones, se elaborarán 

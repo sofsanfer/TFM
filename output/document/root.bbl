@@ -22,6 +22,13 @@ Christian Doczkal and Gert Smolka.
 \newblock En \href{http://www.cs.ru.nl/~spitters/coqw_files/paper_1.pdf}
   {\url{http://www.cs.ru.nl/~spitters/coqw_files/paper_1.pdf}}.
 
+\bibitem{tfg}
+Sof{\'i}a~Santiago Fern{\'a}ndez.
+\newblock {\em Elementos de l{\'o}gica formalizados en {I}sabelle/HOL}.
+\newblock 2020.
+\newblock Trabajo Fin de Grado. En \href{https://github.com/sofsanfer/TFG}
+  {\url{https://github.com/sofsanfer/TFG}}.
+
 \bibitem{fitting1996first}
 M.~Fitting.
 \newblock {\em First-order Logic and Automated Theorem Proving}.
@@ -53,14 +60,6 @@ Dr. Kevin~P. Lee.
 \newblock En \href{http://cc.kangwon.ac.kr/~kimoon/me/me-132/math-writing.pdf}
   {\url{http://cc.kangwon.ac.kr/~kimoon/me/me-132/math-writing.pdf}}.
 
-\bibitem{CC}
-F.~F{\'e}lix~Lara Mart{\'\i}n.
-\newblock Temas 3 de ``{C}iencias de la computaci{\'o}n (2018--19)'': Funciones
-  recursivas.
-\newblock Technical report, Univ. de Sevilla, 2019.
-\newblock En \href{http://www.cs.us.es/cursos/cc-2018/Tema-03.pdf}
-  {\url{http://www.cs.us.es/cursos/cc-2018/Tema-03.pdf}}.
-
 \bibitem{proofsystems}
 Julius Michaelis and Tobias Nipkow.
 \newblock Propositional {P}roof {S}ystems.
@@ -75,6 +74,11 @@ Tobias Nipkow.
 \newblock En
   \href{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/main.pdf}
   {\url{https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019/doc/main.pdf}}.
+
+\bibitem{notacion}
+R.~M. Smullyan.
+\newblock {\em First {O}rder {L}ogic}.
+\newblock Springer--Verlag, 1968.
 
 \bibitem{tutorial}
 Lawrence C.~Paulson Tobias~Nipkow and Markus Wenzel.

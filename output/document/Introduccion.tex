@@ -89,66 +89,102 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   herramientas interactivas que asistan a los matemáticos en el proceso 
   de formalización, demostración y búsqueda de nuevos resultados. 
 
-\comentario{Modificar en adelante.}
+  Este trabajo constituye una continuación del Trabajo de Fin de Grado
+  \isa{Elementos\ de\ lógica\ formalizados\ en\ Isabelle{\isacharslash}HOL} \isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} dedicado al estudio
+  y formalización de la sintaxis, semántica y lema de Hintikka de la lógica
+  proposicional. Inspirado en la primera sección de la publicación 
+  \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} de Julius Michaelis y Tobias Nipkow, y
+  basando su contenido teórico en el libro \isa{First{\isacharminus}Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{5}}{\isacharbrackright}} de Melvin Fitting, este trabajo tiene como objetivo la
+  demostración y formalización del \isa{Teorema\ de\ Existencia\ de\ Modelo}, concluyendo
+  con el \isa{Teorema\ de\ Compacidad} como consecuencia del mismo. Para ello, consta
+  de cuatro capítulos. En el primero se introduce la notación uniforme para 
+  fórmulas proposicionales, en el segundo capítulo se define la propiedad de 
+  consistencia proposicional para colecciones de conjuntos de fórmulas, en el 
+  tercero se definen las colecciones cerradas bajo subconjuntos y de carácter 
+  finito y en el último capítulo se demuestra finalmente \isa{Teorema\ de\ Existencia\ de\ Modelo}, concluyendo con la prueba del \isa{Teorema\ de\ Compacidad}.
 
-  El objetivo de este trabajo es la formalización de elementos y 
-  resultados destacados de la lógica proposicional en Isabelle/HOL. 
-  Está inspirado en la primera sección de la publicación \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} de Julius Michaelis y Tobias Nipkow. Del mismo 
-  modo, cabe citar los artículos \isa{Constructive\ Formalization\ of\ Classical\ Modal\ Logic} \isa{{\isacharbrackleft}{\isadigit{3}}{\isacharbrackright}} de Christian Doczkal y Gert Smolka, y 
-  \isa{Propositional\ Calculus\ in\ Coq} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{3}}{\isacharbrackright}} de Floris van Doorn, por la 
-  influencia ejercida en el desarrollo de este trabajo. El contenido 
-  teórico del mismo se fundamenta en el libro \isa{First{\isacharminus}Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{4}}{\isacharbrackright}} de Melvin Fitting. Los tres capítulos 
-  tratados consisten en la sintaxis, semántica y, finalmente, la versión 
-  proposicional del lema de Hintikka. Este último fue desarrollado por 
-  el filósofo y lógico Jaakko Hintikka (1929- 2015) como herramienta 
-  para probar la completitud de la lógica de primer orden.
+  El primer capítulo introduce la notación uniforme para las fórmulas
+  proposicionales con el fin de reducir el número de casos a considerar sobre 
+  la estructura de las fórmulas al clasificarlas en dos categorías. Para 
+  justificar la clasificación, se introduce la definición de fórmulas 
+  semánticamente equivalentes como aquellas que tienen el mismo 
+  valor para toda interpretación. De este modo, las fórmulas proposicionales
+  pueden ser de dos tipos: las de tipo conjuntivo (las fórmulas \isa{{\isasymalpha}}) y las 
+  de tipo disyuntivo (las fórmulas \isa{{\isasymbeta}}). Cada fórmula de tipo \isa{{\isasymalpha}}, o \isa{{\isasymbeta}} 
+  respectivamente, tiene asociada sus dos componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}}, o \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y 
+  \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} respectivamente. Intuitivamente, una fórmula es de tipo \isa{{\isasymalpha}} con 
+  componentes \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}} y \isa{{\isasymalpha}\isactrlsub {\isadigit{2}}} si es semánticamente equivalente a la fórmula 
+  \isa{{\isasymalpha}\isactrlsub {\isadigit{1}}\ {\isasymand}\ {\isasymalpha}\isactrlsub {\isadigit{2}}}, y una fórmula será de tipo \isa{{\isasymbeta}} con componentes \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}} y \isa{{\isasymbeta}\isactrlsub {\isadigit{2}}} si es 
+  semánticamente equivalente a la fórmula\\ \isa{{\isasymbeta}\isactrlsub {\isadigit{1}}\ {\isasymor}\ {\isasymbeta}\isactrlsub {\isadigit{2}}}. En Isabelle, se formalizarán
+  sintácticamente los conjuntos de fórmulas de tipo \isa{{\isasymalpha}} y de tipo \isa{{\isasymbeta}} como
+  predicados inductivos, simplificando la intuición original al prescindir 
+  de la noción de equivalencia semántica que permite clasificar la totalidad 
+  de las fórmulas proposicionales. Finalmente, el capítulo concluye con un lema
+  de caracterización de los conjuntos de Hintikka mediante la notación uniforme.
 
-  En el primer capítulo sobre sintaxis se establecen inicialmente las
-  variables proposicionales que conforman los elementos básicos del 
-  alfabeto, junto con una serie de conectivas que actúan sobre ellas. 
-  De este modo, se define por recursión el conjunto de las fórmulas 
-  proposicionales como el menor conjunto de estructuras sintácticas 
-  con dicho alfabeto y conectivas que contiene a las fórmulas
-  básicas (una constante \isa{{\isasymbottom}} y las propias variables proposicionales, 
-  llamadas fórmulas atómicas) y es cerrado mediante procedimientos de 
-  formación de nuevas fórmulas a partir de otras, en los que intervienen 
-  las conectivas. Como es habitual, dada esta definición 
-  recursiva, se dispone de un esquema de inducción sobre fórmulas que
-  nos permitirá probar los resultados expuestos. Del mismo modo, se 
-  define recursivamente el conjunto de subfórmulas de una fórmula, 
-  mostrando propiedades que describen la estructura de las mismas en 
-  relación con las propias fórmulas. Finalmente se presenta la 
-  fórmula \isa{{\isasymtop}} a partir de la constante \isa{{\isasymbottom}}, y dos conectivas 
-  generalizadas que permiten extender conectivas binarias a una lista de 
-  fórmulas.  
+  En el siguiente capítulo se define la propiedad de consistencia proposicional
+  para colecciones de conjuntos de fórmulas. Al final del capítulo se introduce 
+  un lema que caracteriza dicha propiedad mediante notación uniforme, lo que 
+  facilita las demostraciones de los resultados posteriores.
 
-  En el siguiente capítulo precisamos la semántica asociada a las 
-  estructuras sintácticas. Para ello, se define una interpretación como 
-  una aplicación que asocia un booleano a cada variable proposicional. 
-  Por recursión sobre la estructura de las fórmulas proposicionales, 
-  podemos definir el valor de una fórmula en una interpretación dada. 
-  De este modo, se prueba que dicho valor queda unívocamente determinado 
-  por la imagen que la interpretación asocia a cada variable
-  proposicional que aparece en la fórmula. Las nociones semánticas se 
-  extienden análogamente a las fórmulas formadas con conectivas 
-  generalizadas.
+  En el tercer capítulo se definen las colecciones de conjuntos de fórmulas
+  cerradas bajo subconjuntos y de carácter finito. Una colección de conjuntos 
+  es cerrada bajo subconjuntos si todo subconjunto de cada conjunto de la 
+  colección pertenece a la colección, mientras que una colección es de 
+  carácter finito si para todo conjunto son equivalentes que el conjunto
+  pertenezca a la colección y que todo subconjunto finito del mismo pertenezca
+  a la colección. Posteriormente se muestran tres resultados sobre las mismas. 
+  El primero de ellos permite extender una colección con la propiedad de 
+  consistencia proposicional a otra que también la verifique y sea cerrada bajo 
+  subconjuntos. Seguidamente se probará que toda colección de carácter finito
+  es cerrada bajo subconjuntos. En último lugar, se demuestra que una colección
+  cerrada bajo subconjuntos que verifique la propiedad de consistencia 
+  proposicional se puede extender a otra que también verifique dicha propiedad 
+  y sea de carácter finito. 
 
-  Posteriormente se introducen dos definiciones semánticas 
-  fundamentales: modelo de una fórmula y fórmula satisfacible. 
-  La primera hace referencia a una interpretación en la que el valor 
-  de una fórmula dada es verdadero, mientras la segunda se trata de una
-  fórmula para la que existe una interpretación que sea modelo suyo. 
-  Ambas nociones se extienden a conjuntos de fórmulas. 
-  Por otro lado, se define el concepto de tautología como aquella 
-  fórmula cuyo valor es verdadero en toda interpretación. Para concluir 
-  la sección, daremos una noción formal de consecuencia lógica. 
+  Finalmente, en el cuarto capítulo se demuestra el \isa{Teorema\ de\ Existencia\ de\ Modelo} y el \isa{Teorema\ de\ Compacidad} como consecuencia de este. El capítulo 
+  está dividido en tres apartados: el primero donde se definen ciertas 
+  sucesiones de conjuntos de fórmulas a partir de una colección y un conjunto, 
+  el segundo apartado dedicado a la demostración del \isa{Teorema\ de\ Existencia\ de\ Modelo} y el tercer apartado donde se demuestra el \isa{Teorema\ de\ Compacidad}. 
 
-  El capítulo tercero, y último, tiene como objetivo probar el lema de
-  Hintikka, que manifiesta la satisfacibilidad de ciertos conjuntos de
-  fórmulas. Para ello define dicha clase de conjuntos, llamados 
-  conjuntos de Hintikka, de modo que para cada uno de ellos se 
-  determina paralelamente una interpretación asociada, garantizando que 
-  esta es modelo de cada fórmula del conjunto.
+  En la primera parte del cuarto capítulo se definen ciertas sucesiones 
+  monótonas \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} de conjuntos de fórmulas a partir de una colección \isa{C} y un 
+  conjunto \isa{S\ {\isasymin}\ C}. De este modo, se prueban distintas propiedades sobre dichas 
+  sucesiones de conjuntos que permiten la prueba del \isa{Teorema\ de\ Existencia\ de\ Modelo}. En primer lugar, se prueba que si \isa{C} verifica la propiedad de 
+  consistencia proposicional, entonces todo elemento de la suceción \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} 
+  pertenece a la colección. Igualmente, se dará un resultado que permite 
+  caracterizar conjuntos de \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} en función de los anteriores. Por otro lado, 
+  definiremos el límite de dichas sucesiones, probando que todo conjunto de 
+  \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} está contenido en el límite. Además, se demostrará que si una fórmula 
+  pertenece al límite, entonces pertenece a algún conjunto de la sucesión \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}}. 
+  Finalmente, se mostrará un resultado sobre conjuntos finitos contenidos en el 
+  límite.
+
+  En la segunda parte del capítulo se demuestra el \isa{Teorema\ de\ Existencia\ de\ Modelo}, que prueba que todo conjunto de fórmulas \isa{S} perteneciente a una 
+  colección \isa{C} que verifique la propiedad de consistencia proposicional es 
+  satisfacible. Para ello, extenderemos la colección \isa{C} a otra \isa{C{\isacharprime}} que 
+  tenga la propiedad de consistencia proposicional, sea cerrada bajo 
+  subconjuntos y sea de carácter finito, de modo que se introducirán
+  distintos resultados sobre colecciones con las características anteriores. 
+  En primer lugar, probaremos que el límite de la sucesión \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} definida a 
+  partir de \isa{C{\isacharprime}} y \isa{S} pertenece a \isa{C{\isacharprime}}. En particular se probará que dicho 
+  límite es un elemento maximal de la colección que lo define si esta es 
+  cerrada bajo subconjuntos y verifica la propiedad de consistencia 
+  proposicional. Por otra parte se demostrará que el límite de \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} es un 
+  conjunto de Hintikka si está definido a partir de una colección \isa{C{\isacharprime}} con 
+  las propiedades descritas luego, por el \isa{Teorema\ de\ Hintikka}, es
+  satisfacible. Finalmente, como \isa{S\ {\isasymin}\ C} pertenece también a la extensión \isa{C{\isacharprime}}, 
+  se verifica que está contenido en el límite de la sucesión \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} definida a 
+  partir de \isa{C{\isacharprime}} y\\ \isa{S\ {\isasymin}\ C{\isacharprime}}. Por tanto, quedará demostrada la satisfacibilidad 
+  del conjunto \isa{S} al heredarla por contención del límite.
+
+  Por último, el apartado final del capítulo se dedica a la demostración del 
+  \isa{Teorema\ de\ Compacidad} que prueba que todo conjunto de fórmulas finitamente 
+  satisfacible es satisfacible. Para su demostración consideraremos la 
+  colección formada por los conjuntos de fórmulas finitamente satisfacibles. 
+  Probaremos que dicha colección verifica la propiedad de consistencia 
+  proposicional y, por el \isa{Teorema\ de\ Existencia\ de\ Modelo}, todo conjunto 
+  perteneciente a ella será satisfacible. 
 
   En lo referente a las demostraciones asistidas por Isabelle/HOL de
   los resultados formalizados a lo largo de las secciones, se elaborarán 
@@ -170,8 +206,8 @@ El objetivo de la Lógica es la formalización del conocimiento y el
 
   \isa{Este\ trabajo\ está\ disponible\ en\ la\ plataforma} GitHub \isa{mediante\ el\ siguiente\ enlace{\isacharcolon}} 
 
-\href{https://github.com/sofsanfer/TFG}
-                  {\url{https://github.com/sofsanfer/TFG}}%
+\href{https://github.com/sofsanfer/TFM}
+                  {\url{https://github.com/sofsanfer/TFM}}%
 \end{isamarkuptext}\isamarkuptrue%
 %
 \isadelimtheory
@@ -269,85 +305,124 @@ El objetivo de la Lógica es la formalización del conocimiento y el
 %:%94=90%:%
 %:%95=91%:%
 %:%96=92%:%
-%:%96=93%:%
+%:%97=93%:%
 %:%97=94%:%
-%:%97=95%:%
-%:%98=96%:%
-%:%99=97%:%
-%:%100=98%:%
-%:%100=99%:%
-%:%101=100%:%
-%:%102=101%:%
-%:%103=102%:%
-%:%104=103%:%
-%:%105=104%:%
-%:%106=105%:%
-%:%107=106%:%
-%:%108=107%:%
-%:%109=108%:%
-%:%110=109%:%
-%:%111=110%:%
-%:%112=111%:%
-%:%113=112%:%
-%:%114=113%:%
-%:%115=114%:%
-%:%116=115%:%
-%:%117=116%:%
-%:%118=117%:%
-%:%119=118%:%
-%:%120=119%:%
-%:%121=120%:%
-%:%122=121%:%
-%:%123=122%:%
-%:%124=123%:%
-%:%125=124%:%
-%:%126=125%:%
-%:%127=126%:%
-%:%128=127%:%
-%:%129=128%:%
-%:%130=129%:%
-%:%131=130%:%
-%:%132=131%:%
-%:%133=132%:%
-%:%134=133%:%
-%:%135=134%:%
-%:%136=135%:%
-%:%137=136%:%
-%:%138=137%:%
-%:%139=138%:%
-%:%140=139%:%
-%:%141=140%:%
-%:%142=141%:%
-%:%143=142%:%
-%:%144=143%:%
+%:%98=95%:%
+%:%99=96%:%
+%:%100=97%:%
+%:%101=98%:%
+%:%102=99%:%
+%:%103=100%:%
+%:%104=101%:%
+%:%104=102%:%
+%:%105=103%:%
+%:%106=104%:%
+%:%107=105%:%
+%:%108=106%:%
+%:%109=107%:%
+%:%110=108%:%
+%:%111=109%:%
+%:%112=110%:%
+%:%113=111%:%
+%:%114=112%:%
+%:%115=113%:%
+%:%116=114%:%
+%:%117=115%:%
+%:%118=116%:%
+%:%119=117%:%
+%:%120=118%:%
+%:%121=119%:%
+%:%122=120%:%
+%:%123=121%:%
+%:%124=122%:%
+%:%125=123%:%
+%:%126=124%:%
+%:%127=125%:%
+%:%128=126%:%
+%:%129=127%:%
+%:%130=128%:%
+%:%131=129%:%
+%:%132=130%:%
+%:%133=131%:%
+%:%134=132%:%
+%:%135=133%:%
+%:%136=134%:%
+%:%137=135%:%
+%:%138=136%:%
+%:%139=137%:%
+%:%140=138%:%
+%:%141=139%:%
+%:%142=140%:%
+%:%143=141%:%
+%:%144=142%:%
+%:%145=143%:%
 %:%145=144%:%
 %:%146=145%:%
 %:%147=146%:%
 %:%148=147%:%
-%:%149=148%:%
-%:%150=149%:%
-%:%151=150%:%
-%:%152=151%:%
-%:%153=152%:%
-%:%154=153%:%
-%:%155=154%:%
-%:%156=155%:%
-%:%157=156%:%
-%:%158=157%:%
-%:%159=158%:%
-%:%160=159%:%
-%:%161=160%:%
-%:%162=161%:%
-%:%163=162%:%
-%:%164=163%:%
-%:%165=164%:%
-%:%166=165%:%
-%:%167=166%:%
-%:%168=167%:%
-%:%169=168%:%
-%:%170=169%:%
-%:%171=170%:%
-%:%171=171%:%
-%:%172=172%:%
-%:%173=173%:%
-%:%174=174%:%
+%:%148=148%:%
+%:%149=149%:%
+%:%150=150%:%
+%:%151=151%:%
+%:%152=152%:%
+%:%153=153%:%
+%:%153=154%:%
+%:%154=155%:%
+%:%155=156%:%
+%:%156=157%:%
+%:%157=158%:%
+%:%158=159%:%
+%:%159=160%:%
+%:%160=161%:%
+%:%161=162%:%
+%:%162=163%:%
+%:%163=164%:%
+%:%163=165%:%
+%:%164=166%:%
+%:%165=167%:%
+%:%166=168%:%
+%:%167=169%:%
+%:%168=170%:%
+%:%169=171%:%
+%:%170=172%:%
+%:%171=173%:%
+%:%172=174%:%
+%:%173=175%:%
+%:%174=176%:%
+%:%175=177%:%
+%:%176=178%:%
+%:%177=179%:%
+%:%178=180%:%
+%:%179=181%:%
+%:%180=182%:%
+%:%181=183%:%
+%:%182=184%:%
+%:%183=185%:%
+%:%184=186%:%
+%:%185=187%:%
+%:%186=188%:%
+%:%187=189%:%
+%:%188=190%:%
+%:%189=191%:%
+%:%190=192%:%
+%:%191=193%:%
+%:%192=194%:%
+%:%193=195%:%
+%:%194=196%:%
+%:%195=197%:%
+%:%196=198%:%
+%:%197=199%:%
+%:%198=200%:%
+%:%199=201%:%
+%:%200=202%:%
+%:%201=203%:%
+%:%202=204%:%
+%:%203=205%:%
+%:%204=206%:%
+%:%205=207%:%
+%:%206=208%:%
+%:%207=209%:%
+%:%207=210%:%
+%:%208=211%:%
+%:%209=212%:%
+%:%210=213%:%

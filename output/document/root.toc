@@ -1,19 +1,19 @@
 \contentsline {chapter}{Sumario}{5}{chapter*.2}
-\contentsline {chapter}{Introducci\IeC {\'o}n}{7}{chapter*.4}
-\contentsline {chapter}{\numberline {1}Notaci\IeC {\'o}n uniforme}{11}{chapter.1}
-\contentsline {chapter}{\numberline {2}Propiedad de consistencia proposicional}{31}{chapter.2}
-\contentsline {chapter}{\numberline {3}Colecciones de conjuntos cerradas bajo subconjuntos y de car\IeC {\'a}cter finito}{51}{chapter.3}
-\contentsline {chapter}{\numberline {4}Teorema de existencia de modelo}{91}{chapter.4}
-\contentsline {section}{\numberline {4.1}Sucesiones de conjuntos}{91}{section.4.1}
-\contentsline {section}{\numberline {4.2}El Teorema de Existencia de Modelo}{101}{section.4.2}
-\contentsline {section}{\numberline {4.3}Teorema de Compacidad}{116}{section.4.3}
-\contentsline {chapter}{\numberline {A}Lemas de HOL usados}{153}{appendix.A}
-\contentsline {section}{\numberline {A.1}La base de l\IeC {\'o}gica de primer orden (1)}{153}{section.A.1}
-\contentsline {section}{\numberline {A.2}Teor\IeC {\'\i }a de \IeC {\'o}rdenes (3)}{157}{section.A.2}
-\contentsline {section}{\numberline {A.3}Teor\IeC {\'\i }a de ret\IeC {\'\i }culos (5)}{157}{section.A.3}
-\contentsline {section}{\numberline {A.4}Teor\IeC {\'\i }a de conjuntos (6)}{157}{section.A.4}
-\contentsline {section}{\numberline {A.5}Ret\IeC {\'\i }culos completos (10)}{161}{section.A.5}
-\contentsline {section}{\numberline {A.6}N\IeC {\'u}meros naturales (15)}{161}{section.A.6}
-\contentsline {section}{\numberline {A.7}Conjuntos finitos (17)}{162}{section.A.7}
-\contentsline {section}{\numberline {A.8}Ret\IeC {\'\i }culos condicionalmente completos (89)}{162}{section.A.8}
-\contentsline {chapter}{Bibliograf\'{\i }a}{163}{appendix*.8}
+\contentsline {chapter}{Introducci\IeC {\'o}n}{7}{chapter*.3}
+\contentsline {chapter}{\numberline {1}Notaci\IeC {\'o}n uniforme}{13}{chapter.1}
+\contentsline {chapter}{\numberline {2}Propiedad de consistencia proposicional}{33}{chapter.2}
+\contentsline {chapter}{\numberline {3}Colecciones de conjuntos cerradas bajo subconjuntos y de car\IeC {\'a}cter finito}{53}{chapter.3}
+\contentsline {chapter}{\numberline {4}Teorema de existencia de modelo}{93}{chapter.4}
+\contentsline {section}{\numberline {4.1}Sucesiones de conjuntos}{93}{section.4.1}
+\contentsline {section}{\numberline {4.2}El Teorema de Existencia de Modelo}{103}{section.4.2}
+\contentsline {section}{\numberline {4.3}Teorema de Compacidad}{118}{section.4.3}
+\contentsline {chapter}{\numberline {A}Lemas de HOL usados}{155}{appendix.A}
+\contentsline {section}{\numberline {A.1}La base de l\IeC {\'o}gica de primer orden (1)}{155}{section.A.1}
+\contentsline {section}{\numberline {A.2}Teor\IeC {\'\i }a de \IeC {\'o}rdenes (3)}{159}{section.A.2}
+\contentsline {section}{\numberline {A.3}Teor\IeC {\'\i }a de ret\IeC {\'\i }culos (5)}{159}{section.A.3}
+\contentsline {section}{\numberline {A.4}Teor\IeC {\'\i }a de conjuntos (6)}{159}{section.A.4}
+\contentsline {section}{\numberline {A.5}Ret\IeC {\'\i }culos completos (10)}{163}{section.A.5}
+\contentsline {section}{\numberline {A.6}N\IeC {\'u}meros naturales (15)}{163}{section.A.6}
+\contentsline {section}{\numberline {A.7}Conjuntos finitos (17)}{164}{section.A.7}
+\contentsline {section}{\numberline {A.8}Ret\IeC {\'\i }culos condicionalmente completos (89)}{164}{section.A.8}
+\contentsline {chapter}{Bibliograf\'{\i }a}{165}{appendix*.4}

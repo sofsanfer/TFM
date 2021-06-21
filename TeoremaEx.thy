@@ -481,7 +481,7 @@ section \<open>El Teorema de Existencia de Modelo\<close>
 
 text \<open>En esta sección demostraremos el \<open>Teorema de Existencia de Modelo\<close>, que prueba 
   que todo conjunto de fórmulas \<open>S\<close> perteneciente a una colección \<open>C\<close> que verifique la propiedad de 
-  consistencia proposicional es satisfacible. Para ello, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
+  consistencia proposicional es satisfacible. Para probarlo, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y sea de 
   carácter finito. Pare ello, introduciremos distintos resultados sobre colecciones \<open>C'\<close> con 
   las características anteriores. En primer lugar, probaremos que el límite de la sucesión definida

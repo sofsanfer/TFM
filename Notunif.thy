@@ -7,18 +7,11 @@ theory Notunif
 begin
 (*>*)
 
-text \<open>
-\comentario{Localización de sello.png.}
-
-\<close>
-
 text \<open>En este capítulo introduciremos la notación uniforme inicialmente 
-  desarrollada por \<open>R. M. Smullyan\<close> (añadir referencia bibliográfica). La finalidad
-  de dicha notación es reducir el número de casos a considerar sobre la estructura de 
-  las fórmulas al clasificar estas en dos categorías, facilitando las demostraciones
+  desarrollada por R. M. Smullyan \<open>[12]\<close>. La finalidad de dicha notación es 
+  reducir el número de casos a considerar sobre la estructura de las fórmulas 
+  al clasificar estas en dos categorías, facilitando las demostraciones
   y métodos empleados en adelante.
-
-  \comentario{Añadir referencia bibliográfica.}
 
   De este modo, las fórmulas proposicionales pueden ser de dos tipos:
   las de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y las de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>). 
