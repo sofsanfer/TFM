@@ -121,9 +121,11 @@ text \<open>
   de caracterización de los conjuntos de Hintikka mediante la notación uniforme.
 
   En el siguiente capítulo se define la propiedad de consistencia proposicional
-  para colecciones de conjuntos de fórmulas. Al final del capítulo se introduce 
-  un lema que caracteriza dicha propiedad mediante notación uniforme, lo que 
+  para colecciones de conjuntos de fórmulas. Al final del capítulo se caracteriza 
+  dicha propiedad mediante notación uniforme, lo que 
   facilita las demostraciones de los resultados posteriores.
+
+\comentario{Párrafo ligeramente modificado.}
 
   En el tercer capítulo se definen las colecciones de conjuntos de fórmulas
   cerradas bajo subconjuntos y de carácter finito. Una colección de conjuntos 
@@ -141,14 +143,14 @@ text \<open>
   y sea de carácter finito. 
 
   Finalmente, en el cuarto capítulo se demuestra el \<open>Teorema de Existencia de 
-  Modelo\<close> y el \<open>Teorema de Compacidad\<close> como consecuencia de este. El capítulo 
+  Modelo\<close> y el \<open>Teorema de Compacidad\<close> como consecuencia de éste. El capítulo 
   está dividido en tres apartados: el primero donde se definen ciertas 
   sucesiones de conjuntos de fórmulas a partir de una colección y un conjunto, 
   el segundo apartado dedicado a la demostración del \<open>Teorema de Existencia de 
   Modelo\<close> y el tercer apartado donde se demuestra el \<open>Teorema de Compacidad\<close>. 
 
-  En la primera parte del cuarto capítulo se definen ciertas sucesiones 
-  monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a partir de una colección \<open>C\<close> y un 
+  En la primera parte del cuarto capítulo se define una sucesión 
+  monótona \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a partir de una colección \<open>C\<close> y un 
   conjunto \<open>S \<in> C\<close>. De este modo, se prueban distintas propiedades sobre dichas 
   sucesiones de conjuntos que permiten la prueba del \<open>Teorema de Existencia de
   Modelo\<close>. En primer lugar, se prueba que si \<open>C\<close> verifica la propiedad de 
@@ -160,6 +162,10 @@ text \<open>
   pertenece al límite, entonces pertenece a algún conjunto de la sucesión \<open>{S\<^sub>n}\<close>. 
   Finalmente, se mostrará un resultado sobre conjuntos finitos contenidos en el 
   límite.
+
+\comentario{Corregir el párrafo anterior, relativo a la primera parte
+del cuarto capítulo.}
+
 
   En la segunda parte del capítulo se demuestra el \<open>Teorema de Existencia
   de Modelo\<close>, que prueba que todo conjunto de fórmulas \<open>S\<close> perteneciente a una 

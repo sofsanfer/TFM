@@ -16,15 +16,20 @@ text \<open>En este capítulo se demuestra el \<open>Teorema de Existencia de Mo
 
 section \<open>Sucesiones de conjuntos\<close>
 
-text\<open>En este apartado vamos a definir las sucesiones monótonas \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas a 
-  partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>. De este modo, se demostrará que si
-  \<open>C\<close> verifica la propiedad de consistencia proposicional, entonces todo elemento de la suceción
-  \<open>{S\<^sub>n}\<close> pertenece a la colección. Igualmente, daremos un resultado que permite caracterizar 
-  conjuntos de \<open>{S\<^sub>n}\<close> en función de los anteriores. Por otro lado, definiremos el límite de dichas 
-  sucesiones, probando que todo conjunto de \<open>{S\<^sub>n}\<close> está contenido en el límite. Además, se
-  demostrará que si una fórmula pertenece al límite, entonces pertenece a algún conjunto de
-  la sucesión \<open>{S\<^sub>n}\<close>. Finalmente, mostraremos un resultado sobre conjuntos finitos contenidos en
-  el límite.
+text\<open>A partir de una colección \<open>C\<close> y un conjunto \<open>S \<in> C\<close>, vamos 
+ a definir una sucesión monótona \<open>{S\<^sub>n}\<close> de conjuntos de fórmulas
+ proposicionales. Se demostrarán las siguientes propiedades:
+  \begin{itemize}
+   \item Si \<open>C\<close> verifica la propiedad de consistencia proposicional, 
+   entonces todo elemento de la suceción \<open>{S\<^sub>n}\<close> pertenece a \<open>C\<close>. 
+   \item Para todo \<open>n,m \<in> \<nat>\<close> se verifica $\bigcup_{n \leq m} S_{n} = S_{m}$ 
+   \item Definiremos el límite de dichas sucesiones, probando que todo 
+    conjunto de \<open>{S\<^sub>n}\<close> está contenido en el límite. 
+  \item Si una fórmula pertenece al límite de la sucesión \<open>{S\<^sub>n}\<close>, 
+   entonces pertenece a algún conjunto de dicha sucesión. 
+  \item Si \<open>S'\<close> es un subconjunto finito del límite de la sucesión \<open>{S\<^sub>n}\<close>, 
+   entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
+\end{itemize}
 
   Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
   de un alfabeto numerable de variables proposicionales. Por lo tanto, el conjunto de fórmulas 
