@@ -28,7 +28,7 @@ text\<open>A partir de una colección \<open>C\<close> y un conjunto \<open>S \<
   \item Si una fórmula pertenece al límite de la sucesión \<open>{S\<^sub>n}\<close>, 
    entonces pertenece a algún conjunto de dicha sucesión. 
   \item Si \<open>S'\<close> es un subconjunto finito del límite de la sucesión \<open>{S\<^sub>n}\<close>, 
-   entonces existe un \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
+   entonces existe un\\ \<open>k \<in> \<nat>\<close> tal que \<open>S' \<subseteq> S\<^sub>k\<close>.
 \end{itemize}
 
   Recordemos que el conjunto de las fórmulas proposicionales se define recursivamente a partir 
