@@ -78,14 +78,14 @@ text \<open>
   \<open>Propositional Proof Systems\<close> \<open>[10]\<close> de Julius Michaelis y Tobias Nipkow, y
   basando su contenido teórico en el libro \<open>First-Order Logic and Automated 
   Theorem Proving\<close> \<open>[5]\<close> de Melvin Fitting, este trabajo tiene como objetivo la
-  demostración y formalización del \<open>Teorema de Existencia de Modelo\<close>, concluyendo
-  con el \<open>Teorema de Compacidad\<close> como consecuencia del mismo. Para ello, consta
+  demostración y formalización del \<open>teorema de existencia de modelo\<close>, concluyendo
+  con el \<open>teorema de compacidad\<close> como consecuencia del mismo. Para ello, consta
   de cuatro capítulos. En el primero se introduce la notación uniforme para 
   fórmulas proposicionales, en el segundo capítulo se estudia la propiedad de 
   consistencia proposicional para colecciones de conjuntos de fórmulas, el 
   tercero trata sobre las colecciones cerradas bajo subconjuntos y de carácter 
-  finito y en el último capítulo se demuestra finalmente \<open>Teorema de Existencia 
-  de Modelo\<close>, concluyendo con la prueba del \<open>Teorema de Compacidad\<close>.
+  finito y en el último capítulo se demuestra finalmente \<open>teorema de existencia 
+  de modelo\<close>, concluyendo con la prueba del \<open>teorema de compacidad\<close>.
 
   El primer capítulo introduce la notación uniforme para las fórmulas
   proposicionales, lo que permite reducir el número de casos a considerar 
@@ -124,15 +124,15 @@ text \<open>
   subconjuntos que verifique la propiedad de consistencia proposicional se puede 
   extender a otra que también verifique dicha propiedad y sea de carácter finito. 
 
-  Por último, en el cuarto capítulo se centra en la demostración del \<open>Teorema de 
-  Existencia de Modelo\<close>, exponiendo posteriormente la prueba del \<open>Teorema de 
-  Compacidad\<close> como consecuencia de éste. El capítulo está dividido en tres apartados: 
+  Por último, el cuarto capítulo se centra en la demostración del \<open>teorema de 
+  existencia de modelo\<close>, exponiendo posteriormente la prueba del \<open>teorema de 
+  compacidad\<close> como consecuencia de este. El capítulo está dividido en tres apartados: 
   el primero, en el que se definen ciertas sucesiones de conjuntos de fórmulas a partir de 
   una colección y un conjunto, el segundo apartado dedicado a la demostración del 
-  \<open>Teorema de Existencia de Modelo\<close> y el tercer apartado donde se demuestra el 
-  \<open>Teorema de Compacidad\<close>. 
+  \<open>teorema de existencia de modelo\<close> y el tercer apartado donde se demuestra el 
+  \<open>teorema de compacidad\<close>. 
 
-  Para demostrar el \<open>Teorema de Existencia de Modelo\<close>, dada una colección
+  Para demostrar el \<open>teorema de existencia de modelo\<close>, dada una colección
   y un conjunto perteneciente a ella, se dedicará el primer apartado del cuarto capítulo 
   a la definición de ciertas sucesiones monótonas de conjuntos de fórmulas y a la 
   demostración de distintos resultados relativos a este tipo de sucesiones. En primer 
@@ -146,15 +146,15 @@ text \<open>
   conjunto de la sucesión.
 
   Por otro lado, en la segunda parte del cuarto capítulo se desarrolla la demostración del
-  \<open>Teorema de Existencia de Modelo\<close> que prueba que todo conjunto de fórmulas
+  \<open>teorema de existencia de modelo\<close> que prueba que todo conjunto de fórmulas
   perteneciente a una colección que verifique la propiedad de consistencia proposicional 
   es satisfacible. Dada una colección \<open>C\<close> en estas condiciones y un conjunto \<open>S \<in> C\<close>, 
   la clave de la demostración consiste en probar que \<open>S\<close> está contenido en un conjunto de 
-  Hintikka que, por el \<open>Teorema de Hintikka\<close>, es satisfacible. Para ello, empleando los 
+  Hintikka que, por el \<open>lema de Hintikka\<close>, es satisfacible. Para ello, empleando los 
   resultados expuestos en el segundo capítulo, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y 
   sea de carácter finito. De este modo, se considerará la sucesión definida a partir de 
-  \<open>S\<close> y \<open>C'\<close> según el primer apartado del cuarto capítulo, probamos que el límite de dicha 
+  \<open>S\<close> y \<open>C'\<close> según el primer apartado del cuarto capítulo, y se probará que el límite de dicha 
   sucesión es un conjunto de Hintikka que contiene a \<open>S\<close>. Para ello, previamente se 
   demostrará que el límite de este tipo de sucesiones es un elemento maximal de la
   colección que lo define si esta es cerrada bajo subconjuntos y verifica la propiedad de
@@ -162,11 +162,11 @@ text \<open>
   de carácter finito, el límite pertenece a ella.
 
   Por último, el apartado final del capítulo se dedica a la demostración del 
-  \<open>Teorema de Compacidad\<close> que prueba que todo conjunto de fórmulas finitamente 
+  \<open>teorema de compacidad\<close> que prueba que todo conjunto de fórmulas finitamente 
   satisfacible es satisfacible. Para su demostración consideraremos la 
   colección formada por los conjuntos de fórmulas finitamente satisfacibles. 
   Probaremos que dicha colección verifica la propiedad de consistencia 
-  proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto 
+  proposicional y, por el \<open>teorema de existencia de modelo\<close>, todo conjunto 
   perteneciente a ella será satisfacible. 
 
   En lo referente a las demostraciones asistidas por Isabelle/HOL de

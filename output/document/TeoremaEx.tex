@@ -16,8 +16,8 @@
 \endisadelimtheory
 %
 \begin{isamarkuptext}%
-En este capítulo se demuestra el \isa{Teorema\ de\ Existencia\ de\ Modelo} para la Lógica 
-  Proposicional y el \isa{Teorema\ de\ Compacidad}. Para ello, definiremos ciertas sucesiones monótonas 
+En este capítulo se demuestra el \isa{teorema\ de\ existencia\ de\ modelo} para la Lógica 
+  Proposicional y el \isa{teorema\ de\ compacidad}. Para ello, definiremos ciertas sucesiones monótonas 
   de conjuntos de fórmulas a partir de una colección y un conjunto perteneciente a ella.%
 \end{isamarkuptext}\isamarkuptrue%
 %
@@ -1537,7 +1537,7 @@ Mostremos su demostración automática.%
 \begin{isamarkuptext}%
 El siguiente resultado prueba que el límite de la sucesión definida en \isa{{\isadigit{4}}{\isachardot}{\isadigit{1}}{\isachardot}{\isadigit{1}}} es un conjunto
   de Hintikka si la colección que lo define verifica la propiedad de consistencia proposicional, es
-  es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \isa{teorema\ de\ Hintikka},
+  es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \isa{lema\ de\ Hintikka},
   se trata en particular de un conjunto satisfacible. 
 
   \begin{lema}
@@ -2006,7 +2006,7 @@ Finalmente, vamos a demostrar el \isa{teorema\ de\ existencia\ de\ modelo}. Para
 \begin{isamarkuptext}%
 De este modo, procedamos finalmente con la demostración del teorema.
 
-  \begin{teorema}[Teorema de Existencia de Modelo]
+  \begin{teorema}[Teorema de existencia de modelo]
     Todo conjunto de fórmulas perteneciente a una colección que verifique la propiedad de
     consistencia proposicional es satisfacible. 
   \end{teorema}
@@ -2028,7 +2028,7 @@ De este modo, procedamos finalmente con la demostración del teorema.
     En suma, \isa{C{\isacharprime}{\isacharprime}} es una extensión de \isa{C} que verifica la propiedad de consistencia proposicional, 
     es cerrada bajo subconjuntos y es de carácter finito. Luego, por el lema \isa{{\isadigit{4}}{\isachardot}{\isadigit{2}}{\isachardot}{\isadigit{4}}}, el límite de 
     la sucesión \isa{{\isacharbraceleft}S\isactrlsub n{\isacharbraceright}} de conjuntos de \isa{C{\isacharprime}{\isacharprime}} a partir de \isa{S} según la definición \isa{{\isadigit{4}}{\isachardot}{\isadigit{1}}{\isachardot}{\isadigit{1}}} es un 
-    conjunto de Hintikka. Por tanto, por el \isa{teorema\ de\ Hintikka}, se trata de un conjunto 
+    conjunto de Hintikka. Por tanto, por el \isa{lema\ de\ Hintikka}, se trata de un conjunto 
     satisfacible. 
 
     Finalmente, puesto que para todo \isa{n\ {\isasymin}\ {\isasymnat}} se tiene que \isa{S\isactrlsub n} está contenido en el límite, en 
@@ -2230,7 +2230,7 @@ Finalmente, demostremos el teorema de manera automática.%
 %
 \isatagdocument
 %
-\isamarkupsection{Teorema de Compacidad%
+\isamarkupsection{Teorema de compacidad%
 }
 \isamarkuptrue%
 %
@@ -2242,16 +2242,16 @@ Finalmente, demostremos el teorema de manera automática.%
 \endisadelimdocument
 %
 \begin{isamarkuptext}%
-En esta sección vamos demostrar el \isa{Teorema\ de\ Compacidad} para la lógica proposicional
-  como consecuencia del \isa{Teorema\ de\ Existencia\ de\ Modelo}.
+En esta sección vamos demostrar el \isa{teorema\ de\ compacidad} para la lógica proposicional
+  como consecuencia del \isa{teorema\ de\ existencia\ de\ modelo}.
 
-  \begin{teorema}[Teorema de Compacidad]
+  \begin{teorema}[Teorema de compacidad]
     Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
   \end{teorema}
 
   Para su demostración consideraremos la colección formada por los conjuntos de fórmulas finitamente 
   satisfacibles. Probaremos que dicha colección verifica la propiedad de consistencia proposicional
-  y, por el \isa{Teorema\ de\ Existencia\ de\ Modelo}, todo conjunto perteneciente a ella será
+  y, por el \isa{teorema\ de\ existencia\ de\ modelo}, todo conjunto perteneciente a ella será
   satisfacible, demostrando así el teorema.
 
   Mostremos previamente dos resultados sobre subconjuntos finitos que emplearemos en la 
@@ -2655,7 +2655,7 @@ Una vez introducidos los resultados anteriores, procedamos con la prueba del \is
     Consideremos la colección \isa{C} formada por los conjuntos de fórmulas finitamente satisfacibles.
     Recordemos que un conjunto de fórmulas es finitamente satisfacible si todo subconjunto finito 
     suyo es satisfacible. Vamos a probar que dicha colección verifica la propiedad de consistencia 
-    proposicional y, por el \isa{Teorema\ de\ Existencia\ de\ Modelo}, quedará probado que todo conjunto de 
+    proposicional y, por el \isa{teorema\ de\ existencia\ de\ modelo}, quedará probado que todo conjunto de 
     \isa{C} es satisfacible, lo que demuestra el teorema.
 
     Para probar que \isa{C} verifica la propiedad de consistencia proposicional, por el lema \isa{{\isadigit{2}}{\isachardot}{\isadigit{0}}{\isachardot}{\isadigit{2}}} de 
@@ -2828,7 +2828,7 @@ Una vez introducidos los resultados anteriores, procedamos con la prueba del \is
     insatisfacible. Esto contradice lo demostrado anteriormente, llegando así a una contradicción
     que prueba por reducción al absurdo la última condición del lema \isa{{\isadigit{2}}{\isachardot}{\isadigit{0}}{\isachardot}{\isadigit{2}}}. De este modo, queda
     probado que la colección formada por los conjuntos de fórmulas finitamente satisfacibles 
-    verifica la propiedad de consistencia proposicional y, por el \isa{Teorema\ de\ Existencia\ de\ Modelo}, 
+    verifica la propiedad de consistencia proposicional y, por el \isa{teorema\ de\ existencia\ de\ modelo}, 
     todo conjunto perteneciente a ella es satisfacible, lo que demuestra el teorema.
   \end{demostracion}
 

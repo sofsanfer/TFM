@@ -8,13 +8,13 @@ text \<open>
 El objetivo de la Lógica es la formalización del conocimiento y su
 razonamiento. Este trabajo constituye una continuación del Trabajo de Fin de
 Grado \<open>Elementos de lógica formalizados en Isabelle/HOL\<close> \<open>[4]\<close>, donde se estudiaron
-la sintaxis, semántica y \<open>Lema de Hintikka\<close> de la Lógica Proposicional
+la sintaxis, semántica y \<open>lema de Hintikka\<close> de la Lógica Proposicional
 desde la perspectiva teórica de \<open>First−Order Logic and Automated Theorem Proving\<close> 
 \<open>[5]\<close> de Melvin Fitting. Manteniendo dicha perspectiva, nos centraremos en la 
-demostración del \<open>Teorema de Existencia de Modelo\<close>, concluyendo con 
-el \<open>Teorema de Compacidad\<close> como consecuencia del mismo. Siguiendo la 
-inspiración de \<open>Propositional Proof Systems\<close> \<open>[10]\<close> por Julius Michaelis y Tobias 
-Nipkow, los resultados expuestos serán formalizados mediante Isabelle: un demostrador 
+demostración del \<open>teorema de existencia de modelo\<close>, concluyendo con 
+el \<open>teorema de compacidad\<close> como consecuencia del mismo. Siguiendo la inspiración de 
+Julius Michaelis y Tobias Nipkow en \<open>Propositional Proof Systems\<close> \<open>[10]\<close>, los resultados 
+expuestos serán formalizados mediante Isabelle: un demostrador 
 interactivo que incluye herramientas de razonamiento automático para guiar al usuario 
 en el proceso de formalización, verificación y automatización de resultados. 
 Concretamente, Isabelle/HOL es una especialización de Isabelle para la lógica de orden 

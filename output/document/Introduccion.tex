@@ -81,13 +81,13 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   proposicional. Inspirado en la primera sección de la publicación 
   \isa{Propositional\ Proof\ Systems} \isa{{\isacharbrackleft}{\isadigit{1}}{\isadigit{0}}{\isacharbrackright}} de Julius Michaelis y Tobias Nipkow, y
   basando su contenido teórico en el libro \isa{First{\isacharminus}Order\ Logic\ and\ Automated\ Theorem\ Proving} \isa{{\isacharbrackleft}{\isadigit{5}}{\isacharbrackright}} de Melvin Fitting, este trabajo tiene como objetivo la
-  demostración y formalización del \isa{Teorema\ de\ Existencia\ de\ Modelo}, concluyendo
-  con el \isa{Teorema\ de\ Compacidad} como consecuencia del mismo. Para ello, consta
+  demostración y formalización del \isa{teorema\ de\ existencia\ de\ modelo}, concluyendo
+  con el \isa{teorema\ de\ compacidad} como consecuencia del mismo. Para ello, consta
   de cuatro capítulos. En el primero se introduce la notación uniforme para 
-  fórmulas proposicionales, en el segundo capítulo se define la propiedad de 
-  consistencia proposicional para colecciones de conjuntos de fórmulas, en el 
-  tercero se definen las colecciones cerradas bajo subconjuntos y de carácter 
-  finito y en el último capítulo se demuestra finalmente \isa{Teorema\ de\ Existencia\ de\ Modelo}, concluyendo con la prueba del \isa{Teorema\ de\ Compacidad}.
+  fórmulas proposicionales, en el segundo capítulo se estudia la propiedad de 
+  consistencia proposicional para colecciones de conjuntos de fórmulas, el 
+  tercero trata sobre las colecciones cerradas bajo subconjuntos y de carácter 
+  finito y en el último capítulo se demuestra finalmente \isa{teorema\ de\ existencia\ de\ modelo}, concluyendo con la prueba del \isa{teorema\ de\ compacidad}.
 
   El primer capítulo introduce la notación uniforme para las fórmulas
   proposicionales, lo que permite reducir el número de casos a considerar 
@@ -96,14 +96,13 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   fórmulas semánticamente equivalentes como aquellas que tienen el mismo valor 
   para toda interpretación. De este modo, las fórmulas proposicionales pueden ser 
   de tipo conjuntivo (las fórmulas \isa{{\isasymalpha}}) y de tipo disyuntivo (las fórmulas \isa{{\isasymbeta}}),
-  asociandose dos componentes a cada fórmula según el tipo al que correspondan. 
+  asociándose dos componentes a cada fórmula según el tipo al que correspondan. 
   Intuitivamente, una fórmula de tipo \isa{{\isasymalpha}} es semánticamente equivalente a la 
   conjunción de sus componentes conjuntivas, y una fórmula de tipo \isa{{\isasymbeta}} es 
   semánticamente equivalente a la disyunción de sus componentes disyuntivas. En 
   Isabelle, se formalizarán sintácticamente los conjuntos de fórmulas de tipo \isa{{\isasymalpha}} 
-  y de tipo \isa{{\isasymbeta}} como predicados inductivos, simplificando la intuición original al 
-  prescindir de la noción de equivalencia semántica que permite clasificar la 
-  totalidad de las fórmulas proposicionales. Finalmente, el capítulo concluye con 
+  y de tipo \isa{{\isasymbeta}} como predicados inductivos, prescindiendo de la noción de 
+  equivalencia semántica. Finalmente, el capítulo concluye con 
   un lema de caracterización de los conjuntos de Hintikka mediante la notación 
   uniforme.
 
@@ -112,7 +111,7 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   dicha propiedad mediante notación uniforme, lo que facilita las demostraciones 
   de los resultados posteriores.
 
-  En el tercer capítulo se definen las colecciones de conjuntos de fórmulas
+  En el tercer capítulo se estudian las colecciones de conjuntos de fórmulas
   cerradas bajo subconjuntos y de carácter finito. Una colección de conjuntos 
   es cerrada bajo subconjuntos si todo subconjunto de cada conjunto de la 
   colección pertenece a la colección, mientras que una colección es de 
@@ -127,16 +126,16 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   subconjuntos que verifique la propiedad de consistencia proposicional se puede 
   extender a otra que también verifique dicha propiedad y sea de carácter finito. 
 
-  Por último, en el cuarto capítulo se centra en la demostración del \isa{Teorema\ de\ Existencia\ de\ Modelo}, exponiendo posteriormente la prueba del \isa{Teorema\ de\ Compacidad} como consecuencia de éste. El capítulo está dividido en tres apartados: 
-  el primero donde se definen ciertas sucesiones de conjuntos de fórmulas a partir de 
+  Por último, el cuarto capítulo se centra en la demostración del \isa{teorema\ de\ existencia\ de\ modelo}, exponiendo posteriormente la prueba del \isa{teorema\ de\ compacidad} como consecuencia de este. El capítulo está dividido en tres apartados: 
+  el primero, en el que se definen ciertas sucesiones de conjuntos de fórmulas a partir de 
   una colección y un conjunto, el segundo apartado dedicado a la demostración del 
-  \isa{Teorema\ de\ Existencia\ de\ Modelo} y el tercer apartado donde se demuestra el 
-  \isa{Teorema\ de\ Compacidad}. 
+  \isa{teorema\ de\ existencia\ de\ modelo} y el tercer apartado donde se demuestra el 
+  \isa{teorema\ de\ compacidad}. 
 
-  Para demostrar el \isa{Teorema\ de\ Existencia\ de\ Modelo}, dada una colección
+  Para demostrar el \isa{teorema\ de\ existencia\ de\ modelo}, dada una colección
   y un conjunto perteneciente a ella, se dedicará el primer apartado del cuarto capítulo 
-  a la definición de ciertas sucesiones monótonas de conjuntos de fórmulas. Del mismo
-  modo, se probarán distintos resultados relativos a este tipo de sucesiones. En primer 
+  a la definición de ciertas sucesiones monótonas de conjuntos de fórmulas y a la 
+  demostración de distintos resultados relativos a este tipo de sucesiones. En primer 
   lugar, se demostrará que todo conjunto de la sucesión pertenece a la colección si esta 
   verifica la propiedad de consistencia proposicional. Por otro lado, se caracterizará 
   cada conjunto de la sucesión mediante la unión generalizada de los conjuntos anteriores 
@@ -147,15 +146,15 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   conjunto de la sucesión.
 
   Por otro lado, en la segunda parte del cuarto capítulo se desarrolla la demostración del
-  \isa{Teorema\ de\ Existencia\ de\ Modelo} que prueba que todo conjunto de fórmulas
+  \isa{teorema\ de\ existencia\ de\ modelo} que prueba que todo conjunto de fórmulas
   perteneciente a una colección que verifique la propiedad de consistencia proposicional 
   es satisfacible. Dada una colección \isa{C} en estas condiciones y un conjunto \isa{S\ {\isasymin}\ C}, 
   la clave de la demostración consiste en probar que \isa{S} está contenido en un conjunto de 
-  Hintikka que, por el \isa{Teorema\ de\ Hintikka}, es satisfacible. Para ello, empleando los 
+  Hintikka que, por el \isa{lema\ de\ Hintikka}, es satisfacible. Para ello, empleando los 
   resultados expuestos en el segundo capítulo, extenderemos la colección \isa{C} a otra \isa{C{\isacharprime}} 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y 
   sea de carácter finito. De este modo, se considerará la sucesión definida a partir de 
-  \isa{S} y \isa{C{\isacharprime}} según el primer apartado del cuarto capítulo, probando que el límite de dicha 
+  \isa{S} y \isa{C{\isacharprime}} según el primer apartado del cuarto capítulo, y se probará que el límite de dicha 
   sucesión es un conjunto de Hintikka que contiene a \isa{S}. Para ello, previamente se 
   demostrará que el límite de este tipo de sucesiones es un elemento maximal de la
   colección que lo define si esta es cerrada bajo subconjuntos y verifica la propiedad de
@@ -163,11 +162,11 @@ El objetivo de la Lógica es la formalización del conocimiento y el
   de carácter finito, el límite pertenece a ella.
 
   Por último, el apartado final del capítulo se dedica a la demostración del 
-  \isa{Teorema\ de\ Compacidad} que prueba que todo conjunto de fórmulas finitamente 
+  \isa{teorema\ de\ compacidad} que prueba que todo conjunto de fórmulas finitamente 
   satisfacible es satisfacible. Para su demostración consideraremos la 
   colección formada por los conjuntos de fórmulas finitamente satisfacibles. 
   Probaremos que dicha colección verifica la propiedad de consistencia 
-  proposicional y, por el \isa{Teorema\ de\ Existencia\ de\ Modelo}, todo conjunto 
+  proposicional y, por el \isa{teorema\ de\ existencia\ de\ modelo}, todo conjunto 
   perteneciente a ella será satisfacible. 
 
   En lo referente a las demostraciones asistidas por Isabelle/HOL de
@@ -324,8 +323,8 @@ El objetivo de la Lógica es la formalización del conocimiento y el
 %:%127=125%:%
 %:%128=126%:%
 %:%129=127%:%
-%:%130=128%:%
-%:%130=129%:%
+%:%129=128%:%
+%:%129=129%:%
 %:%130=130%:%
 %:%131=131%:%
 %:%132=132%:%
@@ -387,8 +386,7 @@ El objetivo de la Lógica es la formalización del conocimiento y el
 %:%188=188%:%
 %:%189=189%:%
 %:%190=190%:%
-%:%191=191%:%
+%:%190=191%:%
 %:%191=192%:%
 %:%192=193%:%
 %:%193=194%:%
-%:%194=195%:%

@@ -10,8 +10,8 @@ theory TeoremaEx
 begin
 (*>*)
 
-text \<open>En este capítulo se demuestra el \<open>Teorema de Existencia de Modelo\<close> para la Lógica 
-  Proposicional y el \<open>Teorema de Compacidad\<close>. Para ello, definiremos ciertas sucesiones monótonas 
+text \<open>En este capítulo se demuestra el \<open>teorema de existencia de modelo\<close> para la Lógica 
+  Proposicional y el \<open>teorema de compacidad\<close>. Para ello, definiremos ciertas sucesiones monótonas 
   de conjuntos de fórmulas a partir de una colección y un conjunto perteneciente a ella.\<close>
 
 section \<open>Sucesiones de conjuntos\<close>
@@ -773,7 +773,7 @@ lemma cl_max':
 
 text \<open>El siguiente resultado prueba que el límite de la sucesión definida en \<open>4.1.1\<close> es un conjunto
   de Hintikka si la colección que lo define verifica la propiedad de consistencia proposicional, es
-  es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \<open>teorema de Hintikka\<close>,
+  es cerrada bajo subconjuntos y es de carácter finito. Como consecuencia del \<open>lema de Hintikka\<close>,
   se trata en particular de un conjunto satisfacible. 
 
   \begin{lema}
@@ -1025,7 +1025,7 @@ qed
 
 text\<open>De este modo, procedamos finalmente con la demostración del teorema.
 
-  \begin{teorema}[Teorema de Existencia de Modelo]
+  \begin{teorema}[Teorema de existencia de modelo]
     Todo conjunto de fórmulas perteneciente a una colección que verifique la propiedad de
     consistencia proposicional es satisfacible. 
   \end{teorema}
@@ -1047,7 +1047,7 @@ text\<open>De este modo, procedamos finalmente con la demostración del teorema.
     En suma, \<open>C''\<close> es una extensión de \<open>C\<close> que verifica la propiedad de consistencia proposicional, 
     es cerrada bajo subconjuntos y es de carácter finito. Luego, por el lema \<open>4.2.4\<close>, el límite de 
     la sucesión \<open>{S\<^sub>n}\<close> de conjuntos de \<open>C''\<close> a partir de \<open>S\<close> según la definición \<open>4.1.1\<close> es un 
-    conjunto de Hintikka. Por tanto, por el \<open>teorema de Hintikka\<close>, se trata de un conjunto 
+    conjunto de Hintikka. Por tanto, por el \<open>lema de Hintikka\<close>, se trata de un conjunto 
     satisfacible. 
 
     Finalmente, puesto que para todo \<open>n \<in> \<nat>\<close> se tiene que \<open>S\<^sub>n\<close> está contenido en el límite, en 
@@ -1129,18 +1129,18 @@ proof -
   ultimately show ?thesis unfolding sat_def by fast
 qed
 
-section \<open>Teorema de Compacidad\<close>
+section \<open>Teorema de compacidad\<close>
 
-text \<open>En esta sección vamos demostrar el \<open>Teorema de Compacidad\<close> para la lógica proposicional
-  como consecuencia del \<open>Teorema de Existencia de Modelo\<close>.
+text \<open>En esta sección vamos demostrar el \<open>teorema de compacidad\<close> para la lógica proposicional
+  como consecuencia del \<open>teorema de existencia de modelo\<close>.
 
-  \begin{teorema}[Teorema de Compacidad]
+  \begin{teorema}[Teorema de compacidad]
     Todo conjunto de fórmulas finitamente satisfacible es satisfacible.
   \end{teorema}
 
   Para su demostración consideraremos la colección formada por los conjuntos de fórmulas finitamente 
   satisfacibles. Probaremos que dicha colección verifica la propiedad de consistencia proposicional
-  y, por el \<open>Teorema de Existencia de Modelo\<close>, todo conjunto perteneciente a ella será
+  y, por el \<open>teorema de existencia de modelo\<close>, todo conjunto perteneciente a ella será
   satisfacible, demostrando así el teorema.
 
   Mostremos previamente dos resultados sobre subconjuntos finitos que emplearemos en la 
@@ -1339,7 +1339,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     Consideremos la colección \<open>C\<close> formada por los conjuntos de fórmulas finitamente satisfacibles.
     Recordemos que un conjunto de fórmulas es finitamente satisfacible si todo subconjunto finito 
     suyo es satisfacible. Vamos a probar que dicha colección verifica la propiedad de consistencia 
-    proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, quedará probado que todo conjunto de 
+    proposicional y, por el \<open>teorema de existencia de modelo\<close>, quedará probado que todo conjunto de 
     \<open>C\<close> es satisfacible, lo que demuestra el teorema.
 
     Para probar que \<open>C\<close> verifica la propiedad de consistencia proposicional, por el lema \<open>2.0.2\<close> de 
@@ -1512,7 +1512,7 @@ text \<open>Una vez introducidos los resultados anteriores, procedamos con la pr
     insatisfacible. Esto contradice lo demostrado anteriormente, llegando así a una contradicción
     que prueba por reducción al absurdo la última condición del lema \<open>2.0.2\<close>. De este modo, queda
     probado que la colección formada por los conjuntos de fórmulas finitamente satisfacibles 
-    verifica la propiedad de consistencia proposicional y, por el \<open>Teorema de Existencia de Modelo\<close>, 
+    verifica la propiedad de consistencia proposicional y, por el \<open>teorema de existencia de modelo\<close>, 
     todo conjunto perteneciente a ella es satisfacible, lo que demuestra el teorema.
   \end{demostracion}
 

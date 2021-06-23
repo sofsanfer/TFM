@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  22 JUN 2021 20:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  23 JUN 2021 13:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1353,19 +1353,19 @@ File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 [6] (./Introduccion.tex [7
 
 ]
-Overfull \hbox (4.89783pt too wide) in paragraph at lines 92--109
+Overfull \hbox (4.89783pt too wide) in paragraph at lines 92--108
 []\OT1/ppl/m/n/12 El primer cap[]^^Ptulo in-tro-duce la no-taci[]on uni-forme p
 ara las f[]ormulas proposi-cionales,
  []
 
 
-Overfull \hbox (7.3342pt too wide) in paragraph at lines 92--109
+Overfull \hbox (7.3342pt too wide) in paragraph at lines 92--108
 \OT1/ppl/m/n/12 lo que per-mite re-ducir el n[]umero de ca-sos a con-si-de-rar 
 so-bre la es-truc-tura de las f[]ormulas.
  []
 
 
-Overfull \hbox (2.23364pt too wide) in paragraph at lines 92--109
+Overfull \hbox (2.23364pt too wide) in paragraph at lines 92--108
 \OT1/ppl/m/n/12 cionales pueden ser de tipo con-jun-tivo (las f[]ormulas $\OML/
 zplm/m/it/12 $\OT1/ppl/m/n/12 ) y de tipo disyun-tivo (las f[]ormulas
  []
@@ -1612,7 +1612,7 @@ roposi-
  []
 
 [107] [108] [109] [110] [111] [112] [113]
-Overfull \hbox (4.71341pt too wide) in paragraph at lines 2010--2012
+Overfull \hbox (2.0493pt too wide) in paragraph at lines 2010--2012
 []\OT1/ppl/m/it/12 Todo con-junto de f^^Sormulas per-te-ne-ciente
  []
 
@@ -1749,26 +1749,26 @@ Underfull \hbox (badness 3049) in paragraph at lines 72--77
 [165
 
 ]) [166]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 175.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 175.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 181.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 181.
  (./root.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 175.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 175.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 181.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 181.
 Package rerunfilecheck Info: File `root.out' has not changed.
-(rerunfilecheck)             Checksum: 91C4D11AA36D604FB87D6EDB30F11D36;1364.
+(rerunfilecheck)             Checksum: E50FD81D83AC4A7C8B5E4F4B4FAC41DB;1364.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 38995 strings out of 492649
- 831238 string characters out of 6129622
- 900944 words of memory out of 5000000
- 41908 multiletter control sequences out of 15000+600000
+ 38996 strings out of 492649
+ 831246 string characters out of 6129622
+ 900947 words of memory out of 5000000
+ 41909 multiletter control sequences out of 15000+600000
  579916 words of font info for 161 fonts, out of 8000000 for 9000
  1210 hyphenation exceptions out of 8191
- 62i,22n,104p,10397b,1806s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,22n,104p,10397b,1804s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/t
 exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
@@ -1783,7 +1783,7 @@ f-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-dist/
 fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/t
 ype1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/ur
 w/palatino/uplri8a.pfb>
-Output written on root.pdf (166 pages, 650201 bytes).
+Output written on root.pdf (166 pages, 650531 bytes).
 PDF statistics:
  1137 PDF objects out of 1200 (max. 8388607)
  927 compressed objects within 10 object streams
