@@ -81,9 +81,9 @@ text \<open>
   demostración y formalización del \<open>Teorema de Existencia de Modelo\<close>, concluyendo
   con el \<open>Teorema de Compacidad\<close> como consecuencia del mismo. Para ello, consta
   de cuatro capítulos. En el primero se introduce la notación uniforme para 
-  fórmulas proposicionales, en el segundo capítulo se define la propiedad de 
-  consistencia proposicional para colecciones de conjuntos de fórmulas, en el 
-  tercero se definen las colecciones cerradas bajo subconjuntos y de carácter 
+  fórmulas proposicionales, en el segundo capítulo se estudia la propiedad de 
+  consistencia proposicional para colecciones de conjuntos de fórmulas, el 
+  tercero trata sobre las colecciones cerradas bajo subconjuntos y de carácter 
   finito y en el último capítulo se demuestra finalmente \<open>Teorema de Existencia 
   de Modelo\<close>, concluyendo con la prueba del \<open>Teorema de Compacidad\<close>.
 
@@ -94,14 +94,13 @@ text \<open>
   fórmulas semánticamente equivalentes como aquellas que tienen el mismo valor 
   para toda interpretación. De este modo, las fórmulas proposicionales pueden ser 
   de tipo conjuntivo (las fórmulas \<open>\<alpha>\<close>) y de tipo disyuntivo (las fórmulas \<open>\<beta>\<close>),
-  asociandose dos componentes a cada fórmula según el tipo al que correspondan. 
+  asociándose dos componentes a cada fórmula según el tipo al que correspondan. 
   Intuitivamente, una fórmula de tipo \<open>\<alpha>\<close> es semánticamente equivalente a la 
   conjunción de sus componentes conjuntivas, y una fórmula de tipo \<open>\<beta>\<close> es 
   semánticamente equivalente a la disyunción de sus componentes disyuntivas. En 
   Isabelle, se formalizarán sintácticamente los conjuntos de fórmulas de tipo \<open>\<alpha>\<close> 
-  y de tipo \<open>\<beta>\<close> como predicados inductivos, simplificando la intuición original al 
-  prescindir de la noción de equivalencia semántica que permite clasificar la 
-  totalidad de las fórmulas proposicionales. Finalmente, el capítulo concluye con 
+  y de tipo \<open>\<beta>\<close> como predicados inductivos, prescindiendo de la noción de 
+  equivalencia semántica. Finalmente, el capítulo concluye con 
   un lema de caracterización de los conjuntos de Hintikka mediante la notación 
   uniforme.
 
@@ -110,7 +109,7 @@ text \<open>
   dicha propiedad mediante notación uniforme, lo que facilita las demostraciones 
   de los resultados posteriores.
 
-  En el tercer capítulo se definen las colecciones de conjuntos de fórmulas
+  En el tercer capítulo se estudian las colecciones de conjuntos de fórmulas
   cerradas bajo subconjuntos y de carácter finito. Una colección de conjuntos 
   es cerrada bajo subconjuntos si todo subconjunto de cada conjunto de la 
   colección pertenece a la colección, mientras que una colección es de 
@@ -128,15 +127,15 @@ text \<open>
   Por último, en el cuarto capítulo se centra en la demostración del \<open>Teorema de 
   Existencia de Modelo\<close>, exponiendo posteriormente la prueba del \<open>Teorema de 
   Compacidad\<close> como consecuencia de éste. El capítulo está dividido en tres apartados: 
-  el primero donde se definen ciertas sucesiones de conjuntos de fórmulas a partir de 
+  el primero, en el que se definen ciertas sucesiones de conjuntos de fórmulas a partir de 
   una colección y un conjunto, el segundo apartado dedicado a la demostración del 
   \<open>Teorema de Existencia de Modelo\<close> y el tercer apartado donde se demuestra el 
   \<open>Teorema de Compacidad\<close>. 
 
   Para demostrar el \<open>Teorema de Existencia de Modelo\<close>, dada una colección
   y un conjunto perteneciente a ella, se dedicará el primer apartado del cuarto capítulo 
-  a la definición de ciertas sucesiones monótonas de conjuntos de fórmulas. Del mismo
-  modo, se probarán distintos resultados relativos a este tipo de sucesiones. En primer 
+  a la definición de ciertas sucesiones monótonas de conjuntos de fórmulas y a la 
+  demostración de distintos resultados relativos a este tipo de sucesiones. En primer 
   lugar, se demostrará que todo conjunto de la sucesión pertenece a la colección si esta 
   verifica la propiedad de consistencia proposicional. Por otro lado, se caracterizará 
   cada conjunto de la sucesión mediante la unión generalizada de los conjuntos anteriores 
@@ -155,7 +154,7 @@ text \<open>
   resultados expuestos en el segundo capítulo, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y 
   sea de carácter finito. De este modo, se considerará la sucesión definida a partir de 
-  \<open>S\<close> y \<open>C'\<close> según el primer apartado del cuarto capítulo, probando que el límite de dicha 
+  \<open>S\<close> y \<open>C'\<close> según el primer apartado del cuarto capítulo, probamos que el límite de dicha 
   sucesión es un conjunto de Hintikka que contiene a \<open>S\<close>. Para ello, previamente se 
   demostrará que el límite de este tipo de sucesiones es un elemento maximal de la
   colección que lo define si esta es cerrada bajo subconjuntos y verifica la propiedad de
