@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  23 JUN 2021 13:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.26)  24 JUN 2021 18:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1755,7 +1755,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 181.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 181.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 181.
 Package rerunfilecheck Info: File `root.out' has not changed.
-(rerunfilecheck)             Checksum: E50FD81D83AC4A7C8B5E4F4B4FAC41DB;1364.
+(rerunfilecheck)             Checksum: 2DEDA84656C01A056F67942A0BF61901;1361.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1783,7 +1783,7 @@ f-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-dist/
 fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/t
 ype1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/ur
 w/palatino/uplri8a.pfb>
-Output written on root.pdf (166 pages, 650531 bytes).
+Output written on root.pdf (166 pages, 649120 bytes).
 PDF statistics:
  1137 PDF objects out of 1200 (max. 8388607)
  927 compressed objects within 10 object streams

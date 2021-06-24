@@ -482,9 +482,9 @@ proof(induction S' rule: finite_induct)
   thus ?case by blast
 qed simp
 
-section \<open>El Teorema de Existencia de Modelo\<close>
+section \<open>Teorema de existencia de modelo\<close>
 
-text \<open>En esta sección demostraremos el \<open>Teorema de Existencia de Modelo\<close>, que prueba 
+text \<open>En esta sección demostraremos el \<open>teorema de existencia de modelo\<close>, que prueba 
   que todo conjunto de fórmulas \<open>S\<close> perteneciente a una colección \<open>C\<close> que verifique la propiedad de 
   consistencia proposicional es satisfacible. Para probarlo, extenderemos la colección \<open>C\<close> a otra \<open>C'\<close> 
   que tenga la propiedad de consistencia proposicional, sea cerrada bajo subconjuntos y sea de 
@@ -494,12 +494,12 @@ text \<open>En esta sección demostraremos el \<open>Teorema de Existencia de Mo
   dicho límite es un elemento maximal de la colección que lo define si esta es cerrada bajo 
   subconjuntos y verifica la propiedad de consistencia proposicional. Por otra parte demostraremos 
   que el límite es un conjunto de \<open>Hintikka\<close> si está definido a partir de una colección \<open>C'\<close> con las 
-  propiedades descritas. Por tanto, por el \<open>Teorema de Hintikka\<close>, en las condiciones anteriores el 
+  propiedades descritas. Por tanto, por el \<open>lema de Hintikka\<close>, en las condiciones anteriores el 
   límite es un conjunto satisfacible. Finalmente, como \<open>S \<in> C\<close> pertenece también a la extensión 
   \<open>C'\<close>, se verifica que está contenido en el límite de la sucesión definida según la definición 
   \<open>4.1.1\<close> a partir de \<open>C'\<close> y \<open>S \<in> C'\<close>. Por tanto, quedará demostrada la satisfacibilidad del 
-  conjunto \<open>S\<close> al heredarla por contención del límite, lo que prueba el \<open>Teorema de Existencia de 
-  Modelo\<close>.
+  conjunto \<open>S\<close> al heredarla por contención del límite, lo que prueba el \<open>teorema de existencia de 
+  modelo\<close>.
 
   En primer lugar, probemos que si \<open>C\<close> es una colección que verifica la propiedad de 
   consistencia proposicional, es cerrada bajo subconjuntos y es de carácter finito, entonces el 
